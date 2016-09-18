@@ -20,7 +20,7 @@ function isDigit(c) {
 }
 
 
-function mkContext(context, token) {
+function makeContext(context, token) {
     return {
         input: context.input,
         next: context.next,
@@ -28,88 +28,93 @@ function mkContext(context, token) {
     };
 }
 
+function createCursorFromContext(context) {
+    return {
+        index: context.token.index,
+        indexX: context.token.indexX,
+        indexY: context.token.indexY,
+
+        indexXY: context.token.index,
+        x: context.token.indexX,
+        y: context.token.indexY,
+
+        content: context.input.content,
+        length: context.input.length,
+
+        charCodeAtIndex: function () {
+            return this.content.charCodeAt(this.index);
+        },
+
+        is: function (predicate) {
+            return this.isNotEndOfFile() && predicate(this.charCodeAtIndex());
+        },
+        isNot: function (predicate) {
+            return this.isNotEndOfFile() && !predicate(this.charCodeAtIndex());
+        },
+        isEndOfFile: function () {
+            return this.index >= this.length;
+        },
+        isNotEndOfFile: function () {
+            return !this.isEndOfFile();
+        },
+        advanceIndex: function () {
+            if (this.isNotEndOfFile()) {
+                if (this.is(isEndOfLine)) {
+                    this.indexX = 1;
+                    this.indexY += 1;
+                } else {
+                    this.indexX += 1;
+                }
+                this.index += 1;
+            }
+        },
+        markStartOfToken: function () {
+            this.indexXY = this.index;
+            this.x = this.indexX;
+            this.y = this.indexY;
+        },
+        toToken: function (id) {
+            return {
+                id: id,
+                x: this.x,
+                y: this.y,
+                index: this.index,
+                indexX: this.indexX,
+                indexY: this.indexY,
+                text: this.content.substr(this.indexXY, this.index - this.indexXY)
+            };
+        }
+    };
+}
+
+
 function next(context) {
     if (context.token.id == TokenEnum.EOF) {
         return context;
     } else {
-        var cursor = {
-            index: context.token.index,
-            indexX: context.token.indexX,
-            indexY: context.token.indexY,
-
-            indexXY: context.token.index,
-            x: context.token.indexX,
-            y: context.token.indexY,
-
-            content: context.input.content,
-            length: context.input.lineLength,
-
-            charCodeAtIndex: function() {
-                return this.content.charCodeAt(this.index);
-            },
-
-            is: function(predicate) {
-                return this.isNotEndOfFile() && predicate(this.charCodeAtIndex());
-            },
-            isNot: function(predicate) {
-                return this.isNotEndOfFile() && !predicate(this.charCodeAtIndex());
-            },
-            isEndOfFile: function() {
-                return this.index >= this.length;
-            },
-            isNotEndOfFile: function() {
-                return !this.isEndOfFile();
-            },
-            advanceIndex: function() {
-                if (this.isNotEndOfFile()) {
-                    if (this.is(isEndOfLine)) {
-                        this.indexX = 1;
-                        this.indexY += 1;
-                    } else {
-                        this.indexX += 1;
-                    }
-                    this.index += 1;
-                }
-            },
-            setXY: function() {
-                this.indexXY = this.index;
-                this.x = this.indexX;
-                this.y = this.indexY;
-            },
-            toToken: function(id) {
-                return {
-                    id: id,
-                    x: this.x,
-                    y: this.y,
-                    index: this.index,
-                    indexX: this.indexX,
-                    indexY: this.indexY,
-                    text: this.content.substr(this.indexXY, this.index - this.indexXY)
-                };
-            }
-        };
+        var cursor = createCursorFromContext(context);
 
         while (cursor.is(isWhitespace)) {
             cursor.advanceIndex();
         }
 
         if (cursor.isEndOfFile()) {
-            return mkContext(context, cursor.toToken(TokenEnum.EOF));
+            return makeContext(context, cursor.toToken(TokenEnum.EOF));
         } else {
             if (cursor.is(isDigit)) {
-                cursor.setXY();
+                cursor.markStartOfToken();
                 while(cursor.is(isDigit)) {
                     cursor.advanceIndex();
                 }
-                return mkContext(context, cursor.toToken(TokenEnum.CONSTANT_INTEGER));
+                return makeContext(context, cursor.toToken(TokenEnum.CONSTANT_INTEGER));
             } else {
-                cursor.setXY();
+                cursor.markStartOfToken();
 
                 while(cursor.isNot(isWhitespace)) {
                     cursor.advanceIndex();
                 }
 
-                return mkContext(context, cursor.toToken(TokenEnum.IDENTIFIER));
+                return makeContext(context, cursor.toToken(TokenEnum.IDENTIFIER));
             }
         }
     }
@@ -120,7 +125,7 @@ function initialContext(input) {
     return {
         input: {
             content: input,
-            lineLength: input.length
+            length: input.length
         },
         token: {
             index: 0,
@@ -142,5 +147,6 @@ var fromString = function (input) {
 
 
 module.exports = {
-    fromString, TokenEnum
+    fromString: fromString,
+    TokenEnum: TokenEnum
 };
