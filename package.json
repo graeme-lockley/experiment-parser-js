@@ -1,0 +1,22 @@
+{
+  "name": "experiment-parser-js",
+  "version": "1.0.0",
+  "description": "A parser for a lambda based language written in JavaScript",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/graeme-lockley/experiment-parser-js.git"
+  },
+  "author": "Graeme Lockley <graemel@no9.co.za>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/graeme-lockley/experiment-parser-js/issues"
+  },
+  "homepage": "https://github.com/graeme-lockley/experiment-parser-js#readme"
+}
