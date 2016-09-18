@@ -1,3 +1,5 @@
+"use strict";
+
 var Lexer = require("../src/Lexer");
 var Chai = require("../bower_components/chai/chai");
 
