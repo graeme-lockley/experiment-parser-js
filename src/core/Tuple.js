@@ -1,18 +1,15 @@
 "use strict";
 
 var Tuple = function (fst, snd) {
-    return {
-        fst: fst,
-        snd: snd
-    };
+    return [fst, snd];
 };
 
 function fst(tuple) {
-    return tuple.fst;
+    return tuple[0];
 }
 
 function snd(tuple) {
-    return tuple.snd;
+    return tuple[1];
 }
 
 function setFst(fst, tuple) {
