@@ -6,17 +6,17 @@ var ASTEnum = {
     LAMBDA: 3
 };
 
-function CONSTANT_INTEGER(constantInteger) {
+function CONSTANT_INTEGER(value) {
     return {
         type: ASTEnum.CONSTANT_INTEGER,
-        value: constantInteger
+        value: value
     };
 }
 
-function IDENTIFIER(constantInteger) {
+function IDENTIFIER(name) {
     return {
         type: ASTEnum.IDENTIFIER,
-        value: constantInteger
+        name: name
     };
 }
 

@@ -45,7 +45,7 @@ describe('Parser', function () {
         });
         it('should parse an IDENTIFIER with value "abc"', function () {
             expect(Tuple.fst(Result.getOkOrElse(result)).type).to.equal(AST.ASTEnum.IDENTIFIER);
-            expect(Tuple.fst(Result.getOkOrElse(result)).value).to.equal('abc');
+            expect(Tuple.fst(Result.getOkOrElse(result)).name).to.equal('abc');
         });
         it("should have the next token of CONSTANT_INTEGER", function () {
             expect(Tuple.snd(Result.getOkOrElse(result)).token.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER);

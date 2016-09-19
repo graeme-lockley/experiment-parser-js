@@ -128,7 +128,7 @@ function parseConstantIdentifier(name) {
     return function (lexer) {
         var result = symbol(Lexer.TokenEnum.IDENTIFIER, AST.IDENTIFIER)(lexer);
 
-        if (Result.isOk(result) && Tuple.fst(Result.getOkOrElse(result)).value == name) {
+        if (Result.isOk(result) && Tuple.fst(Result.getOkOrElse(result)).name == name) {
             return result;
         } else {
             return Result.Error("Expected " + name);
