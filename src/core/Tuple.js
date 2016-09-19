@@ -2,17 +2,17 @@
 
 var Tuple = function (fst, snd) {
     return {
-        fstA: fst,
-        sndA: snd
+        fst: fst,
+        snd: snd
     };
 };
 
 function fst(tuple) {
-    return tuple.fstA;
+    return tuple.fst;
 }
 
 function snd(tuple) {
-    return tuple.sndA;
+    return tuple.snd;
 }
 
 function setFst(fst, tuple) {
