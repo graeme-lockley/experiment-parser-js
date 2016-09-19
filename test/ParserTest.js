@@ -1,5 +1,6 @@
 "use strict";
 
+var Result = require('../src/core/Result');
 var Parser = require("../src/Parser");
 var Lexer = require("../src/Lexer");
 var AST = require('../src/AST');
@@ -24,14 +25,14 @@ describe('Parser', function () {
         var result = Parser.parseTerm(Lexer.fromString("123"));
 
         it("should parse without any errors", function () {
-            expect(result.isOk()).to.equal(true);
+            expect(Result.isOk(result)).to.equal(true);
         });
         it("should parse a CONSTANT_INTEGER with value 123", function () {
-            expect(result.getOkOrElse(null).fst.type).to.equal(AST.ASTEnum.CONSTANT_INTEGER);
-            expect(result.getOkOrElse(null).fst.value).to.equal(123);
+            expect(Result.getOkOrElse(result).fst.type).to.equal(AST.ASTEnum.CONSTANT_INTEGER);
+            expect(Result.getOkOrElse(result).fst.value).to.equal(123);
         });
         it("should have the next token of EOF", function () {
-            expect(result.getOkOrElse(null).snd.token.id).to.equal(Lexer.TokenEnum.EOF);
+            expect(Result.getOkOrElse(result).snd.token.id).to.equal(Lexer.TokenEnum.EOF);
         });
     });
 
@@ -39,14 +40,14 @@ describe('Parser', function () {
         var result = Parser.parseTerm(Lexer.fromString("abc 123"));
 
         it("should parse without any errors", function () {
-            expect(result.isOk()).to.equal(true);
+            expect(Result.isOk(result)).to.equal(true);
         });
         it('should parse an IDENTIFIER with value "abc"', function () {
-            expect(result.getOkOrElse(null).fst.type).to.equal(AST.ASTEnum.IDENTIFIER);
-            expect(result.getOkOrElse(null).fst.value).to.equal('abc');
+            expect(Result.getOkOrElse(result).fst.type).to.equal(AST.ASTEnum.IDENTIFIER);
+            expect(Result.getOkOrElse(result).fst.value).to.equal('abc');
         });
         it("should have the next token of CONSTANT_INTEGER", function () {
-            expect(result.getOkOrElse(null).snd.token.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER);
+            expect(Result.getOkOrElse(result).snd.token.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER);
         });
     });
 });

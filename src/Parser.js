@@ -21,7 +21,7 @@ function compose(f1, f2) {
 }
 
 function mapError(result, errorMessage) {
-    if (result.isError()) {
+    if (Result.isError(result)) {
         return Result.Error(errorMessage);
     } else {
         return result;

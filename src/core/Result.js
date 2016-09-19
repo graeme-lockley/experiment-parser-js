@@ -6,15 +6,6 @@ var Ok = function (value) {
 
         isOk: function () {
             return true;
-        },
-        isError: function () {
-            return false;
-        },
-        getOkOrElse: function(ignore) {
-            return this.ok;
-        },
-        getErrorOrElse: function(errorValue) {
-            return errorValue;
         }
     };
 };
@@ -25,20 +16,31 @@ var Error = function (value) {
 
         isOk: function () {
             return false;
-        },
-        isError: function () {
-            return true;
-        },
-        getOkOrElse: function(okValue) {
-            return okValue;
-        },
-        getErrorOrElse: function(ignore) {
-            return this.error;
         }
     };
 };
 
+function isOk(result) {
+    return result.isOk();
+}
+
+function isError(result) {
+    return !isOk(result);
+}
+
+function getOkOrElse(result, elseValue) {
+    return isOk(result) ? result.ok : elseValue;
+}
+
+function getErrorOrElse(result, elseValue) {
+    return isError(result) ? result.error : elseValue;
+}
+
 module.exports = {
     Ok: Ok,
-    Error: Error
+    Error: Error,
+    isOk: isOk,
+    isError: isError,
+    getOkOrElse: getOkOrElse,
+    getErrorOrElse: getErrorOrElse
 };
