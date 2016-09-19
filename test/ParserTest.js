@@ -66,4 +66,21 @@ describe('Parser', function () {
             expect(Tuple.snd(Result.getOkOrElse(result)).token.id).to.equal(Lexer.TokenEnum.EOF);
         });
     });
+
+    describe('given the input "\\a \\b -> (a)" to parseTerm', function () {
+        var result = Parser.parseTerm(Lexer.fromString('\\a \\b -> (a)'));
+
+        it("should parse without any errors", function () {
+            expect(Result.isOk(result)).to.equal(true);
+        });
+        it("should parse a LAMBDA with variables ['a', 'b'] and expression of IDENTIFIER with value 'a'", function () {
+            expect(Tuple.fst(Result.getOkOrElse(result)).type).to.equal(AST.ASTEnum.LAMBDA);
+            expect(Tuple.fst(Result.getOkOrElse(result)).variables.length).to.equal(2);
+            expect(Tuple.fst(Result.getOkOrElse(result)).variables[0]).to.equal('a');
+            expect(Tuple.fst(Result.getOkOrElse(result)).variables[1]).to.equal('b');
+        });
+        it("should have the next token of EOF", function () {
+            expect(Tuple.snd(Result.getOkOrElse(result)).token.id).to.equal(Lexer.TokenEnum.EOF);
+        });
+    });
 });

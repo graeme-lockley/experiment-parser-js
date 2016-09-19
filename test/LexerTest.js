@@ -68,17 +68,29 @@ describe('Lexer', function () {
         });
     });
 
-    describe('with input "( )"', function() {
-        var context = Lexer.fromString('( )');
+    describe('with input "a\\ b) c("', function() {
+        var context = Lexer.fromString('a\\ b) c(');
 
-        it('first token should be LPAREN', function() {
-            expect(context.token.id).to.equal(Lexer.TokenEnum.LPAREN);
+        it('first token should be IDENTIFIER', function() {
+            expect(context.token.id).to.equal(Lexer.TokenEnum.IDENTIFIER);
         });
-        it('second token should be RPAREN', function() {
-            expect(context.next().token.id).to.equal(Lexer.TokenEnum.RPAREN);
+        it('second token should be LAMBDA', function() {
+            expect(context.next().token.id).to.equal(Lexer.TokenEnum.LAMBDA);
         });
-        it('third token should be EOF', function() {
-            expect(context.next().next().token.id).to.equal(Lexer.TokenEnum.EOF);
+        it('third token should be IDENTIFIER', function() {
+            expect(context.next().next().token.id).to.equal(Lexer.TokenEnum.IDENTIFIER);
+        });
+        it('forth token should be RPAREN', function() {
+            expect(context.next().next().next().token.id).to.equal(Lexer.TokenEnum.RPAREN);
+        });
+        it('fifth token should be IDENTIFIER', function() {
+            expect(context.next().next().next().next().token.id).to.equal(Lexer.TokenEnum.IDENTIFIER);
+        });
+        it('sixth token should be LPAREN', function() {
+            expect(context.next().next().next().next().next().token.id).to.equal(Lexer.TokenEnum.LPAREN);
+        });
+        it('seventh token should be EOF', function() {
+            expect(context.next().next().next().next().next().next().token.id).to.equal(Lexer.TokenEnum.EOF);
         });
     });
 });

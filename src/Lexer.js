@@ -1,12 +1,21 @@
 "use strict";
 
+var Tuple = require('./core/Tuple');
+
 var TokenEnum = {
     EOF: 1,
     IDENTIFIER: 2,
     CONSTANT_INTEGER: 3,
     LPAREN: 4,
-    RPAREN: 5
+    RPAREN: 5,
+    LAMBDA: 6
 };
+
+var reservedCharacters = [
+    Tuple.Tuple('\\'.charCodeAt(0), TokenEnum.LAMBDA),
+    Tuple.Tuple('('.charCodeAt(0), TokenEnum.LPAREN),
+    Tuple.Tuple(')'.charCodeAt(0), TokenEnum.RPAREN)
+];
 
 
 function isWhitespace(c) {
@@ -21,10 +30,14 @@ function isDigit(c) {
     return c >= 48 && c <= 57;
 }
 
-function isCharacter(characterToMatch) {
-    return function (c) {
-        return c == characterToMatch;
-    }
+function findReservedCharacter(c) {
+    return reservedCharacters.find(function (tuple) {
+        return Tuple.fst(tuple) == c;
+    });
+}
+
+function isReservedCharacter(c) {
+    return findReservedCharacter(c);
 }
 
 
@@ -108,14 +121,11 @@ function next(context) {
 
         if (cursor.isEndOfFile()) {
             return makeContext(context, cursor.toToken(TokenEnum.EOF));
-        } else if (cursor.is(isCharacter('('.charCodeAt(0)))) {
+        } else if (cursor.is(isReservedCharacter)) {
             cursor.markStartOfToken();
+            var reservedCharacter = cursor.charCodeAtIndex();
             cursor.advanceIndex();
-            return makeContext(context, cursor.toToken(TokenEnum.LPAREN));
-        } else if (cursor.is(isCharacter(')'.charCodeAt(0)))) {
-            cursor.markStartOfToken();
-            cursor.advanceIndex();
-            return makeContext(context, cursor.toToken(TokenEnum.RPAREN));
+            return makeContext(context, cursor.toToken(Tuple.snd(findReservedCharacter(reservedCharacter))));
         } else if (cursor.is(isDigit)) {
             cursor.markStartOfToken();
             while (cursor.is(isDigit)) {
@@ -125,7 +135,7 @@ function next(context) {
         } else {
             cursor.markStartOfToken();
 
-            while (cursor.isNot(isWhitespace)) {
+            while (cursor.isNot(isWhitespace) && cursor.isNot(isReservedCharacter)) {
                 cursor.advanceIndex();
             }
 

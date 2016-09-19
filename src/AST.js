@@ -2,7 +2,8 @@
 
 var ASTEnum = {
     CONSTANT_INTEGER: 1,
-    IDENTIFIER: 2
+    IDENTIFIER: 2,
+    LAMBDA: 3
 };
 
 function CONSTANT_INTEGER(constantInteger) {
@@ -19,8 +20,17 @@ function IDENTIFIER(constantInteger) {
     };
 }
 
+function LAMBDA(variables, expression) {
+    return {
+        type: ASTEnum.LAMBDA,
+        variables: variables,
+        expression: expression
+    };
+}
+
 module.exports = {
     ASTEnum: ASTEnum,
     CONSTANT_INTEGER: CONSTANT_INTEGER,
-    IDENTIFIER: IDENTIFIER
+    IDENTIFIER: IDENTIFIER,
+    LAMBDA: LAMBDA
 };

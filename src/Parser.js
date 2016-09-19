@@ -80,6 +80,30 @@ function parseAnd(parsers, mapFunction) {
     }
 }
 
+function many1(parser) {
+    return function (lexer) {
+        var firstResult = parser(lexer);
+
+        if (Result.isOk(firstResult)) {
+            var result = [Tuple.fst(Result.getOkOrElse(firstResult))];
+            var currentLexer = Tuple.snd(Result.getOkOrElse(firstResult));
+
+            while (true) {
+                var currentResult = parser(currentLexer);
+
+                if (Result.isOk(currentResult)) {
+                    result.push(Tuple.fst(Result.getOkOrElse(currentResult)));
+                    currentLexer = Tuple.snd(Result.getOkOrElse(currentResult));
+                } else {
+                    return Result.Ok(Tuple.Tuple(result, currentLexer));
+                }
+            }
+        } else {
+            return firstResult;
+        }
+    }
+}
+
 function nthArrayElement(n) {
     return function (elements) {
         return elements[n];
@@ -100,6 +124,29 @@ function parseIdentifier(lexer) {
     );
 }
 
+function parseConstantIdentifier(name) {
+    return function (lexer) {
+        var result = symbol(Lexer.TokenEnum.IDENTIFIER, AST.IDENTIFIER)(lexer);
+
+        if (Result.isOk(result) && Tuple.fst(Result.getOkOrElse(result)).value == name) {
+            return result;
+        } else {
+            return Result.Error("Expected " + name);
+        }
+    };
+}
+
+function parseLambda(lexer) {
+    return parseAnd([
+        many1(
+            parseAnd([symbol(Lexer.TokenEnum.LAMBDA, identity), symbol(Lexer.TokenEnum.IDENTIFIER, identity)], nthArrayElement(1))),
+        parseConstantIdentifier("->"),
+        parseExpr
+    ], function (items) {
+        return AST.LAMBDA(items[0], items[2]);
+    })(lexer);
+}
+
 function parseParenthesisExpression(lexer) {
     return parseAnd([
         symbol(Lexer.TokenEnum.LPAREN, identity),
@@ -112,7 +159,7 @@ function parseExpr(lexer) {
 }
 
 function parseTerm(lexer) {
-    return parseOr([parseConstantInteger, parseIdentifier, parseParenthesisExpression])(lexer);
+    return parseOr([parseConstantInteger, parseIdentifier, parseLambda, parseParenthesisExpression])(lexer);
 }
 
 var parseString = function (input) {
