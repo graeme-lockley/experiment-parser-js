@@ -14,6 +14,14 @@ var AST = require('./AST');
  *        | '(' EXPR ')'
  */
 
+/**
+ * parser 'a :: Lexer -> Result(Tuple('a, Lexer))
+ */
+
+function identity(x) {
+    return x;
+}
+
 function compose(f1, f2) {
     return function (x) {
         return f1(f2(x));
@@ -28,36 +36,75 @@ function mapError(result, errorMessage) {
     }
 }
 
-function symbol(lexer, tokenID, mapFunction) {
-    if (lexer.token.id == tokenID) {
-        return Result.Ok(Tuple.Tuple(mapFunction(lexer.token.text), lexer.next()));
-    } else {
-        return Result.Error("Expected the symbol " + tokenID);
+function symbol(tokenID, mapFunction) {
+    return function (lexer) {
+        if (lexer.token.id == tokenID) {
+            return Result.Ok(Tuple.Tuple(mapFunction(lexer.token.text), lexer.next()));
+        } else {
+            return Result.Error("Expected the symbol " + tokenID);
+        }
+    };
+}
+
+function parseOr(parsers) {
+    return function (lexer) {
+        for (var index = 0; index < parsers.length; index += 1) {
+            var parserIndexResult = parsers[index](lexer);
+            if (Result.isOk(parserIndexResult)) {
+                return parserIndexResult;
+            }
+        }
+        return Result.Error("None of the OR terms could be matched");
+    };
+}
+
+function parseAnd(parsers, mapFunction) {
+    return function (lexer) {
+        if (parsers.length == 0) {
+            return Result.Error("And parsing function requires at least one parser")
+        } else {
+            var results = [];
+            var currentLexer = lexer;
+            for (var index = 0; index < parsers.length; index += 1) {
+                var intermediateResult = parsers[index](currentLexer);
+                if (Result.isOk(intermediateResult)) {
+                    results.push(Tuple.fst(Result.getOkOrElse(intermediateResult)));
+                    currentLexer = Tuple.snd(Result.getOkOrElse(intermediateResult));
+                } else {
+                    return intermediateResult;
+                }
+            }
+
+            return Result.Ok(Tuple.Tuple(mapFunction(results), currentLexer));
+        }
     }
 }
 
-function parseOr(lexer, parsers) {
-    for (var index = 0; index < parsers.length; index += 1) {
-        var parserIndexResult = parsers[index](lexer);
-        if (parserIndexResult.isOk()) {
-            return parserIndexResult;
-        }
+function nthArrayElement(n) {
+    return function (elements) {
+        return elements[n];
     }
-    return Result.Error("None of the OR terms could be matched");
 }
 
 function parseConstantInteger(lexer) {
     return mapError(
-        symbol(lexer, Lexer.TokenEnum.CONSTANT_INTEGER, compose(AST.CONSTANT_INTEGER, parseInt)),
+        symbol(Lexer.TokenEnum.CONSTANT_INTEGER, compose(AST.CONSTANT_INTEGER, parseInt))(lexer),
         "Expected a constant integer"
     );
 }
 
 function parseIdentifier(lexer) {
     return mapError(
-        symbol(lexer, Lexer.TokenEnum.IDENTIFIER, AST.IDENTIFIER),
+        symbol(Lexer.TokenEnum.IDENTIFIER, AST.IDENTIFIER)(lexer),
         "Expected an identifier"
     );
+}
+
+function parseParenthesisExpression(lexer) {
+    return parseAnd([
+        symbol(Lexer.TokenEnum.LPAREN, identity),
+        parseExpr,
+        symbol(Lexer.TokenEnum.RPAREN, identity)], nthArrayElement(1))(lexer);
 }
 
 function parseExpr(lexer) {
@@ -65,7 +112,7 @@ function parseExpr(lexer) {
 }
 
 function parseTerm(lexer) {
-    return parseOr(lexer, [parseConstantInteger, parseIdentifier]);
+    return parseOr([parseConstantInteger, parseIdentifier, parseParenthesisExpression])(lexer);
 }
 
 var parseString = function (input) {

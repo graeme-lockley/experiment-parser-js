@@ -3,7 +3,9 @@
 var TokenEnum = {
     EOF: 1,
     IDENTIFIER: 2,
-    CONSTANT_INTEGER: 3
+    CONSTANT_INTEGER: 3,
+    LPAREN: 4,
+    RPAREN: 5
 };
 
 
@@ -17,6 +19,12 @@ function isEndOfLine(c) {
 
 function isDigit(c) {
     return c >= 48 && c <= 57;
+}
+
+function isCharacter(characterToMatch) {
+    return function (c) {
+        return c == characterToMatch;
+    }
 }
 
 
@@ -100,22 +108,28 @@ function next(context) {
 
         if (cursor.isEndOfFile()) {
             return makeContext(context, cursor.toToken(TokenEnum.EOF));
-        } else {
-            if (cursor.is(isDigit)) {
-                cursor.markStartOfToken();
-                while(cursor.is(isDigit)) {
-                    cursor.advanceIndex();
-                }
-                return makeContext(context, cursor.toToken(TokenEnum.CONSTANT_INTEGER));
-            } else {
-                cursor.markStartOfToken();
-
-                while(cursor.isNot(isWhitespace)) {
-                    cursor.advanceIndex();
-                }
-
-                return makeContext(context, cursor.toToken(TokenEnum.IDENTIFIER));
+        } else if (cursor.is(isCharacter('('.charCodeAt(0)))) {
+            cursor.markStartOfToken();
+            cursor.advanceIndex();
+            return makeContext(context, cursor.toToken(TokenEnum.LPAREN));
+        } else if (cursor.is(isCharacter(')'.charCodeAt(0)))) {
+            cursor.markStartOfToken();
+            cursor.advanceIndex();
+            return makeContext(context, cursor.toToken(TokenEnum.RPAREN));
+        } else if (cursor.is(isDigit)) {
+            cursor.markStartOfToken();
+            while (cursor.is(isDigit)) {
+                cursor.advanceIndex();
             }
+            return makeContext(context, cursor.toToken(TokenEnum.CONSTANT_INTEGER));
+        } else {
+            cursor.markStartOfToken();
+
+            while (cursor.isNot(isWhitespace)) {
+                cursor.advanceIndex();
+            }
+
+            return makeContext(context, cursor.toToken(TokenEnum.IDENTIFIER));
         }
     }
 }

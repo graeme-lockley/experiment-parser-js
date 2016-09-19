@@ -12,7 +12,6 @@ describe('Lexer', function () {
         describe('after initialisation', function () {
             it('should match to an IDENTIFIER', function () {
                 expect(context.token.id).to.equal(Lexer.TokenEnum.IDENTIFIER);
-
             });
             it('should have the coordinates (1, 1)', function () {
                 expect(context.token.x).to.equal(1);
@@ -66,6 +65,20 @@ describe('Lexer', function () {
             it('should have the text ""', function () {
                 expect(nextNextContext.token.text).to.equal("");
             });
+        });
+    });
+
+    describe('with input "( )"', function() {
+        var context = Lexer.fromString('( )');
+
+        it('first token should be LPAREN', function() {
+            expect(context.token.id).to.equal(Lexer.TokenEnum.LPAREN);
+        });
+        it('second token should be RPAREN', function() {
+            expect(context.next().token.id).to.equal(Lexer.TokenEnum.RPAREN);
+        });
+        it('third token should be EOF', function() {
+            expect(context.next().next().token.id).to.equal(Lexer.TokenEnum.EOF);
         });
     });
 });

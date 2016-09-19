@@ -51,4 +51,19 @@ describe('Parser', function () {
             expect(Tuple.snd(Result.getOkOrElse(result)).token.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER);
         });
     });
+
+    describe('given the input "( 123)" to parseTerm', function () {
+        var result = Parser.parseTerm(Lexer.fromString('( 123)'));
+
+        it("should parse without any errors", function () {
+            expect(Result.isOk(result)).to.equal(true);
+        });
+        it("should parse a CONSTANT_INTEGER with value 123", function () {
+            expect(Tuple.fst(Result.getOkOrElse(result)).type).to.equal(AST.ASTEnum.CONSTANT_INTEGER);
+            expect(Tuple.fst(Result.getOkOrElse(result)).value).to.equal(123);
+        });
+        it("should have the next token of EOF", function () {
+            expect(Tuple.snd(Result.getOkOrElse(result)).token.id).to.equal(Lexer.TokenEnum.EOF);
+        });
+    });
 });
