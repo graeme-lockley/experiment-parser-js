@@ -1,8 +1,9 @@
 "use strict";
 
-var Result = require("./core/Result");
-var Lexer = require("./Lexer");
-var Tuple = require("./core/Tuple");
+var Result = require('./core/Result');
+var Lexer = require('./Lexer');
+var Tuple = require('./core/Tuple');
+var AST = require('./AST');
 
 
 /**
@@ -13,18 +14,58 @@ var Tuple = require("./core/Tuple");
  *        | '(' EXPR ')'
  */
 
+function compose(f1, f2) {
+    return function (x) {
+        return f1(f2(x));
+    }
+}
+
+function mapError(result, errorMessage) {
+    if (result.isError()) {
+        return Result.Error(errorMessage);
+    } else {
+        return result;
+    }
+}
+
+function symbol(lexer, tokenID, mapFunction) {
+    if (lexer.token.id == tokenID) {
+        return Result.Ok(Tuple.Tuple(mapFunction(lexer.token.text), lexer.next()));
+    } else {
+        return Result.Error("Expected the symbol " + tokenID);
+    }
+}
+
+function parseOr(lexer, parsers) {
+    for (var index = 0; index < parsers.length; index += 1) {
+        var parserIndexResult = parsers[index](lexer);
+        if (parserIndexResult.isOk()) {
+            return parserIndexResult;
+        }
+    }
+    return Result.Error("None of the OR terms could be matched");
+}
+
+function parseConstantInteger(lexer) {
+    return mapError(
+        symbol(lexer, Lexer.TokenEnum.CONSTANT_INTEGER, compose(AST.CONSTANT_INTEGER, parseInt)),
+        "Expected a constant integer"
+    );
+}
+
+function parseIdentifier(lexer) {
+    return mapError(
+        symbol(lexer, Lexer.TokenEnum.IDENTIFIER, AST.IDENTIFIER),
+        "Expected an identifier"
+    );
+}
 
 function parseExpr(lexer) {
     return parseTerm(lexer);
 }
 
 function parseTerm(lexer) {
-    var token = lexer.token.id;
-
-    if (token == Lexer.TokenEnum.CONSTANT_INTEGER) {
-        return Result.Ok(Tuple.Tuple(parseInt(lexer.token.text), lexer.next()));
-    }
-    return Result.Error("Expected a constant integer");
+    return parseOr(lexer, [parseConstantInteger, parseIdentifier]);
 }
 
 var parseString = function (input) {
