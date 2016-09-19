@@ -2,18 +2,31 @@
 
 var Tuple = function (fst, snd) {
     return {
-        fst: fst,
-        snd: snd,
-
-        setFst: function (fst) {
-            return Tuple(fst, this.snd);
-        },
-        setSnd: function (snd) {
-            return Tuple(this.fst, snd);
-        }
+        fstA: fst,
+        sndA: snd
     };
 };
 
+function fst(tuple) {
+    return tuple.fstA;
+}
+
+function snd(tuple) {
+    return tuple.sndA;
+}
+
+function setFst(fst, tuple) {
+    return Tuple(fst, snd(tuple));
+}
+
+function setSnd(snd, tuple) {
+    return Tuple(fst(tuple), snd);
+}
+
 module.exports = {
-    Tuple: Tuple
+    Tuple: Tuple,
+    fst: fst,
+    snd: snd,
+    setFst: setFst,
+    setSnd: setSnd
 };

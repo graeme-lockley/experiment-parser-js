@@ -1,6 +1,7 @@
 "use strict";
 
 var Result = require('../src/core/Result');
+var Tuple = require('../src/core/Tuple');
 var Parser = require("../src/Parser");
 var Lexer = require("../src/Lexer");
 var AST = require('../src/AST');
@@ -28,11 +29,11 @@ describe('Parser', function () {
             expect(Result.isOk(result)).to.equal(true);
         });
         it("should parse a CONSTANT_INTEGER with value 123", function () {
-            expect(Result.getOkOrElse(result).fst.type).to.equal(AST.ASTEnum.CONSTANT_INTEGER);
-            expect(Result.getOkOrElse(result).fst.value).to.equal(123);
+            expect(Tuple.fst(Result.getOkOrElse(result)).type).to.equal(AST.ASTEnum.CONSTANT_INTEGER);
+            expect(Tuple.fst(Result.getOkOrElse(result)).value).to.equal(123);
         });
         it("should have the next token of EOF", function () {
-            expect(Result.getOkOrElse(result).snd.token.id).to.equal(Lexer.TokenEnum.EOF);
+            expect(Tuple.snd(Result.getOkOrElse(result)).token.id).to.equal(Lexer.TokenEnum.EOF);
         });
     });
 
@@ -43,11 +44,11 @@ describe('Parser', function () {
             expect(Result.isOk(result)).to.equal(true);
         });
         it('should parse an IDENTIFIER with value "abc"', function () {
-            expect(Result.getOkOrElse(result).fst.type).to.equal(AST.ASTEnum.IDENTIFIER);
-            expect(Result.getOkOrElse(result).fst.value).to.equal('abc');
+            expect(Tuple.fst(Result.getOkOrElse(result)).type).to.equal(AST.ASTEnum.IDENTIFIER);
+            expect(Tuple.fst(Result.getOkOrElse(result)).value).to.equal('abc');
         });
         it("should have the next token of CONSTANT_INTEGER", function () {
-            expect(Result.getOkOrElse(result).snd.token.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER);
+            expect(Tuple.snd(Result.getOkOrElse(result)).token.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER);
         });
     });
 });
