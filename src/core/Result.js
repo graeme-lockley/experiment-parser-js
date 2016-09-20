@@ -5,11 +5,11 @@ class OkImpl {
         this._ok = value;
     }
 
-    static isOk() {
+    isOk() {
         return true;
     }
 
-    static isError() {
+    isError() {
         return false;
     }
 
@@ -17,7 +17,7 @@ class OkImpl {
         return this._ok;
     }
 
-    static getErrorOrElse(elseValue) {
+    getErrorOrElse(elseValue) {
         return elseValue;
     }
 
@@ -31,15 +31,15 @@ class ErrorImpl {
         this._error = value;
     }
 
-    static isOk() {
+    isOk() {
         return false;
     }
 
-    static isError() {
+    isError() {
         return true;
     }
 
-    static getOkOrElse(elseValue) {
+    getOkOrElse(elseValue) {
         return elseValue;
     }
 
