@@ -1,29 +1,32 @@
 "use strict";
 
-var Tuple = function (fst, snd) {
-    return [fst, snd];
-};
+class TupleImpl {
+    constructor(fst, snd) {
+        this._fst = fst;
+        this._snd = snd;
+    }
 
-function fst(tuple) {
-    return tuple[0];
+    get fst() {
+        return this._fst;
+    }
+
+    get snd() {
+        return this._snd;
+    }
+
+    setFst(fst) {
+        return new TupleImpl(fst, this._snd);
+    }
+
+    setSnd(snd) {
+        return new TupleImpl(this._fst, snd);
+    }
 }
 
-function snd(tuple) {
-    return tuple[1];
-}
-
-function setFst(fst, tuple) {
-    return Tuple(fst, snd(tuple));
-}
-
-function setSnd(snd, tuple) {
-    return Tuple(fst(tuple), snd);
+function Tuple(fst, snd) {
+    return new TupleImpl(fst, snd);
 }
 
 module.exports = {
-    Tuple: Tuple,
-    fst: fst,
-    snd: snd,
-    setFst: setFst,
-    setSnd: setSnd
+    Tuple
 };

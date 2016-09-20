@@ -60,8 +60,8 @@ function parseAnd(parsers, mapFunction) {
             for (var index = 0; index < parsers.length; index += 1) {
                 var intermediateResult = parsers[index](currentLexer);
                 if (Result.isOk(intermediateResult)) {
-                    results.push(Tuple.fst(Result.getOkOrElse(intermediateResult)));
-                    currentLexer = Tuple.snd(Result.getOkOrElse(intermediateResult));
+                    results.push(Result.getOkOrElse(intermediateResult).fst);
+                    currentLexer = Result.getOkOrElse(intermediateResult).snd;
                 } else {
                     return intermediateResult;
                 }
@@ -77,15 +77,15 @@ function many1(parser) {
         var firstResult = parser(lexer);
 
         if (Result.isOk(firstResult)) {
-            var result = [Tuple.fst(Result.getOkOrElse(firstResult))];
-            var currentLexer = Tuple.snd(Result.getOkOrElse(firstResult));
+            var result = [Result.getOkOrElse(firstResult).fst];
+            var currentLexer = Result.getOkOrElse(firstResult).snd;
 
             while (true) {
                 var currentResult = parser(currentLexer);
 
                 if (Result.isOk(currentResult)) {
-                    result.push(Tuple.fst(Result.getOkOrElse(currentResult)));
-                    currentLexer = Tuple.snd(Result.getOkOrElse(currentResult));
+                    result.push(Result.getOkOrElse(currentResult).fst);
+                    currentLexer = Result.getOkOrElse(currentResult).snd;
                 } else {
                     return Result.Ok(Tuple.Tuple(result, currentLexer));
                 }
@@ -114,7 +114,7 @@ function parseConstantIdentifier(name) {
     return lexer => {
         var result = symbol(Lexer.TokenEnum.IDENTIFIER, AST.IDENTIFIER)(lexer);
 
-        return (Result.isOk(result) && Tuple.fst(Result.getOkOrElse(result)).name == name)
+        return (Result.isOk(result) && Result.getOkOrElse(result).fst.name == name)
             ? result
             : Result.Error("Expected " + name);
     };

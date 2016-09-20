@@ -32,7 +32,7 @@ function isDigit(c) {
 
 function findReservedCharacter(c) {
     return reservedCharacters.find(function (tuple) {
-        return Tuple.fst(tuple) == c;
+        return tuple.fst == c;
     });
 }
 
@@ -125,7 +125,7 @@ function next(context) {
             cursor.markStartOfToken();
             var reservedCharacter = cursor.charCodeAtIndex();
             cursor.advanceIndex();
-            return makeContext(context, cursor.toToken(Tuple.snd(findReservedCharacter(reservedCharacter))));
+            return makeContext(context, cursor.toToken(findReservedCharacter(reservedCharacter).snd));
         } else if (cursor.is(isDigit)) {
             cursor.markStartOfToken();
             while (cursor.is(isDigit)) {

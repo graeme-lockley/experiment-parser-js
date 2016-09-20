@@ -29,11 +29,11 @@ describe('Parser', function () {
             expect(Result.isOk(result)).to.equal(true);
         });
         it("should parse a CONSTANT_INTEGER with value 123", function () {
-            expect(Tuple.fst(Result.getOkOrElse(result)).type).to.equal(AST.ASTEnum.CONSTANT_INTEGER);
-            expect(Tuple.fst(Result.getOkOrElse(result)).value).to.equal(123);
+            expect(Result.getOkOrElse(result).fst.type).to.equal(AST.ASTEnum.CONSTANT_INTEGER);
+            expect(Result.getOkOrElse(result).fst.value).to.equal(123);
         });
         it("should have the next token of EOF", function () {
-            expect(Tuple.snd(Result.getOkOrElse(result)).token.id).to.equal(Lexer.TokenEnum.EOF);
+            expect(Result.getOkOrElse(result).snd.token.id).to.equal(Lexer.TokenEnum.EOF);
         });
     });
 
@@ -44,11 +44,11 @@ describe('Parser', function () {
             expect(Result.isOk(result)).to.equal(true);
         });
         it('should parse an IDENTIFIER with value "abc"', function () {
-            expect(Tuple.fst(Result.getOkOrElse(result)).type).to.equal(AST.ASTEnum.IDENTIFIER);
-            expect(Tuple.fst(Result.getOkOrElse(result)).name).to.equal('abc');
+            expect(Result.getOkOrElse(result).fst.type).to.equal(AST.ASTEnum.IDENTIFIER);
+            expect(Result.getOkOrElse(result).fst.name).to.equal('abc');
         });
         it("should have the next token of CONSTANT_INTEGER", function () {
-            expect(Tuple.snd(Result.getOkOrElse(result)).token.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER);
+            expect(Result.getOkOrElse(result).snd.token.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER);
         });
     });
 
@@ -59,11 +59,11 @@ describe('Parser', function () {
             expect(Result.isOk(result)).to.equal(true);
         });
         it("should parse a CONSTANT_INTEGER with value 123", function () {
-            expect(Tuple.fst(Result.getOkOrElse(result)).type).to.equal(AST.ASTEnum.CONSTANT_INTEGER);
-            expect(Tuple.fst(Result.getOkOrElse(result)).value).to.equal(123);
+            expect(Result.getOkOrElse(result).fst.type).to.equal(AST.ASTEnum.CONSTANT_INTEGER);
+            expect(Result.getOkOrElse(result).fst.value).to.equal(123);
         });
         it("should have the next token of EOF", function () {
-            expect(Tuple.snd(Result.getOkOrElse(result)).token.id).to.equal(Lexer.TokenEnum.EOF);
+            expect(Result.getOkOrElse(result).snd.token.id).to.equal(Lexer.TokenEnum.EOF);
         });
     });
 
@@ -74,13 +74,13 @@ describe('Parser', function () {
             expect(Result.isOk(result)).to.equal(true);
         });
         it("should parse a LAMBDA with variables ['a', 'b'] and expression of IDENTIFIER with value 'a'", function () {
-            expect(Tuple.fst(Result.getOkOrElse(result)).type).to.equal(AST.ASTEnum.LAMBDA);
-            expect(Tuple.fst(Result.getOkOrElse(result)).variables.length).to.equal(2);
-            expect(Tuple.fst(Result.getOkOrElse(result)).variables[0]).to.equal('a');
-            expect(Tuple.fst(Result.getOkOrElse(result)).variables[1]).to.equal('b');
+            expect(Result.getOkOrElse(result).fst.type).to.equal(AST.ASTEnum.LAMBDA);
+            expect(Result.getOkOrElse(result).fst.variables.length).to.equal(2);
+            expect(Result.getOkOrElse(result).fst.variables[0]).to.equal('a');
+            expect(Result.getOkOrElse(result).fst.variables[1]).to.equal('b');
         });
         it("should have the next token of EOF", function () {
-            expect(Tuple.snd(Result.getOkOrElse(result)).token.id).to.equal(Lexer.TokenEnum.EOF);
+            expect(Result.getOkOrElse(result).snd.token.id).to.equal(Lexer.TokenEnum.EOF);
         });
     });
 });
