@@ -23,31 +23,23 @@ function identity(x) {
 }
 
 function compose(f1, f2) {
-    return function (x) {
-        return f1(f2(x));
-    }
+    return x => f1(f2(x));
 }
 
 function mapError(result, errorMessage) {
-    if (Result.isError(result)) {
-        return Result.Error(errorMessage);
-    } else {
-        return result;
-    }
+    return Result.isError(result)
+        ? Result.Error(errorMessage)
+        : result;
 }
 
-function symbol(tokenID, mapFunction) {
-    return function (lexer) {
-        if (lexer.token.id == tokenID) {
-            return Result.Ok(Tuple.Tuple(mapFunction(lexer.token.text), lexer.next()));
-        } else {
-            return Result.Error("Expected the symbol " + tokenID);
-        }
-    };
+function symbol(tokenID, mapFunction = identity) {
+    return lexer => (lexer.token.id == tokenID)
+        ? Result.Ok(Tuple.Tuple(mapFunction(lexer.token.text), lexer.next()))
+        : Result.Error("Expected the symbol " + tokenID);
 }
 
 function parseOr(parsers) {
-    return function (lexer) {
+    return lexer => {
         for (var index = 0; index < parsers.length; index += 1) {
             var parserIndexResult = parsers[index](lexer);
             if (Result.isOk(parserIndexResult)) {
@@ -59,7 +51,7 @@ function parseOr(parsers) {
 }
 
 function parseAnd(parsers, mapFunction) {
-    return function (lexer) {
+    return lexer => {
         if (parsers.length == 0) {
             return Result.Error("And parsing function requires at least one parser")
         } else {
@@ -81,7 +73,7 @@ function parseAnd(parsers, mapFunction) {
 }
 
 function many1(parser) {
-    return function (lexer) {
+    return lexer => {
         var firstResult = parser(lexer);
 
         if (Result.isOk(firstResult)) {
@@ -104,12 +96,6 @@ function many1(parser) {
     }
 }
 
-function nthArrayElement(n) {
-    return function (elements) {
-        return elements[n];
-    }
-}
-
 function parseConstantInteger(lexer) {
     return mapError(
         symbol(Lexer.TokenEnum.CONSTANT_INTEGER, compose(AST.CONSTANT_INTEGER, parseInt))(lexer),
@@ -125,33 +111,29 @@ function parseIdentifier(lexer) {
 }
 
 function parseConstantIdentifier(name) {
-    return function (lexer) {
+    return lexer => {
         var result = symbol(Lexer.TokenEnum.IDENTIFIER, AST.IDENTIFIER)(lexer);
 
-        if (Result.isOk(result) && Tuple.fst(Result.getOkOrElse(result)).name == name) {
-            return result;
-        } else {
-            return Result.Error("Expected " + name);
-        }
+        return (Result.isOk(result) && Tuple.fst(Result.getOkOrElse(result)).name == name)
+            ? result
+            : Result.Error("Expected " + name);
     };
 }
 
 function parseLambda(lexer) {
     return parseAnd([
         many1(
-            parseAnd([symbol(Lexer.TokenEnum.LAMBDA, identity), symbol(Lexer.TokenEnum.IDENTIFIER, identity)], nthArrayElement(1))),
+            parseAnd([symbol(Lexer.TokenEnum.LAMBDA), symbol(Lexer.TokenEnum.IDENTIFIER)], elements => elements[1])),
         parseConstantIdentifier("->"),
         parseExpr
-    ], function (items) {
-        return AST.LAMBDA(items[0], items[2]);
-    })(lexer);
+    ], items => AST.LAMBDA(items[0], items[2]))(lexer);
 }
 
 function parseParenthesisExpression(lexer) {
     return parseAnd([
-        symbol(Lexer.TokenEnum.LPAREN, identity),
+        symbol(Lexer.TokenEnum.LPAREN),
         parseExpr,
-        symbol(Lexer.TokenEnum.RPAREN, identity)], nthArrayElement(1))(lexer);
+        symbol(Lexer.TokenEnum.RPAREN)], elements => elements[1])(lexer);
 }
 
 function parseExpr(lexer) {
@@ -162,14 +144,11 @@ function parseTerm(lexer) {
     return parseOr([parseConstantInteger, parseIdentifier, parseLambda, parseParenthesisExpression])(lexer);
 }
 
-var parseString = function (input) {
-    var context = Lexer.fromString(input);
-
-    return parseExpr(context);
-};
+function parseString(input) {
+    return parseExpr(Lexer.fromString(input));
+}
 
 
 module.exports = {
-    parseString: parseString,
-    parseTerm: parseTerm
+    parseString, parseTerm
 };
