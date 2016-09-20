@@ -4,7 +4,7 @@ var Ok = function (value) {
     return {
         ok: value,
 
-        isOk: function () {
+        isOk() {
             return true;
         }
     };
@@ -14,7 +14,7 @@ var Error = function (value) {
     return {
         error: value,
 
-        isOk: function () {
+        isOk() {
             return false;
         }
     };
@@ -37,10 +37,5 @@ function getErrorOrElse(result, elseValue) {
 }
 
 module.exports = {
-    Ok: Ok,
-    Error: Error,
-    isOk: isOk,
-    isError: isError,
-    getOkOrElse: getOkOrElse,
-    getErrorOrElse: getErrorOrElse
+    Ok, Error, isOk, isError, getOkOrElse, getErrorOrElse
 };
