@@ -27,9 +27,9 @@ function compose(f1, f2) {
 }
 
 function mapError(result, errorMessage) {
-    return Result.isError(result)
-        ? Result.Error(errorMessage)
-        : result;
+    return result.map(
+        ok => result,
+        error => Result.Error(errorMessage));
 }
 
 function symbol(tokenID, mapFunction = identity) {
@@ -42,7 +42,7 @@ function parseOr(parsers) {
     return lexer => {
         for (var index = 0; index < parsers.length; index += 1) {
             var parserIndexResult = parsers[index](lexer);
-            if (Result.isOk(parserIndexResult)) {
+            if (parserIndexResult.isOk()) {
                 return parserIndexResult;
             }
         }
@@ -59,9 +59,9 @@ function parseAnd(parsers, mapFunction) {
             var currentLexer = lexer;
             for (var index = 0; index < parsers.length; index += 1) {
                 var intermediateResult = parsers[index](currentLexer);
-                if (Result.isOk(intermediateResult)) {
-                    results.push(Result.getOkOrElse(intermediateResult).fst);
-                    currentLexer = Result.getOkOrElse(intermediateResult).snd;
+                if (intermediateResult.isOk()) {
+                    results.push(intermediateResult.getOkOrElse().fst);
+                    currentLexer = intermediateResult.getOkOrElse().snd;
                 } else {
                     return intermediateResult;
                 }
@@ -76,16 +76,16 @@ function many1(parser) {
     return lexer => {
         var firstResult = parser(lexer);
 
-        if (Result.isOk(firstResult)) {
-            var result = [Result.getOkOrElse(firstResult).fst];
-            var currentLexer = Result.getOkOrElse(firstResult).snd;
+        if (firstResult.isOk()) {
+            var result = [firstResult.getOkOrElse().fst];
+            var currentLexer = firstResult.getOkOrElse().snd;
 
             while (true) {
                 var currentResult = parser(currentLexer);
 
-                if (Result.isOk(currentResult)) {
-                    result.push(Result.getOkOrElse(currentResult).fst);
-                    currentLexer = Result.getOkOrElse(currentResult).snd;
+                if (currentResult.isOk()) {
+                    result.push(currentResult.getOkOrElse().fst);
+                    currentLexer = currentResult.getOkOrElse().snd;
                 } else {
                     return Result.Ok(Tuple.Tuple(result, currentLexer));
                 }
@@ -114,9 +114,9 @@ function parseConstantIdentifier(name) {
     return lexer => {
         var result = symbol(Lexer.TokenEnum.IDENTIFIER, AST.IDENTIFIER)(lexer);
 
-        return (Result.isOk(result) && Result.getOkOrElse(result).fst.name == name)
-            ? result
-            : Result.Error("Expected " + name);
+        return result.map(
+            ok => result,
+            error => Result.Error("Expected " + name));
     };
 }
 

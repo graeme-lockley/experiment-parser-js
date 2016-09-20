@@ -31,9 +31,7 @@ function isDigit(c) {
 }
 
 function findReservedCharacter(c) {
-    return reservedCharacters.find(function (tuple) {
-        return tuple.fst == c;
-    });
+    return reservedCharacters.find(tuple => tuple.fst == c);
 }
 
 function isReservedCharacter(c) {
@@ -165,12 +163,11 @@ function initialContext(input) {
     }.next();
 }
 
-var fromString = function (input) {
+function fromString(input) {
     return initialContext(input);
-};
+}
 
 
 module.exports = {
-    fromString: fromString,
-    TokenEnum: TokenEnum
+    fromString, TokenEnum
 };

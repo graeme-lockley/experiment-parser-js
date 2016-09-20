@@ -1,41 +1,65 @@
 "use strict";
 
-var Ok = function (value) {
-    return {
-        ok: value,
+class OkImpl {
+    constructor(value) {
+        this._ok = value;
+    }
 
-        isOk() {
-            return true;
-        }
-    };
-};
+    static isOk() {
+        return true;
+    }
 
-var Error = function (value) {
-    return {
-        error: value,
+    static isError() {
+        return false;
+    }
 
-        isOk() {
-            return false;
-        }
-    };
-};
+    getOkOrElse(elseValue) {
+        return this._ok;
+    }
 
-function isOk(result) {
-    return result.isOk();
+    static getErrorOrElse(elseValue) {
+        return elseValue;
+    }
+
+    map(okFn, errorFn) {
+        return okFn(this._ok);
+    }
 }
 
-function isError(result) {
-    return !isOk(result);
+class ErrorImpl {
+    constructor(value) {
+        this._error = value;
+    }
+
+    static isOk() {
+        return false;
+    }
+
+    static isError() {
+        return true;
+    }
+
+    static getOkOrElse(elseValue) {
+        return elseValue;
+    }
+
+    getErrorOrElse(elseValue) {
+        return this._error;
+    }
+
+    map(okFn, errorFn) {
+        return errorFn(this._error);
+    }
 }
 
-function getOkOrElse(result, elseValue) {
-    return isOk(result) ? result.ok : elseValue;
+function Ok(value) {
+    return new OkImpl(value);
 }
 
-function getErrorOrElse(result, elseValue) {
-    return isError(result) ? result.error : elseValue;
+function Error(value) {
+    return new ErrorImpl(value);
 }
 
 module.exports = {
-    Ok, Error, isOk, isError, getOkOrElse, getErrorOrElse
+    Ok, Error
 };
