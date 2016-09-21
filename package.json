@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/graeme-lockley/experiment-parser-js/issues"
   },
-  "homepage": "https://github.com/graeme-lockley/experiment-parser-js#readme"
+  "homepage": "https://github.com/graeme-lockley/experiment-parser-js#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2"
+  }
 }

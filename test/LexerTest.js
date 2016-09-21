@@ -1,9 +1,7 @@
 "use strict";
 
 var Lexer = require("../src/Lexer");
-var Chai = require("../bower_components/chai/chai");
-
-var expect = Chai.expect;
+var expect = require("chai").expect;
 
 describe('Lexer', function () {
     describe('with input "Hello 123"', () => {

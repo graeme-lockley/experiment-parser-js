@@ -1,9 +1,7 @@
 "use strict";
 
 var Result = require("../../src/core/Result");
-var Chai = require("../../bower_components/chai/chai");
-
-var expect = Chai.expect;
+var expect = require("../../bower_components/chai/chai").expect;
 
 describe('Core/Result', function () {
     describe('given an Ok created with a content of 123', () => {

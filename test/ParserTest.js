@@ -5,9 +5,8 @@ var Tuple = require('../src/core/Tuple');
 var Parser = require("../src/Parser");
 var Lexer = require("../src/Lexer");
 var AST = require('../src/AST');
-var Chai = require("../bower_components/chai/chai");
 
-var expect = Chai.expect;
+var expect = require("../bower_components/chai/chai").expect;
 
 describe('Parser', function () {
     describe('given the input "123" to parseTerm', () => {

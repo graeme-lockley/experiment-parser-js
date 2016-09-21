@@ -1,9 +1,7 @@
 "use strict";
 
 var Tuple = require("../../src/core/Tuple");
-var Chai = require("../../bower_components/chai/chai");
-
-var expect = Chai.expect;
+var expect = require("../../bower_components/chai/chai").expect;
 
 describe('Core/Tuple', function () {
     describe('given a tuple of (10, "abc")', () => {

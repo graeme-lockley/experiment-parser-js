@@ -3,5 +3,4 @@ node_js:
   - "6.6.0"
 
 before_script:
-  - npm install -g mocha bower
-  - bower install
+  - npm install -g mocha
