@@ -67,9 +67,7 @@ function parseParenthesisExpression(lexer) {
 }
 
 
-function parseExpr(lexer) {
-    return parseTerm(lexer);
-}
+const parseExpr = P.many1(parseTerm, elements => elements.length == 1 ? elements[0] : AST.newApply(elements));
 
 
 function parseTerm(lexer) {

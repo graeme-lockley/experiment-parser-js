@@ -20,6 +20,8 @@ function astToJavascript(ast) {
     } else if (ast instanceof AST.Lambda) {
         const tmpResult = foldr(astToJavascript(ast.expression), (accumulator, item) => "(" + item + " => " + accumulator + ")", ast.variables);
         return tmpResult.substr(1, tmpResult.length - 2);
+    } else if (ast instanceof AST.Apply) {
+        return astToJavascript(ast.expressions[0]) + ast.expressions.slice(1).map(x => "(" + astToJavascript(x) + ")").join('');
     }
 }
 

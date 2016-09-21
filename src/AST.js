@@ -1,6 +1,15 @@
 "use strict";
 
 
+class Apply {
+    constructor(expressions) {
+        this.expressions = expressions;
+    }
+}
+
+const newApply = e => new Apply(e);
+
+
 class ConstantInteger {
     constructor(value) {
         this.value = value;
@@ -30,6 +39,8 @@ const newLambda = (v, e) => new Lambda(v, e);
 
 
 module.exports = {
+    Apply,
+    newApply: e => new Apply(e),
     ConstantInteger,
     newConstantInteger,
     Identifier,
