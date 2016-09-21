@@ -6,7 +6,7 @@ var Parser = require("../src/Parser");
 var Lexer = require("../src/Lexer");
 var AST = require('../src/AST');
 
-var expect = require("../bower_components/chai/chai").expect;
+var expect = require("chai").expect;
 
 describe('Parser', function () {
     describe('given the input "123" to parseTerm', () => {
