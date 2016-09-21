@@ -9,6 +9,9 @@ const Tuple = require('./Tuple');
  */
 
 
+const identity = (x => x);
+
+
 function mapError(result, errorMessage) {
     return result.map(
         ok => result,
@@ -16,7 +19,7 @@ function mapError(result, errorMessage) {
 }
 
 
-function symbol(tokenID, mapFunction = (x => x)) {
+function symbol(tokenID, mapFunction = identity) {
     return lexer => (lexer.token.id == tokenID)
         ? Result.Ok(Tuple.Tuple(mapFunction(lexer.token.text), lexer.next()))
         : Result.Error("Expected the symbol " + tokenID);
@@ -36,7 +39,7 @@ function parseOr(parsers) {
 }
 
 
-function parseAnd(parsers, mapFunction) {
+function parseAnd(parsers, mapFunction = identity) {
     return lexer => {
         if (parsers.length == 0) {
             return Result.Error("And parsing function requires at least one parser")
@@ -59,7 +62,7 @@ function parseAnd(parsers, mapFunction) {
 }
 
 
-function many1(parser) {
+function many1(parser, mapFunction = identity) {
     return lexer => {
         const firstResult = parser(lexer);
 
@@ -74,11 +77,14 @@ function many1(parser) {
                     result.push(currentResult.getOkOrElse().fst);
                     currentLexer = currentResult.getOkOrElse().snd;
                 } else {
-                    return Result.Ok(Tuple.Tuple(result, currentLexer));
+                    return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
                 }
             }
         } else {
-            return firstResult;
+            return firstResult.map(
+                ok => Result.Ok(mapFunction(ok.fst), ok.snd),
+                error => firstResult
+            );
         }
     }
 }
