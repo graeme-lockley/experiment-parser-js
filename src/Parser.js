@@ -1,11 +1,11 @@
 "use strict";
 
-var Result = require('./core/Result');
-var Lexer = require('./Lexer');
-var Tuple = require('./core/Tuple');
-var AST = require('./AST');
+const Result = require('./core/Result');
+const Lexer = require('./Lexer');
+const Tuple = require('./core/Tuple');
+const AST = require('./AST');
 
-var P = require('./core/ParserCombinators');
+const P = require('./core/ParserCombinators');
 
 
 /**
@@ -40,7 +40,7 @@ function parseIdentifier(lexer) {
 
 function parseConstantIdentifier(name) {
     return lexer => {
-        var result = P.symbol(Lexer.TokenEnum.IDENTIFIER, AST.newIdentifier)(lexer);
+        const result = P.symbol(Lexer.TokenEnum.IDENTIFIER, AST.newIdentifier)(lexer);
 
         return result.map(
             ok => lexer.token.text == name ? result : Result.Error("Expected " + name),

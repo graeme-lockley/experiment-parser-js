@@ -1,7 +1,7 @@
 "use strict";
 
-var Result = require('./Result');
-var Tuple = require('./Tuple');
+const Result = require('./Result');
+const Tuple = require('./Tuple');
 
 
 /**
@@ -25,8 +25,8 @@ function symbol(tokenID, mapFunction = (x => x)) {
 
 function parseOr(parsers) {
     return lexer => {
-        for (var index = 0; index < parsers.length; index += 1) {
-            var parserIndexResult = parsers[index](lexer);
+        for (let index = 0; index < parsers.length; index += 1) {
+            const parserIndexResult = parsers[index](lexer);
             if (parserIndexResult.isOk()) {
                 return parserIndexResult;
             }
@@ -41,10 +41,10 @@ function parseAnd(parsers, mapFunction) {
         if (parsers.length == 0) {
             return Result.Error("And parsing function requires at least one parser")
         } else {
-            var results = [];
-            var currentLexer = lexer;
-            for (var index = 0; index < parsers.length; index += 1) {
-                var intermediateResult = parsers[index](currentLexer);
+            const results = [];
+            let currentLexer = lexer;
+            for (let index = 0; index < parsers.length; index += 1) {
+                const intermediateResult = parsers[index](currentLexer);
                 if (intermediateResult.isOk()) {
                     results.push(intermediateResult.getOkOrElse().fst);
                     currentLexer = intermediateResult.getOkOrElse().snd;
@@ -61,14 +61,14 @@ function parseAnd(parsers, mapFunction) {
 
 function many1(parser) {
     return lexer => {
-        var firstResult = parser(lexer);
+        const firstResult = parser(lexer);
 
         if (firstResult.isOk()) {
-            var result = [firstResult.getOkOrElse().fst];
-            var currentLexer = firstResult.getOkOrElse().snd;
+            const result = [firstResult.getOkOrElse().fst];
+            let currentLexer = firstResult.getOkOrElse().snd;
 
             while (true) {
-                var currentResult = parser(currentLexer);
+                const currentResult = parser(currentLexer);
 
                 if (currentResult.isOk()) {
                     result.push(currentResult.getOkOrElse().fst);

@@ -1,16 +1,16 @@
 "use strict";
 
-var Result = require('../src/core/Result');
-var Tuple = require('../src/core/Tuple');
-var Parser = require("../src/Parser");
-var Lexer = require("../src/Lexer");
-var AST = require('../src/AST');
+const Result = require('../src/core/Result');
+const Tuple = require('../src/core/Tuple');
+const Parser = require("../src/Parser");
+const Lexer = require("../src/Lexer");
+const AST = require('../src/AST');
 
-var expect = require("chai").expect;
+const expect = require("chai").expect;
 
 describe('Parser', function () {
     describe('given the input "123" to parseTerm', () => {
-        var result = Parser.parseTerm(Lexer.fromString("123"));
+        const result = Parser.parseTerm(Lexer.fromString("123"));
 
         it("should parse without any errors", () =>
             expect(result.isOk()).to.equal(true));
@@ -23,7 +23,7 @@ describe('Parser', function () {
     });
 
     describe('given the input "abc 123" to parseTerm', () => {
-        var result = Parser.parseTerm(Lexer.fromString("abc 123"));
+        const result = Parser.parseTerm(Lexer.fromString("abc 123"));
 
         it("should parse without any errors", () =>
             expect(result.isOk()).to.equal(true));
@@ -36,7 +36,7 @@ describe('Parser', function () {
     });
 
     describe('given the input "( 123)" to parseTerm', () => {
-        var result = Parser.parseTerm(Lexer.fromString('( 123)'));
+        const result = Parser.parseTerm(Lexer.fromString('( 123)'));
 
         it("should parse without any errors", ()=>
             expect(result.isOk(result)).to.equal(true));
@@ -49,7 +49,7 @@ describe('Parser', function () {
     });
 
     describe('given the input "\\a \\b -> (a)" to parseTerm', () => {
-        var result = Parser.parseTerm(Lexer.fromString('\\a \\b -> (a)'));
+        const result = Parser.parseTerm(Lexer.fromString('\\a \\b -> (a)'));
 
         it("should parse without any errors", () => expect(result.isOk()).to.equal(true));
         it("should parse a LAMBDA with variables ['a', 'b'] and expression of IDENTIFIER with value 'a'", () => {

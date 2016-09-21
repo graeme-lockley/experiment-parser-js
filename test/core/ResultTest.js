@@ -1,11 +1,11 @@
 "use strict";
 
-var Result = require("../../src/core/Result");
-var expect = require("chai").expect;
+const Result = require("../../src/core/Result");
+const expect = require("chai").expect;
 
 describe('Core/Result', function () {
     describe('given an Ok created with a content of 123', () => {
-        var result = Result.Ok(123);
+        const result = Result.Ok(123);
 
         it('should return true for isOk', () => expect(result.isOk()).to.equal(true));
         it('should return false for isError', () => expect(result.isError()).to.equal(false));
@@ -14,7 +14,7 @@ describe('Core/Result', function () {
     });
 
     describe('given an Error created with a content of 123', () => {
-        var result = Result.Error(123);
+        const result = Result.Error(123);
 
         it('should return false for isOk', () => expect(result.isOk()).to.equal(false));
         it('should return true for isError', () => expect(result.isError()).to.equal(true));

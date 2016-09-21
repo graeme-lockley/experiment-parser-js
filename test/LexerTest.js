@@ -1,11 +1,11 @@
 "use strict";
 
-var Lexer = require("../src/Lexer");
-var expect = require("chai").expect;
+const Lexer = require("../src/Lexer");
+const expect = require("chai").expect;
 
 describe('Lexer', function () {
     describe('with input "Hello 123"', () => {
-        var context = Lexer.fromString('Hello 123');
+        const context = Lexer.fromString('Hello 123');
 
         describe('after initialisation', () => {
             it('should match to an IDENTIFIER', () => expect(context.token.id).to.equal(Lexer.TokenEnum.IDENTIFIER));
@@ -17,7 +17,7 @@ describe('Lexer', function () {
         });
 
         describe('next token', () => {
-            var nextContext = context.next();
+            const nextContext = context.next();
 
             it('should match to a CONSTANT_INTEGER', () => expect(nextContext.token.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER));
             it('should have the coordinates (7, 1)', ()=> {
@@ -28,7 +28,7 @@ describe('Lexer', function () {
         });
 
         describe('next next token', () => {
-            var nextNextContext = context.next().next();
+            const nextNextContext = context.next().next();
 
             it('should report end-of-file', () => expect(nextNextContext.token.id).to.equal(Lexer.TokenEnum.EOF));
             it('should have the coordinates (10, 1)', ()=> {
@@ -39,7 +39,7 @@ describe('Lexer', function () {
         });
 
         describe('next next next token', () => {
-            var nextNextContext = context.next().next().next();
+            const nextNextContext = context.next().next().next();
 
             it('should still report end-of-file', () => expect(nextNextContext.token.id).to.equal(Lexer.TokenEnum.EOF));
             it('should have the coordinates (10, 1)', () => {
@@ -51,7 +51,7 @@ describe('Lexer', function () {
     });
 
     describe('with input "a\\ b) c("', function () {
-        var context = Lexer.fromString('a\\ b) c(');
+        const context = Lexer.fromString('a\\ b) c(');
 
         it('first token should be IDENTIFIER', () =>
             expect(context.token.id).to.equal(Lexer.TokenEnum.IDENTIFIER));

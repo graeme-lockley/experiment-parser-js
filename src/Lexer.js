@@ -1,8 +1,8 @@
 "use strict";
 
-var Tuple = require('./core/Tuple');
+const Tuple = require('./core/Tuple');
 
-var TokenEnum = {
+const TokenEnum = {
     EOF: 1,
     IDENTIFIER: 2,
     CONSTANT_INTEGER: 3,
@@ -11,7 +11,7 @@ var TokenEnum = {
     LAMBDA: 6
 };
 
-var reservedCharacters = [
+const reservedCharacters = [
     Tuple.Tuple('\\'.charCodeAt(0), TokenEnum.LAMBDA),
     Tuple.Tuple('('.charCodeAt(0), TokenEnum.LPAREN),
     Tuple.Tuple(')'.charCodeAt(0), TokenEnum.RPAREN)
@@ -111,7 +111,7 @@ function next(context) {
     if (context.token.id == TokenEnum.EOF) {
         return context;
     } else {
-        var cursor = createCursorFromContext(context);
+        const cursor = createCursorFromContext(context);
 
         while (cursor.is(isWhitespace)) {
             cursor.advanceIndex();
@@ -121,7 +121,7 @@ function next(context) {
             return makeContext(context, cursor.toToken(TokenEnum.EOF));
         } else if (cursor.is(isReservedCharacter)) {
             cursor.markStartOfToken();
-            var reservedCharacter = cursor.charCodeAtIndex();
+            const reservedCharacter = cursor.charCodeAtIndex();
             cursor.advanceIndex();
             return makeContext(context, cursor.toToken(findReservedCharacter(reservedCharacter).snd));
         } else if (cursor.is(isDigit)) {
