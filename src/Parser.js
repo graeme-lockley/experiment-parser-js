@@ -78,7 +78,12 @@ function parseTerm(lexer) {
 
 
 function parseString(input) {
-    return parseExpr(Lexer.fromString(input));
+    const parseResult = parseExpr(Lexer.fromString(input));
+
+    return parseResult.map(
+        ok => Result.Ok(ok.fst),
+        error => parseResult
+    );
 }
 
 
