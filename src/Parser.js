@@ -24,7 +24,7 @@ function compose(f1, f2) {
 
 function parseConstantInteger(lexer) {
     return P.mapError(
-        P.symbol(Lexer.TokenEnum.CONSTANT_INTEGER, compose(AST.CONSTANT_INTEGER, parseInt))(lexer),
+        P.symbol(Lexer.TokenEnum.CONSTANT_INTEGER, compose(AST.newConstantInteger, parseInt))(lexer),
         "Expected a constant integer"
     );
 }
@@ -32,7 +32,7 @@ function parseConstantInteger(lexer) {
 
 function parseIdentifier(lexer) {
     return P.mapError(
-        P.symbol(Lexer.TokenEnum.IDENTIFIER, AST.IDENTIFIER)(lexer),
+        P.symbol(Lexer.TokenEnum.IDENTIFIER, AST.newIdentifier)(lexer),
         "Expected an identifier"
     );
 }
@@ -40,7 +40,7 @@ function parseIdentifier(lexer) {
 
 function parseConstantIdentifier(name) {
     return lexer => {
-        var result = P.symbol(Lexer.TokenEnum.IDENTIFIER, AST.IDENTIFIER)(lexer);
+        var result = P.symbol(Lexer.TokenEnum.IDENTIFIER, AST.newIdentifier)(lexer);
 
         return result.map(
             ok => lexer.token.text == name ? result : Result.Error("Expected " + name),
@@ -55,7 +55,7 @@ function parseLambda(lexer) {
             P.parseAnd([P.symbol(Lexer.TokenEnum.LAMBDA), P.symbol(Lexer.TokenEnum.IDENTIFIER)], elements => elements[1])),
         parseConstantIdentifier("->"),
         parseExpr
-    ], items => AST.LAMBDA(items[0], items[2]))(lexer);
+    ], items => AST.newLambda(items[0], items[2]))(lexer);
 }
 
 

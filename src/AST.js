@@ -1,36 +1,39 @@
 "use strict";
 
-var ASTEnum = {
-    CONSTANT_INTEGER: 1,
-    IDENTIFIER: 2,
-    LAMBDA: 3
-};
 
-function CONSTANT_INTEGER(value) {
-    return {
-        type: ASTEnum.CONSTANT_INTEGER,
-        value: value
-    };
+class ConstantInteger {
+    constructor(value) {
+        this.value = value;
+    }
 }
 
-function IDENTIFIER(name) {
-    return {
-        type: ASTEnum.IDENTIFIER,
-        name: name
-    };
+const newConstantInteger = v => new ConstantInteger(v);
+
+
+class Identifier {
+    constructor(name) {
+        this.name = name;
+    }
 }
 
-function LAMBDA(variables, expression) {
-    return {
-        type: ASTEnum.LAMBDA,
-        variables: variables,
-        expression: expression
-    };
+const newIdentifier = n => new Identifier(n);
+
+
+class Lambda {
+    constructor(variables, expression) {
+        this.variables = variables;
+        this.expression = expression;
+    }
 }
+
+const newLambda = (v, e) => new Lambda(v, e);
+
 
 module.exports = {
-    ASTEnum: ASTEnum,
-    CONSTANT_INTEGER: CONSTANT_INTEGER,
-    IDENTIFIER: IDENTIFIER,
-    LAMBDA: LAMBDA
+    ConstantInteger,
+    newConstantInteger,
+    Identifier,
+    newIdentifier,
+    Lambda,
+    newLambda
 };
