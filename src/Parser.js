@@ -76,7 +76,8 @@ function parseTerm(lexer) {
 
 
 function parseString(input) {
-    const parseResult = parseExpr(Lexer.fromString(input));
+    const parseResult =
+        P.parseAnd([parseExpr, P.symbol(Lexer.TokenEnum.EOF)], (elements=>elements[0]))(Lexer.fromString(input));
 
     return parseResult.map(
         ok => Result.Ok(ok.fst),
