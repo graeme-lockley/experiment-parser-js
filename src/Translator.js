@@ -1,15 +1,5 @@
 const AST = require('./AST');
-
-
-function foldr(initValue, foldFunction, arr) {
-    let result = initValue;
-
-    for (let index = arr.length - 1; index >= 0; index -= 1) {
-        result = foldFunction(result, arr[index]);
-    }
-
-    return result;
-}
+const Array = require('./core/Array');
 
 
 function astToJavascript(ast) {
@@ -18,12 +8,17 @@ function astToJavascript(ast) {
     } else if (ast instanceof AST.Identifier) {
         return ast.name;
     } else if (ast instanceof AST.Lambda) {
-        const tmpResult = foldr(astToJavascript(ast.expression), (accumulator, item) => "(" + item + " => " + accumulator + ")", ast.variables);
+        const tmpResult = Array.foldr(astToJavascript(ast.expression), (accumulator, item) => "(" + item + " => " + accumulator + ")", ast.variables);
         return tmpResult.substr(1, tmpResult.length - 2);
     } else if (ast instanceof AST.Apply) {
         return astToJavascript(ast.expressions[0]) + ast.expressions.slice(1).map(x => "(" + astToJavascript(x) + ")").join('');
+    } else if (ast instanceof AST.Declaration) {
+        return 'const ' + ast.name + ' = ' + astToJavascript(ast.expression) + ';';
+    } else if (ast instanceof AST.Declarations) {
+        return ast.declarations.map(d => astToJavascript(d)).join('\n');
     }
 }
+
 
 module.exports = {
     astToJavascript

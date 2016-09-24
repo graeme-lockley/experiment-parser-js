@@ -8,13 +8,15 @@ const TokenEnum = {
     CONSTANT_INTEGER: 3,
     LPAREN: 4,
     RPAREN: 5,
-    LAMBDA: 6
+    LAMBDA: 6,
+    EQUAL: 7
 };
 
 const reservedCharacters = [
     Tuple.Tuple('\\'.charCodeAt(0), TokenEnum.LAMBDA),
     Tuple.Tuple('('.charCodeAt(0), TokenEnum.LPAREN),
-    Tuple.Tuple(')'.charCodeAt(0), TokenEnum.RPAREN)
+    Tuple.Tuple(')'.charCodeAt(0), TokenEnum.RPAREN),
+    Tuple.Tuple('='.charCodeAt(0), TokenEnum.EQUAL)
 ];
 
 
