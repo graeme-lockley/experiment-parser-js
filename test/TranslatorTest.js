@@ -34,16 +34,16 @@ describe('Translator', () => {
         });
     });
 
-    // describe('given the declaration "add a b = (plus a b)"', () => {
-    //     const parseResponse = Parser.parseDECLS(Lexer.fromString('add a b = (plus a b)'));
-    //
-    //     it('should parse without any errors', () =>
-    //         expect(parseResponse.isOk()).to.be.true);
-    //
-    //     it('is translated into correct JavaScript', () => {
-    //         const translation = Translator.astToJavascript(parseResponse.getOkOrElse().fst);
-    //
-    //         expect(translation).to.equal('function add(a) {\n  return b => plus(a)(b);\n}\n');
-    //     });
-    // });
+    describe('given the declaration "add a b = (plus a b)"', () => {
+        const parseResponse = Parser.parseDECLS(Lexer.fromString('add a b = (plus a b)'));
+
+        it('should parse without any errors', () =>
+            expect(parseResponse.isOk()).to.be.true);
+
+        it('is translated into correct JavaScript', () => {
+            const translation = Translator.astToJavascript(parseResponse.getOkOrElse().fst);
+
+            expect(translation).to.equal('function add(a) {\n  return b => plus(a)(b);\n}');
+        });
+    });
 });
