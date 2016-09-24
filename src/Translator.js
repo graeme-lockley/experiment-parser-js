@@ -19,7 +19,7 @@ function astToJavascript(ast) {
             return 'const ' + ast.name + ' = ' + astToJavascript(ast.expression) + ';';
         }
     } else if (ast instanceof AST.Declarations) {
-        return ast.declarations.map(d => astToJavascript(d)).join('\n');
+        return ast.declarations.map(d => astToJavascript(d)).join('\n\n');
     }
 }
 
