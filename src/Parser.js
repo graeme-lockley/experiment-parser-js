@@ -9,11 +9,13 @@ const P = require('./core/ParserCombinators');
 
 
 /**
- * EXPR :== TERM { TERM }
- * TERM :== CONSTANT_INTEGER
- *        | IDENTIFIER
- *        | '\\' IDENTIFIER { '\\' IDENTIFIER } '->' EXPR
- *        | '(' EXPR ')'
+ * DECLS -> DECL { DECL }
+ * DECL -> IDENTIFIER { IDENTIFIER } '=' EXPR
+ * EXPR -> TERM { TERM }
+ * TERM -> CONSTANT_INTEGER
+ *       | IDENTIFIER
+ *       | '\\' IDENTIFIER { '\\' IDENTIFIER } '->' EXPR
+ *       | '(' EXPR ')'
  */
 
 
@@ -58,7 +60,6 @@ function parseLambda(lexer) {
     ], items => AST.newLambda(items[0], items[2]))(lexer);
 }
 
-
 function parseParenthesisExpression(lexer) {
     return P.and([
         P.symbol(Lexer.TokenEnum.LPAREN),
@@ -66,9 +67,7 @@ function parseParenthesisExpression(lexer) {
         P.symbol(Lexer.TokenEnum.RPAREN)], elements => elements[1])(lexer);
 }
 
-
 const parseTerm = P.or([parseConstantInteger, parseIdentifier, parseLambda, parseParenthesisExpression]);
-
 
 const parseExpr = P.many1(parseTerm, elements => elements.length == 1 ? elements[0] : AST.newApply(elements));
 
