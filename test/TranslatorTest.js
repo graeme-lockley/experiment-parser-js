@@ -14,7 +14,7 @@ describe('Translator', () => {
         it('is parsed without any errors', () =>
             expect(parseResponse.isOk()).to.be.true);
 
-        it('is translated into', () => {
+        it('is translated into correct JavaScript', () => {
             const translation = Translator.astToJavascript(parseResponse.getOkOrElse());
 
             expect(translation).to.equal('a => (b => add(a)(b))')
