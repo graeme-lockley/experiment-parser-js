@@ -50,9 +50,9 @@ function parseConstantIdentifier(name) {
 
 
 function parseLambda(lexer) {
-    return P.parseAnd([
+    return P.and([
         P.many1(
-            P.parseAnd([P.symbol(Lexer.TokenEnum.LAMBDA), P.symbol(Lexer.TokenEnum.IDENTIFIER)], elements => elements[1])),
+            P.and([P.symbol(Lexer.TokenEnum.LAMBDA), P.symbol(Lexer.TokenEnum.IDENTIFIER)], elements => elements[1])),
         parseConstantIdentifier("->"),
         parseExpr
     ], items => AST.newLambda(items[0], items[2]))(lexer);
@@ -60,24 +60,22 @@ function parseLambda(lexer) {
 
 
 function parseParenthesisExpression(lexer) {
-    return P.parseAnd([
+    return P.and([
         P.symbol(Lexer.TokenEnum.LPAREN),
         parseExpr,
         P.symbol(Lexer.TokenEnum.RPAREN)], elements => elements[1])(lexer);
 }
 
 
+const parseTerm = P.or([parseConstantInteger, parseIdentifier, parseLambda, parseParenthesisExpression]);
+
+
 const parseExpr = P.many1(parseTerm, elements => elements.length == 1 ? elements[0] : AST.newApply(elements));
-
-
-function parseTerm(lexer) {
-    return P.parseOr([parseConstantInteger, parseIdentifier, parseLambda, parseParenthesisExpression])(lexer);
-}
 
 
 function parseString(input) {
     const parseResult =
-        P.parseAnd([parseExpr, P.symbol(Lexer.TokenEnum.EOF)], (elements=>elements[0]))(Lexer.fromString(input));
+        P.and([parseExpr, P.symbol(Lexer.TokenEnum.EOF)], (elements=>elements[0]))(Lexer.fromString(input));
 
     return parseResult.map(
         ok => Result.Ok(ok.fst),

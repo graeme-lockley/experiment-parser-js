@@ -26,7 +26,7 @@ function symbol(tokenID, mapFunction = identity) {
 }
 
 
-function parseOr(parsers) {
+function or(parsers) {
     return lexer => {
         for (let index = 0; index < parsers.length; index += 1) {
             const parserIndexResult = parsers[index](lexer);
@@ -39,7 +39,7 @@ function parseOr(parsers) {
 }
 
 
-function parseAnd(parsers, mapFunction = identity) {
+function and(parsers, mapFunction = identity) {
     return lexer => {
         if (parsers.length == 0) {
             return Result.Error("And parsing function requires at least one parser")
@@ -93,7 +93,7 @@ function many1(parser, mapFunction = identity) {
 module.exports = {
     many1,
     mapError,
-    parseAnd,
-    parseOr,
+    and,
+    or,
     symbol
 };
