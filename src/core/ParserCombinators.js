@@ -89,11 +89,41 @@ function many1(parser, mapFunction = identity) {
     }
 }
 
+function sepBy1(parser, separatorParser, mapFunction = identity) {
+    const nextParser = and([separatorParser, parser], elements => elements[1]);
+
+    return lexer => {
+        const firstResult = parser(lexer);
+
+        if (firstResult.isOk()) {
+            const result = [firstResult.getOkOrElse().fst];
+            let currentLexer = firstResult.getOkOrElse().snd;
+
+            while (true) {
+                const currentResult = nextParser(currentLexer);
+
+                if (currentResult.isOk()) {
+                    result.push(currentResult.getOkOrElse().fst);
+                    currentLexer = currentResult.getOkOrElse().snd;
+                } else {
+                    return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
+                }
+            }
+        } else {
+            return firstResult.map(
+                ok => Result.Ok(mapFunction(ok.fst), ok.snd),
+                error => firstResult
+            );
+        }
+    }
+}
+
 
 module.exports = {
+    and,
     many1,
     mapError,
-    and,
     or,
+    sepBy1,
     symbol
 };

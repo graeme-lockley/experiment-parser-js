@@ -9,14 +9,16 @@ const TokenEnum = {
     LPAREN: 4,
     RPAREN: 5,
     LAMBDA: 6,
-    EQUAL: 7
+    EQUAL: 7,
+    SEMICOLON: 8
 };
 
 const reservedCharacters = [
     Tuple.Tuple('\\'.charCodeAt(0), TokenEnum.LAMBDA),
     Tuple.Tuple('('.charCodeAt(0), TokenEnum.LPAREN),
     Tuple.Tuple(')'.charCodeAt(0), TokenEnum.RPAREN),
-    Tuple.Tuple('='.charCodeAt(0), TokenEnum.EQUAL)
+    Tuple.Tuple('='.charCodeAt(0), TokenEnum.EQUAL),
+    Tuple.Tuple(';'.charCodeAt(0), TokenEnum.SEMICOLON)
 ];
 
 

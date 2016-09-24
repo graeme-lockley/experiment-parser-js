@@ -34,8 +34,8 @@ describe('Translator', () => {
         });
     });
 
-    describe('given the declaration "add a b = (plus a b)"', () => {
-        const parseResponse = Parser.parseDECLS(Lexer.fromString('add a b = (plus a b)'));
+    describe('given the declaration "add a b = plus a b"', () => {
+        const parseResponse = Parser.parseDECLS(Lexer.fromString('add a b = plus a b'));
 
         it('should parse without any errors', () =>
             expect(parseResponse.isOk()).to.be.true);
@@ -44,6 +44,19 @@ describe('Translator', () => {
             const translation = Translator.astToJavascript(parseResponse.getOkOrElse().fst);
 
             expect(translation).to.equal('function add(a) {\n  return b => plus(a)(b);\n}');
+        });
+    });
+
+    describe('given the declarations "pi = 3 ; add a b = plus a b; ln = 3"', () => {
+        const parseResponse = Parser.parseDECLS(Lexer.fromString('pi = 3 ; add a b = plus a b; ln = 3'));
+
+        it('should parse without any errors', () =>
+            expect(parseResponse.isOk()).to.be.true);
+
+        it('is translated into correct JavaScript', () => {
+            const translation = Translator.astToJavascript(parseResponse.getOkOrElse().fst);
+
+            expect(translation).to.equal('const pi = 3;\nfunction add(a) {\n  return b => plus(a)(b);\n}\nconst ln = 3;');
         });
     });
 });

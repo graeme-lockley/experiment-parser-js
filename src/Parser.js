@@ -25,7 +25,7 @@ function compose(f1, f2) {
 
 
 function parseDECLS(lexer) {
-    return P.many1(parseDECL, element => AST.newDeclarations(element))(lexer);
+    return P.sepBy1(parseDECL, P.symbol(Lexer.TokenEnum.SEMICOLON), element => AST.newDeclarations(element))(lexer);
 }
 
 
