@@ -96,7 +96,7 @@ function parseExpr(lexer) {
 
 function parseString(input) {
     const parseResult =
-        P.and([parseExpr, P.symbol(Lexer.TokenEnum.EOF)], (elements => elements[0]))(Lexer.fromString(input));
+        P.and([parseDECLS, P.symbol(Lexer.TokenEnum.EOF)], (elements => elements[0]))(Lexer.fromString(input));
 
     return parseResult.map(
         ok => Result.Ok(ok.fst),

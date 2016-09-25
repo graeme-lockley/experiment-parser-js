@@ -10,19 +10,6 @@ const expect = require('chai').expect;
 
 
 describe('Translator', () => {
-    describe('translating the parsed input of "' + '\\a \\b -> (add a b)' + '" in JavaScript', () => {
-        const parseResponse = Parser.parseString('\\a \\b -> (add a b)');
-
-        it('is parsed without any errors', () =>
-            expect(parseResponse.isOk()).to.be.true);
-
-        it('is translated into correct JavaScript', () => {
-            const translation = Translator.astToJavascript(parseResponse.getOkOrElse());
-
-            expect(translation).to.equal('a => (b => add(a)(b))')
-        });
-    });
-
     describe('given the declaration "pi = 3"', () => {
         const parseResponse = Parser.parseDECLS(Lexer.fromString('pi = 3'));
 
