@@ -84,7 +84,7 @@ function safeScriptEval(input, context, filename, cb) {
     if (parsedResponse.isOk()) {
         if (state.showAST) {
             console.log('--- AST ---');
-            console.log(parsedResponse.getOkOrElse());
+            console.log(JSON.stringify(parsedResponse.getOkOrElse().toJSON(), null, 2));
             console.log('-----------');
         }
 

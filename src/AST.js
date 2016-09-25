@@ -5,6 +5,13 @@ class Apply {
     constructor(expressions) {
         this.expressions = expressions;
     }
+
+    toJSON() {
+        return {
+            type: 'APPLY',
+            expressions: this.expressions
+        };
+    }
 }
 
 const newApply = e => new Apply(e);
@@ -13,6 +20,13 @@ const newApply = e => new Apply(e);
 class ConstantInteger {
     constructor(value) {
         this.value = value;
+    }
+
+    toJSON() {
+        return {
+            type: 'CONSTANT_INTEGER',
+            value: this.value
+        };
     }
 }
 
@@ -24,6 +38,14 @@ class Declaration {
         this.name = name;
         this.expression = expression;
     }
+
+    toJSON() {
+        return {
+            type: 'DECLARATION',
+            name: this.name,
+            expression: this.expression
+        };
+    }
 }
 
 const newDeclaration = (n, e) => new Declaration(n, e);
@@ -32,6 +54,13 @@ const newDeclaration = (n, e) => new Declaration(n, e);
 class Declarations {
     constructor(declarations) {
         this.declarations = declarations;
+    }
+
+    toJSON() {
+        return {
+            type: 'DECLARATIONS',
+            declarations: this.declarations
+        };
     }
 }
 
@@ -42,6 +71,13 @@ class Identifier {
     constructor(name) {
         this.name = name;
     }
+
+    toJSON() {
+        return {
+            type: 'IDENTIFIER',
+            name: this.name
+        };
+    }
 }
 
 const newIdentifier = n => new Identifier(n);
@@ -51,6 +87,14 @@ class Lambda {
     constructor(variables, expression) {
         this.variables = variables;
         this.expression = expression;
+    }
+
+    toJSON() {
+        return {
+            type: 'LAMBDA',
+            variables: this.variables,
+            expression: this.expression
+        };
     }
 }
 
