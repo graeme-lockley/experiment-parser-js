@@ -60,7 +60,7 @@ function parseConstantIdentifier(name) {
         const result = P.symbol(Lexer.TokenEnum.IDENTIFIER, AST.newIdentifier)(lexer);
 
         return result.map(
-            ok => lexer.token.text == name ? result : Result.Error("Expected " + name),
+            ok => lexer.text == name ? result : Result.Error("Expected " + name),
             error => Result.Error("Expected " + name));
     };
 }

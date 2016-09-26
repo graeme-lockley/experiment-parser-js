@@ -19,7 +19,7 @@ describe('Parser', function () {
             expect(result.getOkOrElse().fst.value).to.equal(123);
         });
         it("should have the next token of EOF", () =>
-            expect(result.getOkOrElse().snd.token.id).to.equal(Lexer.TokenEnum.EOF));
+            expect(result.getOkOrElse().snd.id).to.equal(Lexer.TokenEnum.EOF));
     });
 
     describe('given the input "abc 123" to parseTerm', () => {
@@ -32,7 +32,7 @@ describe('Parser', function () {
             expect(result.getOkOrElse().fst.name).to.equal('abc');
         });
         it("should have the next token of CONSTANT_INTEGER", () =>
-            expect(result.getOkOrElse().snd.token.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER));
+            expect(result.getOkOrElse().snd.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER));
     });
 
     describe('given the input "( 123)" to parseTerm', () => {
@@ -45,7 +45,7 @@ describe('Parser', function () {
             expect(result.getOkOrElse().fst.value).to.equal(123);
         });
         it("should have the next token of EOF", () =>
-            expect(result.getOkOrElse().snd.token.id).to.equal(Lexer.TokenEnum.EOF));
+            expect(result.getOkOrElse().snd.id).to.equal(Lexer.TokenEnum.EOF));
     });
 
     describe('given the input "\\a \\b -> (a)" to parseTerm', () => {
@@ -59,6 +59,6 @@ describe('Parser', function () {
             expect(result.getOkOrElse().fst.variables[1]).to.equal('b');
         });
         it("should have the next token of EOF", () =>
-            expect(result.getOkOrElse().snd.token.id).to.equal(Lexer.TokenEnum.EOF));
+            expect(result.getOkOrElse().snd.id).to.equal(Lexer.TokenEnum.EOF));
     });
 });

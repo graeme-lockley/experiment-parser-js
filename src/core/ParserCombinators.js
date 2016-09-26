@@ -20,8 +20,8 @@ function mapError(result, errorMessage) {
 
 
 function symbol(tokenID, mapFunction = identity) {
-    return lexer => (lexer.token.id == tokenID)
-        ? Result.Ok(Tuple.Tuple(mapFunction(lexer.token.text), lexer.next()))
+    return lexer => (lexer.id == tokenID)
+        ? Result.Ok(Tuple.Tuple(mapFunction(lexer.text), lexer.next()))
         : Result.Error("Expected the symbol " + tokenID);
 }
 
