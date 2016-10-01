@@ -76,7 +76,6 @@ const reservedIdentifiers = {
     'true': TokenEnum.TRUE
 };
 
-
 function isWhitespace(c) {
     return c <= 32;
 }
@@ -134,10 +133,13 @@ class Context {
             is: function (predicate) {
                 return this.isNotEndOfFile() && predicate(this.charCodeAtIndex());
             },
-            isChar: function(c) {
+            isNot: function (predicate) {
+                return this.isNotEndOfFile() && !predicate(this.charCodeAtIndex());
+            },
+            isChar: function (c) {
                 return this.isNotEndOfFile() && this.charCodeAtIndex() == c.charCodeAt(0);
             },
-            isNotChar: function(c) {
+            isNotChar: function (c) {
                 return this.isNotEndOfFile() && this.charCodeAtIndex() != c.charCodeAt(0);
             },
             isEndOfFile: function () {
@@ -203,11 +205,22 @@ class Context {
                     cursor.advanceIndex();
                 }
 
-                const reserved = reservedIdentifiers[cursor.text()];
+                if (cursor.text() == "file" && cursor.isChar(':')) {
+                    cursor.advanceIndex();
+                    while (cursor.isNot(isWhitespace)) {
+                        if (cursor.isChar('\\')) {
+                            cursor.advanceIndex();
+                        }
+                        cursor.advanceIndex();
+                    }
+                    return this.newContext(TokenEnum.CONSTANT_URL, cursor);
+                } else {
+                    const reserved = reservedIdentifiers[cursor.text()];
 
-                return reserved
-                    ? this.newContext(reserved, cursor)
-                    : this.newContext(TokenEnum.IDENTIFIER, cursor);
+                    return reserved
+                        ? this.newContext(reserved, cursor)
+                        : this.newContext(TokenEnum.IDENTIFIER, cursor);
+                }
             } else if (cursor.isChar("'")) {
                 cursor.markStartOfToken();
                 cursor.advanceIndex();

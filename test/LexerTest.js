@@ -115,4 +115,12 @@ describe('Lexer', function () {
         it('should return text of "\\"hello \\" world\\""', () => expect(context.text).to.equal('"hello \\" world"'));
         it('should return EOF for next', () => expect(context.next().id).to.equal(Lexer.TokenEnum.EOF));
     });
+
+    describe('with input "file:../src/hello\\ world as"', () => {
+        const context = Lexer.fromString('file:../src/hello\\ world as');
+
+        it('should return CONSTANT_URL', () => expect(context.id).to.equal(Lexer.TokenEnum.CONSTANT_URL));
+        it('should return text of "file:../src/hello\\ world"', () => expect(context.text).to.equal('file:../src/hello\\ world'));
+        it('should return AS for next', () => expect(context.next().id).to.equal(Lexer.TokenEnum.AS));
+    });
 });
