@@ -53,7 +53,7 @@ The approach that I am going to take is to bootstrap this language using a JavaS
 set and then, through subsequent version, implement the entire language.
  
 | Category | Features                          | v1 | v2 | v3 | v4 | v5 | v6 | v7 | v8 | v9 |
-| ---------| --------------------------------- | -- | -- | -- | -- | -- | -- | -- | -- | -- |
+|----------|-----------------------------------|----|----|----|----|----|----|----|----|----|
 | Lexical  | Layout based                      |    |    |    |    |    |    |    |    | *  |
 | Syntax   | module/imports                    | *  |    |    |    |    |    |    |    |    |
 |          | if-then-else                      | *  |    |    |    |    |    |    |    |    |
