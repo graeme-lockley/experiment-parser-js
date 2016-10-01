@@ -30,7 +30,7 @@ not been picked up through automated tests and have resulted in defects slipping
 This has resulted in a general reluctance to upgrade third party libraries.
 
 So in this experiment I would like to experiment with language ideas captured by the `Run Once, Run Always` philosophy and
-see whether or not these ideas are improvements and should they be promoted either idiomatically or as language extensions. 
+see whether or not these ideas are improvements and should be promoted either idiomatically or as language extensions. 
 A number of these ideas are:
 
 - How to make testing a core of the language rather than an idiomatic addendum to the language
@@ -50,7 +50,7 @@ I am certain that as I work through this experiment more ideas will pop out to b
 ## Approach
 
 The approach that I am going to take is to bootstrap this language using a JavaScript compiler using a minimal feature
-set and then, through subsequent version, implement the entire language.
+set and then, through subsequent versions, implement the entire language.
  
 | Category | Features                          | v1 | v2 | v3 | v4 | v5 | v6 | v7 | v8 | v9 |
 |----------|-----------------------------------|----|----|----|----|----|----|----|----|----|
