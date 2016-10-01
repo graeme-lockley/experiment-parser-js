@@ -3,6 +3,7 @@ concepts:
 
 - How to use parser combinators
 - How to parse a language based on its layout
+- How to parse a language that support operator overloading - dynamic precedence and dynamic associativity
 - How to implement an inference type system using Hindley-Milner
 - How to implement Haskell's type classes
 - How to implement a pattern matching 
@@ -11,7 +12,7 @@ I have certainly read much about the above concepts but, as I have discovered, k
 insight is gained through doing.
 
 
-== Philosophy ==
+## Philosophy
 
 When Java arrived Sun presented it using the slogan
 
@@ -39,15 +40,35 @@ manage these dependencies.
 I am certain that as I work through this experiment more ideas will pop out to be tested.
 
 
-== Decisions ==
+## Decisions
 
 - The target language will be JavaScript
 - The language's heritage will be Standard ML/Caml-light/Haskell
 - The language will attempt to identify the maximum number of errors at compile-time
 
 
-== Approach ==
+## Approach
 
 The approach that I am going to take is to bootstrap this language using a JavaScript compiler using a minimal feature
 set and then, through subsequent version, implement the entire language.
  
+Category | Features                          | v1 | v2 | v3 | v4 | v5 | v6 | v7 | v8 | v9
+---------| --------------------------------- | -- | -- | -- | -- | -- | -- | -- | -- | --
+Lexical  | Layout based                      |    |    |    |    |    |    |    |    | *  
+Syntax   | module/imports                    | *  |    |    |    |    |    |    |    |    
+         | if-then-else                      | *  |    |    |    |    |    |    |    |    
+         | let ... in                        |    | *  |    |    |    |    |    |    |    
+         | ... where                         |    | *  |    |    |    |    |    |    |    
+         | ... assumption ...                |    |    | *  |    |    |    |    |    |    
+         | match                             |    |    |    |    |    | *  |    |    |    
+         | Pattern matching on definition    |    |    |    |    |    | *  |    |    |   
+         | Operator overloading              |    |    |    |    |    |    | *  |    |    
+Typing   | Int, String, Char, Boolean, Float | *  |    |    |    |    |    |    |    |    
+         | Long, Double                      |    | *  |    |    |    |    |    |    |    
+         | Lists                             | *  |    |    |    |    |    |    |    |    
+         | String as a list of Char          |    |    |    |    |    |    | *  |    |    
+         | Dictionary                        | *  |    |    |    |    |    |    |    |    
+         | n-tuple                           |    |    |    |    | *  |    |    |    |    
+         | Type inference                    |    |    |    | *  |    |    |    |    |    
+         | Type classes                      |    |    |    |    |    |    |    | *  |    
+General  | Use native JavaScript libraries   | *  |    |    |    |    |    |    |    |    
