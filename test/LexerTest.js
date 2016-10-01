@@ -91,4 +91,20 @@ describe('Lexer', function () {
             });
         });
     });
+
+    describe('with input "\'a\'"', () => {
+        const context = Lexer.fromString('\'a\'');
+
+        it('should return CONSTANT_CHAR', () => expect(context.id).to.equal(Lexer.TokenEnum.CONSTANT_CHAR));
+        it('should return text of "a"', () => expect(context.text).to.equal('a'));
+        it('should return EOF for next', () => expect(context.next().id).to.equal(Lexer.TokenEnum.EOF));
+    });
+
+    describe('with input "\'\\\'\'"', () => {
+        const context = Lexer.fromString('\'\\\'\'');
+
+        it('should return CONSTANT_CHAR', () => expect(context.id).to.equal(Lexer.TokenEnum.CONSTANT_CHAR));
+        it('should return text of "\'"', () => expect(context.text).to.equal('\''));
+        it('should return EOF for next', () => expect(context.next().id).to.equal(Lexer.TokenEnum.EOF));
+    });
 });

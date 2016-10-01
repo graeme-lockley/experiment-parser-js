@@ -124,6 +124,8 @@ class Context {
             x: this.indexX,
             y: this.indexY,
 
+            tokenEndIndex: -1,
+
             content: this.input.content,
             length: this.input.length,
 
@@ -156,10 +158,13 @@ class Context {
                 this.x = this.indexX;
                 this.y = this.indexY;
             },
-            text: function () {
-                return this.content.substr(this.indexXY, this.index - this.indexXY);
+            markEndOfToken: function () {
+                this.tokenEndIndex = this.index;
             },
-            clone: function() {
+            text: function () {
+                return this.content.substr(this.indexXY, (this.tokenEndIndex == -1 ? this.index : this.tokenEndIndex) - this.indexXY);
+            },
+            clone: function () {
                 var temp = this.constructor();
                 for (var key in this) {
                     if (this.hasOwnProperty(key)) {
@@ -202,6 +207,30 @@ class Context {
                 return reserved
                     ? this.newContext(reserved, cursor)
                     : this.newContext(TokenEnum.IDENTIFIER, cursor);
+            } else if (cursor.is(c => c == '\''.charCodeAt(0))) {
+                cursor.advanceIndex();
+                if (cursor.is(c => c == '\\'.charCodeAt(0))) {
+                    cursor.advanceIndex();
+                    cursor.markStartOfToken();
+                    cursor.advanceIndex();
+                    if (cursor.is(c => c == '\''.charCodeAt(0))) {
+                        cursor.markEndOfToken();
+                        cursor.advanceIndex();
+                        return this.newContext(TokenEnum.CONSTANT_CHAR, cursor);
+                    } else {
+                        return this.newContext(TokenEnum.UNKNOWN, cursor);
+                    }
+                } else {
+                    cursor.markStartOfToken();
+                    cursor.advanceIndex();
+                    if (cursor.is(c => c == '\''.charCodeAt(0))) {
+                        cursor.markEndOfToken();
+                        cursor.advanceIndex();
+                        return this.newContext(TokenEnum.CONSTANT_CHAR, cursor);
+                    } else {
+                        return this.newContext(TokenEnum.UNKNOWN, cursor);
+                    }
+                }
             } else {
                 for (let index = 0; index < symbols.length; index += 1) {
                     const symbol = symbols[index];
@@ -232,6 +261,7 @@ class Context {
 
                 cursor.markStartOfToken();
                 cursor.advanceIndex();
+
                 return this.newContext(TokenEnum.UNKNOWN, cursor);
             }
         }
