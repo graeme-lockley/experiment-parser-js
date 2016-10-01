@@ -71,5 +71,6 @@ set and then, through subsequent versions, implement the entire language.
 |          | n-tuple                           |    |    |    |    | *  |    |    |    |    |
 |          | Records                           |    |    |    |    | *  |    |    |    |    |
 |          | Type inference                    |    |    |    | *  |    |    |    |    |    |
+|          | Abstract Data Types               |    |    |    |    | *  |    |    |    |    |
 |          | Type classes                      |    |    |    |    |    |    |    | *  |    |
 | General  | Use native JavaScript libraries   | *  |    |    |    |    |    |    |    |    |
