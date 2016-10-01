@@ -1,7 +1,8 @@
 "use strict";
 
-const Lexer = require("../src/Lexer");
-const expect = require("chai").expect;
+const Tuple = require('../src/core/Tuple');
+const Lexer = require('../src/Lexer');
+const expect = require('chai').expect;
 
 describe('Lexer', function () {
     describe('with input "Hello 123"', () => {
@@ -50,7 +51,7 @@ describe('Lexer', function () {
         });
     });
 
-    describe('with input "a\\ b) c("', function () {
+    describe('with input "a\\ b) c("', () => {
         const context = Lexer.fromString('a\\ b) c(');
 
         it('first token should be IDENTIFIER', () =>
@@ -67,5 +68,27 @@ describe('Lexer', function () {
             expect(context.next().next().next().next().next().id).to.equal(Lexer.TokenEnum.LPAREN));
         it('seventh token should be EOF', () =>
             expect(context.next().next().next().next().next().next().id).to.equal(Lexer.TokenEnum.EOF));
+    });
+
+    describe('with selected input should return the correct tokens', () => {
+        const items = [
+            Tuple.Tuple('\\ ( ) { }', [Lexer.TokenEnum.LAMBDA, Lexer.TokenEnum.LPAREN, Lexer.TokenEnum.RPAREN, Lexer.TokenEnum.LCURLEY, Lexer.TokenEnum.RCURLEY, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('== = ; ++ +', [Lexer.TokenEnum.EQUALEQUAL, Lexer.TokenEnum.EQUAL, Lexer.TokenEnum.SEMICOLON, Lexer.TokenEnum.PLUSPLUS, Lexer.TokenEnum.PLUS, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('-> - <= < >=', [Lexer.TokenEnum.MINUSGREATER, Lexer.TokenEnum.MINUS, Lexer.TokenEnum.LESSEQUAL, Lexer.TokenEnum.LESS, Lexer.TokenEnum.GREATEREQUAL, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('> * / ! as', [Lexer.TokenEnum.GREATER, Lexer.TokenEnum.STAR, Lexer.TokenEnum.SLASH, Lexer.TokenEnum.BANG, Lexer.TokenEnum.AS, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('else false if import o', [Lexer.TokenEnum.ELSE, Lexer.TokenEnum.FALSE, Lexer.TokenEnum.IF, Lexer.TokenEnum.IMPORT, Lexer.TokenEnum.O, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('then true hello\' h123_\'\' _123', [Lexer.TokenEnum.THEN, Lexer.TokenEnum.TRUE, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.EOF])
+        ];
+
+        items.forEach(tuple => {
+            it(tuple.fst, () => {
+                let context = Lexer.fromString(tuple.fst);
+
+                tuple.snd.forEach(token => {
+                    expect(context.id).to.equal(token);
+                    context = context.next();
+                })
+            });
+        });
     });
 });

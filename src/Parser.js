@@ -55,22 +55,11 @@ function parseIdentifier(lexer) {
 }
 
 
-function parseConstantIdentifier(name) {
-    return lexer => {
-        const result = P.symbol(Lexer.TokenEnum.IDENTIFIER, AST.newIdentifier)(lexer);
-
-        return result.map(
-            ok => lexer.text == name ? result : Result.Error("Expected " + name),
-            error => Result.Error("Expected " + name));
-    };
-}
-
-
 function parseLambda(lexer) {
     return P.and([
         P.many1(
             P.and([P.symbol(Lexer.TokenEnum.LAMBDA), P.symbol(Lexer.TokenEnum.IDENTIFIER)], elements => elements[1])),
-        parseConstantIdentifier("->"),
+        P.symbol(Lexer.TokenEnum.MINUSGREATER),
         parseExpr
     ], items => AST.newLambda(items[0], items[2]))(lexer);
 }

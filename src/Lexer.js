@@ -3,23 +3,78 @@
 const Tuple = require('./core/Tuple');
 
 const TokenEnum = {
+    UNKNOWN: 0,
     EOF: 1,
+
     IDENTIFIER: 2,
+
     CONSTANT_INTEGER: 3,
-    LPAREN: 4,
-    RPAREN: 5,
-    LAMBDA: 6,
-    EQUAL: 7,
-    SEMICOLON: 8
+    CONSTANT_STRING: 4,
+    CONSTANT_CHAR: 5,
+    CONSTANT_URL: 6,
+
+    BANG: 7,
+    EQUAL: 8,
+    EQUALEQUAL: 9,
+    GREATER: 10,
+    GREATEREQUAL: 11,
+    LAMBDA: 12,
+    LCURLEY: 13,
+    LESS: 14,
+    LESSEQUAL: 15,
+    LPAREN: 16,
+    MINUS: 17,
+    MINUSGREATER: 18,
+    PLUS: 19,
+    PLUSPLUS: 20,
+    RCURLEY: 21,
+    RPAREN: 22,
+    SEMICOLON: 23,
+    SLASH: 24,
+    STAR: 25,
+
+    AS: 26,
+    ELSE: 27,
+    FALSE: 28,
+    IF: 29,
+    IMPORT: 30,
+    O: 31,
+    THEN: 32,
+    TRUE: 33
 };
 
-const reservedCharacters = [
-    Tuple.Tuple('\\'.charCodeAt(0), TokenEnum.LAMBDA),
-    Tuple.Tuple('('.charCodeAt(0), TokenEnum.LPAREN),
-    Tuple.Tuple(')'.charCodeAt(0), TokenEnum.RPAREN),
-    Tuple.Tuple('='.charCodeAt(0), TokenEnum.EQUAL),
-    Tuple.Tuple(';'.charCodeAt(0), TokenEnum.SEMICOLON)
+const symbols = [
+    Tuple.Tuple('\\', TokenEnum.LAMBDA),
+    Tuple.Tuple('(', TokenEnum.LPAREN),
+    Tuple.Tuple(')', TokenEnum.RPAREN),
+    Tuple.Tuple('{', TokenEnum.LCURLEY),
+    Tuple.Tuple('}', TokenEnum.RCURLEY),
+    Tuple.Tuple('==', TokenEnum.EQUALEQUAL),
+    Tuple.Tuple('=', TokenEnum.EQUAL),
+    Tuple.Tuple(';', TokenEnum.SEMICOLON),
+    Tuple.Tuple('++', TokenEnum.PLUSPLUS),
+    Tuple.Tuple('+', TokenEnum.PLUS),
+    Tuple.Tuple('->', TokenEnum.MINUSGREATER),
+    Tuple.Tuple('-', TokenEnum.MINUS),
+    Tuple.Tuple('<=', TokenEnum.LESSEQUAL),
+    Tuple.Tuple('<', TokenEnum.LESS),
+    Tuple.Tuple('>=', TokenEnum.GREATEREQUAL),
+    Tuple.Tuple('>', TokenEnum.GREATER),
+    Tuple.Tuple('*', TokenEnum.STAR),
+    Tuple.Tuple('/', TokenEnum.SLASH),
+    Tuple.Tuple('!', TokenEnum.BANG)
 ];
+
+const reservedIdentifiers = {
+    'as': TokenEnum.AS,
+    'else': TokenEnum.ELSE,
+    'false': TokenEnum.FALSE,
+    'if': TokenEnum.IF,
+    'import': TokenEnum.IMPORT,
+    'o': TokenEnum.O,
+    'then': TokenEnum.THEN,
+    'true': TokenEnum.TRUE
+};
 
 
 function isWhitespace(c) {
@@ -34,12 +89,17 @@ function isDigit(c) {
     return c >= 48 && c <= 57;
 }
 
-function findReservedCharacter(c) {
-    return reservedCharacters.find(tuple => tuple.fst == c);
+function isIdentifierStart(c) {
+    return c >= 'a'.charCodeAt(0) && c <= 'z'.charCodeAt(0) ||
+        c >= 'A'.charCodeAt(0) && c <= 'Z'.charCodeAt(0) ||
+        c == '_'.charCodeAt(0);
 }
 
-function isReservedCharacter(c) {
-    return findReservedCharacter(c);
+function isIdentifierRest(c) {
+    return c >= 'a'.charCodeAt(0) && c <= 'z'.charCodeAt(0) ||
+        c >= 'A'.charCodeAt(0) && c <= 'Z'.charCodeAt(0) ||
+        c >= '0'.charCodeAt(0) && c <= '9'.charCodeAt(0) ||
+        c == '_'.charCodeAt(0) || c == '\''.charCodeAt(0);
 }
 
 class Context {
@@ -74,9 +134,6 @@ class Context {
             is: function (predicate) {
                 return this.isNotEndOfFile() && predicate(this.charCodeAtIndex());
             },
-            isNot: function (predicate) {
-                return this.isNotEndOfFile() && !predicate(this.charCodeAtIndex());
-            },
             isEndOfFile: function () {
                 return this.index >= this.length;
             },
@@ -101,6 +158,16 @@ class Context {
             },
             text: function () {
                 return this.content.substr(this.indexXY, this.index - this.indexXY);
+            },
+            clone: function() {
+                var temp = this.constructor();
+                for (var key in this) {
+                    if (this.hasOwnProperty(key)) {
+                        temp[key] = this[key];
+                    }
+                }
+
+                return temp;
             }
         };
     }
@@ -117,25 +184,55 @@ class Context {
 
             if (cursor.isEndOfFile()) {
                 return this.newContext(TokenEnum.EOF, cursor);
-            } else if (cursor.is(isReservedCharacter)) {
-                cursor.markStartOfToken();
-                const reservedCharacter = cursor.charCodeAtIndex();
-                cursor.advanceIndex();
-                return this.newContext(findReservedCharacter(reservedCharacter).snd, cursor);
             } else if (cursor.is(isDigit)) {
                 cursor.markStartOfToken();
                 while (cursor.is(isDigit)) {
                     cursor.advanceIndex();
                 }
                 return this.newContext(TokenEnum.CONSTANT_INTEGER, cursor);
-            } else {
+            } else if (cursor.is(isIdentifierStart)) {
                 cursor.markStartOfToken();
 
-                while (cursor.isNot(isWhitespace) && cursor.isNot(isReservedCharacter)) {
+                while (cursor.is(isIdentifierRest)) {
                     cursor.advanceIndex();
                 }
 
-                return this.newContext(TokenEnum.IDENTIFIER, cursor);
+                const reserved = reservedIdentifiers[cursor.text()];
+
+                return reserved
+                    ? this.newContext(reserved, cursor)
+                    : this.newContext(TokenEnum.IDENTIFIER, cursor);
+            } else {
+                for (let index = 0; index < symbols.length; index += 1) {
+                    const symbol = symbols[index];
+
+                    if (symbol.fst.charCodeAt(0) == cursor.charCodeAtIndex()) {
+                        if (symbol.fst.length == 1) {
+                            cursor.markStartOfToken();
+                            cursor.advanceIndex();
+
+                            return this.newContext(symbol.snd, cursor);
+                        } else {
+                            const tmpCursor = cursor.clone();
+                            let matched = true;
+
+                            tmpCursor.markStartOfToken();
+                            tmpCursor.advanceIndex();
+                            for (let tmpCursorIndex = 1; tmpCursorIndex < symbol.fst.length; tmpCursorIndex += 1) {
+                                matched = matched && symbol.fst.charCodeAt(tmpCursorIndex) == tmpCursor.charCodeAtIndex();
+                                tmpCursor.advanceIndex();
+                            }
+
+                            if (matched) {
+                                return this.newContext(symbol.snd, tmpCursor);
+                            }
+                        }
+                    }
+                }
+
+                cursor.markStartOfToken();
+                cursor.advanceIndex();
+                return this.newContext(TokenEnum.UNKNOWN, cursor);
             }
         }
     }
@@ -151,6 +248,7 @@ class Context {
     get x() {
         return this._x;
     }
+
     get y() {
         return this._y;
     }
