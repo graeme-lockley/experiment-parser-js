@@ -57,18 +57,19 @@ set and then, through subsequent versions, implement the entire language.
 | Lexical  | Layout based                      |    |    |    |    |    |    |    |    | *  |
 | Syntax   | module/imports                    | *  |    |    |    |    |    |    |    |    |
 |          | if-then-else                      | *  |    |    |    |    |    |    |    |    |
-|          | let ... in                        |    | *  |    |    |    |    |    |    |    |
-|          | ... where                         |    | *  |    |    |    |    |    |    |    |
-|          | ... assumption ...                |    |    | *  |    |    |    |    |    |    |
+|          | let ... in                        |    |    | *  |    |    |    |    |    |    |
+|          | ... where                         |    |    | *  |    |    |    |    |    |    |
+|          | ... assumption ...                |    | *  |    |    |    |    |    |    |    |
 |          | match                             |    |    |    |    |    | *  |    |    |    |
 |          | Pattern matching on definition    |    |    |    |    |    | *  |    |    |    |
 |          | Operator overloading              |    |    |    |    |    |    | *  |    |    |
 | Typing   | Int, String, Char, Boolean, Float | *  |    |    |    |    |    |    |    |    |
-|          | Long, Double                      |    | *  |    |    |    |    |    |    |    |
+|          | Long, Double                      |    |    | *  |    |    |    |    |    |    |
 |          | Lists                             | *  |    |    |    |    |    |    |    |    |
 |          | String as a list of Char          |    |    |    |    |    |    | *  |    |    |
 |          | Dictionary                        | *  |    |    |    |    |    |    |    |    |
 |          | n-tuple                           |    |    |    |    | *  |    |    |    |    |
+|          | Records                           |    |    |    |    | *  |    |    |    |    |
 |          | Type inference                    |    |    |    | *  |    |    |    |    |    |
 |          | Type classes                      |    |    |    |    |    |    |    | *  |    |
 | General  | Use native JavaScript libraries   | *  |    |    |    |    |    |    |    |    |
