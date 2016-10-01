@@ -96,7 +96,7 @@ describe('Lexer', function () {
         const context = Lexer.fromString('\'a\'');
 
         it('should return CONSTANT_CHAR', () => expect(context.id).to.equal(Lexer.TokenEnum.CONSTANT_CHAR));
-        it('should return text of "a"', () => expect(context.text).to.equal('a'));
+        it('should return text of "\'a\'"', () => expect(context.text).to.equal('\'a\''));
         it('should return EOF for next', () => expect(context.next().id).to.equal(Lexer.TokenEnum.EOF));
     });
 
@@ -104,7 +104,15 @@ describe('Lexer', function () {
         const context = Lexer.fromString('\'\\\'\'');
 
         it('should return CONSTANT_CHAR', () => expect(context.id).to.equal(Lexer.TokenEnum.CONSTANT_CHAR));
-        it('should return text of "\'"', () => expect(context.text).to.equal('\''));
+        it('should return text of "\'\\\'\'"', () => expect(context.text).to.equal('\'\\\'\''));
+        it('should return EOF for next', () => expect(context.next().id).to.equal(Lexer.TokenEnum.EOF));
+    });
+
+    describe('with input "\"hello \\"world\\"\""', () => {
+        const context = Lexer.fromString('"hello \\" world"');
+
+        it('should return CONSTANT_STRING', () => expect(context.id).to.equal(Lexer.TokenEnum.CONSTANT_STRING));
+        it('should return text of "\\"hello \\" world\\""', () => expect(context.text).to.equal('"hello \\" world"'));
         it('should return EOF for next', () => expect(context.next().id).to.equal(Lexer.TokenEnum.EOF));
     });
 });

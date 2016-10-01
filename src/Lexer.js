@@ -124,8 +124,6 @@ class Context {
             x: this.indexX,
             y: this.indexY,
 
-            tokenEndIndex: -1,
-
             content: this.input.content,
             length: this.input.length,
 
@@ -135,6 +133,12 @@ class Context {
 
             is: function (predicate) {
                 return this.isNotEndOfFile() && predicate(this.charCodeAtIndex());
+            },
+            isChar: function(c) {
+                return this.isNotEndOfFile() && this.charCodeAtIndex() == c.charCodeAt(0);
+            },
+            isNotChar: function(c) {
+                return this.isNotEndOfFile() && this.charCodeAtIndex() != c.charCodeAt(0);
             },
             isEndOfFile: function () {
                 return this.index >= this.length;
@@ -158,11 +162,8 @@ class Context {
                 this.x = this.indexX;
                 this.y = this.indexY;
             },
-            markEndOfToken: function () {
-                this.tokenEndIndex = this.index;
-            },
             text: function () {
-                return this.content.substr(this.indexXY, (this.tokenEndIndex == -1 ? this.index : this.tokenEndIndex) - this.indexXY);
+                return this.content.substr(this.indexXY, this.index - this.indexXY);
             },
             clone: function () {
                 var temp = this.constructor();
@@ -207,29 +208,41 @@ class Context {
                 return reserved
                     ? this.newContext(reserved, cursor)
                     : this.newContext(TokenEnum.IDENTIFIER, cursor);
-            } else if (cursor.is(c => c == '\''.charCodeAt(0))) {
+            } else if (cursor.isChar("'")) {
+                cursor.markStartOfToken();
                 cursor.advanceIndex();
-                if (cursor.is(c => c == '\\'.charCodeAt(0))) {
+                if (cursor.isChar('\\')) {
                     cursor.advanceIndex();
-                    cursor.markStartOfToken();
                     cursor.advanceIndex();
-                    if (cursor.is(c => c == '\''.charCodeAt(0))) {
-                        cursor.markEndOfToken();
+                    if (cursor.isChar("'")) {
                         cursor.advanceIndex();
                         return this.newContext(TokenEnum.CONSTANT_CHAR, cursor);
                     } else {
                         return this.newContext(TokenEnum.UNKNOWN, cursor);
                     }
                 } else {
-                    cursor.markStartOfToken();
                     cursor.advanceIndex();
-                    if (cursor.is(c => c == '\''.charCodeAt(0))) {
-                        cursor.markEndOfToken();
+                    if (cursor.isChar("'")) {
                         cursor.advanceIndex();
                         return this.newContext(TokenEnum.CONSTANT_CHAR, cursor);
                     } else {
                         return this.newContext(TokenEnum.UNKNOWN, cursor);
                     }
+                }
+            } else if (cursor.isChar('"')) {
+                cursor.markStartOfToken();
+                cursor.advanceIndex();
+                while (cursor.isNotChar('"')) {
+                    if (cursor.isChar('\\')) {
+                        cursor.advanceIndex();
+                    }
+                    cursor.advanceIndex();
+                }
+                if (cursor.isEndOfFile()) {
+                    return this.newContext(TokenEnum.UNKNOWN, cursor);
+                } else {
+                    cursor.advanceIndex();
+                    return this.newContext(TokenEnum.CONSTANT_STRING, cursor);
                 }
             } else {
                 for (let index = 0; index < symbols.length; index += 1) {
