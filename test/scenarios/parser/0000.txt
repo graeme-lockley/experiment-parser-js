@@ -1,6 +1,6 @@
 -- given multiple import statements
-import file:../src/core/Option as Option ;
-import file:../src/core/Tuple as Tuple ;
+import file:../src/core/Option as Option;
+import file:../src/core/Tuple as Tuple;
 -- ast
 {
   "type": "MODULE",
