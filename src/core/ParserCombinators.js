@@ -2,6 +2,7 @@
 
 const Result = require('./Result');
 const Tuple = require('./Tuple');
+const Option = require('./Option');
 
 
 /**
@@ -62,6 +63,36 @@ function and(parsers, mapFunction = identity) {
 }
 
 
+function option(parser, mapFunction = identity) {
+    return lexer => {
+        const result = parser(lexer);
+
+        return result.isOk()
+            ? Result.Ok(Tuple.Tuple(Option.Some(mapFunction(result.getOkOrElse().fst)), result.getOkOrElse().snd))
+            : Result.Ok(Tuple.Tuple(Option.None, lexer));
+    }
+}
+
+
+function many(parser, mapFunction = identity) {
+    return lexer => {
+        const result = [];
+        let currentLexer = lexer;
+
+        while (true) {
+            const currentResult = parser(currentLexer);
+
+            if (currentResult.isOk()) {
+                result.push(currentResult.getOkOrElse().fst);
+                currentLexer = currentResult.getOkOrElse().snd;
+            } else {
+                return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
+            }
+        }
+    }
+}
+
+
 function many1(parser, mapFunction = identity) {
     return lexer => {
         const firstResult = parser(lexer);
@@ -88,6 +119,7 @@ function many1(parser, mapFunction = identity) {
         }
     }
 }
+
 
 function sepBy1(parser, separatorParser, mapFunction = identity) {
     const nextParser = and([separatorParser, parser], elements => elements[1]);
@@ -121,8 +153,10 @@ function sepBy1(parser, separatorParser, mapFunction = identity) {
 
 module.exports = {
     and,
+    many,
     many1,
     mapError,
+    option,
     or,
     sepBy1,
     symbol

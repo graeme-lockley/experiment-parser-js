@@ -24,6 +24,26 @@ function compose(f1, f2) {
 }
 
 
+function parseMODULE(lexer) {
+    return P.and([
+        P.many(parseIMPORT),
+        P.many(parseDECL),
+        P.option(parseExpr)
+    ], e => AST.newModule(e[0], e[1], e[2]))(lexer);
+}
+
+
+function parseIMPORT(lexer) {
+    return P.and([
+        P.symbol(Lexer.TokenEnum.IMPORT),
+        P.symbol(Lexer.TokenEnum.CONSTANT_URL),
+        P.symbol(Lexer.TokenEnum.AS),
+        P.symbol(Lexer.TokenEnum.IDENTIFIER),
+        P.symbol(Lexer.TokenEnum.SEMICOLON)
+    ], e => AST.newImport(e[1], e[3]))(lexer);
+}
+
+
 function parseDECLS(lexer) {
     return P.sepBy1(parseDECL, P.symbol(Lexer.TokenEnum.SEMICOLON), element => AST.newDeclarations(element))(lexer);
 }
@@ -82,10 +102,9 @@ function parseExpr(lexer) {
     return P.many1(parseTerm, elements => elements.length == 1 ? elements[0] : AST.newApply(elements))(lexer);
 }
 
-
 function parseString(input) {
     const parseResult =
-        P.and([parseDECLS, P.symbol(Lexer.TokenEnum.EOF)], (elements => elements[0]))(Lexer.fromString(input));
+        P.and([parseMODULE, P.symbol(Lexer.TokenEnum.EOF)], (elements => elements[0]))(Lexer.fromString(input));
 
     return parseResult.map(
         ok => Result.Ok(ok.fst),

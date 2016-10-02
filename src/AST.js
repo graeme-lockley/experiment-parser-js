@@ -14,8 +14,6 @@ class Apply {
     }
 }
 
-const newApply = e => new Apply(e);
-
 
 class ConstantInteger {
     constructor(value) {
@@ -83,6 +81,14 @@ class Identifier {
 const newIdentifier = n => new Identifier(n);
 
 
+class Import {
+    constructor(url, id) {
+        this.type = 'IMPORT';
+        this.url = url;
+        this.id = id;
+    }
+}
+
 class Lambda {
     constructor(variables, expression) {
         this.variables = variables;
@@ -101,6 +107,17 @@ class Lambda {
 const newLambda = (v, e) => new Lambda(v, e);
 
 
+class Module {
+    constructor(imports, declarations, optionalExpression) {
+        this.type = 'MODULE';
+        this.imports = imports;
+        this.declarations = declarations;
+        this.optionalExpression = optionalExpression;
+    }
+}
+
+
+
 module.exports = {
     Apply,
     newApply: e => new Apply(e),
@@ -112,6 +129,10 @@ module.exports = {
     newDeclarations,
     Identifier,
     newIdentifier,
+    Import,
+    newImport: (u, i) => new Import(u, i),
     Lambda,
-    newLambda
+    newLambda,
+    Module,
+    newModule: (i, d, e) => new Module(i, d, e)
 };

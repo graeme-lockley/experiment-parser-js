@@ -1,0 +1,21 @@
+-- given multiple import statements
+import file:../src/core/Option as Option ;
+import file:../src/core/Tuple as Tuple ;
+-- ast
+{
+  "type": "MODULE",
+  "imports": [
+    {
+      "type": "IMPORT",
+      "url": "file:../src/core/Option",
+      "id": "Option"
+    },
+    {
+      "type": "IMPORT",
+      "url": "file:../src/core/Tuple",
+      "id": "Tuple"
+    }
+  ],
+  "declarations": [],
+  "optionalExpression": {}
+}
