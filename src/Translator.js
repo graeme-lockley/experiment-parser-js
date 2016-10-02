@@ -18,8 +18,6 @@ function astToJavascript(ast) {
         } else {
             return 'const ' + ast.name + ' = ' + astToJavascript(ast.expression) + ';';
         }
-    } else if (ast instanceof AST.Declarations) {
-        return ast.declarations.map(d => astToJavascript(d)).join('\n\n');
     } else if (ast instanceof AST.Module) {
         return ast.declarations.map(d => astToJavascript(d)).join('\n\n');
     }

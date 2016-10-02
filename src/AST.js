@@ -3,82 +3,51 @@
 
 class Apply {
     constructor(expressions) {
+        this.type = 'APPLY';
         this.expressions = expressions;
-    }
-
-    toJSON() {
-        return {
-            type: 'APPLY',
-            expressions: this.expressions
-        };
     }
 }
 
 
 class ConstantInteger {
     constructor(value) {
+        this.type = 'CONSTANT_INTEGER';
         this.value = value;
-    }
-
-    toJSON() {
-        return {
-            type: 'CONSTANT_INTEGER',
-            value: this.value
-        };
     }
 }
 
-const newConstantInteger = v => new ConstantInteger(v);
+
+class ConstantURL {
+    constructor(value) {
+        this.type = 'CONSTANT_URL';
+        this.value = value;
+    }
+}
 
 
 class Declaration {
     constructor(name, expression) {
+        this.type = 'DECLARATION';
         this.name = name;
         this.expression = expression;
     }
-
-    toJSON() {
-        return {
-            type: 'DECLARATION',
-            name: this.name,
-            expression: this.expression
-        };
-    }
 }
-
-const newDeclaration = (n, e) => new Declaration(n, e);
 
 
 class Declarations {
     constructor(declarations) {
+        this.type = 'DECLARATIONS';
         this.declarations = declarations;
     }
-
-    toJSON() {
-        return {
-            type: 'DECLARATIONS',
-            declarations: this.declarations
-        };
-    }
 }
-
-const newDeclarations = ds => new Declarations(ds);
 
 
 class Identifier {
     constructor(name) {
+        this.type = 'IDENTIFIER';
         this.name = name;
     }
-
-    toJSON() {
-        return {
-            type: 'IDENTIFIER',
-            name: this.name
-        };
-    }
 }
-
-const newIdentifier = n => new Identifier(n);
 
 
 class Import {
@@ -91,20 +60,11 @@ class Import {
 
 class Lambda {
     constructor(variables, expression) {
+        this.type = 'LAMBDA';
         this.variables = variables;
         this.expression = expression;
     }
-
-    toJSON() {
-        return {
-            type: 'LAMBDA',
-            variables: this.variables,
-            expression: this.expression
-        };
-    }
 }
-
-const newLambda = (v, e) => new Lambda(v, e);
 
 
 class Module {
@@ -117,22 +77,21 @@ class Module {
 }
 
 
-
 module.exports = {
     Apply,
     newApply: e => new Apply(e),
     ConstantInteger,
-    newConstantInteger,
+    newConstantInteger: v => new ConstantInteger(v),
+    ConstantURL,
+    newConstantURL: v => new ConstantURL(v),
     Declaration,
-    newDeclaration,
-    Declarations,
-    newDeclarations,
+    newDeclaration: (n, e) => new Declaration(n, e),
     Identifier,
-    newIdentifier,
+    newIdentifier: n => new Identifier(n),
     Import,
     newImport: (u, i) => new Import(u, i),
     Lambda,
-    newLambda,
+    newLambda: (v, e) => new Lambda(v, e),
     Module,
     newModule: (i, d, e) => new Module(i, d, e)
 };
