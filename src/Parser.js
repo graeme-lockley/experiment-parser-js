@@ -17,7 +17,7 @@ function parseMODULE(lexer) {
     return P.and([
         P.many(parseIMPORT),
         P.many(parseDECL),
-        P.option(parseExpr)
+        P.option(parseEXPR1)
     ], e => AST.newModule(e[0], e[1], e[2]))(lexer);
 }
 
@@ -37,7 +37,7 @@ function parseDECL(lexer) {
     return P.and([
         P.many1(parseIdentifier),
         P.symbol(Lexer.TokenEnum.EQUAL),
-        parseExpr,
+        parseEXPR1,
         P.symbol(Lexer.TokenEnum.SEMICOLON)
     ], elements =>
         elements[0].length == 1 ? AST.newDeclaration(elements[0][0].name, elements[2]) : AST.newDeclaration(elements[0][0].name, AST.newLambda(elements[0].slice(1).map(n => n.name), elements[2])))(lexer);
@@ -68,7 +68,7 @@ function parseLambda(lexer) {
                 P.symbol(Lexer.TokenEnum.IDENTIFIER)
             ], elements => elements[1])),
         P.symbol(Lexer.TokenEnum.MINUSGREATER),
-        parseExpr
+        parseEXPR1
     ], items => AST.newLambda(items[0], items[2]))(lexer);
 }
 
@@ -76,7 +76,7 @@ function parseLambda(lexer) {
 function parseParenthesisExpression(lexer) {
     return P.and([
         P.symbol(Lexer.TokenEnum.LPAREN),
-        parseExpr,
+        parseEXPR1,
         P.symbol(Lexer.TokenEnum.RPAREN)
     ], elements => elements[1])(lexer);
 }
@@ -92,7 +92,7 @@ function parseEXPR11(lexer) {
 }
 
 
-function parseExpr(lexer) {
+function parseEXPR1(lexer) {
     return P.many1(parseEXPR11, elements => elements.length == 1 ? elements[0] : AST.newApply(elements))(lexer);
 }
 
