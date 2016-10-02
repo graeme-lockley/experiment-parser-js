@@ -82,7 +82,7 @@ function parseParenthesisExpression(lexer) {
 }
 
 
-function parseTerm(lexer) {
+function parseEXPR11(lexer) {
     return P.or([
         parseConstantInteger,
         parseIdentifier,
@@ -93,7 +93,7 @@ function parseTerm(lexer) {
 
 
 function parseExpr(lexer) {
-    return P.many1(parseTerm, elements => elements.length == 1 ? elements[0] : AST.newApply(elements))(lexer);
+    return P.many1(parseEXPR11, elements => elements.length == 1 ? elements[0] : AST.newApply(elements))(lexer);
 }
 
 
@@ -109,5 +109,5 @@ function parseString(input) {
 
 
 module.exports = {
-    parseString, parseTerm
+    parseString, parseEXPR11
 };
