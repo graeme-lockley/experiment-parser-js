@@ -8,17 +8,6 @@ const AST = require('./AST');
 const P = require('./core/ParserCombinators');
 
 
-/**
- * DECLS -> DECL { DECL }
- * DECL -> IDENTIFIER { IDENTIFIER } '=' EXPR
- * EXPR -> TERM { TERM }
- * TERM -> CONSTANT_INTEGER
- *       | IDENTIFIER
- *       | '\\' IDENTIFIER { '\\' IDENTIFIER } '->' EXPR
- *       | '(' EXPR ')'
- */
-
-
 function compose(f1, f2) {
     return x => f1(f2(x));
 }
@@ -74,7 +63,10 @@ function parseIdentifier(lexer) {
 function parseLambda(lexer) {
     return P.and([
         P.many1(
-            P.and([P.symbol(Lexer.TokenEnum.LAMBDA), P.symbol(Lexer.TokenEnum.IDENTIFIER)], elements => elements[1])),
+            P.and([
+                P.symbol(Lexer.TokenEnum.LAMBDA),
+                P.symbol(Lexer.TokenEnum.IDENTIFIER)
+            ], elements => elements[1])),
         P.symbol(Lexer.TokenEnum.MINUSGREATER),
         parseExpr
     ], items => AST.newLambda(items[0], items[2]))(lexer);
@@ -85,18 +77,25 @@ function parseParenthesisExpression(lexer) {
     return P.and([
         P.symbol(Lexer.TokenEnum.LPAREN),
         parseExpr,
-        P.symbol(Lexer.TokenEnum.RPAREN)], elements => elements[1])(lexer);
+        P.symbol(Lexer.TokenEnum.RPAREN)
+    ], elements => elements[1])(lexer);
 }
 
 
 function parseTerm(lexer) {
-    return P.or([parseConstantInteger, parseIdentifier, parseLambda, parseParenthesisExpression])(lexer);
+    return P.or([
+        parseConstantInteger,
+        parseIdentifier,
+        parseLambda,
+        parseParenthesisExpression
+    ])(lexer);
 }
 
 
 function parseExpr(lexer) {
     return P.many1(parseTerm, elements => elements.length == 1 ? elements[0] : AST.newApply(elements))(lexer);
 }
+
 
 function parseString(input) {
     const parseResult =
