@@ -7,13 +7,25 @@ import file:../src/core/Tuple as Tuple ;
   "imports": [
     {
       "type": "IMPORT",
-      "url": "file:../src/core/Option",
-      "id": "Option"
+      "url": {
+        "type": "CONSTANT_URL",
+        "value": "file:../src/core/Option"
+      },
+      "id": {
+        "type": "IDENTIFIER",
+        "name": "Option"
+      }
     },
     {
       "type": "IMPORT",
-      "url": "file:../src/core/Tuple",
-      "id": "Tuple"
+      "url": {
+        "type": "CONSTANT_URL",
+        "value": "file:../src/core/Tuple"
+      },
+      "id": {
+        "type": "IDENTIFIER",
+        "name": "Tuple"
+      }
     }
   ],
   "declarations": [],

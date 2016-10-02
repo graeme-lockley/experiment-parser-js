@@ -40,7 +40,7 @@ function parseIMPORT(lexer) {
         P.symbol(Lexer.TokenEnum.AS),
         P.symbol(Lexer.TokenEnum.IDENTIFIER),
         P.symbol(Lexer.TokenEnum.SEMICOLON)
-    ], e => AST.newImport(e[1], e[3]))(lexer);
+    ], e => AST.newImport(AST.newConstantURL(e[1]), AST.newIdentifier(e[3])))(lexer);
 }
 
 
