@@ -20,6 +20,8 @@ function astToJavascript(ast) {
         }
     } else if (ast instanceof AST.Declarations) {
         return ast.declarations.map(d => astToJavascript(d)).join('\n\n');
+    } else if (ast instanceof AST.Module) {
+        return ast.declarations.map(d => astToJavascript(d)).join('\n\n');
     }
 }
 

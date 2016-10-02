@@ -44,16 +44,12 @@ function parseIMPORT(lexer) {
 }
 
 
-function parseDECLS(lexer) {
-    return P.sepBy1(parseDECL, P.symbol(Lexer.TokenEnum.SEMICOLON), element => AST.newDeclarations(element))(lexer);
-}
-
-
 function parseDECL(lexer) {
     return P.and([
         P.many1(parseIdentifier),
         P.symbol(Lexer.TokenEnum.EQUAL),
-        parseExpr
+        parseExpr,
+        P.symbol(Lexer.TokenEnum.SEMICOLON)
     ], elements =>
         elements[0].length == 1 ? AST.newDeclaration(elements[0][0].name, elements[2]) : AST.newDeclaration(elements[0][0].name, AST.newLambda(elements[0].slice(1).map(n => n.name), elements[2])))(lexer);
 }
@@ -114,5 +110,5 @@ function parseString(input) {
 
 
 module.exports = {
-    parseString, parseTerm, parseDECLS
+    parseString, parseTerm
 };

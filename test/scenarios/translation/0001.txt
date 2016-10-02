@@ -1,6 +1,6 @@
 -- given the Church Numerals for zero and succ
 zero = \f \x -> x;
-succ n = \f \x -> f ((n f) x)
+succ n = \f \x -> f ((n f) x);
 -- js
 function zero(f) {
   return x => x;

@@ -1,7 +1,7 @@
 -- given the declarations "pi = 3 ; add a b = plus a b; ln = 3
 pi = 3;
 add a b = plus a b;
-ln = 3
+ln = 3;
 -- js
 const pi = 3;
 
