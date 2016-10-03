@@ -18,7 +18,7 @@ function parseMODULE(lexer) {
         P.many(parseIMPORT),
         P.many(parseDECL),
         P.option(parseEXPR1)
-    ], e => AST.newModule(e[0], e[1], e[2]))(lexer);
+    ], e => new AST.Module(e[0], e[1], e[2]))(lexer);
 }
 
 
@@ -29,7 +29,7 @@ function parseIMPORT(lexer) {
         P.symbol(Lexer.TokenEnum.AS),
         P.symbol(Lexer.TokenEnum.IDENTIFIER),
         P.symbol(Lexer.TokenEnum.SEMICOLON)
-    ], e => AST.newImport(AST.newConstantURL(e[1]), AST.newIdentifier(e[3])))(lexer);
+    ], e => new AST.Import(new AST.ConstantURL(e[1]), new AST.Identifier(e[3])))(lexer);
 }
 
 
@@ -40,13 +40,13 @@ function parseDECL(lexer) {
         parseEXPR1,
         P.symbol(Lexer.TokenEnum.SEMICOLON)
     ], elements =>
-        elements[0].length == 1 ? AST.newDeclaration(elements[0][0].name, elements[2]) : AST.newDeclaration(elements[0][0].name, AST.newLambda(elements[0].slice(1).map(n => n.name), elements[2])))(lexer);
+        elements[0].length == 1 ? new AST.Declaration(elements[0][0].name, elements[2]) : new AST.Declaration(elements[0][0].name, new AST.Lambda(elements[0].slice(1).map(n => n.name), elements[2])))(lexer);
 }
 
 
 function parseConstantInteger(lexer) {
     return P.mapError(
-        P.symbol(Lexer.TokenEnum.CONSTANT_INTEGER, compose(AST.newConstantInteger, parseInt))(lexer),
+        P.symbol(Lexer.TokenEnum.CONSTANT_INTEGER, compose(c => new AST.ConstantInteger(c), parseInt))(lexer),
         "Expected a constant integer"
     );
 }
@@ -54,7 +54,7 @@ function parseConstantInteger(lexer) {
 
 function parseIdentifier(lexer) {
     return P.mapError(
-        P.symbol(Lexer.TokenEnum.IDENTIFIER, AST.newIdentifier)(lexer),
+        P.symbol(Lexer.TokenEnum.IDENTIFIER, i => new AST.Identifier(i))(lexer),
         "Expected an identifier"
     );
 }
@@ -69,7 +69,7 @@ function parseLambda(lexer) {
             ], elements => elements[1])),
         P.symbol(Lexer.TokenEnum.MINUSGREATER),
         parseEXPR1
-    ], items => AST.newLambda(items[0], items[2]))(lexer);
+    ], items => new AST.Lambda(items[0], items[2]))(lexer);
 }
 
 
@@ -101,11 +101,11 @@ function parseEXPR1(lexer) {
             parseEXPR1,
             P.symbol(Lexer.TokenEnum.ELSE),
             parseEXPR1
-        ], e => AST.newIf(e[1], e[3], e[5])),
-        P.many1(parseEXPR2, elements => elements.length == 1 ? elements[0] : AST.newApply(elements)),
+        ], e => new AST.If(e[1], e[3], e[5])),
+        P.many1(parseEXPR2, elements => elements.length == 1 ? elements[0] : new AST.Apply(elements)),
         P.and([
             P.symbol(Lexer.TokenEnum.LCURLEY),
-            P.sepBy1(parseEXPR1, P.symbol(Lexer.TokenEnum.SEMICOLON), e => AST.newExpressions(e)),
+            P.sepBy1(parseEXPR1, P.symbol(Lexer.TokenEnum.SEMICOLON), e => new AST.Expressions(e)),
             P.symbol(Lexer.TokenEnum.RCURLEY)
         ], e => e[1])
     ])(lexer);

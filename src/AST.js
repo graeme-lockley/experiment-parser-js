@@ -105,25 +105,15 @@ class Module {
 
 module.exports = {
     Apply,
-    newApply: e => new Apply(e),
     BooleanAnd,
     BooleanOr,
     ConstantInteger,
-    newConstantInteger: v => new ConstantInteger(v),
     ConstantURL,
-    newConstantURL: v => new ConstantURL(v),
     Declaration,
-    newDeclaration: (n, e) => new Declaration(n, e),
     Expressions,
-    newExpressions: (e) => new Expressions(e),
     Identifier,
-    newIdentifier: n => new Identifier(n),
     If,
-    newIf: (i, t, e) => new If(i, t, e),
     Import,
-    newImport: (u, i) => new Import(u, i),
     Lambda,
-    newLambda: (v, e) => new Lambda(v, e),
     Module,
-    newModule: (i, d, e) => new Module(i, d, e)
 };
