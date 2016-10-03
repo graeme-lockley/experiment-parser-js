@@ -34,14 +34,6 @@ class Declaration {
 }
 
 
-class Declarations {
-    constructor(declarations) {
-        this.type = 'DECLARATIONS';
-        this.declarations = declarations;
-    }
-}
-
-
 class Identifier {
     constructor(name) {
         this.type = 'IDENTIFIER';
