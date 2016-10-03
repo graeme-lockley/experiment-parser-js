@@ -1,0 +1,37 @@
+-- given an if-then-else
+aaa b c d = if (b) then c else d;
+-- ast
+{
+  "type": "MODULE",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "aaa",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "b",
+          "c",
+          "d"
+        ],
+        "expression": {
+          "type": "IF",
+          "ifExpr": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          },
+          "thenExpr": {
+            "type": "IDENTIFIER",
+            "name": "c"
+          },
+          "elseExpr": {
+            "type": "IDENTIFIER",
+            "name": "d"
+          }
+        }
+      }
+    }
+  ],
+  "optionalExpression": {}
+}

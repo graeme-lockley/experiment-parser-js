@@ -93,7 +93,17 @@ function parseEXPR11(lexer) {
 
 
 function parseEXPR1(lexer) {
-    return P.many1(parseEXPR11, elements => elements.length == 1 ? elements[0] : AST.newApply(elements))(lexer);
+    return P.or([
+        P.and([
+            P.symbol(Lexer.TokenEnum.IF),
+            parseEXPR11,
+            P.symbol(Lexer.TokenEnum.THEN),
+            parseEXPR11,
+            P.symbol(Lexer.TokenEnum.ELSE),
+            parseEXPR11
+        ], e => AST.newIf(e[1], e[3], e[5])),
+        P.many1(parseEXPR11, elements => elements.length == 1 ? elements[0] : AST.newApply(elements))
+    ])(lexer);
 }
 
 

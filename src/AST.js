@@ -50,6 +50,16 @@ class Identifier {
 }
 
 
+class If {
+    constructor(ifExpr, thenExpr, elseExpr) {
+        this.type = 'IF';
+        this.ifExpr = ifExpr;
+        this.thenExpr = thenExpr;
+        this.elseExpr = elseExpr;
+    }
+}
+
+
 class Import {
     constructor(url, id) {
         this.type = 'IMPORT';
@@ -88,6 +98,8 @@ module.exports = {
     newDeclaration: (n, e) => new Declaration(n, e),
     Identifier,
     newIdentifier: n => new Identifier(n),
+    If,
+    newIf: (i, t, e) => new If(i, t, e),
     Import,
     newImport: (u, i) => new Import(u, i),
     Lambda,
