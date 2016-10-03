@@ -24,7 +24,7 @@ function scenariosIn(directory) {
                     expect(parseResponse.isError()).to.be.true);
 
                 it('with the expected error message ' + output, () =>
-                    expect(parseResponse.getErrorOrElse()).should.equal(output));
+                    expect(parseResponse.getErrorOrElse()).to.equal(output));
             } else if (expectation == 'ast') {
                 it('should parse without any errors', () =>
                     expect(parseResponse.isOk()).to.be.true);
