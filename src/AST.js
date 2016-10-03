@@ -34,6 +34,14 @@ class Declaration {
 }
 
 
+class Expressions {
+    constructor(expressions) {
+        this.type = 'EXPRESSIONS';
+        this.expressions = expressions;
+    }
+}
+
+
 class Identifier {
     constructor(name) {
         this.type = 'IDENTIFIER';
@@ -88,6 +96,8 @@ module.exports = {
     newConstantURL: v => new ConstantURL(v),
     Declaration,
     newDeclaration: (n, e) => new Declaration(n, e),
+    Expressions,
+    newExpressions: (e) => new Expressions(e),
     Identifier,
     newIdentifier: n => new Identifier(n),
     If,

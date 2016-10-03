@@ -96,13 +96,18 @@ function parseEXPR1(lexer) {
     return P.or([
         P.and([
             P.symbol(Lexer.TokenEnum.IF),
-            parseEXPR11,
+            parseEXPR1,
             P.symbol(Lexer.TokenEnum.THEN),
-            parseEXPR11,
+            parseEXPR1,
             P.symbol(Lexer.TokenEnum.ELSE),
-            parseEXPR11
+            parseEXPR1
         ], e => AST.newIf(e[1], e[3], e[5])),
-        P.many1(parseEXPR11, elements => elements.length == 1 ? elements[0] : AST.newApply(elements))
+        P.many1(parseEXPR11, elements => elements.length == 1 ? elements[0] : AST.newApply(elements)),
+        P.and([
+            P.symbol(Lexer.TokenEnum.LCURLEY),
+            P.sepBy1(parseEXPR1, P.symbol(Lexer.TokenEnum.SEMICOLON), e => AST.newExpressions(e)),
+            P.symbol(Lexer.TokenEnum.RCURLEY)
+        ], e => e[1])
     ])(lexer);
 }
 

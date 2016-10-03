@@ -1,0 +1,77 @@
+-- given a sequence of expressions within curley braces
+aaa b c d = {
+  1;
+  b;
+  if (b) then {c; d} else {d; c};
+  d
+};
+-- ast
+{
+  "type": "MODULE",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "aaa",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "b",
+          "c",
+          "d"
+        ],
+        "expression": {
+          "type": "EXPRESSIONS",
+          "expressions": [
+            {
+              "type": "CONSTANT_INTEGER",
+              "value": 1
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            },
+            {
+              "type": "IF",
+              "ifExpr": {
+                "type": "IDENTIFIER",
+                "name": "b"
+              },
+              "thenExpr": {
+                "type": "EXPRESSIONS",
+                "expressions": [
+                  {
+                    "type": "IDENTIFIER",
+                    "name": "c"
+                  },
+                  {
+                    "type": "IDENTIFIER",
+                    "name": "d"
+                  }
+                ]
+              },
+              "elseExpr": {
+                "type": "EXPRESSIONS",
+                "expressions": [
+                  {
+                    "type": "IDENTIFIER",
+                    "name": "d"
+                  },
+                  {
+                    "type": "IDENTIFIER",
+                    "name": "c"
+                  }
+                ]
+              }
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "d"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "optionalExpression": {}
+}
