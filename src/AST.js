@@ -9,6 +9,14 @@ class Apply {
 }
 
 
+class BooleanOr{
+    constructor(expressions) {
+        this.type = 'BOOLEAN_OR';
+        this.expressions = expressions;
+    }
+}
+
+
 class ConstantInteger {
     constructor(value) {
         this.type = 'CONSTANT_INTEGER';
@@ -90,6 +98,7 @@ class Module {
 module.exports = {
     Apply,
     newApply: e => new Apply(e),
+    BooleanOr,
     ConstantInteger,
     newConstantInteger: v => new ConstantInteger(v),
     ConstantURL,

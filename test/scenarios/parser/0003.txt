@@ -1,0 +1,68 @@
+-- given an expression containing boolean ||
+aaa b c d = if b || c || d then c || d else b || d;
+-- ast
+{
+  "type": "MODULE",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "aaa",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "b",
+          "c",
+          "d"
+        ],
+        "expression": {
+          "type": "IF",
+          "ifExpr": {
+            "type": "BOOLEAN_OR",
+            "expressions": [
+              {
+                "type": "IDENTIFIER",
+                "name": "b"
+              },
+              {
+                "type": "IDENTIFIER",
+                "name": "c"
+              },
+              {
+                "type": "IDENTIFIER",
+                "name": "d"
+              }
+            ]
+          },
+          "thenExpr": {
+            "type": "BOOLEAN_OR",
+            "expressions": [
+              {
+                "type": "IDENTIFIER",
+                "name": "c"
+              },
+              {
+                "type": "IDENTIFIER",
+                "name": "d"
+              }
+            ]
+          },
+          "elseExpr": {
+            "type": "BOOLEAN_OR",
+            "expressions": [
+              {
+                "type": "IDENTIFIER",
+                "name": "b"
+              },
+              {
+                "type": "IDENTIFIER",
+                "name": "d"
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "optionalExpression": {}
+}

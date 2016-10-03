@@ -13,34 +13,36 @@ const TokenEnum = {
     CONSTANT_CHAR: 5,
     CONSTANT_URL: 6,
 
-    BANG: 7,
-    EQUAL: 8,
-    EQUALEQUAL: 9,
-    GREATER: 10,
-    GREATEREQUAL: 11,
-    LAMBDA: 12,
-    LCURLEY: 13,
-    LESS: 14,
-    LESSEQUAL: 15,
-    LPAREN: 16,
-    MINUS: 17,
-    MINUSGREATER: 18,
-    PLUS: 19,
-    PLUSPLUS: 20,
-    RCURLEY: 21,
-    RPAREN: 22,
-    SEMICOLON: 23,
-    SLASH: 24,
-    STAR: 25,
+    AMPERSAND_AMPERSAND: 7,
+    BANG: 8,
+    BAR_BAR: 9,
+    EQUAL: 10,
+    EQUALEQUAL: 11,
+    GREATER: 12,
+    GREATEREQUAL: 13,
+    LAMBDA: 14,
+    LCURLEY: 15,
+    LESS: 16,
+    LESSEQUAL: 17,
+    LPAREN: 18,
+    MINUS: 19,
+    MINUSGREATER: 20,
+    PLUS: 21,
+    PLUSPLUS: 22,
+    RCURLEY: 23,
+    RPAREN: 24,
+    SEMICOLON: 25,
+    SLASH: 26,
+    STAR: 27,
 
-    AS: 26,
-    ELSE: 27,
-    FALSE: 28,
-    IF: 29,
-    IMPORT: 30,
-    O: 31,
-    THEN: 32,
-    TRUE: 33
+    AS: 28,
+    ELSE: 29,
+    FALSE: 30,
+    IF: 31,
+    IMPORT: 32,
+    O: 33,
+    THEN: 34,
+    TRUE: 35
 };
 
 const symbols = [
@@ -62,7 +64,8 @@ const symbols = [
     Tuple.Tuple('>', TokenEnum.GREATER),
     Tuple.Tuple('*', TokenEnum.STAR),
     Tuple.Tuple('/', TokenEnum.SLASH),
-    Tuple.Tuple('!', TokenEnum.BANG)
+    Tuple.Tuple('!', TokenEnum.BANG),
+    Tuple.Tuple('||', TokenEnum.BAR_BAR)
 ];
 
 const reservedIdentifiers = {
