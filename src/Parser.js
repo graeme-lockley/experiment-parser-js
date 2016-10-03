@@ -113,7 +113,12 @@ function parseEXPR1(lexer) {
 
 
 function parseEXPR2(lexer) {
-    return P.sepBy1(parseEXPR11, P.symbol(Lexer.TokenEnum.BAR_BAR), e => e.length == 1 ? e[0] : new AST.BooleanOr(e))(lexer);
+    return P.sepBy1(parseEXPR3, P.symbol(Lexer.TokenEnum.BAR_BAR), e => e.length == 1 ? e[0] : new AST.BooleanOr(e))(lexer);
+}
+
+
+function parseEXPR3(lexer) {
+    return P.sepBy1(parseEXPR11, P.symbol(Lexer.TokenEnum.AMPERSAND_AMPERSAND), e => e.length == 1 ? e[0] : new AST.BooleanAnd(e))(lexer);
 }
 
 

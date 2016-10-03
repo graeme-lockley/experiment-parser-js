@@ -65,7 +65,8 @@ const symbols = [
     Tuple.Tuple('*', TokenEnum.STAR),
     Tuple.Tuple('/', TokenEnum.SLASH),
     Tuple.Tuple('!', TokenEnum.BANG),
-    Tuple.Tuple('||', TokenEnum.BAR_BAR)
+    Tuple.Tuple('||', TokenEnum.BAR_BAR),
+    Tuple.Tuple('&&', TokenEnum.AMPERSAND_AMPERSAND)
 ];
 
 const reservedIdentifiers = {
