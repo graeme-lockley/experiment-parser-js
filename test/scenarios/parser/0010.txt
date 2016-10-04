@@ -1,0 +1,124 @@
+-- given expressions containing unary operators !, + and -
+funnyNot a b = !(!a && b);
+funnyPlus a b = +a + +b * + + b;
+funnyMinus a b = -a + -b / - + b;
+-- ast
+{
+  "type": "MODULE",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "funnyNot",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "BOOLEAN_NOT",
+          "operand": {
+            "type": "BOOLEAN_AND",
+            "expressions": [
+              {
+                "type": "BOOLEAN_NOT",
+                "operand": {
+                  "type": "IDENTIFIER",
+                  "name": "a"
+                }
+              },
+              {
+                "type": "IDENTIFIER",
+                "name": "b"
+              }
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "funnyPlus",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "ADDITION",
+          "left": {
+            "type": "UNARY_PLUS",
+            "operand": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            }
+          },
+          "right": {
+            "type": "MULTIPLICATION",
+            "left": {
+              "type": "UNARY_PLUS",
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "b"
+              }
+            },
+            "right": {
+              "type": "UNARY_PLUS",
+              "operand": {
+                "type": "UNARY_PLUS",
+                "operand": {
+                  "type": "IDENTIFIER",
+                  "name": "b"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "funnyMinus",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "ADDITION",
+          "left": {
+            "type": "UNARY_NEGATE",
+            "operand": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            }
+          },
+          "right": {
+            "type": "DIVISION",
+            "left": {
+              "type": "UNARY_NEGATE",
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "b"
+              }
+            },
+            "right": {
+              "type": "UNARY_NEGATE",
+              "operand": {
+                "type": "UNARY_PLUS",
+                "operand": {
+                  "type": "IDENTIFIER",
+                  "name": "b"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "optionalExpression": {}
+}

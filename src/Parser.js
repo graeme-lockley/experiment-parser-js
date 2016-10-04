@@ -169,7 +169,7 @@ function parseAdditiveOp(lexer) {
 
 
 function parseEXPR8(lexer) {
-    return P.chainl1(parseEXPR11, parseMultiplicativeOp)(lexer);
+    return P.chainl1(parseEXPR9, parseMultiplicativeOp)(lexer);
 }
 
 
@@ -177,6 +177,26 @@ function parseMultiplicativeOp(lexer) {
     return P.or([
         P.symbol(Lexer.TokenEnum.STAR, () => (l, r) => new AST.Multiplication(l, r)),
         P.symbol(Lexer.TokenEnum.SLASH, () => (l, r) => new AST.Division(l, r))
+    ])(lexer);
+}
+
+
+function parseEXPR9(lexer) {
+    return P.or([
+        P.and([
+            parseUnaryOp,
+            parseEXPR9
+        ], e => e[0](e[1])),
+        parseEXPR11
+    ])(lexer);
+}
+
+
+function parseUnaryOp(lexer) {
+    return P.or([
+        P.symbol(Lexer.TokenEnum.BANG, () => (op) => new AST.BooleanNot(op)),
+        P.symbol(Lexer.TokenEnum.PLUS, () => (op) => new AST.UnaryPlus(op)),
+        P.symbol(Lexer.TokenEnum.MINUS, () => (op) => new AST.UnaryNegate(op))
     ])(lexer);
 }
 

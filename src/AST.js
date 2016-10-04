@@ -26,6 +26,14 @@ class BooleanAnd {
 }
 
 
+class BooleanNot {
+    constructor(operand) {
+        this.type = 'BOOLEAN_NOT';
+        this.operand = operand;
+    }
+}
+
+
 class BooleanOr {
     constructor(expressions) {
         this.type = 'BOOLEAN_OR';
@@ -202,10 +210,27 @@ class Subtraction {
 }
 
 
+class UnaryPlus {
+    constructor(operand) {
+        this.type = 'UNARY_PLUS';
+        this.operand = operand;
+    }
+}
+
+
+class UnaryNegate {
+    constructor(operand) {
+        this.type = 'UNARY_NEGATE';
+        this.operand = operand;
+    }
+}
+
+
 module.exports = {
     Addition,
     Apply,
     BooleanAnd,
+    BooleanNot,
     BooleanOr,
     ConstantInteger,
     ConstantURL,
@@ -225,5 +250,7 @@ module.exports = {
     Multiplication,
     NotEqual,
     StringConcat,
-    Subtraction
+    Subtraction,
+    UnaryPlus,
+    UnaryNegate
 };
