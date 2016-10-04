@@ -1,4 +1,4 @@
--- given an expression containing boolean &&
+-- given expressions containing == and !=
 intEq a b = a == b;
 intNq a b = a != b;
 intEqBool a b c = a == b == c;
