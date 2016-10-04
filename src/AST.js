@@ -59,6 +59,15 @@ class Declaration {
 }
 
 
+class Division {
+    constructor(left, right) {
+        this.type = 'DIVISION';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
 class Equal {
     constructor(left, right) {
         this.type = 'EQUAL';
@@ -157,6 +166,15 @@ class Module {
 }
 
 
+class Multiplication {
+    constructor(left, right) {
+        this.type = 'MULTIPLICATION';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
 class NotEqual {
     constructor(left, right) {
         this.type = 'NOT_EQUAL';
@@ -192,6 +210,7 @@ module.exports = {
     ConstantInteger,
     ConstantURL,
     Declaration,
+    Division,
     Equal,
     Expressions,
     GreaterThan,
@@ -203,6 +222,7 @@ module.exports = {
     LessThan,
     LessThanEqual,
     Module,
+    Multiplication,
     NotEqual,
     StringConcat,
     Subtraction
