@@ -1,0 +1,77 @@
+-- given an expression containing ++
+concat2 a b = a ++ b;
+concat4 a b c d = (concat2 a b) ++ c ++ d;
+-- ast
+{
+  "type": "MODULE",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "concat2",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "STRING_CONCAT",
+          "left": {
+            "type": "IDENTIFIER",
+            "name": "a"
+          },
+          "right": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "concat4",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "expression": {
+          "type": "STRING_CONCAT",
+          "left": {
+            "type": "STRING_CONCAT",
+            "left": {
+              "type": "APPLY",
+              "expressions": [
+                {
+                  "type": "IDENTIFIER",
+                  "name": "concat2"
+                },
+                {
+                  "type": "IDENTIFIER",
+                  "name": "a"
+                },
+                {
+                  "type": "IDENTIFIER",
+                  "name": "b"
+                }
+              ]
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "c"
+            }
+          },
+          "right": {
+            "type": "IDENTIFIER",
+            "name": "d"
+          }
+        }
+      }
+    }
+  ],
+  "optionalExpression": {}
+}

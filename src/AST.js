@@ -9,7 +9,7 @@ class Apply {
 }
 
 
-class BooleanAnd{
+class BooleanAnd {
     constructor(expressions) {
         this.type = 'BOOLEAN_AND';
         this.expressions = expressions;
@@ -17,7 +17,7 @@ class BooleanAnd{
 }
 
 
-class BooleanOr{
+class BooleanOr {
     constructor(expressions) {
         this.type = 'BOOLEAN_OR';
         this.expressions = expressions;
@@ -157,6 +157,15 @@ class NotEqual {
 }
 
 
+class StringConcat {
+    constructor(left, right) {
+        this.type = 'STRING_CONCAT';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
 module.exports = {
     Apply,
     BooleanAnd,
@@ -175,5 +184,6 @@ module.exports = {
     LessThan,
     LessThanEqual,
     Module,
-    NotEqual
+    NotEqual,
+    StringConcat
 };

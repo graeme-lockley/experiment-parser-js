@@ -136,7 +136,12 @@ function parseEqualOp(lexer) {
 
 
 function parseEXPR5(lexer) {
-    return P.chainl1(parseEXPR11, parseComparisonOp)(lexer);
+    return P.chainl1(parseEXPR6, parseComparisonOp)(lexer);
+}
+
+
+function parseEXPR6(lexer) {
+    return P.chainl1(parseEXPR11, P.symbol(Lexer.TokenEnum.PLUS_PLUS, () => (l, r) => new AST.StringConcat(l, r)))(lexer);
 }
 
 
