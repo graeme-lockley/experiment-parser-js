@@ -140,17 +140,30 @@ function parseEXPR5(lexer) {
 }
 
 
-function parseEXPR6(lexer) {
-    return P.chainl1(parseEXPR11, P.symbol(Lexer.TokenEnum.PLUS_PLUS, () => (l, r) => new AST.StringConcat(l, r)))(lexer);
-}
-
-
 function parseComparisonOp(lexer) {
     return P.or([
         P.symbol(Lexer.TokenEnum.LESS, () => (l, r) => new AST.LessThan(l, r)),
         P.symbol(Lexer.TokenEnum.LESS_EQUAL, () => (l, r) => new AST.LessThanEqual(l, r)),
         P.symbol(Lexer.TokenEnum.GREATER, () => (l, r) => new AST.GreaterThan(l, r)),
         P.symbol(Lexer.TokenEnum.GREATER_EQUAL, () => (l, r) => new AST.GreaterThanEqual(l, r)),
+    ])(lexer);
+}
+
+
+function parseEXPR6(lexer) {
+    return P.chainl1(parseEXPR7, P.symbol(Lexer.TokenEnum.PLUS_PLUS, () => (l, r) => new AST.StringConcat(l, r)))(lexer);
+}
+
+
+function parseEXPR7(lexer) {
+    return P.chainl1(parseEXPR11, parseAdditiveOp)(lexer);
+}
+
+
+function parseAdditiveOp(lexer) {
+    return P.or([
+        P.symbol(Lexer.TokenEnum.PLUS, () => (l, r) => new AST.Addition(l, r)),
+        P.symbol(Lexer.TokenEnum.MINUS, () => (l, r) => new AST.Subtraction(l, r))
     ])(lexer);
 }
 

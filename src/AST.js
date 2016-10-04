@@ -1,6 +1,15 @@
 "use strict";
 
 
+class Addition {
+    constructor(left, right) {
+        this.type = 'ADDITION';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
 class Apply {
     constructor(expressions) {
         this.type = 'APPLY';
@@ -166,7 +175,17 @@ class StringConcat {
 }
 
 
+class Subtraction {
+    constructor(left, right) {
+        this.type = 'SUBTRACTION';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
 module.exports = {
+    Addition,
     Apply,
     BooleanAnd,
     BooleanOr,
@@ -185,5 +204,6 @@ module.exports = {
     LessThanEqual,
     Module,
     NotEqual,
-    StringConcat
+    StringConcat,
+    Subtraction
 };
