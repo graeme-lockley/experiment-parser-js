@@ -50,6 +50,15 @@ class Declaration {
 }
 
 
+class Equal {
+    constructor(left, right) {
+        this.type = 'EQUAL';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
 class Expressions {
     constructor(expressions) {
         this.type = 'EXPRESSIONS';
@@ -103,6 +112,15 @@ class Module {
 }
 
 
+class NotEqual {
+    constructor(left, right) {
+        this.type = 'NOT_EQUAL';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
 module.exports = {
     Apply,
     BooleanAnd,
@@ -110,10 +128,12 @@ module.exports = {
     ConstantInteger,
     ConstantURL,
     Declaration,
+    Equal,
     Expressions,
     Identifier,
     If,
     Import,
     Lambda,
     Module,
+    NotEqual
 };

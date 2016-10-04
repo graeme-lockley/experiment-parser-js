@@ -151,8 +151,41 @@ function sepBy1(parser, separatorParser, mapFunction = identity) {
 }
 
 
+function chainl1(parser, separatorParser, mapFunction = identity) {
+    const nextParser = and([separatorParser, parser]);
+
+    return lexer => {
+        const firstResult = parser(lexer);
+
+        if (firstResult.isOk()) {
+            let result = firstResult.getOkOrElse().fst;
+            let currentLexer = firstResult.getOkOrElse().snd;
+
+            while (true) {
+                const currentResult = nextParser(currentLexer);
+
+                if (currentResult.isOk()) {
+                    const nextParseResult = currentResult.getOkOrElse().fst;
+
+                    result = nextParseResult[0](result, nextParseResult[1]);
+                    currentLexer = currentResult.getOkOrElse().snd;
+                } else {
+                    return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
+                }
+            }
+        } else {
+            return firstResult.map(
+                ok => Result.Ok(mapFunction(ok.fst), ok.snd),
+                error => firstResult
+            );
+        }
+    }
+}
+
+
 module.exports = {
     and,
+    chainl1,
     many,
     many1,
     mapError,

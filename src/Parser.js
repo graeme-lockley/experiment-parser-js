@@ -118,9 +118,20 @@ function parseEXPR2(lexer) {
 
 
 function parseEXPR3(lexer) {
-    return P.sepBy1(parseEXPR11, P.symbol(Lexer.TokenEnum.AMPERSAND_AMPERSAND), e => e.length == 1 ? e[0] : new AST.BooleanAnd(e))(lexer);
+    return P.sepBy1(parseEXPR4, P.symbol(Lexer.TokenEnum.AMPERSAND_AMPERSAND), e => e.length == 1 ? e[0] : new AST.BooleanAnd(e))(lexer);
 }
 
+
+function parseEXPR4(lexer) {
+    return P.chainl1(parseEXPR11, parseEqualOp)(lexer);
+}
+
+function parseEqualOp(lexer) {
+    return P.or([
+        P.symbol(Lexer.TokenEnum.EQUALEQUAL, () => (l, r) => new AST.Equal(l, r)),
+        P.symbol(Lexer.TokenEnum.BANG_EQUAL, () => (l, r) => new AST.NotEqual(l, r)),
+    ])(lexer);
+}
 
 function parseString(input) {
     const parseResult =
