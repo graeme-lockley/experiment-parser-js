@@ -123,15 +123,32 @@ function parseEXPR3(lexer) {
 
 
 function parseEXPR4(lexer) {
-    return P.chainl1(parseEXPR11, parseEqualOp)(lexer);
+    return P.chainl1(parseEXPR5, parseEqualOp)(lexer);
 }
+
 
 function parseEqualOp(lexer) {
     return P.or([
         P.symbol(Lexer.TokenEnum.EQUALEQUAL, () => (l, r) => new AST.Equal(l, r)),
-        P.symbol(Lexer.TokenEnum.BANG_EQUAL, () => (l, r) => new AST.NotEqual(l, r)),
+        P.symbol(Lexer.TokenEnum.BANG_EQUAL, () => (l, r) => new AST.NotEqual(l, r))
     ])(lexer);
 }
+
+
+function parseEXPR5(lexer) {
+    return P.chainl1(parseEXPR11, parseComparisonOp)(lexer);
+}
+
+
+function parseComparisonOp(lexer) {
+    return P.or([
+        P.symbol(Lexer.TokenEnum.LESS, () => (l, r) => new AST.LessThan(l, r)),
+        P.symbol(Lexer.TokenEnum.LESSEQUAL, () => (l, r) => new AST.LessThanEqual(l, r)),
+        P.symbol(Lexer.TokenEnum.GREATER, () => (l, r) => new AST.GreaterThan(l, r)),
+        P.symbol(Lexer.TokenEnum.GREATEREQUAL, () => (l, r) => new AST.GreaterThanEqual(l, r)),
+    ])(lexer);
+}
+
 
 function parseString(input) {
     const parseResult =

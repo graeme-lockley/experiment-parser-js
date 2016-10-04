@@ -67,6 +67,24 @@ class Expressions {
 }
 
 
+class GreaterThan {
+    constructor(left, right) {
+        this.type = 'GREATER_THAN';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
+class GreaterThanEqual {
+    constructor(left, right) {
+        this.type = 'GREATER_THAN_EQUAL';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
 class Identifier {
     constructor(name) {
         this.type = 'IDENTIFIER';
@@ -102,6 +120,24 @@ class Lambda {
 }
 
 
+class LessThan {
+    constructor(left, right) {
+        this.type = 'LESS_THAN';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
+class LessThanEqual {
+    constructor(left, right) {
+        this.type = 'LESS_THAN_EQUAL';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
 class Module {
     constructor(imports, declarations, optionalExpression) {
         this.type = 'MODULE';
@@ -130,10 +166,14 @@ module.exports = {
     Declaration,
     Equal,
     Expressions,
+    GreaterThan,
+    GreaterThanEqual,
     Identifier,
     If,
     Import,
     Lambda,
+    LessThan,
+    LessThanEqual,
     Module,
     NotEqual
 };
