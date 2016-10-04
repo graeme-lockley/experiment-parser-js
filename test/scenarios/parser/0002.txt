@@ -1,4 +1,4 @@
--- given a sequence of expressions within curley braces
+-- given a sequence of expressions within curly braces
 aaa b c d = {
   1;
   b;
