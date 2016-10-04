@@ -60,21 +60,21 @@ describe('Lexer', function () {
             expect(context.next().id).to.equal(Lexer.TokenEnum.LAMBDA));
         it('third token should be IDENTIFIER', () =>
             expect(context.next().next().id).to.equal(Lexer.TokenEnum.IDENTIFIER));
-        it('forth token should be RPAREN', () =>
-            expect(context.next().next().next().id).to.equal(Lexer.TokenEnum.RPAREN));
+        it('forth token should be RIGHT_PAREN', () =>
+            expect(context.next().next().next().id).to.equal(Lexer.TokenEnum.RIGHT_PAREN));
         it('fifth token should be IDENTIFIER', () =>
             expect(context.next().next().next().next().id).to.equal(Lexer.TokenEnum.IDENTIFIER));
-        it('sixth token should be LPAREN', () =>
-            expect(context.next().next().next().next().next().id).to.equal(Lexer.TokenEnum.LPAREN));
+        it('sixth token should be LEFT_PAREN', () =>
+            expect(context.next().next().next().next().next().id).to.equal(Lexer.TokenEnum.LEFT_PAREN));
         it('seventh token should be EOF', () =>
             expect(context.next().next().next().next().next().next().id).to.equal(Lexer.TokenEnum.EOF));
     });
 
     describe('with selected input should return the correct tokens', () => {
         const items = [
-            Tuple.Tuple('\\ ( ) { }', [Lexer.TokenEnum.LAMBDA, Lexer.TokenEnum.LPAREN, Lexer.TokenEnum.RPAREN, Lexer.TokenEnum.LCURLEY, Lexer.TokenEnum.RCURLEY, Lexer.TokenEnum.EOF]),
-            Tuple.Tuple('== = ; ++ +', [Lexer.TokenEnum.EQUALEQUAL, Lexer.TokenEnum.EQUAL, Lexer.TokenEnum.SEMICOLON, Lexer.TokenEnum.PLUSPLUS, Lexer.TokenEnum.PLUS, Lexer.TokenEnum.EOF]),
-            Tuple.Tuple('-> - <= < >=', [Lexer.TokenEnum.MINUSGREATER, Lexer.TokenEnum.MINUS, Lexer.TokenEnum.LESSEQUAL, Lexer.TokenEnum.LESS, Lexer.TokenEnum.GREATEREQUAL, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('\\ ( ) { }', [Lexer.TokenEnum.LAMBDA, Lexer.TokenEnum.LEFT_PAREN, Lexer.TokenEnum.RIGHT_PAREN, Lexer.TokenEnum.LEFT_CURLY, Lexer.TokenEnum.RIGHT_CURLY, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('== = ; ++ +', [Lexer.TokenEnum.EQUAL_EQUAL, Lexer.TokenEnum.EQUAL, Lexer.TokenEnum.SEMICOLON, Lexer.TokenEnum.PLUS_PLUS, Lexer.TokenEnum.PLUS, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('-> - <= < >=', [Lexer.TokenEnum.MINUS_GREATER, Lexer.TokenEnum.MINUS, Lexer.TokenEnum.LESS_EQUAL, Lexer.TokenEnum.LESS, Lexer.TokenEnum.GREATER_EQUAL, Lexer.TokenEnum.EOF]),
             Tuple.Tuple('> * / ! as', [Lexer.TokenEnum.GREATER, Lexer.TokenEnum.STAR, Lexer.TokenEnum.SLASH, Lexer.TokenEnum.BANG, Lexer.TokenEnum.AS, Lexer.TokenEnum.EOF]),
             Tuple.Tuple('else false if import o', [Lexer.TokenEnum.ELSE, Lexer.TokenEnum.FALSE, Lexer.TokenEnum.IF, Lexer.TokenEnum.IMPORT, Lexer.TokenEnum.O, Lexer.TokenEnum.EOF]),
             Tuple.Tuple('then true hello\' h123_\'\' _123', [Lexer.TokenEnum.THEN, Lexer.TokenEnum.TRUE, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.EOF])

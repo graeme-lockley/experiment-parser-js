@@ -67,7 +67,7 @@ function parseLambda(lexer) {
                 P.symbol(Lexer.TokenEnum.LAMBDA),
                 P.symbol(Lexer.TokenEnum.IDENTIFIER)
             ], elements => elements[1])),
-        P.symbol(Lexer.TokenEnum.MINUSGREATER),
+        P.symbol(Lexer.TokenEnum.MINUS_GREATER),
         parseEXPR1
     ], items => new AST.Lambda(items[0], items[2]))(lexer);
 }
@@ -75,9 +75,9 @@ function parseLambda(lexer) {
 
 function parseParenthesisExpression(lexer) {
     return P.and([
-        P.symbol(Lexer.TokenEnum.LPAREN),
+        P.symbol(Lexer.TokenEnum.LEFT_PAREN),
         parseEXPR1,
-        P.symbol(Lexer.TokenEnum.RPAREN)
+        P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
     ], elements => elements[1])(lexer);
 }
 
@@ -104,9 +104,9 @@ function parseEXPR1(lexer) {
         ], e => new AST.If(e[1], e[3], e[5])),
         P.many1(parseEXPR2, elements => elements.length == 1 ? elements[0] : new AST.Apply(elements)),
         P.and([
-            P.symbol(Lexer.TokenEnum.LCURLEY),
+            P.symbol(Lexer.TokenEnum.LEFT_CURLY),
             P.sepBy1(parseEXPR1, P.symbol(Lexer.TokenEnum.SEMICOLON), e => new AST.Expressions(e)),
-            P.symbol(Lexer.TokenEnum.RCURLEY)
+            P.symbol(Lexer.TokenEnum.RIGHT_CURLY)
         ], e => e[1])
     ])(lexer);
 }
@@ -129,7 +129,7 @@ function parseEXPR4(lexer) {
 
 function parseEqualOp(lexer) {
     return P.or([
-        P.symbol(Lexer.TokenEnum.EQUALEQUAL, () => (l, r) => new AST.Equal(l, r)),
+        P.symbol(Lexer.TokenEnum.EQUAL_EQUAL, () => (l, r) => new AST.Equal(l, r)),
         P.symbol(Lexer.TokenEnum.BANG_EQUAL, () => (l, r) => new AST.NotEqual(l, r))
     ])(lexer);
 }
@@ -143,9 +143,9 @@ function parseEXPR5(lexer) {
 function parseComparisonOp(lexer) {
     return P.or([
         P.symbol(Lexer.TokenEnum.LESS, () => (l, r) => new AST.LessThan(l, r)),
-        P.symbol(Lexer.TokenEnum.LESSEQUAL, () => (l, r) => new AST.LessThanEqual(l, r)),
+        P.symbol(Lexer.TokenEnum.LESS_EQUAL, () => (l, r) => new AST.LessThanEqual(l, r)),
         P.symbol(Lexer.TokenEnum.GREATER, () => (l, r) => new AST.GreaterThan(l, r)),
-        P.symbol(Lexer.TokenEnum.GREATEREQUAL, () => (l, r) => new AST.GreaterThanEqual(l, r)),
+        P.symbol(Lexer.TokenEnum.GREATER_EQUAL, () => (l, r) => new AST.GreaterThanEqual(l, r)),
     ])(lexer);
 }
 
