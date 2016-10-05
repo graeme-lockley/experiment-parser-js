@@ -164,7 +164,8 @@ function parseEXPR11(lexer) {
         parseIdentifier,
         parseLambda,
         parseParenthesisExpression,
-        parsePrefixOperator
+        parsePrefixOperator,
+        parseConstantUnit
     ])(lexer);
 }
 
@@ -227,6 +228,14 @@ function parsePrefixOperator(lexer) {
         ]),
         P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
     ], e => new AST.InfixOperator(e[1]))(lexer);
+}
+
+
+function parseConstantUnit(lexer) {
+    return P.and([
+        P.symbol(Lexer.TokenEnum.LEFT_PAREN),
+        P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
+    ], e => new AST.ConstantUnit())(lexer);
 }
 
 

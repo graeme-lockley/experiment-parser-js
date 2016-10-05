@@ -59,6 +59,13 @@ class ConstantInteger {
 }
 
 
+class ConstantUnit {
+    constructor() {
+        this.type = 'CONSTANT_UNIT';
+    }
+}
+
+
 class ConstantURL {
     constructor(value) {
         this.type = 'CONSTANT_URL';
@@ -250,6 +257,7 @@ module.exports = {
     BooleanOr,
     Composition,
     ConstantInteger,
+    ConstantUnit,
     ConstantURL,
     Declaration,
     Division,
