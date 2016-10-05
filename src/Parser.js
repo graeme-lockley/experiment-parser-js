@@ -187,7 +187,7 @@ function parseEXPR9(lexer) {
             parseUnaryOp,
             parseEXPR9
         ], e => e[0](e[1])),
-        parseEXPR11
+        parseEXPR10
     ])(lexer);
 }
 
@@ -198,6 +198,11 @@ function parseUnaryOp(lexer) {
         P.symbol(Lexer.TokenEnum.PLUS, () => (op) => new AST.UnaryPlus(op)),
         P.symbol(Lexer.TokenEnum.MINUS, () => (op) => new AST.UnaryNegate(op))
     ])(lexer);
+}
+
+
+function parseEXPR10(lexer) {
+    return P.chainl1(parseEXPR11, P.symbol(Lexer.TokenEnum.O, () => (l, r) => new AST.Composition(l, r)))(lexer);
 }
 
 

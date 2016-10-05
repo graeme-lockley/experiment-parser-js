@@ -42,6 +42,15 @@ class BooleanOr {
 }
 
 
+class Composition {
+    constructor(left, right) {
+        this.type = 'COMPOSITION';
+        this.left = left;
+        this.right = right;
+    }
+}
+
+
 class ConstantInteger {
     constructor(value) {
         this.type = 'CONSTANT_INTEGER';
@@ -232,6 +241,7 @@ module.exports = {
     BooleanAnd,
     BooleanNot,
     BooleanOr,
+    Composition,
     ConstantInteger,
     ConstantURL,
     Declaration,

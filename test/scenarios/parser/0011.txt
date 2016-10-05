@@ -1,0 +1,73 @@
+-- given expressions containing functional composition
+funnyNot a b = a o b;
+funnyPlus a b c x = (a o b o c) x;
+-- ast
+{
+  "type": "MODULE",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "funnyNot",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "COMPOSITION",
+          "left": {
+            "type": "IDENTIFIER",
+            "name": "a"
+          },
+          "right": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "funnyPlus",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b",
+          "c",
+          "x"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "COMPOSITION",
+              "left": {
+                "type": "COMPOSITION",
+                "left": {
+                  "type": "IDENTIFIER",
+                  "name": "a"
+                },
+                "right": {
+                  "type": "IDENTIFIER",
+                  "name": "b"
+                }
+              },
+              "right": {
+                "type": "IDENTIFIER",
+                "name": "c"
+              }
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "x"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "optionalExpression": {}
+}
