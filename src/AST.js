@@ -146,6 +146,13 @@ class Import {
     }
 }
 
+class InfixOperator {
+    constructor(operator) {
+        this.type = 'INFIX_OPERATOR';
+        this.url = operator;
+    }
+}
+
 class Lambda {
     constructor(variables, expression) {
         this.type = 'LAMBDA';
@@ -253,6 +260,7 @@ module.exports = {
     Identifier,
     If,
     Import,
+    InfixOperator,
     Lambda,
     LessThan,
     LessThanEqual,

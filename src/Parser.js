@@ -163,7 +163,8 @@ function parseEXPR11(lexer) {
         parseConstantInteger,
         parseIdentifier,
         parseLambda,
-        parseParenthesisExpression
+        parseParenthesisExpression,
+        parsePrefixOperator
     ])(lexer);
 }
 
@@ -203,6 +204,29 @@ function parseParenthesisExpression(lexer) {
         parseEXPR1,
         P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
     ], elements => elements[1])(lexer);
+}
+
+
+function parsePrefixOperator(lexer) {
+    return P.and([
+        P.symbol(Lexer.TokenEnum.LEFT_PAREN),
+        P.or([
+            P.symbol(Lexer.TokenEnum.BAR_BAR),
+            P.symbol(Lexer.TokenEnum.AMPERSAND_AMPERSAND),
+            P.symbol(Lexer.TokenEnum.EQUAL_EQUAL),
+            P.symbol(Lexer.TokenEnum.BANG_EQUAL),
+            P.symbol(Lexer.TokenEnum.LESS),
+            P.symbol(Lexer.TokenEnum.LESS_EQUAL),
+            P.symbol(Lexer.TokenEnum.GREATER),
+            P.symbol(Lexer.TokenEnum.GREATER_EQUAL),
+            P.symbol(Lexer.TokenEnum.PLUS_PLUS),
+            P.symbol(Lexer.TokenEnum.PLUS),
+            P.symbol(Lexer.TokenEnum.MINUS),
+            P.symbol(Lexer.TokenEnum.STAR),
+            P.symbol(Lexer.TokenEnum.SLASH)
+        ]),
+        P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
+    ], e => new AST.InfixOperator(e[1]))(lexer);
 }
 
 

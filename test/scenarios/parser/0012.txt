@@ -1,0 +1,386 @@
+-- given expressions containing contain infix operators expressed in the prefix form
+prefixOr a b = (||) a b;
+prefixAnd a b = (&&) a b;
+prefixEqual a b = (==) a b;
+prefixNotEqual a b = (!=) a b;
+prefixLessThan a b = (<) a b;
+prefixLessThanEqual a b = (<=) a b;
+prefixGreaterThan a b = (>) a b;
+prefixGreaterThanEqual a b = (>=) a b;
+prefixConcat a b = (++) a b;
+prefixPlus a b = (+) a b;
+prefixMinus a b = (-) a b;
+prefixMultiply a b = (*) a b;
+prefixDivide a b = (/) a b;
+-- ast
+{
+  "type": "MODULE",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "prefixOr",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": "||"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixAnd",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": "&&"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixEqual",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": "=="
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixNotEqual",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": "!="
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixLessThan",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": "<"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixLessThanEqual",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": "<="
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixGreaterThan",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": ">"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixGreaterThanEqual",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": ">="
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixConcat",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": "++"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixPlus",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": "+"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixMinus",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": "-"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixMultiply",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": "*"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "prefixDivide",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "APPLY",
+          "expressions": [
+            {
+              "type": "INFIX_OPERATOR",
+              "url": "/"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "optionalExpression": {}
+}
