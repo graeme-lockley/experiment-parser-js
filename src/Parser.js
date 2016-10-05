@@ -44,54 +44,6 @@ function parseDECL(lexer) {
 }
 
 
-function parseConstantInteger(lexer) {
-    return P.mapError(
-        P.symbol(Lexer.TokenEnum.CONSTANT_INTEGER, compose(c => new AST.ConstantInteger(c), parseInt))(lexer),
-        "Expected a constant integer"
-    );
-}
-
-
-function parseIdentifier(lexer) {
-    return P.mapError(
-        P.symbol(Lexer.TokenEnum.IDENTIFIER, i => new AST.Identifier(i))(lexer),
-        "Expected an identifier"
-    );
-}
-
-
-function parseLambda(lexer) {
-    return P.and([
-        P.many1(
-            P.and([
-                P.symbol(Lexer.TokenEnum.LAMBDA),
-                P.symbol(Lexer.TokenEnum.IDENTIFIER)
-            ], elements => elements[1])),
-        P.symbol(Lexer.TokenEnum.MINUS_GREATER),
-        parseEXPR1
-    ], items => new AST.Lambda(items[0], items[2]))(lexer);
-}
-
-
-function parseParenthesisExpression(lexer) {
-    return P.and([
-        P.symbol(Lexer.TokenEnum.LEFT_PAREN),
-        parseEXPR1,
-        P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
-    ], elements => elements[1])(lexer);
-}
-
-
-function parseEXPR11(lexer) {
-    return P.or([
-        parseConstantInteger,
-        parseIdentifier,
-        parseLambda,
-        parseParenthesisExpression
-    ])(lexer);
-}
-
-
 function parseEXPR1(lexer) {
     return P.or([
         P.and([
@@ -203,6 +155,54 @@ function parseUnaryOp(lexer) {
 
 function parseEXPR10(lexer) {
     return P.chainl1(parseEXPR11, P.symbol(Lexer.TokenEnum.O, () => (l, r) => new AST.Composition(l, r)))(lexer);
+}
+
+
+function parseEXPR11(lexer) {
+    return P.or([
+        parseConstantInteger,
+        parseIdentifier,
+        parseLambda,
+        parseParenthesisExpression
+    ])(lexer);
+}
+
+
+function parseConstantInteger(lexer) {
+    return P.mapError(
+        P.symbol(Lexer.TokenEnum.CONSTANT_INTEGER, compose(c => new AST.ConstantInteger(c), parseInt))(lexer),
+        "Expected a constant integer"
+    );
+}
+
+
+function parseIdentifier(lexer) {
+    return P.mapError(
+        P.symbol(Lexer.TokenEnum.IDENTIFIER, i => new AST.Identifier(i))(lexer),
+        "Expected an identifier"
+    );
+}
+
+
+function parseLambda(lexer) {
+    return P.and([
+        P.many1(
+            P.and([
+                P.symbol(Lexer.TokenEnum.LAMBDA),
+                P.symbol(Lexer.TokenEnum.IDENTIFIER)
+            ], elements => elements[1])),
+        P.symbol(Lexer.TokenEnum.MINUS_GREATER),
+        parseEXPR1
+    ], items => new AST.Lambda(items[0], items[2]))(lexer);
+}
+
+
+function parseParenthesisExpression(lexer) {
+    return P.and([
+        P.symbol(Lexer.TokenEnum.LEFT_PAREN),
+        parseEXPR1,
+        P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
+    ], elements => elements[1])(lexer);
 }
 
 
