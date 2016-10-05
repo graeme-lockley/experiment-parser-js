@@ -10,7 +10,7 @@ const expect = require('chai').expect;
 
 
 describe('Translator', () => {
-    describe('given the declaration "pi = 3"', () => {
+    describe('given the declaration "pi = 3;"', () => {
         const parseResponse = Parser.parseString('pi = 3;');
 
         it('should parse without any errors', () =>
@@ -23,7 +23,7 @@ describe('Translator', () => {
         });
     });
 
-    describe('given the declaration "add a b = plus a b"', () => {
+    describe('given the declaration "add a b = plus a b;"', () => {
         const parseResponse = Parser.parseString('add a b = plus a b;');
 
         it('should parse without any errors', () =>

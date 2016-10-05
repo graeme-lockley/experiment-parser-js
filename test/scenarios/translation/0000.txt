@@ -1,4 +1,4 @@
--- given the declarations "pi = 3 ; add a b = plus a b; ln = 3
+-- given the declarations "pi = 3 ; add a b = plus a b; ln = 3;
 pi = 3;
 add a b = plus a b;
 ln = 3;
