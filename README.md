@@ -3,7 +3,7 @@ concepts:
 
 - How to use parser combinators
 - How to parse a language based on its layout
-- How to parse a language that support operator overloading - dynamic precedence and dynamic associativity
+- How to parse a language that supports operator overloading - dynamic precedence and dynamic associativity
 - How to implement an inference type system using Hindley-Milner
 - How to implement Haskell's type classes
 - How to implement a pattern matching 
@@ -18,7 +18,7 @@ When Java arrived Sun presented it using the slogan
 
 > Write Once, Run Everywhere
 
-This moniker became the philosophy behind Java's evolution and the languages eventual success.  The moniker that has
+This moniker became the philosophy behind Java's evolution and the language's eventual success.  The moniker that has
 caught my imagination is
 
 > Run Once, Run Always
@@ -26,7 +26,7 @@ caught my imagination is
 Too often I have found that something I have written stops working when the contained environment is changed.  An example
 of this from the Java world is if I upgrade a library in my Maven POM file and find that the library's semantic has 
 subtly changed and something that was previously working does not work any more.  Sadly, in my career, these defects have
-not been picked up through automated tests and have resulted in defects slipping through into production environments.
+not been picked up through testing and have resulted in defects slipping through into production environments.
 This has resulted in a general reluctance to upgrade third party libraries.
 
 So in this experiment I would like to experiment with language ideas captured by the `Run Once, Run Always` philosophy and
@@ -57,7 +57,7 @@ set and then, through subsequent versions, implement the entire language.
 | Lexical  | Layout based                      |    |    |    |    |    |    |    |    | *  |
 | Syntax   | module/imports                    | *  |    |    |    |    |    |    |    |    |
 |          | if-then-else                      | *  |    |    |    |    |    |    |    |    |
-|          | let ... in                        |    |    | *  |    |    |    |    |    |    |
+|          | let ... in                        | *  |    |    |    |    |    |    |    |    |
 |          | ... where                         |    |    | *  |    |    |    |    |    |    |
 |          | ... assumption ...                |    | *  |    |    |    |    |    |    |    |
 |          | match                             |    |    |    |    |    | *  |    |    |    |
