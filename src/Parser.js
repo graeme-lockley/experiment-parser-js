@@ -179,10 +179,14 @@ function parseConstantInteger(lexer) {
 
 
 function parseIdentifier(lexer) {
-    return P.mapError(
-        P.symbol(Lexer.TokenEnum.IDENTIFIER, i => new AST.Identifier(i))(lexer),
-        "Expected an identifier"
-    );
+    return P.and([
+        P.symbol(Lexer.TokenEnum.IDENTIFIER),
+        P.option(
+            P.and([
+                P.symbol(Lexer.TokenEnum.PERIOD),
+                P.symbol(Lexer.TokenEnum.IDENTIFIER)
+            ]))
+    ], e => e[1].isDefined() ? new AST.QualifiedIdentifier(e[0], e[1].orElse()[1]) : new AST.Identifier(e[0]))(lexer);
 }
 
 

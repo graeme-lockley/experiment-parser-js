@@ -215,6 +215,15 @@ class NotEqual {
 }
 
 
+class QualifiedIdentifier {
+    constructor(module, identifier) {
+        this.type = "QUALIFIED_IDENTIFIER";
+        this.module = module;
+        this.identifier = identifier;
+    }
+}
+
+
 class StringConcat {
     constructor(left, right) {
         this.type = 'STRING_CONCAT';
@@ -275,6 +284,7 @@ module.exports = {
     Module,
     Multiplication,
     NotEqual,
+    QualifiedIdentifier,
     StringConcat,
     Subtraction,
     UnaryPlus,
