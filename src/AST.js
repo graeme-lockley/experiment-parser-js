@@ -51,9 +51,33 @@ class Composition {
 }
 
 
+class ConstantBoolean {
+    constructor(value) {
+        this.type = 'CONSTANT_BOOLEAN';
+        this.value = value;
+    }
+}
+
+
+class ConstantCharacter {
+    constructor(value) {
+        this.type = 'CONSTANT_CHARACTER';
+        this.value = value;
+    }
+}
+
+
 class ConstantInteger {
     constructor(value) {
         this.type = 'CONSTANT_INTEGER';
+        this.value = value;
+    }
+}
+
+
+class ConstantString {
+    constructor(value) {
+        this.type = 'CONSTANT_STRING';
         this.value = value;
     }
 }
@@ -265,7 +289,10 @@ module.exports = {
     BooleanNot,
     BooleanOr,
     Composition,
+    ConstantBoolean,
+    ConstantCharacter,
     ConstantInteger,
+    ConstantString,
     ConstantUnit,
     ConstantURL,
     Declaration,

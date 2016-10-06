@@ -161,6 +161,10 @@ function parseEXPR10(lexer) {
 function parseEXPR11(lexer) {
     return P.or([
         parseConstantInteger,
+        parseConstantCharacter,
+        parseConstantString,
+        P.symbol(Lexer.TokenEnum.TRUE, () => new AST.ConstantBoolean(true)),
+        P.symbol(Lexer.TokenEnum.FALSE, () => new AST.ConstantBoolean(false)),
         parseIdentifier,
         parseLambda,
         parseParenthesisExpression,
@@ -175,6 +179,41 @@ function parseConstantInteger(lexer) {
         P.symbol(Lexer.TokenEnum.CONSTANT_INTEGER, compose(c => new AST.ConstantInteger(c), parseInt))(lexer),
         "Expected a constant integer"
     );
+}
+
+
+function convertCharacter(c) {
+    if (c == '\\n') {
+        return '\n';
+    } else if (c.length == 2) {
+        return c[1];
+    } else {
+        return c;
+    }
+}
+
+
+function parseConstantCharacter(lexer) {
+    return P.symbol(Lexer.TokenEnum.CONSTANT_CHAR, x => new AST.ConstantCharacter(convertCharacter(x.substring(1, x.length - 1))))(lexer);
+}
+
+
+function parseConstantString(lexer) {
+    function convertString(s) {
+        let result = s;
+        let index = 0;
+        while (true) {
+            if (index >= result.length) {
+                return result;
+            } else if (result[index] == '\\') {
+                result = result.slice(0, index) + convertCharacter(result.slice(index, index + 2)) + result.slice(index + 2);
+            }
+
+            index += 1;
+        }
+    }
+
+    return P.symbol(Lexer.TokenEnum.CONSTANT_STRING, x => new AST.ConstantString(convertString(x.substring(1, x.length - 1))))(lexer);
 }
 
 

@@ -1,0 +1,63 @@
+-- given expressions with constants
+constantInt = 10;
+constantChar = 'w';
+constantEscapedChar = '\n';
+constantEscapedString = "Hello\n\"\\World";
+constantTrue = true;
+constantFalse = false;
+-- ast
+{
+  "type": "MODULE",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "constantInt",
+      "expression": {
+        "type": "CONSTANT_INTEGER",
+        "value": 10
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "constantChar",
+      "expression": {
+        "type": "CONSTANT_CHARACTER",
+        "value": "w"
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "constantEscapedChar",
+      "expression": {
+        "type": "CONSTANT_CHARACTER",
+        "value": "\n"
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "constantEscapedString",
+      "expression": {
+        "type": "CONSTANT_STRING",
+        "value": "Hello\n\"\\World"
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "constantTrue",
+      "expression": {
+        "type": "CONSTANT_BOOLEAN",
+        "value": true
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "constantFalse",
+      "expression": {
+        "type": "CONSTANT_BOOLEAN",
+        "value": false
+      }
+    }
+  ],
+  "optionalExpression": {}
+}
