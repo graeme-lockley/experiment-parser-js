@@ -1,38 +1,67 @@
 "use strict";
 
 const FS = require('fs');
+const VM = require('vm');
+
 const Parser = require('../src/Parser');
 const Translator = require('../src/Translator');
 const expect = require("chai").expect;
 
 function scenariosIn(directory) {
-    forAllScenariosIn(directory, (name, input, expectation, output) =>
+    forAllScenariosIn(directory, (name, input, expectations) =>
         describe(name, () => {
             const parseResponse = Parser.parseString(input);
+            let parseResponseIsTested = false;
 
-            if (expectation == 'js') {
-                it('should parse without any errors', () =>
-                    expect(parseResponse.isOk()).to.be.true);
+            if ('js' in expectations) {
+                    parseResponseIsTested = true;
+                it('should parse without any errors', () => {
+                    expect(parseResponse.isOk()).to.equal(true);
+                });
 
                 it('produces the expected JavaScript', () => {
                     const translation = Translator.astToJavascript(parseResponse.getOkOrElse());
 
-                    expect(translation).to.equal(output);
+                    expect(translation).to.equal(expectations['js']);
                 });
-            } else if (expectation == 'error') {
+            }
+
+            if ('error' in expectations) {
                 it('should fail ', () =>
                     expect(parseResponse.isError()).to.be.true);
 
                 it('with the expected error message ' + output, () =>
-                    expect(parseResponse.getErrorOrElse()).to.equal(output));
-            } else if (expectation == 'ast') {
-                it('should parse without any errors', () =>
-                    expect(parseResponse.isOk()).to.be.true);
+                    expect(parseResponse.getErrorOrElse()).to.equal(expectations['error']));
+            }
+
+            if ('ast' in expectations) {
+                if (!parseResponseIsTested) {
+                        parseResponseIsTested = true;
+                    it('should parse without any errors', () => {
+                        expect(parseResponse.isOk()).to.equal(true);
+                    });
+                }
                 it('produces the expected AST', () =>
-                    expect(JSON.stringify(parseResponse.getOkOrElse(), null, 2)).to.equal(output));
-            } else {
-                it('expectation should be "js" or "error"', () =>
-                    expect(expectation).to.be.oneOf(['error', 'js']));
+                    expect(JSON.stringify(parseResponse.getOkOrElse(), null, 2)).to.equal(expectations['ast']));
+            }
+
+            if ('run' in expectations) {
+                if (!parseResponseIsTested) {
+                    it('should parse without any errors', () => {
+                        expect(parseResponse.isOk()).to.equal(true);
+                    });
+                }
+
+                it('should return the expected result', () => {
+                    const programme = Translator.astToJavascript(parseResponse.getOkOrElse());
+                    const assertion = Translator.astToJavascript(Parser.parseExpressionString(expectations['run']).getOkOrElse());
+
+                    const context = VM.createContext();
+                    VM.runInContext(programme, context);
+                    const result = VM.runInContext(assertion, context);
+
+                    expect(result).to.equal(true);
+                });
             }
         })
     );
@@ -45,7 +74,8 @@ function forAllScenariosIn(location, assertions) {
 
         let name = '';
         let input = [];
-        let expectation = '';
+        let currentExpectation;
+        let expectations = {};
         let output = [];
 
         let state = 0;
@@ -56,17 +86,26 @@ function forAllScenariosIn(location, assertions) {
                 state = 1;
             } else if (state == 1) {
                 if (contents[index].startsWith('--')) {
-                    expectation = contents[index].substring(2).trim();
+                    currentExpectation = contents[index].substring(2).trim();
+                    output = [];
                     state = 3;
                 } else {
                     input.push(contents[index]);
                 }
             } else {
-                output.push(contents[index]);
+                if (contents[index].startsWith('--')) {
+                    expectations[currentExpectation] = output.join('\n');
+                    currentExpectation = contents[index].substring(2).trim();
+                    output = [];
+                } else {
+                    output.push(contents[index]);
+                }
             }
         }
 
-        assertions(name, input.join('\n'), expectation, output.join('\n'));
+        expectations[currentExpectation] = output.join('\n');
+
+        assertions(name, input.join('\n'), expectations);
     });
 }
 

@@ -292,7 +292,19 @@ function parseString(input) {
     );
 }
 
+function parseExpressionString(input) {
+    const parseResult =
+        P.and([parseEXPR1, P.symbol(Lexer.TokenEnum.EOF)], (elements => elements[0]))(Lexer.fromString(input));
+
+    return parseResult.map(
+        ok => Result.Ok(ok.fst),
+        error => parseResult
+    );
+}
+
 
 module.exports = {
-    parseString, parseEXPR11
+    parseEXPR11,
+    parseExpressionString,
+    parseString
 };
