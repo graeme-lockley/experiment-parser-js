@@ -1,0 +1,12 @@
+-- given fibonacci
+fib n =
+    if n <= 1 then
+        1
+    else
+        n + fib (n - 1);
+-- js
+function fib(n) {
+  return n <= 1
+    ? 1
+    : n + fib(n - 1);
+}
