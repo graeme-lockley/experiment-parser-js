@@ -93,6 +93,8 @@ function astToJavascript(ast, indentation = 0) {
         return '(' + astToJavascript(ast.left, indentation) + " * " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.QualifiedIdentifier) {
         return ast.module + "." + ast.identifier;
+    } else if (ast instanceof AST.StringConcat) {
+        return '(' + astToJavascript(ast.left, indentation) + " + " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Subtraction) {
         return '(' + astToJavascript(ast.left, indentation) + " - " + astToJavascript(ast.right, indentation) + ')';
     }
