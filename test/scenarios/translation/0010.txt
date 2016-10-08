@@ -5,19 +5,19 @@ greaterThan a b = a > b;
 greaterThanEqual a b = a >= b;
 -- js
 function lessThan(a) {
-  return b => (a < b);
+  return (b => (a < b));
 }
 
 function lessThanEqual(a) {
-  return b => (a <= b);
+  return (b => (a <= b));
 }
 
 function greaterThan(a) {
-  return b => (a > b);
+  return (b => (a > b));
 }
 
 function greaterThanEqual(a) {
-  return b => (a >= b);
+  return (b => (a >= b));
 }
 -- run
 lessThan 10 11 && !(lessThan 11 10) &&

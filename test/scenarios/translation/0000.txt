@@ -6,7 +6,7 @@ ln = 3;
 const pi = 3;
 
 function add(a) {
-  return b => plus(a)(b);
+  return (b => plus(a)(b));
 }
 
 const ln = 3;

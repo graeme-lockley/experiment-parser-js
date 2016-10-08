@@ -32,7 +32,7 @@ describe('Translator', () => {
         it('is translated into correct JavaScript', () => {
             const translation = Translator.astToJavascript(parseResponse.getOkOrElse());
 
-            expect(translation).to.equal('function add(a) {\n  return b => plus(a)(b);\n}');
+            expect(translation).to.equal('function add(a) {\n  return (b => plus(a)(b));\n}');
         });
     });
 

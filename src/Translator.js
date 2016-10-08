@@ -77,7 +77,7 @@ function astToJavascript(ast, indentation = 0) {
     } else if (ast instanceof AST.InfixOperator) {
         return infixOperators[ast.operator];
     } else if (ast instanceof AST.Lambda) {
-        const tmpResult = Array.foldr(astToJavascript(ast.expression, indentation), (accumulator, item) => "(" + item + " => " + accumulator + ")", ast.variables);
+        const tmpResult = '(' + Array.foldr(astToJavascript(ast.expression, indentation), (accumulator, item) => "(" + item + " => " + accumulator + ")", ast.variables) + ')';
         return tmpResult.substr(1, tmpResult.length - 2);
     } else if (ast instanceof AST.LessThan) {
         return '(' + astToJavascript(ast.left, indentation) + " < " + astToJavascript(ast.right, indentation) + ')';

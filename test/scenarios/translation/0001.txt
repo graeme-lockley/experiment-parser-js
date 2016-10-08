@@ -3,9 +3,9 @@ zero = \f \x -> x;
 succ n = \f \x -> f ((n f) x);
 -- js
 function zero(f) {
-  return x => x;
+  return (x => x);
 }
 
 function succ(n) {
-  return f => (x => f(n(f)(x)));
+  return (f => (x => f(n(f)(x))));
 }
