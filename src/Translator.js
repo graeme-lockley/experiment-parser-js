@@ -8,15 +8,15 @@ function astToJavascript(ast, indentation = 0) {
     }
 
     if (ast instanceof AST.Addition) {
-        return astToJavascript(ast.left, indentation) + " + " + astToJavascript(ast.right, indentation);
+        return '(' + astToJavascript(ast.left, indentation) + " + " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Apply) {
         return astToJavascript(ast.expressions[0], indentation) + ast.expressions.slice(1).map(x => "(" + astToJavascript(x, indentation) + ")").join('');
     } else if (ast instanceof AST.BooleanAnd) {
-        return ast.expressions.map(e => astToJavascript(e, indentation)).join(' && ');
+        return '(' + ast.expressions.map(e => astToJavascript(e, indentation)).join(' && ') + ')';
     } else if (ast instanceof AST.BooleanNot) {
-        return '!' + astToJavascript(ast.operand, indentation);
+        return '(!' + astToJavascript(ast.operand, indentation) + ')';
     } else if (ast instanceof AST.BooleanOr) {
-        return ast.expressions.map(e => astToJavascript(e, indentation)).join(' || ');
+        return '(' + ast.expressions.map(e => astToJavascript(e, indentation)).join(' || ') + ')';
     } else if (ast instanceof AST.Composition) {
         const variableName = '_$' + indentation;
         return '(' + variableName + ' => ' + astToJavascript(ast.left, indentation) + '(' + astToJavascript(ast.right, indentation) + '(' + variableName + ')))';
@@ -36,12 +36,14 @@ function astToJavascript(ast, indentation = 0) {
         } else {
             return spaces() + 'const ' + ast.name + ' = ' + astToJavascript(ast.expression) + ';';
         }
+    } else if (ast instanceof AST.Division) {
+        return '(' + astToJavascript(ast.left, indentation) + ' / ' + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Equal) {
-        return astToJavascript(ast.left, indentation) + " == " + astToJavascript(ast.right, indentation);
+        return '(' + astToJavascript(ast.left, indentation) + " == " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Identifier) {
         return ast.name;
     } else if (ast instanceof AST.If) {
-        return astToJavascript(ast.ifExpr, indentation) + "\n" + spaces(indentation + 1) + "? " + astToJavascript(ast.thenExpr, indentation + 1) + "\n" + spaces(indentation + 1) + ": " + astToJavascript(ast.elseExpr, indentation + 1);
+        return '(' + astToJavascript(ast.ifExpr, indentation) + "\n" + spaces(indentation + 1) + "? " + astToJavascript(ast.thenExpr, indentation + 1) + "\n" + spaces(indentation + 1) + ": " + astToJavascript(ast.elseExpr, indentation + 1) + ')';
     } else if (ast instanceof AST.Import) {
         const fileName = ast.url.value.substring(5);
 
@@ -50,17 +52,19 @@ function astToJavascript(ast, indentation = 0) {
         const tmpResult = Array.foldr(astToJavascript(ast.expression, indentation), (accumulator, item) => "(" + item + " => " + accumulator + ")", ast.variables);
         return tmpResult.substr(1, tmpResult.length - 2);
     } else if (ast instanceof AST.LessThan) {
-        return astToJavascript(ast.left, indentation) + " < " + astToJavascript(ast.right, indentation);
+        return '(' + astToJavascript(ast.left, indentation) + " < " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.LessThanEqual) {
-        return astToJavascript(ast.left, indentation) + " <= " + astToJavascript(ast.right, indentation);
+        return '(' + astToJavascript(ast.left, indentation) + " <= " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Module) {
         const imports = ast.imports.map(i => astToJavascript(i, indentation)).join('\n');
 
         return (imports.length == 0 ? '' : imports + '\n\n')
         + ast.declarations.map(d => astToJavascript(d, indentation)).join('\n\n')
         + (ast.optionalExpression.isDefined() ? '\n\n' + astToJavascript(ast.optionalExpression.orElse(), indentation) : '');
+    } else if (ast instanceof AST.Multiplication) {
+        return '(' + astToJavascript(ast.left, indentation) + " * " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Subtraction) {
-        return astToJavascript(ast.left, indentation) + " - " + astToJavascript(ast.right, indentation);
+        return '(' + astToJavascript(ast.left, indentation) + " - " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.QualifiedIdentifier) {
         return ast.module + "." + ast.identifier;
     }
