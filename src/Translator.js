@@ -22,6 +22,8 @@ function astToJavascript(ast, indentation = 0) {
         return '(' + variableName + ' => ' + astToJavascript(ast.left, indentation) + '(' + astToJavascript(ast.right, indentation) + '(' + variableName + ')))';
     } else if (ast instanceof AST.ConstantBoolean) {
         return ast.value ? 'true' : 'false';
+    } else if (ast instanceof AST.ConstantCharacter) {
+        return '"' + ast.value + '"';
     } else if (ast instanceof AST.ConstantInteger) {
         return ast.value;
     } else if (ast instanceof AST.ConstantString) {
