@@ -46,6 +46,10 @@ function astToJavascript(ast, indentation = 0) {
             + (ast.expressions.length > 1 ? ';\n' : '')
             + spaces(indentation + 2) + 'return ' + astToJavascript(ast.expressions[ast.expressions.length - 1]) + ';\n'
             + spaces(indentation + 1) + "})()";
+    } else if (ast instanceof AST.GreaterThan) {
+        return '(' + astToJavascript(ast.left, indentation) + " > " + astToJavascript(ast.right, indentation) + ')';
+    } else if (ast instanceof AST.GreaterThanEqual) {
+        return '(' + astToJavascript(ast.left, indentation) + " >= " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Identifier) {
         return ast.name;
     } else if (ast instanceof AST.If) {
