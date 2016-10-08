@@ -11,6 +11,14 @@ function astToJavascript(ast, indentation = 0) {
         return astToJavascript(ast.left, indentation) + " + " + astToJavascript(ast.right, indentation);
     } else if (ast instanceof AST.Apply) {
         return astToJavascript(ast.expressions[0], indentation) + ast.expressions.slice(1).map(x => "(" + astToJavascript(x, indentation) + ")").join('');
+    } else if (ast instanceof AST.BooleanAnd) {
+        return ast.expressions.map(e => astToJavascript(e, indentation)).join(' && ');
+    } else if (ast instanceof AST.BooleanNot) {
+        return '!' + astToJavascript(ast.operand, indentation);
+    } else if (ast instanceof AST.BooleanOr) {
+        return ast.expressions.map(e => astToJavascript(e, indentation)).join(' || ');
+    } else if (ast instanceof AST.ConstantBoolean) {
+        return ast.value ? 'true' : 'false';
     } else if (ast instanceof AST.ConstantInteger) {
         return ast.value;
     } else if (ast instanceof AST.Declaration) {
