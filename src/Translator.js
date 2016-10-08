@@ -97,6 +97,10 @@ function astToJavascript(ast, indentation = 0) {
         return '(' + astToJavascript(ast.left, indentation) + " + " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Subtraction) {
         return '(' + astToJavascript(ast.left, indentation) + " - " + astToJavascript(ast.right, indentation) + ')';
+    } else if  (ast instanceof AST.UnaryPlus) {
+        return '(+' + astToJavascript(ast.operand) + ')';
+    } else if  (ast instanceof AST.UnaryNegate) {
+        return '(-' + astToJavascript(ast.operand) + ')';
     }
 }
 
