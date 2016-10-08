@@ -2,6 +2,22 @@ const AST = require('./AST');
 const Array = require('./core/Array');
 
 
+const infixOperators = {
+    '||': '(_$a => (_$b => (_$a || _$b)))',
+    '&&': '(_$a => (_$b => (_$a && _$b)))',
+    '==': '(_$a => (_$b => (_$a == _$b)))',
+    '!=': '(_$a => (_$b => (_$a != _$b)))',
+    '<': '(_$a => (_$b => (_$a < _$b)))',
+    '<=': '(_$a => (_$b => (_$a <= _$b)))',
+    '>': '(_$a => (_$b => (_$a > _$b)))',
+    '>=': '(_$a => (_$b => (_$a >= _$b)))',
+    '++': '(_$a => (_$b => (_$a + _$b)))',
+    '+': '(_$a => (_$b => (_$a + _$b)))',
+    '-': '(_$a => (_$b => (_$a - _$b)))',
+    '*': '(_$a => (_$b => (_$a * _$b)))',
+    '/': '(_$a => (_$b => (_$a / _$b)))'
+};
+
 function astToJavascript(ast, indentation = 0) {
     function spaces(count) {
         return '  '.repeat(count);
@@ -58,6 +74,8 @@ function astToJavascript(ast, indentation = 0) {
         const fileName = ast.url.value.substring(5);
 
         return 'const ' + ast.id.name + " = require('" + fileName + "');";
+    } else if (ast instanceof AST.InfixOperator) {
+        return infixOperators[ast.operator];
     } else if (ast instanceof AST.Lambda) {
         const tmpResult = Array.foldr(astToJavascript(ast.expression, indentation), (accumulator, item) => "(" + item + " => " + accumulator + ")", ast.variables);
         return tmpResult.substr(1, tmpResult.length - 2);
