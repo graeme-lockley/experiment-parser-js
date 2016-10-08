@@ -4,4 +4,4 @@ function code(c) {
 
 module.exports = {
     code
-}
+};
