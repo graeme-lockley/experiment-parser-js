@@ -39,8 +39,9 @@ function astToJavascript(ast, indentation = 0) {
     } else if (ast instanceof AST.Module) {
         const imports = ast.imports.map(i => astToJavascript(i, indentation)).join('\n');
 
-        return (imports.length == 0 ? '' : imports + '\n\n') +
-               ast.declarations.map(d => astToJavascript(d, indentation)).join('\n\n');
+        return (imports.length == 0 ? '' : imports + '\n\n')
+        + ast.declarations.map(d => astToJavascript(d, indentation)).join('\n\n')
+        + (ast.optionalExpression.isDefined() ? '\n\n' + astToJavascript(ast.optionalExpression.orElse(), indentation) : '');
     } else if (ast instanceof AST.Subtraction) {
         return astToJavascript(ast.left, indentation) + " - " + astToJavascript(ast.right, indentation);
     } else if (ast instanceof AST.QualifiedIdentifier) {
