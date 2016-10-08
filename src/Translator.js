@@ -28,6 +28,8 @@ function astToJavascript(ast, indentation = 0) {
         return ast.value;
     } else if (ast instanceof AST.ConstantString) {
         return '"' + ast.value + '"';
+    } else if (ast instanceof AST.ConstantUnit) {
+        return 'undefined';
     } else if (ast instanceof AST.Declaration) {
         if (ast.expression instanceof AST.Lambda) {
             return spaces() + 'function ' + ast.name + '(' + ast.expression.variables[0] + ') {\n' + (ast.expression.variables.length == 1 ? '  return ' + astToJavascript(ast.expression.expression, indentation + 1) + ';\n' : '  return ' + astToJavascript(new AST.Lambda(ast.expression.variables.slice(1), ast.expression.expression), indentation + 1) + ';\n') + '}';
