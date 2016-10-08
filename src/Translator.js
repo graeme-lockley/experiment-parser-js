@@ -91,10 +91,10 @@ function astToJavascript(ast, indentation = 0) {
             + (ast.optionalExpression.isDefined() ? '\n\n' + astToJavascript(ast.optionalExpression.orElse(), indentation) : '');
     } else if (ast instanceof AST.Multiplication) {
         return '(' + astToJavascript(ast.left, indentation) + " * " + astToJavascript(ast.right, indentation) + ')';
-    } else if (ast instanceof AST.Subtraction) {
-        return '(' + astToJavascript(ast.left, indentation) + " - " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.QualifiedIdentifier) {
         return ast.module + "." + ast.identifier;
+    } else if (ast instanceof AST.Subtraction) {
+        return '(' + astToJavascript(ast.left, indentation) + " - " + astToJavascript(ast.right, indentation) + ')';
     }
 }
 
