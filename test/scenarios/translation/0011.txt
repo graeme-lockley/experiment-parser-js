@@ -1,0 +1,6 @@
+-- given an expression containing infix operators as prefix operators
+doPlus x y = (+) x y;
+-- js
+-- ast
+-- run
+doPlus 1 2 == 3

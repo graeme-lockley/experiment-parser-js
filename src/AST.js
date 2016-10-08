@@ -180,7 +180,7 @@ class Import {
 class InfixOperator {
     constructor(operator) {
         this.type = 'INFIX_OPERATOR';
-        this.url = operator;
+        this.operator = operator;
     }
 }
 
