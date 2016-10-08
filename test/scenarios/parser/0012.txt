@@ -31,7 +31,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": "||"
+              "operator": "||"
             },
             {
               "type": "IDENTIFIER",
@@ -59,7 +59,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": "&&"
+              "operator": "&&"
             },
             {
               "type": "IDENTIFIER",
@@ -87,7 +87,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": "=="
+              "operator": "=="
             },
             {
               "type": "IDENTIFIER",
@@ -115,7 +115,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": "!="
+              "operator": "!="
             },
             {
               "type": "IDENTIFIER",
@@ -143,7 +143,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": "<"
+              "operator": "<"
             },
             {
               "type": "IDENTIFIER",
@@ -171,7 +171,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": "<="
+              "operator": "<="
             },
             {
               "type": "IDENTIFIER",
@@ -199,7 +199,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": ">"
+              "operator": ">"
             },
             {
               "type": "IDENTIFIER",
@@ -227,7 +227,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": ">="
+              "operator": ">="
             },
             {
               "type": "IDENTIFIER",
@@ -255,7 +255,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": "++"
+              "operator": "++"
             },
             {
               "type": "IDENTIFIER",
@@ -283,7 +283,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": "+"
+              "operator": "+"
             },
             {
               "type": "IDENTIFIER",
@@ -311,7 +311,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": "-"
+              "operator": "-"
             },
             {
               "type": "IDENTIFIER",
@@ -339,7 +339,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": "*"
+              "operator": "*"
             },
             {
               "type": "IDENTIFIER",
@@ -367,7 +367,7 @@ prefixDivide a b = (/) a b;
           "expressions": [
             {
               "type": "INFIX_OPERATOR",
-              "url": "/"
+              "operator": "/"
             },
             {
               "type": "IDENTIFIER",
