@@ -1,4 +1,4 @@
--- given a list, calculate the lists's length
+-- given a list, calculate the list's length
 import file:./lib/List as List;
 
 myList = List.Cons 1 (List.Cons 2 (List.Cons 3 List.Nil));
