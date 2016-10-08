@@ -1,0 +1,21 @@
+-- given an expression containing a sequence of expressions
+funnyIdentityPlusOne a =
+  if a > 0 then
+    a
+  else {
+    a;
+    1 + 2;
+    a + 1
+  };
+-- js
+function funnyIdentityPlusOne(a) {
+  return (undefined
+    ? a
+    : (() => {
+        a;
+        (1 + 2);
+        return (a + 1);
+      })());
+}
+-- run
+funnyIdentityPlusOne 10 == 11

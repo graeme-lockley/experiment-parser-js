@@ -40,6 +40,12 @@ function astToJavascript(ast, indentation = 0) {
         return '(' + astToJavascript(ast.left, indentation) + ' / ' + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Equal) {
         return '(' + astToJavascript(ast.left, indentation) + " == " + astToJavascript(ast.right, indentation) + ')';
+    } else if (ast instanceof AST.Expressions) {
+        return '(() => {\n' + spaces(indentation + 2)
+            + ast.expressions.slice(0, ast.expressions.length - 1).map(e => astToJavascript(e, indentation + 2)).join(";\n" + spaces(indentation + 2))
+            + (ast.expressions.length > 1 ? ';\n' : '')
+            + spaces(indentation + 2) + 'return ' + astToJavascript(ast.expressions[ast.expressions.length - 1]) + ';\n'
+            + spaces(indentation + 1) + "})()";
     } else if (ast instanceof AST.Identifier) {
         return ast.name;
     } else if (ast instanceof AST.If) {
@@ -59,8 +65,8 @@ function astToJavascript(ast, indentation = 0) {
         const imports = ast.imports.map(i => astToJavascript(i, indentation)).join('\n');
 
         return (imports.length == 0 ? '' : imports + '\n\n')
-        + ast.declarations.map(d => astToJavascript(d, indentation)).join('\n\n')
-        + (ast.optionalExpression.isDefined() ? '\n\n' + astToJavascript(ast.optionalExpression.orElse(), indentation) : '');
+            + ast.declarations.map(d => astToJavascript(d, indentation)).join('\n\n')
+            + (ast.optionalExpression.isDefined() ? '\n\n' + astToJavascript(ast.optionalExpression.orElse(), indentation) : '');
     } else if (ast instanceof AST.Multiplication) {
         return '(' + astToJavascript(ast.left, indentation) + " * " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Subtraction) {
