@@ -1,0 +1,154 @@
+-- given a list, calculate the lists's length
+import file:./lib/List as List;
+
+myList = List.Cons 1 (List.Cons 2 (List.Cons 3 List.Nil));
+
+length xs =
+    if (List.isNil xs) then
+        0
+    else
+        1 + length (List.tail xs);
+-- ast
+{
+  "type": "MODULE",
+  "imports": [
+    {
+      "type": "IMPORT",
+      "url": {
+        "type": "CONSTANT_URL",
+        "value": "file:./lib/List"
+      },
+      "id": {
+        "type": "IDENTIFIER",
+        "name": "List"
+      }
+    }
+  ],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "myList",
+      "expression": {
+        "type": "APPLY",
+        "expressions": [
+          {
+            "type": "QUALIFIED_IDENTIFIER",
+            "module": "List",
+            "identifier": "Cons"
+          },
+          {
+            "type": "CONSTANT_INTEGER",
+            "value": 1
+          },
+          {
+            "type": "APPLY",
+            "expressions": [
+              {
+                "type": "QUALIFIED_IDENTIFIER",
+                "module": "List",
+                "identifier": "Cons"
+              },
+              {
+                "type": "CONSTANT_INTEGER",
+                "value": 2
+              },
+              {
+                "type": "APPLY",
+                "expressions": [
+                  {
+                    "type": "QUALIFIED_IDENTIFIER",
+                    "module": "List",
+                    "identifier": "Cons"
+                  },
+                  {
+                    "type": "CONSTANT_INTEGER",
+                    "value": 3
+                  },
+                  {
+                    "type": "QUALIFIED_IDENTIFIER",
+                    "module": "List",
+                    "identifier": "Nil"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "length",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "xs"
+        ],
+        "expression": {
+          "type": "IF",
+          "ifExpr": {
+            "type": "APPLY",
+            "expressions": [
+              {
+                "type": "QUALIFIED_IDENTIFIER",
+                "module": "List",
+                "identifier": "isNil"
+              },
+              {
+                "type": "IDENTIFIER",
+                "name": "xs"
+              }
+            ]
+          },
+          "thenExpr": {
+            "type": "CONSTANT_INTEGER",
+            "value": 0
+          },
+          "elseExpr": {
+            "type": "APPLY",
+            "expressions": [
+              {
+                "type": "ADDITION",
+                "left": {
+                  "type": "CONSTANT_INTEGER",
+                  "value": 1
+                },
+                "right": {
+                  "type": "IDENTIFIER",
+                  "name": "length"
+                }
+              },
+              {
+                "type": "APPLY",
+                "expressions": [
+                  {
+                    "type": "QUALIFIED_IDENTIFIER",
+                    "module": "List",
+                    "identifier": "tail"
+                  },
+                  {
+                    "type": "IDENTIFIER",
+                    "name": "xs"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "optionalExpression": {}
+}
+-- js
+const List = require('./lib/List');
+
+const myList = List.Cons(1)(List.Cons(2)(List.Cons(3)(List.Nil)));
+
+function length(xs) {
+  return List.isNil(xs)
+    ? 0
+    : 1 + length(List.tail(xs));
+}
+-- run
+(length myList) == 3
