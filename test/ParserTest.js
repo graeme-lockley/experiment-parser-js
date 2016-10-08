@@ -10,8 +10,8 @@ const TestUtils = require('./TestUtils');
 const expect = require("chai").expect;
 
 describe('Parser', function () {
-    describe('given the input "123" to parseEXPR11', () => {
-        const result = Parser.parseEXPR11(Lexer.fromString("123"));
+    describe('given the input "123" to parseEXPR12', () => {
+        const result = Parser.parseEXPR12(Lexer.fromString("123"));
 
         it("should parse without any errors", () =>
             expect(result.isOk()).to.equal(true));
@@ -23,8 +23,8 @@ describe('Parser', function () {
             expect(result.getOkOrElse().snd.id).to.equal(Lexer.TokenEnum.EOF));
     });
 
-    describe('given the input "abc 123" to parseEXPR11', () => {
-        const result = Parser.parseEXPR11(Lexer.fromString("abc 123"));
+    describe('given the input "abc 123" to parseEXPR12', () => {
+        const result = Parser.parseEXPR12(Lexer.fromString("abc 123"));
 
         it("should parse without any errors", () =>
             expect(result.isOk()).to.equal(true));
@@ -36,8 +36,8 @@ describe('Parser', function () {
             expect(result.getOkOrElse().snd.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER));
     });
 
-    describe('given the input "( 123)" to parseEXPR11', () => {
-        const result = Parser.parseEXPR11(Lexer.fromString('( 123)'));
+    describe('given the input "( 123)" to parseEXPR12', () => {
+        const result = Parser.parseEXPR12(Lexer.fromString('( 123)'));
 
         it("should parse without any errors", ()=>
             expect(result.isOk(result)).to.equal(true));
@@ -49,8 +49,8 @@ describe('Parser', function () {
             expect(result.getOkOrElse().snd.id).to.equal(Lexer.TokenEnum.EOF));
     });
 
-    describe('given the input "\\a \\b -> (a)" to parseEXPR11', () => {
-        const result = Parser.parseEXPR11(Lexer.fromString('\\a \\b -> (a)'));
+    describe('given the input "\\a \\b -> (a)" to parseEXPR12', () => {
+        const result = Parser.parseEXPR12(Lexer.fromString('\\a \\b -> (a)'));
 
         it("should parse without any errors", () => expect(result.isOk()).to.equal(true));
         it("should parse a LAMBDA with variables ['a', 'b'] and expression of IDENTIFIER with value 'a'", () => {

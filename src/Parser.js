@@ -159,6 +159,11 @@ function parseEXPR10(lexer) {
 
 
 function parseEXPR11(lexer) {
+    return P.many1(parseEXPR12, elements => elements.length == 1 ? elements[0] : new AST.Apply(elements))(lexer);
+}
+
+
+function parseEXPR12(lexer) {
     return P.or([
         parseConstantInteger,
         parseConstantCharacter,
@@ -304,7 +309,7 @@ function parseExpressionString(input) {
 
 
 module.exports = {
-    parseEXPR11,
+    parseEXPR12,
     parseExpressionString,
     parseString
 };
