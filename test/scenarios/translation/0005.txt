@@ -1,0 +1,6 @@
+-- given a string with a composite function of trim and length applied to it
+import file:./lib/String as String;
+
+realLength s = (String.length o String.trim) s;
+-- run
+(realLength "  hello   ") == 5
