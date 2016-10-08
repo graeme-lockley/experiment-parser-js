@@ -1,7 +1,7 @@
 "use strict";
 
 const FS = require('fs');
-const VM = require('vm');
+const {NodeVM} = require('vm2');
 
 const Parser = require('../src/Parser');
 const Translator = require('../src/Translator');
@@ -56,9 +56,15 @@ function scenariosIn(directory) {
                     const programme = Translator.astToJavascript(parseResponse.getOkOrElse());
                     const assertion = Translator.astToJavascript(Parser.parseExpressionString(expectations['run']).getOkOrElse());
 
-                    const context = VM.createContext();
-                    VM.runInContext(programme, context);
-                    const result = VM.runInContext(assertion, context);
+                    const vm = new NodeVM({
+                        console: 'inherit',
+                        sandbox: {},
+                        require: {
+                            external: true
+                        },
+                        wrapper: 'none',
+                    });
+                    const result = vm.run(programme + '\n\n' + 'return ' + assertion + ';', process.cwd() + '/test/lib');
 
                     expect(result).to.equal(true);
                 });
