@@ -1,6 +1,7 @@
 "use strict";
 
 const Result = require('./core/Result');
+const Sequence = require('./core/Sequence');
 const Tuple = require('./core/Tuple');
 
 const Make = require('./compiler/Make');
@@ -33,28 +34,22 @@ function repositoryHomeFromEnvironment() {
 }
 
 
-parseCommandLine()
-    .okay(cmdLine => {
-        repositoryHomeFromEnvironment()
-            .okay(repositoryHome => {
-                const repository = new Make.Repository(repositoryHome);
+const result = Sequence.seq()
+    .assign('cmdLine', s => parseCommandLine())
+    .assign('repositoryHome', s => repositoryHomeFromEnvironment())
+    .return(s => {
+        const repository = new Make.Repository(s.repositoryHome);
 
-                const fileName = repository.compile(cmdLine.script);
+        const fileName = repository.compile(s.cmdLine.script);
 
-                const file = require(fileName);
+        const file = require(fileName);
 
-                if ('_$EXPR' in file) {
-                    console.log(file['_$EXPR']);
-                } else if ('main' in file) {
-                    console.log(file['main'](cmdLine.args));
-                } else {
-                    console.log(file);
-                }
-            })
-            .error(msg => {
-                console.log(msg);
-            });
-    })
-    .error(msg => {
-        console.log(msg);
+        return Result.Ok(
+            ('_$EXPR' in file) ? JSON.stringify(file['_$EXPR'])
+                : ('main' in file) ? file['main'](cmdLine.args)
+                : file);
     });
+
+result
+    .okay(success => console.log(success))
+    .error(msg => console.log(msg));
