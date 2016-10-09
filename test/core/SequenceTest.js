@@ -35,4 +35,16 @@ describe('Core/Sequence', () => {
 
         expect(value.getOkOrElse()).to.equal(25);
     });
+
+    it('given a set of assignments with one throwing an exception then an error is returned', () => {
+        const value = Sequence.seq()
+            .assign('a', s => 10)
+            .assign('b', s => {
+                throw 'My Error';
+            })
+            .assign('c', s => s.a + s.b)
+            .return(s => s.c);
+
+        expect(value.getErrorOrElse()).to.equal('My Error');
+    });
 });

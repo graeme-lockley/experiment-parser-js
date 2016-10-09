@@ -10,16 +10,20 @@ class Sequence {
 
     assign(n, e) {
         if (this._state.isOk()) {
-            const eResult = e(this._state.getOkOrElse());
+            try {
+                const eResult = e(this._state.getOkOrElse());
 
-            if (Result.is(eResult)) {
-                if (eResult.isOk()) {
-                    this._state.getOkOrElse()[n] = eResult.getOkOrElse();
+                if (Result.is(eResult)) {
+                    if (eResult.isOk()) {
+                        this._state.getOkOrElse()[n] = eResult.getOkOrElse();
+                    } else {
+                        this._state = eResult;
+                    }
                 } else {
-                    this._state = eResult;
+                    this._state.getOkOrElse()[n] = eResult;
                 }
-            } else {
-                this._state.getOkOrElse()[n] = eResult;
+            } catch (e) {
+                this._state = Result.Error(e);
             }
         }
         return this;
