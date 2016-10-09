@@ -14,6 +14,7 @@ class Repository {
 
     compile(scriptName) {
         if (scriptName.endsWith('.sl')) {
+
             const content = FS.readFileSync(scriptName).toString();
 
             const ast = Parser.parseString(content);
@@ -63,7 +64,7 @@ function composeScriptNameFromURL(scriptName, url) {
 
 function mkdirp(directoryName) {
     try {
-        if (!direxists(directoryName)) {
+        if (!dirExists(directoryName)) {
             mkdirp(Path.dirname(directoryName));
             FS.mkdirSync(directoryName);
         }
@@ -73,7 +74,7 @@ function mkdirp(directoryName) {
 }
 
 
-function direxists(directoryName) {
+function dirExists(directoryName) {
     try {
         const stats = FS.statSync(directoryName);
 
