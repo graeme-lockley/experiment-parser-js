@@ -4,7 +4,7 @@ const Tuple = require('../../src/core/Tuple');
 const Lexer = require('../../src/compiler/Lexer');
 const expect = require('chai').expect;
 
-describe('Lexer', function () {
+describe('Lexer', () => {
     describe('with input "Hello 123"', () => {
         const context = Lexer.fromString('Hello 123');
 
