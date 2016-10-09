@@ -16,10 +16,10 @@ function runInContext(js, context, fileName) {
 
 
 let state = {
-    mode: 'ss',
-    eval: safeScriptEval,
+    mode: 'sl',
+    eval: safeLangEval,
     showAST: false,
-    showTranslatedSafeScript: false
+    showTranslatedSafeLang: false
 };
 
 
@@ -36,12 +36,12 @@ repl.defineCommand('js', {
     }
 });
 
-repl.defineCommand('ss', {
-    help: 'Set the repl to accept SafeScript instructions',
+repl.defineCommand('sl', {
+    help: 'Set the repl to accept SafeLang instructions',
     action: () => {
-        repl.setPrompt('ss> ');
-        state.eval = safeScriptEval;
-        console.log('Mode set to SafeScript');
+        repl.setPrompt('sl> ');
+        state.eval = safeLangEval;
+        console.log('Mode set to SafeLang');
         repl.displayPrompt();
     }
 });
@@ -56,17 +56,17 @@ repl.defineCommand('set', {
             state.showAST = false;
             console.log('Show AST disabled');
         } else if (name == 'js=on') {
-            state.showTranslatedSafeScript = true;
-            console.log('Show translated SafeScript enabled');
+            state.showTranslatedSafeLang = true;
+            console.log('Show translated SafeLang enabled');
         } else if (name == 'js=off') {
-            state.showTranslatedSafeScript = false;
-            console.log('Show translated SafeScript disabled');
+            state.showTranslatedSafeLang = false;
+            console.log('Show translated SafeLang disabled');
         } else {
             if (name != '') {
                 console.error('Unknown setting instruction: ' + name);
             }
             console.log('ast: ' + (state.showAST ? 'on' : 'off'));
-            console.log('js: ' + (state.showTranslatedSafeScript ? 'on' : 'off'));
+            console.log('js: ' + (state.showTranslatedSafeLang ? 'on' : 'off'));
         }
         repl.displayPrompt();
     }
@@ -78,7 +78,7 @@ function javaScriptEval(input, context, filename, cb) {
 }
 
 
-function safeScriptEval(input, context, filename, cb) {
+function safeLangEval(input, context, filename, cb) {
     const parsedResponse = Parser.parseString(input);
 
     if (parsedResponse.isOk()) {
@@ -90,7 +90,7 @@ function safeScriptEval(input, context, filename, cb) {
 
         const jsText = Translator.astToJavascript(parsedResponse.getOkOrElse());
 
-        if (state.showTranslatedSafeScript) {
+        if (state.showTranslatedSafeLang) {
             console.log('--- JavaScript ---');
             console.log(jsText);
             console.log('------------------');
@@ -105,7 +105,7 @@ function safeScriptEval(input, context, filename, cb) {
 
 function createRepl() {
     return NodeREPL.start({
-        prompt: 'ss> ',
+        prompt: 'sl> ',
         eval: (input, context, filename, cb) => {
             state.eval(input, context, filename, cb);
         }
