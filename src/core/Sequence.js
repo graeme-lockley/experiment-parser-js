@@ -11,10 +11,15 @@ class Sequence {
     assign(n, e) {
         if (this._state.isOk()) {
             const eResult = e(this._state.getOkOrElse());
-            if (eResult.isOk()) {
-                this._state.getOkOrElse()[n] = eResult.getOkOrElse();
+
+            if (Result.is(eResult)) {
+                if (eResult.isOk()) {
+                    this._state.getOkOrElse()[n] = eResult.getOkOrElse();
+                } else {
+                    this._state = eResult;
+                }
             } else {
-                this._state = eResult;
+                this._state.getOkOrElse()[n] = eResult;
             }
         }
         return this;
@@ -22,7 +27,13 @@ class Sequence {
 
     return(e) {
         if (this._state.isOk()) {
-            return e(this._state.getOkOrElse());
+            const result = e(this._state.getOkOrElse());
+
+            if (Result.is(result)) {
+                return result;
+            } else {
+                return Result.Ok(result);
+            }
         } else {
             return this._state;
         }
