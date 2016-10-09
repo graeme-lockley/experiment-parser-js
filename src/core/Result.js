@@ -70,14 +70,22 @@ class ErrorImpl {
     }
 }
 
+
 function Ok(value) {
     return new OkImpl(value);
 }
+
 
 function Error(value) {
     return new ErrorImpl(value);
 }
 
+
+function is(value) {
+    return value instanceof OkImpl || value instanceof ErrorImpl;
+}
+
+
 module.exports = {
-    Ok, Error
+    Ok, Error, is
 };
