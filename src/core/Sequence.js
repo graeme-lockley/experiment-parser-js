@@ -49,6 +49,7 @@ function seq() {
     return new Sequence();
 }
 
+
 module.exports = {
     seq
 };
