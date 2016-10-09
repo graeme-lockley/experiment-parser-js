@@ -39,14 +39,16 @@ const result = Sequence.seq()
     .assign('repositoryHome', s => repositoryHomeFromEnvironment())
     .assign('repository', s => new Make.Repository(s.repositoryHome))
     .assign('fileName', s => s.repository.compile(s.cmdLine.script))
-    .return(s => {
-        const file = require(s.fileName);
+    .assign('result', s => {
+            const file = require(s.fileName);
 
-        return Result.Ok(
-            ('_$EXPR' in file) ? JSON.stringify(file['_$EXPR'])
+            return ('_$EXPR' in file) ? JSON.stringify(file['_$EXPR'])
                 : ('main' in file) ? file['main'](cmdLine.args)
-                : file);
-    });
+                : file;
+        },
+        s => 'Executing script'
+    )
+    .return(s => s.result);
 
 result
     .okay(success => console.log(success))

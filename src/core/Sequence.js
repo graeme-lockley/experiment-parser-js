@@ -8,9 +8,12 @@ class Sequence {
         this._state = Result.Ok(state);
     }
 
-    assign(n, e) {
+    assign(n, e, logMessage = null) {
         if (this._state.isOk()) {
             try {
+                if (logMessage != null) {
+                    console.time(logMessage(this._state.getOkOrElse({})));
+                }
                 const eResult = e(this._state.getOkOrElse());
 
                 if (Result.is(eResult)) {
@@ -24,6 +27,11 @@ class Sequence {
                 }
             } catch (e) {
                 this._state = Result.Error(e);
+            }
+            finally {
+                if (logMessage != null) {
+                    console.timeEnd(logMessage(this._state.getOkOrElse({})));
+                }
             }
         }
         return this;

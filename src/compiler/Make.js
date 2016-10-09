@@ -19,7 +19,7 @@ class Repository {
         if (scriptName.endsWith('.sl')) {
             const seq = Sequence.seq()
                 .assign('content', s => readFile(scriptName))
-                .assign('ast', s => Parser.parseString(s.content))
+                .assign('ast', s => Parser.parseString(s.content), s => 'Parsing ' + scriptName)
                 .assign('dirname', s => this.translateName(Path.dirname(scriptName)))
                 .assign('_', s => {
                     mkdirp(s.dirname);
@@ -27,8 +27,8 @@ class Repository {
                     writeFile(astFileName, JSON.stringify(s.ast, null, 2));
                 })
                 .assign('jsFileName', s => s.dirname + Path.sep + Path.basename(scriptName, '.sl') + '.js')
-                .assign('js', s => Translator.astToJavascript(s.ast))
-                .assign('_', s => writeFile(s.jsFileName, s.js));
+                .assign('js', s => Translator.astToJavascript(s.ast), s => 'Translating ' + scriptName)
+                .assign('_', s => writeFile(s.jsFileName, s.js), s => 'Writing ' + s.jsFileName);
 
             const ast = seq.return(s => s.ast);
             ast.okay(module => module.imports.forEach(i => {
