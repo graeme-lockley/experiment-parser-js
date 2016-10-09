@@ -1,8 +1,8 @@
 "use strict";
 
-const Lexer = require('../src/Lexer');
-const Parser = require('../src/Parser');
-const Translator = require('../src/Translator');
+const Lexer = require('../../src/compiler/Lexer');
+const Parser = require('../../src/compiler/Parser');
+const Translator = require('../../src/compiler/Translator');
 
 const TestUtils = require('./TestUtils');
 

@@ -1,9 +1,9 @@
 "use strict";
 
-const Result = require('../src/core/Result');
-const Parser = require('../src/Parser');
-const Lexer = require('../src/Lexer');
-const AST = require('../src/AST');
+const Result = require('../../src/core/Result');
+const Parser = require('../../src/compiler/Parser');
+const Lexer = require('../../src/compiler/Lexer');
+const AST = require('../../src/compiler/AST');
 
 const TestUtils = require('./TestUtils');
 

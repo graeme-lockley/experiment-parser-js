@@ -3,8 +3,8 @@
 const FS = require('fs');
 const {NodeVM} = require('vm2');
 
-const Parser = require('../src/Parser');
-const Translator = require('../src/Translator');
+const Parser = require('../../src/compiler/Parser');
+const Translator = require('../../src/compiler/Translator');
 const expect = require("chai").expect;
 
 function scenariosIn(directory) {

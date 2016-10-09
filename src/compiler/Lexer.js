@@ -1,6 +1,6 @@
 "use strict";
 
-const Tuple = require('./core/Tuple');
+const Tuple = require('../core/Tuple');
 
 const TokenEnum = {
     UNKNOWN: 0,

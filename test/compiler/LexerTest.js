@@ -1,7 +1,7 @@
 "use strict";
 
-const Tuple = require('../src/core/Tuple');
-const Lexer = require('../src/Lexer');
+const Tuple = require('../../src/core/Tuple');
+const Lexer = require('../../src/compiler/Lexer');
 const expect = require('chai').expect;
 
 describe('Lexer', function () {

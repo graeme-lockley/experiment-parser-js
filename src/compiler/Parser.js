@@ -1,11 +1,11 @@
 "use strict";
 
-const Result = require('./core/Result');
+const Result = require('../core/Result');
 const Lexer = require('./Lexer');
-const Tuple = require('./core/Tuple');
+const Tuple = require('../core/Tuple');
 const AST = require('./AST');
 
-const P = require('./core/ParserCombinators');
+const P = require('../core/ParserCombinators');
 
 
 function compose(f1, f2) {

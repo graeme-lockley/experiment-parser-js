@@ -1,5 +1,5 @@
 const AST = require('./AST');
-const Array = require('./core/Array');
+const Array = require('../core/Array');
 
 
 const infixOperators = {
