@@ -75,7 +75,7 @@ function astToJavascript(ast, indentation = 0) {
     } else if (ast instanceof AST.Import) {
         const fileName = ast.url.value.substring(5);
 
-        return 'const ' + ast.id.name + " = require('" + fileName + "');";
+        return 'const ' + ast.id.name + " = require('" + (fileName.startsWith('./') || fileName.startsWith('/') ? fileName : './' + fileName) + "');";
     } else if (ast instanceof AST.InfixOperator) {
         return infixOperators[ast.operator];
     } else if (ast instanceof AST.Lambda) {
