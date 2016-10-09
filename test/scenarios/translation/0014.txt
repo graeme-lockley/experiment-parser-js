@@ -1,0 +1,17 @@
+-- given an import, declarations and expression
+import file:test/lib/List as List;
+
+lst = List.Cons 1 (List.Cons 2 List.Nil);
+
+lst
+-- js
+const List = require('./test/lib/List');
+
+const lst = List.Cons(1)(List.Cons(2)(List.Nil));
+
+const _$EXPR = lst;
+
+module.exports = {
+  lst,
+  _$EXPR
+};

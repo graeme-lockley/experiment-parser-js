@@ -24,6 +24,15 @@ class OkImpl {
     map(okFn, errorFn) {
         return okFn(this._ok);
     }
+
+    okay(okFn) {
+        okFn(this._ok);
+        return this;
+    }
+
+    error(errorFn) {
+        return this;
+    }
 }
 
 class ErrorImpl {
@@ -49,6 +58,15 @@ class ErrorImpl {
 
     map(okFn, errorFn) {
         return errorFn(this._error);
+    }
+
+    okay(okFn) {
+        return this;
+    }
+
+    error(errorFn) {
+        errorFn(this._error);
+        return this;
     }
 }
 
