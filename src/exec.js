@@ -37,12 +37,10 @@ function repositoryHomeFromEnvironment() {
 const result = Sequence.seq()
     .assign('cmdLine', s => parseCommandLine())
     .assign('repositoryHome', s => repositoryHomeFromEnvironment())
+    .assign('repository', s => new Make.Repository(s.repositoryHome))
+    .assign('fileName', s => s.repository.compile(s.cmdLine.script))
     .return(s => {
-        const repository = new Make.Repository(s.repositoryHome);
-
-        const fileName = repository.compile(s.cmdLine.script);
-
-        const file = require(fileName);
+        const file = require(s.fileName);
 
         return Result.Ok(
             ('_$EXPR' in file) ? JSON.stringify(file['_$EXPR'])
