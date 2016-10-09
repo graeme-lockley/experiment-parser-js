@@ -1,3 +1,5 @@
+"use strict";
+
 const AST = require('./AST');
 const Array = require('../core/Array');
 

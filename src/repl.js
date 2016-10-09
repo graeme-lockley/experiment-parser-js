@@ -1,4 +1,4 @@
-"use script";
+"use strict";
 
 const NodeREPL = require('repl');
 const VM = require('vm');
