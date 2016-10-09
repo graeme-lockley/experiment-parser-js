@@ -6,6 +6,9 @@ const Path = require('path');
 const Parser = require('./Parser');
 const Translator = require('./Translator');
 
+const Sequence = require('../core/Sequence');
+const Result = require('../core/Result');
+
 
 class Repository {
     constructor(home) {
@@ -14,37 +17,39 @@ class Repository {
 
     compile(scriptName) {
         if (scriptName.endsWith('.sl')) {
+            const seq = Sequence.seq()
+                .assign('content', s => readFile(scriptName))
+                .assign('ast', s => Parser.parseString(s.content))
+                .assign('dirname', s => this.translateName(Path.dirname(scriptName)))
+                .assign('_', s => {
+                    mkdirp(s.dirname);
+                    const astFileName = s.dirname + Path.sep + Path.basename(scriptName, '.sl') + '.ast';
+                    writeFile(astFileName, JSON.stringify(s.ast, null, 2));
+                })
+                .assign('jsFileName', s => s.dirname + Path.sep + Path.basename(scriptName, '.sl') + '.js')
+                .assign('js', s => Translator.astToJavascript(s.ast))
+                .assign('_', s => writeFile(s.jsFileName, s.js));
 
-            const content = FS.readFileSync(scriptName).toString();
-
-            const ast = Parser.parseString(content);
-
-            const dirname = this.translateName(Path.dirname(scriptName));
-            mkdirp(dirname);
-            const astFileName = dirname + Path.sep + Path.basename(scriptName, '.sl') + '.ast';
-            FS.writeFileSync(astFileName, JSON.stringify(ast, null, 2));
-            const jsFileName = dirname + Path.sep + Path.basename(scriptName, '.sl') + '.js';
-
-            FS.writeFileSync(jsFileName, Translator.astToJavascript(ast.getOkOrElse()));
-
+            const ast = seq.return(s => s.ast);
             ast.okay(module => module.imports.forEach(i => {
-                this.compile(composeScriptNameFromURL(scriptName, i.url.value));
+                seq.assign('_', s => this.compile(composeScriptNameFromURL(scriptName, i.url.value)));
             }));
 
-            return jsFileName;
+            return seq.return(s => s.jsFileName);
         } else if (scriptName.endsWith('.js')) {
-            const content = FS.readFileSync(scriptName).toString();
-
-            const dirname = this.translateName(Path.dirname(scriptName));
-            mkdirp(dirname);
-            const jsFileName = dirname + Path.sep + Path.basename(scriptName);
-            FS.writeFileSync(jsFileName, content);
-
-            return jsFileName;
+            return Sequence.seq()
+                .assign('content', s => readFile(scriptName))
+                .assign('dirname', s => this.translateName(Path.dirname(scriptName)))
+                .assign('_', s => mkdirp(s.dirname))
+                .assign('jsFileName', s => s.dirname + Path.sep + Path.basename(scriptName))
+                .assign('_', s => writeFile(s.jsFileName, s.content))
+                .return(s => s.jsFileName);
         } else if (fileExists(scriptName + '.sl')) {
-           return this.compile(scriptName + '.sl');
+            return this.compile(scriptName + '.sl');
         } else if (fileExists(scriptName + '.js')) {
-           return this.compile(scriptName + '.js');
+            return this.compile(scriptName + '.js');
+        } else {
+            return Result.Error('File ' + scriptName + ' does not exist');
         }
     }
 
@@ -61,6 +66,15 @@ function composeScriptNameFromURL(scriptName, url) {
     return Path.dirname(scriptName) + Path.sep + urlSuffix;
 }
 
+
+function readFile(fileName) {
+    return FS.readFileSync(fileName).toString();
+}
+
+
+function writeFile(fileName, content) {
+    FS.writeFileSync(fileName, content);
+}
 
 function mkdirp(directoryName) {
     try {
