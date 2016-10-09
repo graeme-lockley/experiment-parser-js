@@ -53,7 +53,6 @@ class Repository {
         }
     }
 
-
     translateName(scriptName) {
         return this.home + scriptName;
     }
