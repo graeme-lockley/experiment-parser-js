@@ -10,5 +10,9 @@ function fib(n) {
     ? 1
     : (n + fib((n - 1))));
 }
+
+module.exports = {
+  fib
+};
 -- run
 fib 10 == 55

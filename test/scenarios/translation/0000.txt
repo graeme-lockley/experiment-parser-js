@@ -10,3 +10,9 @@ function add(a) {
 }
 
 const ln = 3;
+
+module.exports = {
+  pi,
+  add,
+  ln
+};

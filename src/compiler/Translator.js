@@ -88,9 +88,17 @@ function astToJavascript(ast, indentation = 0) {
     } else if (ast instanceof AST.Module) {
         const imports = ast.imports.map(i => astToJavascript(i, indentation)).join('\n');
 
+        const suffix = ast.declarations.length ==  0 && !ast.optionalExpression.isDefined() ? '' :
+            ast.declarations.length > 0 && !ast.optionalExpression.isDefined() ? '\n\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + '\n};' :
+            ast.declarations.length > 0 && ast.optionalExpression.isDefined() ? '\n\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + ',\n' + spaces(1) + '_$EXPR\n};' :
+            '\n\nmodule.exports = {\n' + spaces(1) + '_$EXPR\n};';
+
+
+
         return (imports.length == 0 ? '' : imports + '\n\n')
             + ast.declarations.map(d => astToJavascript(d, indentation)).join('\n\n')
-            + (ast.optionalExpression.isDefined() ? '\n\n' + astToJavascript(ast.optionalExpression.orElse(), indentation) : '');
+            + (ast.optionalExpression.isDefined() ? '\n\nconst _$EXPR = ' + astToJavascript(ast.optionalExpression.orElse(), indentation) + ';' : '')
+            + suffix;
     } else if (ast instanceof AST.Multiplication) {
         return '(' + astToJavascript(ast.left, indentation) + " * " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.QualifiedIdentifier) {

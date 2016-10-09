@@ -17,5 +17,9 @@ function funnyIdentityPlusOne(a) {
         return (a + 1);
       })());
 }
+
+module.exports = {
+  funnyIdentityPlusOne
+};
 -- run
 funnyIdentityPlusOne 0 == 1

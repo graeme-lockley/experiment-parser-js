@@ -19,6 +19,13 @@ function greaterThan(a) {
 function greaterThanEqual(a) {
   return (b => (a >= b));
 }
+
+module.exports = {
+  lessThan,
+  lessThanEqual,
+  greaterThan,
+  greaterThanEqual
+};
 -- run
 lessThan 10 11 && !(lessThan 11 10) &&
 lessThanEqual 11 11 && !(lessThanEqual 12 11) &&

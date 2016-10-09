@@ -9,3 +9,8 @@ function zero(f) {
 function succ(n) {
   return (f => (x => f(n(f)(x))));
 }
+
+module.exports = {
+  zero,
+  succ
+};
