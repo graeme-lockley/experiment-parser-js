@@ -57,9 +57,9 @@ set and then, through subsequent versions, implement the entire language.
 | Lexical  | Layout based                      |    |    |    |    |    |    |    |    | *  |
 | Syntax   | module/imports                    | *  |    |    |    |    |    |    |    |    |
 |          | if-then-else                      | *  |    |    |    |    |    |    |    |    |
-|          | let ... in                        | *  |    |    |    |    |    |    |    |    |
+|          | let ... in                        |    | *  |    |    |    |    |    |    |    |
 |          | ... where                         |    |    | *  |    |    |    |    |    |    |
-|          | ... assumption ...                |    | *  |    |    |    |    |    |    |    |
+|          | ... assumption ...                | *  |    |    |    |    |    |    |    |    |
 |          | match                             |    |    |    |    |    | *  |    |    |    |
 |          | Pattern matching on definition    |    |    |    |    |    | *  |    |    |    |
 |          | Operator overloading              |    |    |    |    |    |    | *  |    |    |
