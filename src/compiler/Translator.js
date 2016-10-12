@@ -88,16 +88,33 @@ function astToJavascript(ast, indentation = 0) {
     } else if (ast instanceof AST.Module) {
         const imports = ast.imports.map(i => astToJavascript(i, indentation)).join('\n');
 
-        const suffix = ast.declarations.length ==  0 && !ast.optionalExpression.isDefined() ? '' :
-            ast.declarations.length > 0 && !ast.optionalExpression.isDefined() ? '\n\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + '\n};' :
-            ast.declarations.length > 0 && ast.optionalExpression.isDefined() ? '\n\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + ',\n' + spaces(1) + '_$EXPR\n};' :
-            '\n\nmodule.exports = {\n' + spaces(1) + '_$EXPR\n};';
-
-
+        const suffix = ast.declarations.length == 0 && !ast.optionalExpression.isDefined() ? '\nmodule.exports = {\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
+            ast.declarations.length > 0 && !ast.optionalExpression.isDefined() ? '\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + ',\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
+                ast.declarations.length > 0 && ast.optionalExpression.isDefined() ? '\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + ',\n' + spaces(1) + '_$EXPR,\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
+                '\nmodule.exports = {\n' + spaces(1) + '_$EXPR,\n' + spaces(1) + '_$ASSUMPTIONS\n};';
 
         return (imports.length == 0 ? '' : imports + '\n\n')
             + ast.declarations.map(d => astToJavascript(d, indentation)).join('\n\n')
             + (ast.optionalExpression.isDefined() ? '\n\nconst _$EXPR = ' + astToJavascript(ast.optionalExpression.orElse(), indentation) + ';' : '')
+            + '\n\nconst _$ASSUMPTIONS = [].concat(\n'
+            + ast.imports.map(i => '  ' + i.id.name + '._$ASSUMPTIONS || []').join(',\n') + ');\n\n'
+            + '_$ASSUMPTIONS.push({\n'
+            + '  source: \'stream\',\n'
+            + '  declarations: [\n'
+            + ast.declarations.filter(d => d.assumptions.length > 0).map(d => '    {\n'
+            + '      name: \'' + d.name + '\',\n'
+            + '      predicates: [\n'
+            + d.assumptions.map(a =>
+            '        {\n'
+            + '          line: ' + a.line + ',\n'
+            + '          source: \'' + a.sourceName + '\',\n'
+            + '          text: \'' + a.text + '\',\n'
+            + '          predicate: () => ' + astToJavascript(a.expression, 6) + '\n'
+            + '        }').join(',\n') + '\n'
+            + '      ]\n'
+            + '    }').join(',\n') + '\n'
+            + '  ]\n'
+            + '});\n\n'
             + suffix;
     } else if (ast instanceof AST.Multiplication) {
         return '(' + astToJavascript(ast.left, indentation) + " * " + astToJavascript(ast.right, indentation) + ')';
@@ -107,9 +124,9 @@ function astToJavascript(ast, indentation = 0) {
         return '(' + astToJavascript(ast.left, indentation) + " + " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Subtraction) {
         return '(' + astToJavascript(ast.left, indentation) + " - " + astToJavascript(ast.right, indentation) + ')';
-    } else if  (ast instanceof AST.UnaryPlus) {
+    } else if (ast instanceof AST.UnaryPlus) {
         return '(+' + astToJavascript(ast.operand) + ')';
-    } else if  (ast instanceof AST.UnaryNegate) {
+    } else if (ast instanceof AST.UnaryNegate) {
         return '(-' + astToJavascript(ast.operand) + ')';
     }
 }

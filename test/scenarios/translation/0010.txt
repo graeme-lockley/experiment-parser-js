@@ -20,11 +20,23 @@ function greaterThanEqual(a) {
   return (b => (a >= b));
 }
 
+const _$ASSUMPTIONS = [].concat(
+);
+
+_$ASSUMPTIONS.push({
+  source: 'stream',
+  declarations: [
+
+  ]
+});
+
+
 module.exports = {
   lessThan,
   lessThanEqual,
   greaterThan,
-  greaterThanEqual
+  greaterThanEqual,
+  _$ASSUMPTIONS
 };
 -- run
 lessThan 10 11 && !(lessThan 11 10) &&

@@ -11,8 +11,20 @@ function add(a) {
 
 const ln = 3;
 
+const _$ASSUMPTIONS = [].concat(
+);
+
+_$ASSUMPTIONS.push({
+  source: 'stream',
+  declarations: [
+
+  ]
+});
+
+
 module.exports = {
   pi,
   add,
-  ln
+  ln,
+  _$ASSUMPTIONS
 };

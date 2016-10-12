@@ -10,7 +10,19 @@ function succ(n) {
   return (f => (x => f(n(f)(x))));
 }
 
+const _$ASSUMPTIONS = [].concat(
+);
+
+_$ASSUMPTIONS.push({
+  source: 'stream',
+  declarations: [
+
+  ]
+});
+
+
 module.exports = {
   zero,
-  succ
+  succ,
+  _$ASSUMPTIONS
 };

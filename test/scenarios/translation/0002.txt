@@ -11,8 +11,20 @@ function fib(n) {
     : (n + fib((n - 1))));
 }
 
+const _$ASSUMPTIONS = [].concat(
+);
+
+_$ASSUMPTIONS.push({
+  source: 'stream',
+  declarations: [
+
+  ]
+});
+
+
 module.exports = {
-  fib
+  fib,
+  _$ASSUMPTIONS
 };
 -- run
 fib 10 == 55

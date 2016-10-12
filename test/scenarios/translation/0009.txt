@@ -18,8 +18,20 @@ function funnyIdentityPlusOne(a) {
       })());
 }
 
+const _$ASSUMPTIONS = [].concat(
+);
+
+_$ASSUMPTIONS.push({
+  source: 'stream',
+  declarations: [
+
+  ]
+});
+
+
 module.exports = {
-  funnyIdentityPlusOne
+  funnyIdentityPlusOne,
+  _$ASSUMPTIONS
 };
 -- run
 funnyIdentityPlusOne 0 == 1
