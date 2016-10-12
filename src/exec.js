@@ -34,6 +34,33 @@ function repositoryHomeFromEnvironment() {
 }
 
 
+function executeTests(tests) {
+    let testCount = 0;
+    let successCount = 0;
+
+    for (let test of tests) {
+        for (let declaration of test.declarations) {
+            for (let predicate of declaration.predicates) {
+                testCount += 1;
+                try {
+                    if (predicate.predicate()) {
+                        successCount += 1;
+                    } else {
+                        console.log('Fail: ' + predicate.source + ': ' + predicate.line + ': ' + predicate.text);
+                    }
+                } catch (e) {
+                    console.log('Error:' + e + ': ' + predicate.source + ': ' + predicate.line + ': ' + predicate.text);
+                }
+            }
+        }
+    }
+
+    console.log('Success: ' + successCount + '/' + testCount);
+
+    return successCount == testCount;
+}
+
+
 const result = Sequence.seq()
     .assign('cmdLine', s => parseCommandLine())
     .assign('repositoryHome', s => repositoryHomeFromEnvironment())
@@ -42,9 +69,13 @@ const result = Sequence.seq()
     .assign('result', s => {
             const file = require(s.fileName);
 
-            return ('_$EXPR' in file) ? JSON.stringify(file['_$EXPR'])
-                : ('main' in file) ? file['main'](cmdLine.args)
-                : file;
+            if (executeTests(file._$ASSUMPTIONS)) {
+                return ('_$EXPR' in file) ? JSON.stringify(file['_$EXPR'])
+                    : ('main' in file) ? file['main'](cmdLine.args)
+                    : file;
+            } else {
+                return Result.Error('Assumptions failed');
+            }
         },
         s => 'Executing script'
     )
