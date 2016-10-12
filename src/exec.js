@@ -71,7 +71,7 @@ const result = Sequence.seq()
 
             if (executeTests(file._$ASSUMPTIONS)) {
                 return ('_$EXPR' in file) ? JSON.stringify(file['_$EXPR'])
-                    : ('main' in file) ? file['main'](cmdLine.args)
+                    : ('main' in file) ? file['main'](s.cmdLine.args)
                     : file;
             } else {
                 return Result.Error('Assumptions failed');
