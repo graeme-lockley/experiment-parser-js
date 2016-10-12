@@ -38,13 +38,14 @@ const TokenEnum = {
     STAR: 29,
 
     AS: 30,
-    ELSE: 31,
-    FALSE: 32,
-    IF: 33,
-    IMPORT: 34,
-    O: 35,
-    THEN: 36,
-    TRUE: 37
+    ASSUMPTIONS: 31,
+    ELSE: 32,
+    FALSE: 33,
+    IF: 34,
+    IMPORT: 35,
+    O: 36,
+    THEN: 37,
+    TRUE: 38
 };
 
 const symbols = [
@@ -75,6 +76,7 @@ const symbols = [
 
 const reservedIdentifiers = {
     'as': TokenEnum.AS,
+    'assumptions': TokenEnum.ASSUMPTIONS,
     'else': TokenEnum.ELSE,
     'false': TokenEnum.FALSE,
     'if': TokenEnum.IF,
