@@ -18,6 +18,17 @@ class Apply {
 }
 
 
+class Assumption {
+    constructor(sourceName, line, text, expression) {
+        this.type = 'ASSUMPTION';
+        this.sourceName = sourceName;
+        this.line = line;
+        this.text = text;
+        this.expression = expression;
+    }
+}
+
+
 class BooleanAnd {
     constructor(expressions) {
         this.type = 'BOOLEAN_AND';
@@ -99,10 +110,11 @@ class ConstantURL {
 
 
 class Declaration {
-    constructor(name, expression) {
+    constructor(name, expression, assumptions) {
         this.type = 'DECLARATION';
         this.name = name;
         this.expression = expression;
+        this.assumptions = assumptions;
     }
 }
 
@@ -283,6 +295,7 @@ class UnaryNegate {
 
 
 module.exports = {
+    Assumption,
     Addition,
     Apply,
     BooleanAnd,
