@@ -61,7 +61,8 @@ aaa b c d = if b || c || d then c || d else b || d;
             ]
           }
         }
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

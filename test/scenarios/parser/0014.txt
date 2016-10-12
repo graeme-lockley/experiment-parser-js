@@ -39,7 +39,8 @@ maxNumber = Integer.max 10 20;
             "value": 20
           }
         ]
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

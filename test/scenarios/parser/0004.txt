@@ -75,7 +75,8 @@ aaa b c d = if b && c || d then b || c && d else b || d;
             ]
           }
         }
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

@@ -26,7 +26,8 @@ sumLots a b c d = a * b / c * d;
             "name": "b"
           }
         }
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -64,7 +65,8 @@ sumLots a b c d = a * b / c * d;
             "name": "d"
           }
         }
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

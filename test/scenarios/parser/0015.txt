@@ -16,7 +16,8 @@ constantFalse = false;
       "expression": {
         "type": "CONSTANT_INTEGER",
         "value": 10
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -24,7 +25,8 @@ constantFalse = false;
       "expression": {
         "type": "CONSTANT_CHARACTER",
         "value": "w"
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -32,7 +34,8 @@ constantFalse = false;
       "expression": {
         "type": "CONSTANT_CHARACTER",
         "value": "\n"
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -40,7 +43,8 @@ constantFalse = false;
       "expression": {
         "type": "CONSTANT_STRING",
         "value": "Hello\n\"\\World"
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -48,7 +52,8 @@ constantFalse = false;
       "expression": {
         "type": "CONSTANT_BOOLEAN",
         "value": true
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -56,7 +61,8 @@ constantFalse = false;
       "expression": {
         "type": "CONSTANT_BOOLEAN",
         "value": false
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

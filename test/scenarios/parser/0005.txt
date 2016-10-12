@@ -28,7 +28,8 @@ intNqBool a b c = a != b != c;
             "name": "b"
           }
         }
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -50,7 +51,8 @@ intNqBool a b c = a != b != c;
             "name": "b"
           }
         }
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -80,7 +82,8 @@ intNqBool a b c = a != b != c;
             "name": "c"
           }
         }
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -110,7 +113,8 @@ intNqBool a b c = a != b != c;
             "name": "c"
           }
         }
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

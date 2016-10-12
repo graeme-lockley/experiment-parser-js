@@ -26,7 +26,8 @@ funnyPlus a b c x = (a o b o c) x;
             "name": "b"
           }
         }
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -66,7 +67,8 @@ funnyPlus a b c x = (a o b o c) x;
             }
           ]
         }
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

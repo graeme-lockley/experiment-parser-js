@@ -35,7 +35,8 @@ funnyMinus a b = -a + -b / - + b;
             ]
           }
         }
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -76,7 +77,8 @@ funnyMinus a b = -a + -b / - + b;
             }
           }
         }
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -117,7 +119,8 @@ funnyMinus a b = -a + -b / - + b;
             }
           }
         }
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

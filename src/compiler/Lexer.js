@@ -91,7 +91,7 @@ function isWhitespace(c) {
 }
 
 function isEndOfLine(c) {
-    return c == 13;
+    return c == 10;
 }
 
 function isDigit(c) {
@@ -112,7 +112,7 @@ function isIdentifierRest(c) {
 }
 
 class Context {
-    constructor(input, id, x, y, index, indexX, indexY, text) {
+    constructor(input, id, x, y, index, indexX, indexY, indexXY, text) {
         this.input = input;
         this._id = id;
         this._x = x;
@@ -120,6 +120,7 @@ class Context {
         this.index = index;
         this.indexX = indexX;
         this.indexY = indexY;
+        this._indexXY = indexXY;
         this._text = text;
     }
 
@@ -129,7 +130,7 @@ class Context {
             indexX: this.indexX,
             indexY: this.indexY,
 
-            indexXY: this.index,
+            _indexXY: this.index,
             x: this.indexX,
             y: this.indexY,
 
@@ -170,12 +171,12 @@ class Context {
                 }
             },
             markStartOfToken: function () {
-                this.indexXY = this.index;
+                this._indexXY = this.index;
                 this.x = this.indexX;
                 this.y = this.indexY;
             },
             text: function () {
-                return this.content.substr(this.indexXY, this.index - this.indexXY);
+                return this.content.substr(this._indexXY, this.index - this._indexXY);
             },
             clone: function () {
                 var temp = this.constructor();
@@ -319,21 +320,34 @@ class Context {
         return this._y;
     }
 
+    get indexXY() {
+        return this._indexXY;
+    }
+
+    streamText(indexStart, indexEnd) {
+        return this.input.content.substring(indexStart, indexEnd);
+    }
+
+    get sourceName() {
+        return this.input.sourceName;
+    }
+
     newContext(id, cursor) {
-        return new Context(this.input, id, cursor.x, cursor.y, cursor.index, cursor.indexX, cursor.indexY, cursor.text());
+        return new Context(this.input, id, cursor.x, cursor.y, cursor.index, cursor.indexX, cursor.indexY, cursor._indexXY, cursor.text());
     }
 }
 
-function initialContext(input) {
+function initialContext(input, sourceName) {
     const lexerInput = {
         content: input,
-        length: input.length
+        length: input.length,
+        sourceName: sourceName
     };
     return new Context(lexerInput, 0, 1, 1, 0, 1, 1, '').next();
 }
 
-function fromString(input) {
-    return initialContext(input);
+function fromString(input, sourceName = 'stream') {
+    return initialContext(input, sourceName);
 }
 
 

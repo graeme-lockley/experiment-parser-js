@@ -70,7 +70,8 @@ aaa b c d = {
             }
           ]
         }
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

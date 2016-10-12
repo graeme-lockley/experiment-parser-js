@@ -123,4 +123,28 @@ describe('Lexer', () => {
         it('should return text of "file:../src/hello\\ world"', () => expect(context.text).to.equal('file:../src/hello\\ world'));
         it('should return AS for next', () => expect(context.next().id).to.equal(Lexer.TokenEnum.AS));
     });
+
+    describe('with input "someID\n1 { a = b }" against the named source "bob.sl"', () => {
+        const context = Lexer.fromString("someID\n1 { a = b }", 'bob.sl');
+        const contents = scanSource(context);
+
+        it('should return 8 tokens', () => expect(contents.length).to.equal(8));
+        it('should return the source name', () => expect(context.sourceName).to.equal('bob.sl'));
+        it('should return 2 for line number of left curly', () => expect(contents[2].y).to.equal(2));
+        it('should return " a = b " for the content between { and }', () => expect(context.streamText(contents[2].indexXY + 1, contents[6].indexXY - 1)))
+    });
 });
+
+
+function scanSource(source) {
+    const result = [];
+    let token = source;
+    while (true) {
+        result.push(token);
+        if (token.id == Lexer.TokenEnum.EOF) {
+            return result;
+        } else {
+            token = token.next();
+        }
+    }
+}

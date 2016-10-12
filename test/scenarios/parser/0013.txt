@@ -11,7 +11,8 @@ callFunctionWithUnit = unitValue ();
       "name": "unitValue",
       "expression": {
         "type": "CONSTANT_UNIT"
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -27,7 +28,8 @@ callFunctionWithUnit = unitValue ();
             "type": "CONSTANT_UNIT"
           }
         ]
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

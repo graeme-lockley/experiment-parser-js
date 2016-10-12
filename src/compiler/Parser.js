@@ -33,14 +33,43 @@ function parseIMPORT(lexer) {
 }
 
 
+function markLocation(parser) {
+    return lexer => {
+        const startToken = lexer;
+        const result = parser(lexer);
+        return result.map(
+            ok => Result.Ok(Tuple.Tuple([startToken, ok.snd, ok.fst], ok.snd)),
+            error => result
+        );
+    };
+}
+
+
 function parseDECL(lexer) {
     return P.and([
         P.many1(parseIdentifier),
         P.symbol(Lexer.TokenEnum.EQUAL),
         parseEXPR1,
+        P.option(
+           P.and([
+               P.symbol(Lexer.TokenEnum.ASSUMPTIONS),
+               P.symbol(Lexer.TokenEnum.LEFT_CURLY),
+               P.sepBy1(markLocation(parseEXPR1), P.symbol(Lexer.TokenEnum.SEMICOLON)),
+               P.symbol(Lexer.TokenEnum.RIGHT_CURLY)
+           ], es => {
+               return es[2].map(a => {
+                   const startIndexXY = a[0].indexXY;
+                   const endIndexXY = a[1].indexXY;
+                   const text = lexer.streamText(startIndexXY, endIndexXY).trim();
+                   return new AST.Assumption(lexer.sourceName, a[0].y, text, a[2])
+               });
+           })
+        ),
         P.symbol(Lexer.TokenEnum.SEMICOLON)
-    ], elements =>
-        elements[0].length == 1 ? new AST.Declaration(elements[0][0].name, elements[2]) : new AST.Declaration(elements[0][0].name, new AST.Lambda(elements[0].slice(1).map(n => n.name), elements[2])))(lexer);
+    ], elements => {
+            const assumptions = elements[3].orElse([]);
+            return elements[0].length == 1 ? new AST.Declaration(elements[0][0].name, elements[2], assumptions) : new AST.Declaration(elements[0][0].name, new AST.Lambda(elements[0].slice(1).map(n => n.name), elements[2]), assumptions)
+        })(lexer);
 }
 
 

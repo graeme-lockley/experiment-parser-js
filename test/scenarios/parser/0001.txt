@@ -30,7 +30,8 @@ aaa b c d = if (b) then c else d;
             "name": "d"
           }
         }
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

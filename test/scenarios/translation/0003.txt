@@ -74,7 +74,8 @@ length xs =
             ]
           }
         ]
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -135,7 +136,8 @@ length xs =
             }
           }
         }
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}

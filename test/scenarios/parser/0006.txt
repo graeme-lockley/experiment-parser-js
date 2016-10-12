@@ -29,7 +29,8 @@ mixItUp a b c = a < b <= c;
             "name": "b"
           }
         }
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -51,7 +52,8 @@ mixItUp a b c = a < b <= c;
             "name": "b"
           }
         }
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -73,7 +75,8 @@ mixItUp a b c = a < b <= c;
             "name": "b"
           }
         }
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -95,7 +98,8 @@ mixItUp a b c = a < b <= c;
             "name": "b"
           }
         }
-      }
+      },
+      "assumptions": []
     },
     {
       "type": "DECLARATION",
@@ -125,7 +129,8 @@ mixItUp a b c = a < b <= c;
             "name": "c"
           }
         }
-      }
+      },
+      "assumptions": []
     }
   ],
   "optionalExpression": {}
