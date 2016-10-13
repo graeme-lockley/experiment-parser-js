@@ -19,7 +19,7 @@ class Repository {
         if (scriptName.endsWith('.sl')) {
             const seq = Sequence.seq()
                 .assign('content', s => readFile(scriptName))
-                .assign('ast', s => Parser.parseString(s.content), s => 'Parsing ' + scriptName)
+                .assign('ast', s => Parser.parseString(s.content, scriptName), s => 'Parsing ' + scriptName)
                 .assign('dirname', s => this.translateName(Path.dirname(scriptName)))
                 .assign('_', s => {
                     mkdirp(s.dirname);
