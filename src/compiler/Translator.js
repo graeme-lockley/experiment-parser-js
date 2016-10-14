@@ -20,6 +20,14 @@ const infixOperators = {
     '/': '(_$a => (_$b => (_$a / _$b)))'
 };
 
+
+function encodeString(s) {
+    return s
+        .replace('\n', '\\n')
+        .replace('"', '\\"');
+}
+
+
 function astToJavascript(ast, indentation = 0) {
     function spaces(count) {
         return '  '.repeat(count);
@@ -45,7 +53,7 @@ function astToJavascript(ast, indentation = 0) {
     } else if (ast instanceof AST.ConstantInteger) {
         return ast.value;
     } else if (ast instanceof AST.ConstantString) {
-        return '"' + ast.value + '"';
+        return '"' + encodeString(ast.value) + '"';
     } else if (ast instanceof AST.ConstantUnit) {
         return 'undefined';
     } else if (ast instanceof AST.Declaration) {
