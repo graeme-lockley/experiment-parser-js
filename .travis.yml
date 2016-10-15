@@ -4,3 +4,8 @@ node_js:
 
 before_script:
   - npm install -g mocha
+
+env:
+  - BASE=v1
+
+script: cd $BASE ; npm install ; npm test
