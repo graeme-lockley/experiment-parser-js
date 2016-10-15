@@ -107,7 +107,7 @@ function astToJavascript(ast, indentation = 0) {
             + '\n\nconst _$ASSUMPTIONS = [].concat(\n'
             + ast.imports.map(i => '  ' + i.id.name + '._$ASSUMPTIONS || []').join(',\n') + ');\n\n'
             + '_$ASSUMPTIONS.push({\n'
-            + '  source: \'stream\',\n'
+            + '  source: \'' + simplifyPath(encodeString(ast.sourceName)) + '\',\n'
             + '  declarations: [\n'
             + ast.declarations.filter(d => d.assumptions.length > 0).map(d => '    {\n'
             + '      name: \'' + d.name + '\',\n'
@@ -115,8 +115,8 @@ function astToJavascript(ast, indentation = 0) {
             + d.assumptions.map(a =>
             '        {\n'
             + '          line: ' + a.line + ',\n'
-            + '          source: \'' + a.sourceName + '\',\n'
-            + '          text: \'' + a.text + '\',\n'
+            + '          source: \'' + simplifyPath(encodeString(a.sourceName)) + '\',\n'
+            + '          text: \'' + encodeString(a.text) + '\',\n'
             + '          predicate: () => ' + astToJavascript(a.expression, 6) + '\n'
             + '        }').join(',\n') + '\n'
             + '      ]\n'
@@ -136,6 +136,19 @@ function astToJavascript(ast, indentation = 0) {
         return '(+' + astToJavascript(ast.operand) + ')';
     } else if (ast instanceof AST.UnaryNegate) {
         return '(-' + astToJavascript(ast.operand) + ')';
+    }
+}
+
+
+function simplifyPath(path) {
+    let candidateResult = path;
+    while (true) {
+        const result = candidateResult.replace('/./', '/');
+        if (result == candidateResult) {
+            return result;
+        } else {
+            candidateResult = result;
+        }
     }
 }
 

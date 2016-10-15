@@ -224,8 +224,9 @@ class LessThanEqual {
 
 
 class Module {
-    constructor(imports, declarations, optionalExpression) {
+    constructor(sourceName, imports, declarations, optionalExpression) {
         this.type = 'MODULE';
+        this.sourceName = sourceName;
         this.imports = imports;
         this.declarations = declarations;
         this.optionalExpression = optionalExpression;

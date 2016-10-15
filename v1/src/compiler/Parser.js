@@ -18,7 +18,7 @@ function parseMODULE(lexer) {
         P.many(parseIMPORT),
         P.many(parseDECL),
         P.option(parseEXPR1)
-    ], e => new AST.Module(e[0], e[1], e[2]))(lexer);
+    ], e => new AST.Module(lexer.sourceName, e[0], e[1], e[2]))(lexer);
 }
 
 
@@ -317,6 +317,7 @@ function parseConstantUnit(lexer) {
 
 
 function parseString(input, sourceName = 'stream') {
+    console.log('sourceName: ' + sourceName);
     const parseResult =
         P.and([parseMODULE, P.symbol(Lexer.TokenEnum.EOF)], (elements => elements[0]))(Lexer.fromString(input, sourceName));
 
