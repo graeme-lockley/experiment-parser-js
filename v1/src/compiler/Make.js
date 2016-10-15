@@ -2,6 +2,8 @@
 
 const FS = require('fs');
 const Path = require('path');
+const {NodeVM} = require('vm2');
+
 
 const Parser = require('./Parser');
 const Translator = require('./Translator');
@@ -53,6 +55,97 @@ class Repository {
         }
     }
 
+    build(options, files) {
+        const sourceDir = simplifyPath(options.srcDir || './src');
+        const outputDir = simplifyPath(options.outputDir || './output');
+
+        const testFileNames = {};
+
+        files.forEach(file => {
+            const fileSourceDir = simplifyPath(file.startsWith('/') ? file : sourceDir + '/' + file);
+
+            function walk(d) {
+                FS.readdirSync(d).forEach(sourceFile => {
+                    const fileName = d + '/' + sourceFile;
+                    if (fileName.endsWith('.sl')) {
+                        const targetFileName = (n => n.substring(0, n.length - 3) + '.js')(mapToOutputFileName(sourceDir, outputDir, fileName));
+
+                        console.log(`Compiling: ${fileName}`);
+                        const content = readFile(fileName);
+
+                        const astResult = Parser.parseString(content, fileName);
+                        if (astResult.isOk()) {
+                            const translationResult = Translator.astToJavascript(astResult.getOkOrElse());
+                            writeFile(targetFileName, translationResult);
+
+                            testFileNames[targetFileName] = true;
+                        } else {
+                            console.log(`Parsing error: ${fileName}: ${astResult.getErrorOrElse()}`);
+                            return astResult;
+                        }
+                    } else {
+                        if (fileExists(fileName)) {
+                            const content = readFile(fileName);
+                            const outputFileName = mapToOutputFileName(sourceDir, outputDir, fileName);
+                            writeFile(outputFileName, content);
+                        } else if (dirExists(fileName)) {
+                            walk(fileName);
+                        } else {
+                            console.log(`skipping ${sourceFile}`);
+                        }
+                    }
+                });
+            }
+
+            walk(fileSourceDir);
+        });
+
+
+        const haveRun = {};
+        let testCount = 0;
+        let testPassed = 0;
+        for (var testFileName in testFileNames) {
+            const vm = new NodeVM({
+                console: 'inherit',
+                sandbox: {},
+                require: {
+                    external: true
+                },
+                wrapper: 'none',
+            });
+
+            vm.run('const x = require("' + testFileName + '");\n return x._$ASSUMPTIONS;', process.cwd() + '/stream.js').forEach(module => {
+                if (!(module.source in haveRun)) {
+                    console.log(module.source);
+                    module.declarations.forEach(declaration => {
+                        console.log(`  ${declaration.name}`);
+                        declaration.predicates.forEach(predicate => {
+                            testCount += 1;
+                            try {
+                                if (predicate.predicate()) {
+                                    console.log(`    Passed: ${predicate.line}: ${predicate.text}`);
+                                    testPassed += 1;
+                                } else {
+                                    console.log(`    Failed: ${predicate.line}: ${predicate.text}`);
+                                }
+                            } catch (e) {
+                                console.log(`    Error: ${predicate.line}: ${predicate.text}: ${e}`);
+                            }
+                        });
+                    });
+                    haveRun[module.source] = true;
+                }
+            });
+        }
+
+        return {
+            totalModules: Object.keys(testFileNames).length,
+            numberTests: testCount,
+            passed: testPassed,
+            failed: testCount - testPassed
+        };
+    }
+
     translateName(scriptName) {
         return this.home + scriptName;
     }
@@ -72,6 +165,7 @@ function readFile(fileName) {
 
 
 function writeFile(fileName, content) {
+    mkdirp(Path.dirname(fileName));
     FS.writeFileSync(fileName, content);
 }
 
@@ -106,6 +200,33 @@ function fileExists(fileName) {
     } catch (e) {
         return false;
     }
+}
+
+function simplifyPath(path) {
+    let candidateResult = path;
+    while (true) {
+        const result = candidateResult.replace('/./', '/').replace('//', '/');
+        if (result == candidateResult) {
+            if (result.endsWith('/.')) {
+                return result.substring(0, result.length - 2);
+            } else {
+                return result;
+            }
+        } else {
+            candidateResult = result;
+        }
+    }
+}
+
+function mapToOutputFileName(srcDir, outputDir, fileName) {
+    let result = '';
+    if (fileName.startsWith(fileName)) {
+        result = simplifyPath(outputDir + '/' + fileName.substring(srcDir.length));
+    } else {
+        result = simplifyPath(outputDir + '/' + fileName);
+    }
+    // console.log(`mapToOutputFileName(${srcDir}, ${outputDir}, ${fileName}) -> [${result}]`);
+    return result;
 }
 
 

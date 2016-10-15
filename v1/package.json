@@ -9,7 +9,8 @@
   "scripts": {
     "test": "mocha --recursive",
     "repl": "node src/repl.js",
-    "exec": "node src/exec.js"
+    "exec": "node src/exec.js",
+    "build": "node src/build.js"
   },
   "repository": {
     "type": "git",
