@@ -1,5 +1,3 @@
-"use strict";
-
 class OkImpl {
     constructor(value) {
         this._ok = value;
@@ -21,7 +19,11 @@ class OkImpl {
         return elseValue;
     }
 
-    map(okFn, errorFn) {
+    unflatMap(okFn, _) {
+        return new OkImpl(okFn(this._ok));
+    }
+
+    map(okFn, _) {
         return okFn(this._ok);
     }
 
@@ -56,7 +58,11 @@ class ErrorImpl {
         return this._error;
     }
 
-    map(okFn, errorFn) {
+    unflatMap(_, errorFn) {
+        return new ErrorImpl(errorFn(this._error));
+    }
+
+    map(_, errorFn) {
         return errorFn(this._error);
     }
 
@@ -75,17 +81,22 @@ function Ok(value) {
     return new OkImpl(value);
 }
 
-
 function Error(value) {
     return new ErrorImpl(value);
 }
 
+function map(okFn) {
+    return errorFn => r => r.map(okFn, errorFn);
+}
+
+function flatMap(okFn) {
+    return errorFn => r => r.flatMap(okFn, errorFn);
+}
 
 function is(value) {
     return value instanceof OkImpl || value instanceof ErrorImpl;
 }
 
-
 module.exports = {
-    Ok, Error, is
+    Ok, Error, map, flatMap, is
 };
