@@ -3,7 +3,6 @@
 const NodeREPL = require('repl');
 const VM = require('vm');
 
-const Array = require('./core/Array');
 const Parser = require('./compiler/Parser');
 const Translator = require('./compiler/Translator');
 
