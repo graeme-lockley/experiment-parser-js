@@ -7,5 +7,6 @@ before_script:
 
 env:
   - BASE=v1
+  - BASE=v2
 
 script: cd $BASE ; npm install ; npm run build ; npm test
