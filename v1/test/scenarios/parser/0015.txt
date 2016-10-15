@@ -8,6 +8,7 @@ constantFalse = false;
 -- ast
 {
   "type": "MODULE",
+  "sourceName": "stream",
   "imports": [],
   "declarations": [
     {

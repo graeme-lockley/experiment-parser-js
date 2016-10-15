@@ -4,6 +4,7 @@ funnyPlus a b c x = (a o b o c) x;
 -- ast
 {
   "type": "MODULE",
+  "sourceName": "stream",
   "imports": [],
   "declarations": [
     {

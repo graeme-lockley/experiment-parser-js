@@ -6,6 +6,7 @@ intNqBool a b c = a != b != c;
 -- ast
 {
   "type": "MODULE",
+  "sourceName": "stream",
   "imports": [],
   "declarations": [
     {

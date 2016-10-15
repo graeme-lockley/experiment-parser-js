@@ -4,6 +4,7 @@ import file:../src/core/Tuple as Tuple;
 -- ast
 {
   "type": "MODULE",
+  "sourceName": "stream",
   "imports": [
     {
       "type": "IMPORT",

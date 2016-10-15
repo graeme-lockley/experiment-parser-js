@@ -5,6 +5,7 @@ funnyMinus a b = -a + -b / - + b;
 -- ast
 {
   "type": "MODULE",
+  "sourceName": "stream",
   "imports": [],
   "declarations": [
     {

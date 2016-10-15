@@ -15,6 +15,7 @@ prefixDivide a b = (/) a b;
 -- ast
 {
   "type": "MODULE",
+  "sourceName": "stream",
   "imports": [],
   "declarations": [
     {

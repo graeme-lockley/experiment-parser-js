@@ -4,6 +4,7 @@ concat4 a b c d = (concat2 a b) ++ c ++ d;
 -- ast
 {
   "type": "MODULE",
+  "sourceName": "stream",
   "imports": [],
   "declarations": [
     {

@@ -5,6 +5,7 @@ maxNumber = Integer.max 10 20;
 -- ast
 {
   "type": "MODULE",
+  "sourceName": "stream",
   "imports": [
     {
       "type": "IMPORT",

@@ -4,6 +4,7 @@ callFunctionWithUnit = unitValue ();
 -- ast
 {
   "type": "MODULE",
+  "sourceName": "stream",
   "imports": [],
   "declarations": [
     {

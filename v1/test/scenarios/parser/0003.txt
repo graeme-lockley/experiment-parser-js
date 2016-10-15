@@ -3,6 +3,7 @@ aaa b c d = if b || c || d then c || d else b || d;
 -- ast
 {
   "type": "MODULE",
+  "sourceName": "stream",
   "imports": [],
   "declarations": [
     {

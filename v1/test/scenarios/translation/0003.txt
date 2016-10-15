@@ -11,6 +11,7 @@ length xs =
 -- ast
 {
   "type": "MODULE",
+  "sourceName": "stream",
   "imports": [
     {
       "type": "IMPORT",
