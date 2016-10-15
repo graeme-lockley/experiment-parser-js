@@ -317,7 +317,6 @@ function parseConstantUnit(lexer) {
 
 
 function parseString(input, sourceName = 'stream') {
-    console.log('sourceName: ' + sourceName);
     const parseResult =
         P.and([parseMODULE, P.symbol(Lexer.TokenEnum.EOF)], (elements => elements[0]))(Lexer.fromString(input, sourceName));
 
