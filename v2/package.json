@@ -10,7 +10,7 @@
     "test": "cd output && mocha --recursive",
     "repl": "node output/src/repl.js",
     "exec": "node output/src/exec.js",
-    "build": "node ../v1/src/build.js --outputDir=./output/src --srcDir=./src . && node ../v1/src/build.js --outputDir=./output/test --srcDir=./test ."
+    "build": "export NODE_PATH=./node_modules:`npm root -g` && node ../v1/src/build.js --outputDir=./output/src --srcDir=./src . && node ../v1/src/build.js --outputDir=./output/test --srcDir=./test ."
   },
   "repository": {
     "type": "git",
