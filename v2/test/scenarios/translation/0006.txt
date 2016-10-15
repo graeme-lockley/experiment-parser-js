@@ -1,0 +1,6 @@
+-- given a constant character confirm it's ASCII code
+import file:./lib/Character as Character;
+
+letterA = Character.code 'A';
+-- run
+letterA == 65

@@ -8,4 +8,4 @@ before_script:
 env:
   - BASE=v1
 
-script: cd $BASE ; npm install ; npm test
+script: cd $BASE ; npm install ; npm run build ; npm test

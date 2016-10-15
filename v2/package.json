@@ -1,16 +1,16 @@
 {
   "name": "experiment-parser-js",
   "version": "1.0.0",
-  "description": "A parser for a lambda based language written in JavaScript",
+  "description": "A compiler for a lambda based language written in JavaScript written in the language",
   "main": "index.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "mocha --recursive",
-    "repl": "node src/repl.js",
-    "exec": "node src/exec.js",
-    "build": "echo done"
+    "test": "cd output && mocha --recursive",
+    "repl": "node output/src/repl.js",
+    "exec": "node output/src/exec.js",
+    "build": "node ../v1/src/build.js --outputDir=./output/src --srcDir=./src . && node ../v1/src/build.js --outputDir=./output/test --srcDir=./test ."
   },
   "repository": {
     "type": "git",

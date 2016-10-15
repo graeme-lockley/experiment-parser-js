@@ -1,0 +1,4 @@
+-- given an expression containing string concatenation
+value = "hello" ++ " " ++ "world";
+-- run
+value == "hello world"

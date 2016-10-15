@@ -1,0 +1,8 @@
+-- given a collection of boolean expressions
+a = true;
+b = false;
+andCalc = a && !b;
+orCalc = a || b;
+mixedCalc = a && !b || b;
+-- run
+andCalc && orCalc && mixedCalc

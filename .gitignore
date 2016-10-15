@@ -3,3 +3,5 @@ node_modules/
 *.ipr
 *.iws
 *.iml
+v1/output/
+v2/output/

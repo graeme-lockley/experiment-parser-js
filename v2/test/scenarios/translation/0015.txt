@@ -1,0 +1,52 @@
+-- given a set of assumptions associated with a declaration
+import file:./lib/List as List;
+
+fold op i xs =
+    if List.isNil xs then
+        List.Nil
+    else
+        fold op (op i List.head) List.tail
+assumptions {
+    fold (+) 0 List.Nil == 0;
+    fold (+) 1 (List.Cons 1 (List.Cons 2 (List.Cons 3 List.Nil))) == 6
+};
+-- js
+const List = require('./lib/List');
+
+function fold(op) {
+  return (i => (xs => (List.isNil(xs)
+    ? List.Nil
+    : fold(op)(op(i)(List.head))(List.tail))));
+}
+
+const _$ASSUMPTIONS = [].concat(
+  List._$ASSUMPTIONS || []);
+
+_$ASSUMPTIONS.push({
+  source: 'stream',
+  declarations: [
+    {
+      name: 'fold',
+      predicates: [
+        {
+          line: 9,
+          source: 'stream',
+          text: 'fold (+) 0 List.Nil == 0',
+          predicate: () => (fold((_$a => (_$b => (_$a + _$b))))(0)(List.Nil) == 0)
+        },
+        {
+          line: 10,
+          source: 'stream',
+          text: 'fold (+) 1 (List.Cons 1 (List.Cons 2 (List.Cons 3 List.Nil))) == 6',
+          predicate: () => (fold((_$a => (_$b => (_$a + _$b))))(1)(List.Cons(1)(List.Cons(2)(List.Cons(3)(List.Nil)))) == 6)
+        }
+      ]
+    }
+  ]
+});
+
+
+module.exports = {
+  fold,
+  _$ASSUMPTIONS
+};

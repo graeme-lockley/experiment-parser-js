@@ -1,0 +1,28 @@
+-- given an expression containing infix operators as prefix operators
+doOr x y = (||) x y;
+doAnd x y = (&&) x y;
+doEqual x y = (==) x y;
+doNotEqual x y = (!=) x y;
+doLessThan x y = (<) x y;
+doLessThanEqual x y = (<=) x y;
+doGreaterThan x y = (>) x y;
+doGreaterThanEqual x y = (>=) x y;
+doPlusPlus x y = (++) x y;
+doPlus x y = (+) x y;
+doMinus x y = (-) x y;
+doMultiply x y = (*) x y;
+doDivide x y = (/) x y;
+-- run
+doOr true false &&
+doAnd true true &&
+doEqual "hello" "hello" &&
+doNotEqual "hello" "world" &&
+doLessThan 11 12 &&
+doLessThanEqual 12 12 &&
+doGreaterThan 13 12 &&
+doGreaterThanEqual 13 13 &&
+doPlusPlus "hello" "world" == "helloworld" &&
+doPlus 1 2 == 3 &&
+doMinus 2 1 == 1 &&
+doMultiply 2 5 == 10 &&
+doDivide 10 2 == 5

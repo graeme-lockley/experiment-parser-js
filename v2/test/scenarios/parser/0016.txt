@@ -1,0 +1,217 @@
+-- given a set of assumptions associated with a declaration
+import file:./lib/List as List;
+
+fold op i xs =
+    if List.isNil xs then
+        List.Nil
+    else
+        fold op (op i List.head) List.tail
+assumptions {
+    fold (+) 0 List.Nil == 0;
+    fold (+) 1 (List.Cons 1 (List.Cons 2 (List.Cons 3 List.Nil))) == 6
+};
+-- ast
+{
+  "type": "MODULE",
+  "sourceName": "stream",
+  "imports": [
+    {
+      "type": "IMPORT",
+      "url": {
+        "type": "CONSTANT_URL",
+        "value": "file:./lib/List"
+      },
+      "id": {
+        "type": "IDENTIFIER",
+        "name": "List"
+      }
+    }
+  ],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "fold",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "op",
+          "i",
+          "xs"
+        ],
+        "expression": {
+          "type": "IF",
+          "ifExpr": {
+            "type": "APPLY",
+            "expressions": [
+              {
+                "type": "QUALIFIED_IDENTIFIER",
+                "module": "List",
+                "identifier": "isNil"
+              },
+              {
+                "type": "IDENTIFIER",
+                "name": "xs"
+              }
+            ]
+          },
+          "thenExpr": {
+            "type": "QUALIFIED_IDENTIFIER",
+            "module": "List",
+            "identifier": "Nil"
+          },
+          "elseExpr": {
+            "type": "APPLY",
+            "expressions": [
+              {
+                "type": "IDENTIFIER",
+                "name": "fold"
+              },
+              {
+                "type": "IDENTIFIER",
+                "name": "op"
+              },
+              {
+                "type": "APPLY",
+                "expressions": [
+                  {
+                    "type": "IDENTIFIER",
+                    "name": "op"
+                  },
+                  {
+                    "type": "IDENTIFIER",
+                    "name": "i"
+                  },
+                  {
+                    "type": "QUALIFIED_IDENTIFIER",
+                    "module": "List",
+                    "identifier": "head"
+                  }
+                ]
+              },
+              {
+                "type": "QUALIFIED_IDENTIFIER",
+                "module": "List",
+                "identifier": "tail"
+              }
+            ]
+          }
+        }
+      },
+      "assumptions": [
+        {
+          "type": "ASSUMPTION",
+          "sourceName": "stream",
+          "line": 9,
+          "text": "fold (+) 0 List.Nil == 0",
+          "expression": {
+            "type": "EQUAL",
+            "left": {
+              "type": "APPLY",
+              "expressions": [
+                {
+                  "type": "IDENTIFIER",
+                  "name": "fold"
+                },
+                {
+                  "type": "INFIX_OPERATOR",
+                  "operator": "+"
+                },
+                {
+                  "type": "CONSTANT_INTEGER",
+                  "value": 0
+                },
+                {
+                  "type": "QUALIFIED_IDENTIFIER",
+                  "module": "List",
+                  "identifier": "Nil"
+                }
+              ]
+            },
+            "right": {
+              "type": "CONSTANT_INTEGER",
+              "value": 0
+            }
+          }
+        },
+        {
+          "type": "ASSUMPTION",
+          "sourceName": "stream",
+          "line": 10,
+          "text": "fold (+) 1 (List.Cons 1 (List.Cons 2 (List.Cons 3 List.Nil))) == 6",
+          "expression": {
+            "type": "EQUAL",
+            "left": {
+              "type": "APPLY",
+              "expressions": [
+                {
+                  "type": "IDENTIFIER",
+                  "name": "fold"
+                },
+                {
+                  "type": "INFIX_OPERATOR",
+                  "operator": "+"
+                },
+                {
+                  "type": "CONSTANT_INTEGER",
+                  "value": 1
+                },
+                {
+                  "type": "APPLY",
+                  "expressions": [
+                    {
+                      "type": "QUALIFIED_IDENTIFIER",
+                      "module": "List",
+                      "identifier": "Cons"
+                    },
+                    {
+                      "type": "CONSTANT_INTEGER",
+                      "value": 1
+                    },
+                    {
+                      "type": "APPLY",
+                      "expressions": [
+                        {
+                          "type": "QUALIFIED_IDENTIFIER",
+                          "module": "List",
+                          "identifier": "Cons"
+                        },
+                        {
+                          "type": "CONSTANT_INTEGER",
+                          "value": 2
+                        },
+                        {
+                          "type": "APPLY",
+                          "expressions": [
+                            {
+                              "type": "QUALIFIED_IDENTIFIER",
+                              "module": "List",
+                              "identifier": "Cons"
+                            },
+                            {
+                              "type": "CONSTANT_INTEGER",
+                              "value": 3
+                            },
+                            {
+                              "type": "QUALIFIED_IDENTIFIER",
+                              "module": "List",
+                              "identifier": "Nil"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            "right": {
+              "type": "CONSTANT_INTEGER",
+              "value": 6
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "optionalExpression": {}
+}

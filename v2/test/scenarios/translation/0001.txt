@@ -1,0 +1,28 @@
+-- given the Church Numerals for zero and succ
+zero = \f \x -> x;
+succ n = \f \x -> f ((n f) x);
+-- js
+function zero(f) {
+  return (x => x);
+}
+
+function succ(n) {
+  return (f => (x => f(n(f)(x))));
+}
+
+const _$ASSUMPTIONS = [].concat(
+);
+
+_$ASSUMPTIONS.push({
+  source: 'stream',
+  declarations: [
+
+  ]
+});
+
+
+module.exports = {
+  zero,
+  succ,
+  _$ASSUMPTIONS
+};
