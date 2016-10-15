@@ -67,7 +67,7 @@ function parseDECL(lexer) {
         ),
         P.symbol(Lexer.TokenEnum.SEMICOLON)
     ], elements => {
-            const assumptions = elements[3].orElse([]);
+            const assumptions = elements[3].withDefault([]);
             return elements[0].length == 1 ? new AST.Declaration(elements[0][0].name, elements[2], assumptions) : new AST.Declaration(elements[0][0].name, new AST.Lambda(elements[0].slice(1).map(n => n.name), elements[2]), assumptions)
         })(lexer);
 }
@@ -259,7 +259,7 @@ function parseIdentifier(lexer) {
                 P.symbol(Lexer.TokenEnum.PERIOD),
                 P.symbol(Lexer.TokenEnum.IDENTIFIER)
             ]))
-    ], e => e[1].isDefined() ? new AST.QualifiedIdentifier(e[0], e[1].orElse()[1]) : new AST.Identifier(e[0]))(lexer);
+    ], e => e[1].isJust() ? new AST.QualifiedIdentifier(e[0], e[1].withDefault()[1]) : new AST.Identifier(e[0]))(lexer);
 }
 
 

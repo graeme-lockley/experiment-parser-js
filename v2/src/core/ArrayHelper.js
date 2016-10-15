@@ -1,6 +1,6 @@
 "use strict";
 
-const Optional = require('./Option');
+const Maybe = require('./Maybe');
 
 
 function foldr(foldFunction) {
@@ -20,10 +20,10 @@ function findFirst(predicate) {
     return arr => {
         for (let index = 0; index < arr.length; index += 1) {
             if (predicate(arr[index])) {
-                return Optional.Some(arr[index]);
+                return Maybe.Just(arr[index]);
             }
         }
-        return Optional.None;
+        return Maybe.Nothing;
     }
 }
 

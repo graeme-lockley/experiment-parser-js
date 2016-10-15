@@ -2,7 +2,7 @@
 
 const Result = require('./Result');
 const Tuple = require('./Tuple');
-const Option = require('./Option');
+const Maybe = require('./Maybe');
 
 
 /**
@@ -68,8 +68,8 @@ function option(parser, mapFunction = identity) {
         const result = parser(lexer);
 
         return result.isOk()
-            ? Result.Ok(Tuple.Tuple(Option.Some(mapFunction(result.getOkOrElse().fst)), result.getOkOrElse().snd))
-            : Result.Ok(Tuple.Tuple(Option.None, lexer));
+            ? Result.Ok(Tuple.Tuple(Maybe.Just(mapFunction(result.getOkOrElse().fst)), result.getOkOrElse().snd))
+            : Result.Ok(Tuple.Tuple(Maybe.Nothing, lexer));
     }
 }
 

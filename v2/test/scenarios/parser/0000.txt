@@ -1,5 +1,5 @@
 -- given multiple import statements
-import file:../src/core/Option as Option;
+import file:../src/core/Maybe as Maybe;
 import file:../src/core/Tuple as Tuple;
 -- ast
 {
@@ -10,11 +10,11 @@ import file:../src/core/Tuple as Tuple;
       "type": "IMPORT",
       "url": {
         "type": "CONSTANT_URL",
-        "value": "file:../src/core/Option"
+        "value": "file:../src/core/Maybe"
       },
       "id": {
         "type": "IDENTIFIER",
-        "name": "Option"
+        "name": "Maybe"
       }
     },
     {
