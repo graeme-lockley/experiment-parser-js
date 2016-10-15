@@ -14,9 +14,7 @@ const identity = (x => x);
 
 
 function mapError(result, errorMessage) {
-    return result.map(
-        ok => result,
-        error => Result.Error(errorMessage));
+    return Result.formatError(_ => errorMessage)(result);
 }
 
 

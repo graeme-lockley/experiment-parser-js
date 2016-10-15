@@ -86,11 +86,11 @@ function Error(value) {
 }
 
 function map(okFn) {
-    return errorFn => r => r.map(okFn, errorFn);
+    return errorFn => r => r.unflatMap(okFn, errorFn);
 }
 
 function flatMap(okFn) {
-    return errorFn => r => r.flatMap(okFn, errorFn);
+    return errorFn => r => r.map(okFn, errorFn);
 }
 
 function is(value) {

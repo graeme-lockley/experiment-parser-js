@@ -7,7 +7,7 @@ Error = RH.Error;
 
 
 withDefault d =
-    RH.flatMap (\_ -> _) (\_ -> d)
+    RH.map (\_ -> _) (\_ -> d)
 assumptions {
     withDefault 10 (Ok 1) == 1;
     withDefault 10 (Error "oops") == 10
@@ -15,7 +15,7 @@ assumptions {
 
 
 errorWithDefault errorDefault =
-    RH.flatMap (\_ -> errorDefault) (\_ -> _)
+    RH.map (\_ -> errorDefault) (\_ -> _)
 assumptions {
     errorWithDefault "none" (Ok 1) == "none";
     errorWithDefault "none" (Error "oops") == "oops"
@@ -23,7 +23,7 @@ assumptions {
 
 
 map f =
-    RH.unflatMap f (\_ -> _)
+    RH.map f (\_ -> _)
 assumptions {
     withDefault 0 (map ((+) 1) (Ok 2)) == 3;
     withDefault 0 (map ((+) 1) (Error "oops")) == 0
@@ -31,7 +31,7 @@ assumptions {
 
 
 formatError f =
-    RH.flap (\_ -> _) f
+    RH.map (\_ -> _) f
 assumptions {
     errorWithDefault "oops" (formatError ((++) "hello ") (Ok 2)) == "oops";
     errorWithDefault "oops" (formatError ((++) "hello ") (Error "world")) == "hello world"
