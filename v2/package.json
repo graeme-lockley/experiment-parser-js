@@ -22,9 +22,11 @@
     "url": "https://github.com/graeme-lockley/experiment-parser-js/issues"
   },
   "homepage": "https://github.com/graeme-lockley/experiment-parser-js#readme",
+  "dependencies": {
+    "vm2": "^3.1.0"
+  },
   "devDependencies": {
     "chai": "^3.5.0",
-    "mocha": "^3.0.2",
-    "vm2": "^3.1.0"
+    "mocha": "^3.0.2"
   }
 }
