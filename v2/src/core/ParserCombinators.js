@@ -1,5 +1,6 @@
 "use strict";
 
+const Assert = require('assert');
 const Result = require('./Result');
 const Tuple = require('./Tuple');
 const Maybe = require('./Maybe');
@@ -10,16 +11,11 @@ const Maybe = require('./Maybe');
  */
 
 
-const identity = (x => x);
-
-
-function symbol(tokenID, mapFunction = identity) {
+function symbol(tokenID) {
     return lexer => {
-        const unmappedResult = (lexer.id == tokenID)
+        return (lexer.id == tokenID)
             ? Result.Ok(Tuple.Tuple(lexer.text)(lexer.next()))
             : Result.Error("Expected the symbol " + tokenID);
-
-        return map(mapFunction)(unmappedResult);
     }
 }
 
@@ -36,7 +32,7 @@ function or(parsers) {
 }
 
 
-function and(parsers, mapFunction = identity) {
+function and(parsers) {
     return lexer => {
         if (parsers.length == 0) {
             return Result.Error("And parsing function requires at least one parser")
@@ -53,24 +49,24 @@ function and(parsers, mapFunction = identity) {
                 }
             }
 
-            return Result.Ok(Tuple.Tuple(mapFunction(results))(currentLexer));
+            return Result.Ok(Tuple.Tuple(results)(currentLexer));
         }
     }
 }
 
 
-function option(parser, mapFunction = identity) {
+function option(parser) {
     return lexer => {
         const result = parser(lexer);
 
         return Result.isOk(result)
-            ? Result.Ok(Tuple.Tuple(Maybe.Just(mapFunction(Tuple.first(Result.withDefault()(result)))))(Tuple.second(Result.withDefault()(result))))
+            ? Result.Ok(Tuple.Tuple(Maybe.Just(Tuple.first(Result.withDefault()(result))))(Tuple.second(Result.withDefault()(result))))
             : Result.Ok(Tuple.Tuple(Maybe.Nothing)(lexer));
     }
 }
 
 
-function many(parser, mapFunction = identity) {
+function many(parser) {
     return lexer => {
         const result = [];
         let currentLexer = lexer;
@@ -82,14 +78,14 @@ function many(parser, mapFunction = identity) {
                 result.push(Tuple.first(Result.withDefault()(currentResult)));
                 currentLexer = Tuple.second(Result.withDefault()(currentResult));
             } else {
-                return Result.Ok(Tuple.Tuple(mapFunction(result))(currentLexer));
+                return Result.Ok(Tuple.Tuple(result)(currentLexer));
             }
         }
     }
 }
 
 
-function many1(parser, mapFunction = identity) {
+function many1(parser) {
     return lexer => {
         const firstResult = parser(lexer);
 
@@ -104,18 +100,18 @@ function many1(parser, mapFunction = identity) {
                     result.push(Tuple.first(Result.withDefault()(currentResult)));
                     currentLexer = Tuple.second(Result.withDefault()(currentResult));
                 } else {
-                    return Result.Ok(Tuple.Tuple(mapFunction(result))(currentLexer));
+                    return Result.Ok(Tuple.Tuple(result)(currentLexer));
                 }
             }
         } else {
-            return Result.map(_ => Tuple.Tuple(mapFunction(Tuple.first(_)))(Tuple.second(_)))(firstResult);
+            return Result.map(_ => Tuple.Tuple(Tuple.first(_))(Tuple.second(_)))(firstResult);
         }
     }
 }
 
 
-function sepBy1(parser, separatorParser, mapFunction = identity) {
-    const nextParser = and([separatorParser, parser], elements => elements[1]);
+function sepBy1(parser, separatorParser) {
+    const nextParser = compose(map(elements => elements[1]), and([separatorParser, parser]));
 
     return lexer => {
         const firstResult = parser(lexer);
@@ -131,17 +127,17 @@ function sepBy1(parser, separatorParser, mapFunction = identity) {
                     result.push(Tuple.first(Result.withDefault()(currentResult)));
                     currentLexer = Tuple.second(Result.withDefault()(currentResult));
                 } else {
-                    return Result.Ok(Tuple.Tuple(mapFunction(result))(currentLexer));
+                    return Result.Ok(Tuple.Tuple(result)(currentLexer));
                 }
             }
         } else {
-            return Result.map(_ => Tuple.Tuple(mapFunction(Tuple.first(_)))(Tuple.second(_)))(firstResult);
+            return Result.map(_ => Tuple.Tuple(Tuple.first(_))(Tuple.second(_)))(firstResult);
         }
     }
 }
 
 
-function chainl1(parser, separatorParser, mapFunction = identity) {
+function chainl1(parser, separatorParser) {
     const nextParser = and([separatorParser, parser]);
 
     return lexer => {
@@ -160,11 +156,11 @@ function chainl1(parser, separatorParser, mapFunction = identity) {
                     result = nextParseResult[0](result, nextParseResult[1]);
                     currentLexer = Tuple.second(Result.withDefault()(currentResult));
                 } else {
-                    return Result.Ok(Tuple.Tuple(mapFunction(result))(currentLexer));
+                    return Result.Ok(Tuple.Tuple(result)(currentLexer));
                 }
             }
         } else {
-            return Result.map(ok => Tuple.Tuple(mapFunction(Tuple.first(ok)))(Tuple.second(ok)))(firstResult);
+            return Result.map(ok => Tuple.Tuple(Tuple.first(ok))(Tuple.second(ok)))(firstResult);
         }
     }
 }
@@ -177,6 +173,11 @@ function map(f) {
 
 function errorMessage(errorMessage) {
     return Result.formatError(_ => errorMessage);
+}
+
+
+function compose(f1, f2) {
+    return x => f1(f2(x));
 }
 
 
