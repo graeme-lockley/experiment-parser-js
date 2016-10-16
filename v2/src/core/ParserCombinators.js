@@ -6,7 +6,7 @@ const Maybe = require('./Maybe');
 
 
 /**
- * parser 'a :: Lexer -> Result(Tuple('a, Lexer))
+ * parser 'a :: Lexer -> Result(Tuple('a, Lexer) String)
  */
 
 
@@ -168,7 +168,7 @@ function chainl1(parser, separatorParser, mapFunction = identity) {
 
 
 function map(f) {
-    return Result.map(f);
+    return result => Result.map(t => Tuple.Tuple(f(Tuple.first(t)), Tuple.second(t)));
 }
 
 
