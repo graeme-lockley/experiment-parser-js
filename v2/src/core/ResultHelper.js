@@ -3,10 +3,6 @@ class OkImpl {
         this._ok = value;
     }
 
-    getOkOrElse(elseValue) {
-        return this._ok;
-    }
-
     getErrorOrElse(elseValue) {
         return elseValue;
     }
@@ -32,10 +28,6 @@ class OkImpl {
 class ErrorImpl {
     constructor(value) {
         this._error = value;
-    }
-
-    getOkOrElse(elseValue) {
-        return elseValue;
     }
 
     getErrorOrElse(elseValue) {

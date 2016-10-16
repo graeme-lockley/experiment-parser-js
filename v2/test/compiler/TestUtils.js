@@ -22,7 +22,7 @@ function scenariosIn(directory) {
                 });
 
                 it('produces the expected JavaScript', () => {
-                    const translation = Translator.astToJavascript(parseResponse.getOkOrElse());
+                    const translation = Translator.astToJavascript(Result.withDefault()(parseResponse));
 
                     expect(translation).to.equal(expectations['js']);
                 });
@@ -44,7 +44,7 @@ function scenariosIn(directory) {
                     });
                 }
                 it('produces the expected AST', () =>
-                    expect(JSON.stringify(parseResponse.getOkOrElse(), null, 2)).to.equal(expectations['ast']));
+                    expect(JSON.stringify(Result.withDefault()(parseResponse), null, 2)).to.equal(expectations['ast']));
             }
 
             if ('run' in expectations) {
@@ -55,8 +55,8 @@ function scenariosIn(directory) {
                 }
 
                 it('should return the expected result', () => {
-                    const programme = Translator.astToJavascript(parseResponse.getOkOrElse());
-                    const assertion = Translator.astToJavascript(Parser.parseExpressionString(expectations['run']).getOkOrElse());
+                    const programme = Translator.astToJavascript(Result.withDefault()(parseResponse));
+                    const assertion = Translator.astToJavascript(Result.withDefault()(Parser.parseExpressionString(expectations['run'])));
 
                     const vm = new NodeVM({
                         console: 'inherit',

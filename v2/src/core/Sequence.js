@@ -12,25 +12,25 @@ class Sequence {
         if (Result.isOk(this._state)) {
             try {
                 if (logMessage != null) {
-                    console.time(logMessage(this._state.getOkOrElse({})));
+                    console.time(logMessage(Result.withDefault({})(this._state)));
                 }
-                const eResult = e(this._state.getOkOrElse());
+                const eResult = e(Result.withDefault()(this._state));
 
                 if (Result.is(eResult)) {
                     if (Result.isOk(eResult)) {
-                        this._state.getOkOrElse()[n] = eResult.getOkOrElse();
+                        Result.withDefault()(this._state)[n] = Result.withDefault()(eResult);
                     } else {
                         this._state = eResult;
                     }
                 } else {
-                    this._state.getOkOrElse()[n] = eResult;
+                    Result.withDefault()(this._state)[n] = eResult;
                 }
             } catch (e) {
                 this._state = Result.Error(e);
             }
             finally {
                 if (logMessage != null) {
-                    console.timeEnd(logMessage(this._state.getOkOrElse({})));
+                    console.timeEnd(logMessage(Result.withDefault({})(this._state)));
                 }
             }
         }
@@ -39,7 +39,7 @@ class Sequence {
 
     return(e) {
         if (Result.isOk(this._state)) {
-            const result = e(this._state.getOkOrElse());
+            const result = e(Result.withDefault()(this._state));
 
             if (Result.is(result)) {
                 return result;

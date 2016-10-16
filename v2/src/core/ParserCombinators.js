@@ -1,5 +1,7 @@
 "use strict";
 
+const Assert = require('assert');
+
 const Result = require('./Result');
 const Tuple = require('./Tuple');
 const Maybe = require('./Maybe');
@@ -48,8 +50,8 @@ function and(parsers, mapFunction = identity) {
             for (let index = 0; index < parsers.length; index += 1) {
                 const intermediateResult = parsers[index](currentLexer);
                 if (Result.isOk(intermediateResult)) {
-                    results.push(intermediateResult.getOkOrElse().fst);
-                    currentLexer = intermediateResult.getOkOrElse().snd;
+                    results.push(Result.withDefault()(intermediateResult).fst);
+                    currentLexer = Result.withDefault()(intermediateResult).snd;
                 } else {
                     return intermediateResult;
                 }
@@ -66,7 +68,7 @@ function option(parser, mapFunction = identity) {
         const result = parser(lexer);
 
         return Result.isOk(result)
-            ? Result.Ok(Tuple.Tuple(Maybe.Just(mapFunction(result.getOkOrElse().fst)), result.getOkOrElse().snd))
+            ? Result.Ok(Tuple.Tuple(Maybe.Just(mapFunction(Result.withDefault()(result).fst)), Result.withDefault()(result).snd))
             : Result.Ok(Tuple.Tuple(Maybe.Nothing, lexer));
     }
 }
@@ -81,8 +83,8 @@ function many(parser, mapFunction = identity) {
             const currentResult = parser(currentLexer);
 
             if (Result.isOk(currentResult)) {
-                result.push(currentResult.getOkOrElse().fst);
-                currentLexer = currentResult.getOkOrElse().snd;
+                result.push(Result.withDefault()(currentResult).fst);
+                currentLexer = Result.withDefault()(currentResult).snd;
             } else {
                 return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
             }
@@ -96,15 +98,15 @@ function many1(parser, mapFunction = identity) {
         const firstResult = parser(lexer);
 
         if (Result.isOk(firstResult)) {
-            const result = [firstResult.getOkOrElse().fst];
-            let currentLexer = firstResult.getOkOrElse().snd;
+            const result = [Result.withDefault()(firstResult).fst];
+            let currentLexer = Result.withDefault()(firstResult).snd;
 
             while (true) {
                 const currentResult = parser(currentLexer);
 
                 if (Result.isOk(currentResult)) {
-                    result.push(currentResult.getOkOrElse().fst);
-                    currentLexer = currentResult.getOkOrElse().snd;
+                    result.push(Result.withDefault()(currentResult).fst);
+                    currentLexer = Result.withDefault()(currentResult).snd;
                 } else {
                     return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
                 }
@@ -126,15 +128,15 @@ function sepBy1(parser, separatorParser, mapFunction = identity) {
         const firstResult = parser(lexer);
 
         if (Result.isOk(firstResult)) {
-            const result = [firstResult.getOkOrElse().fst];
-            let currentLexer = firstResult.getOkOrElse().snd;
+            const result = [Result.withDefault()(firstResult).fst];
+            let currentLexer = Result.withDefault()(firstResult).snd;
 
             while (true) {
                 const currentResult = nextParser(currentLexer);
 
                 if (Result.isOk(currentResult)) {
-                    result.push(currentResult.getOkOrElse().fst);
-                    currentLexer = currentResult.getOkOrElse().snd;
+                    result.push(Result.withDefault()(currentResult).fst);
+                    currentLexer = Result.withDefault()(currentResult).snd;
                 } else {
                     return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
                 }
@@ -156,17 +158,17 @@ function chainl1(parser, separatorParser, mapFunction = identity) {
         const firstResult = parser(lexer);
 
         if (Result.isOk(firstResult)) {
-            let result = firstResult.getOkOrElse().fst;
-            let currentLexer = firstResult.getOkOrElse().snd;
+            let result = Result.withDefault()(firstResult).fst;
+            let currentLexer = Result.withDefault()(firstResult).snd;
 
             while (true) {
                 const currentResult = nextParser(currentLexer);
 
                 if (Result.isOk(currentResult)) {
-                    const nextParseResult = currentResult.getOkOrElse().fst;
+                    const nextParseResult = Result.withDefault()(currentResult).fst;
 
                     result = nextParseResult[0](result, nextParseResult[1]);
-                    currentLexer = currentResult.getOkOrElse().snd;
+                    currentLexer = Result.withDefault()(currentResult).snd;
                 } else {
                     return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
                 }

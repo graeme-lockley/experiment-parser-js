@@ -13,7 +13,7 @@ describe('Core/Sequence', () => {
             .assign('c', s => Result.Ok(s.a + s.b))
             .return(s => Result.Ok(s.c));
 
-        expect(value.getOkOrElse()).to.equal(25);
+        expect(Result.withDefault()(value)).to.equal(25);
     });
 
     it('given a set of assignments with one returning an error then the error is returned', () => {
@@ -33,7 +33,7 @@ describe('Core/Sequence', () => {
             .assign('c', s => s.a + s.b)
             .return(s => s.c);
 
-        expect(value.getOkOrElse()).to.equal(25);
+        expect(Result.withDefault()(value)).to.equal(25);
     });
 
     it('given a set of assignments with one throwing an exception then an error is returned', () => {

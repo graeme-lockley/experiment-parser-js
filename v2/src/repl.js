@@ -85,11 +85,11 @@ function safeLangEval(input, context, filename, cb) {
     if (Result.isOk(parsedResponse)) {
         if (state.showAST) {
             console.log('--- AST ---');
-            console.log(JSON.stringify(parsedResponse.getOkOrElse(), null, 2));
+            console.log(JSON.stringify(Result.withDefault()(parsedResponse), null, 2));
             console.log('-----------');
         }
 
-        const jsText = Translator.astToJavascript(parsedResponse.getOkOrElse());
+        const jsText = Translator.astToJavascript(Result.withDefault()(parsedResponse));
 
         if (state.showTranslatedSafeLang) {
             console.log('--- JavaScript ---');

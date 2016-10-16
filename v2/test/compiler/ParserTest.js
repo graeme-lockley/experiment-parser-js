@@ -16,11 +16,11 @@ describe('Parser', function () {
         it("should parse without any errors", () =>
             expect(Result.isOk(result)).to.equal(true));
         it("should parse a CONSTANT_INTEGER with value 123", () => {
-            expect(result.getOkOrElse().fst).to.be.an.instanceOf(AST.ConstantInteger);
-            expect(result.getOkOrElse().fst.value).to.equal(123);
+            expect(Result.withDefault()(result).fst).to.be.an.instanceOf(AST.ConstantInteger);
+            expect(Result.withDefault()(result).fst.value).to.equal(123);
         });
         it("should have the next token of EOF", () =>
-            expect(result.getOkOrElse().snd.id).to.equal(Lexer.TokenEnum.EOF));
+            expect(Result.withDefault()(result).snd.id).to.equal(Lexer.TokenEnum.EOF));
     });
 
     describe('given the input "abc 123" to parseEXPR12', () => {
@@ -29,11 +29,11 @@ describe('Parser', function () {
         it("should parse without any errors", () =>
             expect(Result.isOk(result)).to.equal(true));
         it('should parse an IDENTIFIER with value "abc"', () => {
-            expect(result.getOkOrElse().fst).to.be.an.instanceOf(AST.Identifier);
-            expect(result.getOkOrElse().fst.name).to.equal('abc');
+            expect(Result.withDefault()(result).fst).to.be.an.instanceOf(AST.Identifier);
+            expect(Result.withDefault()(result).fst.name).to.equal('abc');
         });
         it("should have the next token of CONSTANT_INTEGER", () =>
-            expect(result.getOkOrElse().snd.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER));
+            expect(Result.withDefault()(result).snd.id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER));
     });
 
     describe('given the input "( 123)" to parseEXPR12', () => {
@@ -42,11 +42,11 @@ describe('Parser', function () {
         it("should parse without any errors", ()=>
             expect(Result.isOk(result)).to.equal(true));
         it("should parse a CONSTANT_INTEGER with value 123", () => {
-            expect(result.getOkOrElse().fst).to.be.an.instanceOf(AST.ConstantInteger);
-            expect(result.getOkOrElse().fst.value).to.equal(123);
+            expect(Result.withDefault()(result).fst).to.be.an.instanceOf(AST.ConstantInteger);
+            expect(Result.withDefault()(result).fst.value).to.equal(123);
         });
         it("should have the next token of EOF", () =>
-            expect(result.getOkOrElse().snd.id).to.equal(Lexer.TokenEnum.EOF));
+            expect(Result.withDefault()(result).snd.id).to.equal(Lexer.TokenEnum.EOF));
     });
 
     describe('given the input "\\a \\b -> (a)" to parseEXPR12', () => {
@@ -54,13 +54,13 @@ describe('Parser', function () {
 
         it("should parse without any errors", () => expect(Result.isOk(result)).to.equal(true));
         it("should parse a LAMBDA with variables ['a', 'b'] and expression of IDENTIFIER with value 'a'", () => {
-            expect(result.getOkOrElse().fst).to.be.an.instanceOf(AST.Lambda);
-            expect(result.getOkOrElse().fst.variables.length).to.equal(2);
-            expect(result.getOkOrElse().fst.variables[0]).to.equal('a');
-            expect(result.getOkOrElse().fst.variables[1]).to.equal('b');
+            expect(Result.withDefault()(result).fst).to.be.an.instanceOf(AST.Lambda);
+            expect(Result.withDefault()(result).fst.variables.length).to.equal(2);
+            expect(Result.withDefault()(result).fst.variables[0]).to.equal('a');
+            expect(Result.withDefault()(result).fst.variables[1]).to.equal('b');
         });
         it("should have the next token of EOF", () =>
-            expect(result.getOkOrElse().snd.id).to.equal(Lexer.TokenEnum.EOF));
+            expect(Result.withDefault()(result).snd.id).to.equal(Lexer.TokenEnum.EOF));
     });
 
     TestUtils.scenariosIn('./test/scenarios/parser');

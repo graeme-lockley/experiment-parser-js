@@ -7,7 +7,7 @@ Error = RH.Error;
 
 
 withDefault d =
-    RH.map (\_ -> _) (\_ -> d)
+    RH.flatMap (\_ -> _) (\_ -> d)
 assumptions {
     withDefault 10 (Ok 1) == 1;
     withDefault 10 (Error "oops") == 10
@@ -15,7 +15,7 @@ assumptions {
 
 
 errorWithDefault errorDefault =
-    RH.map (\_ -> errorDefault) (\_ -> _)
+    RH.flatMap (\_ -> errorDefault) (\_ -> _)
 assumptions {
     errorWithDefault "none" (Ok 1) == "none";
     errorWithDefault "none" (Error "oops") == "oops"
