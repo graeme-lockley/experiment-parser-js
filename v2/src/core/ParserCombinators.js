@@ -1,6 +1,5 @@
 "use strict";
 
-const Assert = require('assert');
 const Result = require('./Result');
 const Tuple = require('./Tuple');
 const Maybe = require('./Maybe');
