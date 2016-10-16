@@ -1,14 +1,12 @@
 "use strict";
 
-class TupleImpl {
-    constructor(fst, snd) {
-        this._fst = fst;
-        this._snd = snd;
-    }
-}
-
-function Tuple(fst) {
-    return snd => new TupleImpl(fst, snd);
+function Tuple(first) {
+    return second => {
+        return {
+            _fst: first,
+            _snd: second
+        }
+    };
 }
 
 module.exports = {
