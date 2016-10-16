@@ -3,11 +3,11 @@ class OkImpl {
         this._ok = value;
     }
 
-    unflatMap(okFn, _) {
+    _map(okFn, _) {
         return new OkImpl(okFn(this._ok));
     }
 
-    map(okFn, _) {
+    _flatMap(okFn, _) {
         return okFn(this._ok);
     }
 
@@ -26,11 +26,11 @@ class ErrorImpl {
         this._error = value;
     }
 
-    unflatMap(_, errorFn) {
+    _map(_, errorFn) {
         return new ErrorImpl(errorFn(this._error));
     }
 
-    map(_, errorFn) {
+    _flatMap(_, errorFn) {
         return errorFn(this._error);
     }
 
@@ -54,11 +54,11 @@ function Error(value) {
 }
 
 function map(okFn) {
-    return errorFn => r => r.unflatMap(okFn, errorFn);
+    return errorFn => r => r._map(okFn, errorFn);
 }
 
 function flatMap(okFn) {
-    return errorFn => r => r.map(okFn, errorFn);
+    return errorFn => r => r._flatMap(okFn, errorFn);
 }
 
 function is(value) {
