@@ -23,7 +23,7 @@ describe('Core/Sequence', () => {
             .assign('c', s => Result.Ok(s.a + s.b))
             .return(s => Result.Ok(s.c));
 
-        expect(value.getErrorOrElse()).to.equal('Some error');
+        expect(Result.errorWithDefault()(value)).to.equal('Some error');
     });
 
     it('given a set of assignments without the assignment wrapped in a Result then auto-wrap', () => {
@@ -45,6 +45,6 @@ describe('Core/Sequence', () => {
             .assign('c', s => s.a + s.b)
             .return(s => s.c);
 
-        expect(value.getErrorOrElse()).to.equal('My Error');
+        expect(Result.errorWithDefault()(value)).to.equal('My Error');
     });
 });

@@ -80,7 +80,7 @@ class Repository {
 
                             testFileNames[targetFileName] = true;
                         } else {
-                            console.log(`Parsing error: ${fileName}: ${astResult.getErrorOrElse()}`);
+                            console.log(`Parsing error: ${fileName}: ${Result.errorWithDefault()(astResult)}`);
                             return astResult;
                         }
                     } else {

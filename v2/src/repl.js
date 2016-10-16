@@ -99,7 +99,7 @@ function safeLangEval(input, context, filename, cb) {
 
         cb(null, runInContext(jsText, context, filename));
     } else {
-        cb(parsedResponse.getErrorOrElse());
+        cb(Result.errorWithDefault()(parsedResponse));
     }
 }
 

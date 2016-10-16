@@ -3,10 +3,6 @@ class OkImpl {
         this._ok = value;
     }
 
-    getErrorOrElse(elseValue) {
-        return elseValue;
-    }
-
     unflatMap(okFn, _) {
         return new OkImpl(okFn(this._ok));
     }
@@ -28,10 +24,6 @@ class OkImpl {
 class ErrorImpl {
     constructor(value) {
         this._error = value;
-    }
-
-    getErrorOrElse(elseValue) {
-        return this._error;
     }
 
     unflatMap(_, errorFn) {

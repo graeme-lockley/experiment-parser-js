@@ -33,7 +33,7 @@ function scenariosIn(directory) {
                     expect(parseResponse.isError()).to.be.true);
 
                 it('with the expected error message ' + output, () =>
-                    expect(parseResponse.getErrorOrElse()).to.equal(expectations['error']));
+                    expect(Result.errorWithDefault()(parseResponse)).to.equal(expectations['error']));
             }
 
             if ('ast' in expectations) {
