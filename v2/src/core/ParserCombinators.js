@@ -110,10 +110,7 @@ function many1(parser, mapFunction = identity) {
                 }
             }
         } else {
-            return firstResult.map(
-                ok => Result.Ok(mapFunction(ok.fst), ok.snd),
-                error => firstResult
-            );
+            return Result.map(_ => Tuple.Tuple(mapFunction(_.fst), _.snd))(firstResult);
         }
     }
 }
@@ -140,10 +137,7 @@ function sepBy1(parser, separatorParser, mapFunction = identity) {
                 }
             }
         } else {
-            return firstResult.map(
-                ok => Result.Ok(mapFunction(ok.fst), ok.snd),
-                error => firstResult
-            );
+            return Result.map(_ => Tuple.Tuple(mapFunction(_.fst), _.snd))(firstResult);
         }
     }
 }
@@ -172,10 +166,7 @@ function chainl1(parser, separatorParser, mapFunction = identity) {
                 }
             }
         } else {
-            return firstResult.map(
-                ok => Result.Ok(mapFunction(ok.fst), ok.snd),
-                error => firstResult
-            );
+            return Result.map(ok => Tuple.Tuple(mapFunction(ok.fst), ok.snd))(firstResult);
         }
     }
 }

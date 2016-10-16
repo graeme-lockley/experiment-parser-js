@@ -37,10 +37,7 @@ function markLocation(parser) {
     return lexer => {
         const startToken = lexer;
         const result = parser(lexer);
-        return result.map(
-            ok => Result.Ok(Tuple.Tuple([startToken, ok.snd, ok.fst], ok.snd)),
-            error => result
-        );
+        return Result.map(_ => Tuple.Tuple([startToken, _.snd, _.fst], _.snd))(result);
     };
 }
 
@@ -320,20 +317,14 @@ function parseString(input, sourceName = 'stream') {
     const parseResult =
         P.and([parseMODULE, P.symbol(Lexer.TokenEnum.EOF)], (elements => elements[0]))(Lexer.fromString(input, sourceName));
 
-    return parseResult.map(
-        ok => Result.Ok(ok.fst),
-        error => parseResult
-    );
+    return Result.map(_ => _.fst)(parseResult);
 }
 
 function parseExpressionString(input) {
     const parseResult =
         P.and([parseEXPR1, P.symbol(Lexer.TokenEnum.EOF)], (elements => elements[0]))(Lexer.fromString(input));
 
-    return parseResult.map(
-        ok => Result.Ok(ok.fst),
-        error => parseResult
-    );
+    return Result.map(_ => _.fst)(parseResult);
 }
 
 
