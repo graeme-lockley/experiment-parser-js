@@ -6,10 +6,6 @@ class TupleImpl {
         this._snd = snd;
     }
 
-    get fst() {
-        return this._fst;
-    }
-
     get snd() {
         return this._snd;
     }
