@@ -14,11 +14,14 @@ const identity = (x => x);
 
 
 function symbol(tokenID, mapFunction = identity) {
-    return lexer => (lexer.id == tokenID)
-        ? Result.Ok(Tuple.Tuple(mapFunction(lexer.text))(lexer.next()))
-        : Result.Error("Expected the symbol " + tokenID);
-}
+    return lexer => {
+        const unmappedResult = (lexer.id == tokenID)
+            ? Result.Ok(Tuple.Tuple(lexer.text)(lexer.next()))
+            : Result.Error("Expected the symbol " + tokenID);
 
+        return map(mapFunction)(unmappedResult);
+    }
+}
 
 function or(parsers) {
     return lexer => {
@@ -168,7 +171,7 @@ function chainl1(parser, separatorParser, mapFunction = identity) {
 
 
 function map(f) {
-    return result => Result.map(t => Tuple.Tuple(f(Tuple.first(t)), Tuple.second(t)));
+    return result => Result.map(t => Tuple.mapFirst(f)(t))(result);
 }
 
 
@@ -180,6 +183,7 @@ function errorMessage(errorMessage) {
 module.exports = {
     and,
     chainl1,
+    map,
     many,
     many1,
     errorMessage,
