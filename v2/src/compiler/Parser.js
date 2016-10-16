@@ -183,10 +183,12 @@ function parseMultiplicativeOp(lexer) {
 
 function parseEXPR9(lexer) {
     return P.or([
-        P.and([
-            parseUnaryOp,
-            parseEXPR9
-        ], e => e[0](e[1])),
+        compose(
+            P.map(e => e[0](e[1])),
+            P.and([
+                parseUnaryOp,
+                parseEXPR9
+            ])),
         parseEXPR10
     ])(lexer);
 }
@@ -288,10 +290,12 @@ function parseLambda(lexer) {
         P.map(items => new AST.Lambda(items[0], items[2])),
         P.and([
             P.many1(
-                P.and([
-                    P.symbol(Lexer.TokenEnum.LAMBDA),
-                    P.symbol(Lexer.TokenEnum.IDENTIFIER)
-                ], elements => elements[1])),
+                compose(
+                    P.map(elements => elements[1]),
+                    P.and([
+                        P.symbol(Lexer.TokenEnum.LAMBDA),
+                        P.symbol(Lexer.TokenEnum.IDENTIFIER)
+                    ]))),
             P.symbol(Lexer.TokenEnum.MINUS_GREATER),
             parseEXPR1
         ]))(lexer);
