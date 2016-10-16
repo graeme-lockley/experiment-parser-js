@@ -14,22 +14,26 @@ function compose(f1, f2) {
 
 
 function parseMODULE(lexer) {
-    return P.and([
-        P.many(parseIMPORT),
-        P.many(parseDECL),
-        P.option(parseEXPR1)
-    ], e => new AST.Module(lexer.sourceName, e[0], e[1], e[2]))(lexer);
+    return compose(
+        P.map(e => new AST.Module(lexer.sourceName, e[0], e[1], e[2])),
+        P.and([
+            P.many(parseIMPORT),
+            P.many(parseDECL),
+            P.option(parseEXPR1)
+        ]))(lexer);
 }
 
 
 function parseIMPORT(lexer) {
-    return P.and([
-        P.symbol(Lexer.TokenEnum.IMPORT),
-        P.symbol(Lexer.TokenEnum.CONSTANT_URL),
-        P.symbol(Lexer.TokenEnum.AS),
-        P.symbol(Lexer.TokenEnum.IDENTIFIER),
-        P.symbol(Lexer.TokenEnum.SEMICOLON)
-    ], e => new AST.Import(new AST.ConstantURL(e[1]), new AST.Identifier(e[3])))(lexer);
+    return compose(
+        P.map(e => new AST.Import(new AST.ConstantURL(e[1]), new AST.Identifier(e[3]))),
+        P.and([
+            P.symbol(Lexer.TokenEnum.IMPORT),
+            P.symbol(Lexer.TokenEnum.CONSTANT_URL),
+            P.symbol(Lexer.TokenEnum.AS),
+            P.symbol(Lexer.TokenEnum.IDENTIFIER),
+            P.symbol(Lexer.TokenEnum.SEMICOLON)
+        ]))(lexer);
 }
 
 
@@ -43,60 +47,76 @@ function markLocation(parser) {
 
 
 function parseDECL(lexer) {
-    return P.and([
-        P.many1(parseIdentifier),
-        P.symbol(Lexer.TokenEnum.EQUAL),
-        parseEXPR1,
-        P.option(
-            P.and([
-                P.symbol(Lexer.TokenEnum.ASSUMPTIONS),
-                P.symbol(Lexer.TokenEnum.LEFT_CURLY),
-                P.sepBy1(markLocation(parseEXPR1), P.symbol(Lexer.TokenEnum.SEMICOLON)),
-                P.symbol(Lexer.TokenEnum.RIGHT_CURLY)
-            ], es => {
-                return es[2].map(a => {
-                    const startIndexXY = a[0].indexXY;
-                    const endIndexXY = a[1].indexXY;
-                    const text = lexer.streamText(startIndexXY, endIndexXY).trim();
-                    return new AST.Assumption(lexer.sourceName, a[0].y, text, a[2])
-                });
-            })
-        ),
-        P.symbol(Lexer.TokenEnum.SEMICOLON)
-    ], elements => {
-        const assumptions = elements[3].withDefault([]);
-        return elements[0].length == 1 ? new AST.Declaration(elements[0][0].name, elements[2], assumptions) : new AST.Declaration(elements[0][0].name, new AST.Lambda(elements[0].slice(1).map(n => n.name), elements[2]), assumptions)
-    })(lexer);
+    return compose(
+        P.map(elements => {
+            const assumptions = elements[3].withDefault([]);
+            return elements[0].length == 1 ? new AST.Declaration(elements[0][0].name, elements[2], assumptions) : new AST.Declaration(elements[0][0].name, new AST.Lambda(elements[0].slice(1).map(n => n.name), elements[2]), assumptions)
+        }),
+        P.and([
+            P.many1(parseIdentifier),
+            P.symbol(Lexer.TokenEnum.EQUAL),
+            parseEXPR1,
+            P.option(
+                compose(
+                    P.map(es => {
+                        return es[2].map(a => {
+                            const startIndexXY = a[0].indexXY;
+                            const endIndexXY = a[1].indexXY;
+                            const text = lexer.streamText(startIndexXY, endIndexXY).trim();
+                            return new AST.Assumption(lexer.sourceName, a[0].y, text, a[2])
+                        });
+                    }),
+                    P.and([
+                        P.symbol(Lexer.TokenEnum.ASSUMPTIONS),
+                        P.symbol(Lexer.TokenEnum.LEFT_CURLY),
+                        P.sepBy1(markLocation(parseEXPR1), P.symbol(Lexer.TokenEnum.SEMICOLON)),
+                        P.symbol(Lexer.TokenEnum.RIGHT_CURLY)
+                    ]))
+            ),
+            P.symbol(Lexer.TokenEnum.SEMICOLON)
+        ]))(lexer);
 }
 
 
 function parseEXPR1(lexer) {
     return P.or([
-        P.and([
-            P.symbol(Lexer.TokenEnum.IF),
-            parseEXPR1,
-            P.symbol(Lexer.TokenEnum.THEN),
-            parseEXPR1,
-            P.symbol(Lexer.TokenEnum.ELSE),
-            parseEXPR1
-        ], e => new AST.If(e[1], e[3], e[5])),
-        P.many1(parseEXPR2, elements => elements.length == 1 ? elements[0] : new AST.Apply(elements)),
-        P.and([
-            P.symbol(Lexer.TokenEnum.LEFT_CURLY),
-            P.sepBy1(parseEXPR1, P.symbol(Lexer.TokenEnum.SEMICOLON), e => new AST.Expressions(e)),
-            P.symbol(Lexer.TokenEnum.RIGHT_CURLY)
-        ], e => e[1])
+        compose(
+            P.map(e => new AST.If(e[1], e[3], e[5])),
+            P.and([
+                P.symbol(Lexer.TokenEnum.IF),
+                parseEXPR1,
+                P.symbol(Lexer.TokenEnum.THEN),
+                parseEXPR1,
+                P.symbol(Lexer.TokenEnum.ELSE),
+                parseEXPR1
+            ])),
+        compose(
+            P.map(elements => elements.length == 1 ? elements[0] : new AST.Apply(elements)),
+            P.many1(parseEXPR2)),
+        compose(
+            P.map(e => e[1]),
+            P.and([
+                P.symbol(Lexer.TokenEnum.LEFT_CURLY),
+                compose(
+                    P.map(e => new AST.Expressions(e)),
+                    P.sepBy1(parseEXPR1, P.symbol(Lexer.TokenEnum.SEMICOLON))),
+                P.symbol(Lexer.TokenEnum.RIGHT_CURLY)
+            ]))
     ])(lexer);
 }
 
 
 function parseEXPR2(lexer) {
-    return P.sepBy1(parseEXPR3, P.symbol(Lexer.TokenEnum.BAR_BAR), e => e.length == 1 ? e[0] : new AST.BooleanOr(e))(lexer);
+    return compose(
+        P.map(e => e.length == 1 ? e[0] : new AST.BooleanOr(e)),
+        P.sepBy1(parseEXPR3, P.symbol(Lexer.TokenEnum.BAR_BAR)))(lexer);
 }
 
 
 function parseEXPR3(lexer) {
-    return P.sepBy1(parseEXPR4, P.symbol(Lexer.TokenEnum.AMPERSAND_AMPERSAND), e => e.length == 1 ? e[0] : new AST.BooleanAnd(e))(lexer);
+    return compose(
+        P.map(e => e.length == 1 ? e[0] : new AST.BooleanAnd(e)),
+        P.sepBy1(parseEXPR4, P.symbol(Lexer.TokenEnum.AMPERSAND_AMPERSAND)))(lexer);
 }
 
 
@@ -107,8 +127,8 @@ function parseEXPR4(lexer) {
 
 function parseEqualOp(lexer) {
     return P.or([
-        P.symbol(Lexer.TokenEnum.EQUAL_EQUAL, () => (l, r) => new AST.Equal(l, r)),
-        P.symbol(Lexer.TokenEnum.BANG_EQUAL, () => (l, r) => new AST.NotEqual(l, r))
+        compose(P.map(() => (l, r) => new AST.Equal(l, r)), P.symbol(Lexer.TokenEnum.EQUAL_EQUAL)),
+        compose(P.map(() => (l, r) => new AST.NotEqual(l, r)), P.symbol(Lexer.TokenEnum.BANG_EQUAL))
     ])(lexer);
 }
 
@@ -120,16 +140,18 @@ function parseEXPR5(lexer) {
 
 function parseComparisonOp(lexer) {
     return P.or([
-        P.symbol(Lexer.TokenEnum.LESS, () => (l, r) => new AST.LessThan(l, r)),
-        P.symbol(Lexer.TokenEnum.LESS_EQUAL, () => (l, r) => new AST.LessThanEqual(l, r)),
-        P.symbol(Lexer.TokenEnum.GREATER, () => (l, r) => new AST.GreaterThan(l, r)),
-        P.symbol(Lexer.TokenEnum.GREATER_EQUAL, () => (l, r) => new AST.GreaterThanEqual(l, r)),
+        compose(P.map(() => (l, r) => new AST.LessThan(l, r)), P.symbol(Lexer.TokenEnum.LESS)),
+        compose(P.map(() => (l, r) => new AST.LessThanEqual(l, r)), P.symbol(Lexer.TokenEnum.LESS_EQUAL)),
+        compose(P.map(() => (l, r) => new AST.GreaterThan(l, r)), P.symbol(Lexer.TokenEnum.GREATER)),
+        compose(P.map(() => (l, r) => new AST.GreaterThanEqual(l, r)), P.symbol(Lexer.TokenEnum.GREATER_EQUAL))
     ])(lexer);
 }
 
 
 function parseEXPR6(lexer) {
-    return P.chainl1(parseEXPR7, P.symbol(Lexer.TokenEnum.PLUS_PLUS, () => (l, r) => new AST.StringConcat(l, r)))(lexer);
+    return P.chainl1(
+        parseEXPR7,
+        compose(P.map(() => (l, r) => new AST.StringConcat(l, r)), P.symbol(Lexer.TokenEnum.PLUS_PLUS)))(lexer);
 }
 
 
@@ -140,8 +162,8 @@ function parseEXPR7(lexer) {
 
 function parseAdditiveOp(lexer) {
     return P.or([
-        P.symbol(Lexer.TokenEnum.PLUS, () => (l, r) => new AST.Addition(l, r)),
-        P.symbol(Lexer.TokenEnum.MINUS, () => (l, r) => new AST.Subtraction(l, r))
+        compose(P.map(() => (l, r) => new AST.Addition(l, r)), P.symbol(Lexer.TokenEnum.PLUS)),
+        compose(P.map(() => (l, r) => new AST.Subtraction(l, r)), P.symbol(Lexer.TokenEnum.MINUS))
     ])(lexer);
 }
 
@@ -153,8 +175,8 @@ function parseEXPR8(lexer) {
 
 function parseMultiplicativeOp(lexer) {
     return P.or([
-        P.symbol(Lexer.TokenEnum.STAR, () => (l, r) => new AST.Multiplication(l, r)),
-        P.symbol(Lexer.TokenEnum.SLASH, () => (l, r) => new AST.Division(l, r))
+        compose(P.map(() => (l, r) => new AST.Multiplication(l, r)), P.symbol(Lexer.TokenEnum.STAR)),
+        compose(P.map(() => (l, r) => new AST.Division(l, r)), P.symbol(Lexer.TokenEnum.SLASH))
     ])(lexer);
 }
 
@@ -172,20 +194,22 @@ function parseEXPR9(lexer) {
 
 function parseUnaryOp(lexer) {
     return P.or([
-        P.symbol(Lexer.TokenEnum.BANG, () => (op) => new AST.BooleanNot(op)),
-        P.symbol(Lexer.TokenEnum.PLUS, () => (op) => new AST.UnaryPlus(op)),
-        P.symbol(Lexer.TokenEnum.MINUS, () => (op) => new AST.UnaryNegate(op))
+        compose(P.map(() => (op) => new AST.BooleanNot(op)), P.symbol(Lexer.TokenEnum.BANG)),
+        compose(P.map(() => (op) => new AST.UnaryPlus(op)), P.symbol(Lexer.TokenEnum.PLUS)),
+        compose(P.map(() => (op) => new AST.UnaryNegate(op)), P.symbol(Lexer.TokenEnum.MINUS))
     ])(lexer);
 }
 
 
 function parseEXPR10(lexer) {
-    return P.chainl1(parseEXPR11, P.symbol(Lexer.TokenEnum.O, () => (l, r) => new AST.Composition(l, r)))(lexer);
+    return P.chainl1(parseEXPR11, compose(P.map(() => (l, r) => new AST.Composition(l, r)), P.symbol(Lexer.TokenEnum.O)))(lexer);
 }
 
 
 function parseEXPR11(lexer) {
-    return P.many1(parseEXPR12, elements => elements.length == 1 ? elements[0] : new AST.Apply(elements))(lexer);
+    return compose(
+        P.map(elements => elements.length == 1 ? elements[0] : new AST.Apply(elements)),
+        P.many1(parseEXPR12))(lexer);
 }
 
 
@@ -194,8 +218,8 @@ function parseEXPR12(lexer) {
         parseConstantInteger,
         parseConstantCharacter,
         parseConstantString,
-        P.symbol(Lexer.TokenEnum.TRUE, () => new AST.ConstantBoolean(true)),
-        P.symbol(Lexer.TokenEnum.FALSE, () => new AST.ConstantBoolean(false)),
+        compose(P.map(() => new AST.ConstantBoolean(true)), P.symbol(Lexer.TokenEnum.TRUE)),
+        compose(P.map(() => new AST.ConstantBoolean(false)), P.symbol(Lexer.TokenEnum.FALSE)),
         parseIdentifier,
         parseLambda,
         parseParenthesisExpression,
@@ -206,8 +230,7 @@ function parseEXPR12(lexer) {
 
 
 function parseConstantInteger(lexer) {
-    return P.errorMessage("Expected a constant integer")
-    (P.symbol(Lexer.TokenEnum.CONSTANT_INTEGER, compose(c => new AST.ConstantInteger(c), parseInt))(lexer));
+    return P.errorMessage("Expected a constant integer")(P.map(compose(c => new AST.ConstantInteger(c), parseInt))(P.symbol(Lexer.TokenEnum.CONSTANT_INTEGER)(lexer)));
 }
 
 
@@ -223,7 +246,7 @@ function convertCharacter(c) {
 
 
 function parseConstantCharacter(lexer) {
-    return P.symbol(Lexer.TokenEnum.CONSTANT_CHAR, x => new AST.ConstantCharacter(convertCharacter(x.substring(1, x.length - 1))))(lexer);
+    return compose(P.map(x => new AST.ConstantCharacter(convertCharacter(x.substring(1, x.length - 1)))), P.symbol(Lexer.TokenEnum.CONSTANT_CHAR))(lexer);
 }
 
 
@@ -242,85 +265,97 @@ function parseConstantString(lexer) {
         }
     }
 
-    return P.symbol(Lexer.TokenEnum.CONSTANT_STRING, x => new AST.ConstantString(convertString(x.substring(1, x.length - 1))))(lexer);
+    return compose(P.map(x => new AST.ConstantString(convertString(x.substring(1, x.length - 1)))), P.symbol(Lexer.TokenEnum.CONSTANT_STRING))(lexer);
 }
 
 
 function parseIdentifier(lexer) {
-    return P.and([
-        P.symbol(Lexer.TokenEnum.IDENTIFIER),
-        P.option(
-            P.and([
-                P.symbol(Lexer.TokenEnum.PERIOD),
-                P.symbol(Lexer.TokenEnum.IDENTIFIER)
-            ]))
-    ], e => e[1].isJust() ? new AST.QualifiedIdentifier(e[0], e[1].withDefault()[1]) : new AST.Identifier(e[0]))(lexer);
+    return compose(
+        P.map(e => e[1].isJust() ? new AST.QualifiedIdentifier(e[0], e[1].withDefault()[1]) : new AST.Identifier(e[0])),
+        P.and([
+            P.symbol(Lexer.TokenEnum.IDENTIFIER),
+            P.option(
+                P.and([
+                    P.symbol(Lexer.TokenEnum.PERIOD),
+                    P.symbol(Lexer.TokenEnum.IDENTIFIER)
+                ]))
+        ]))(lexer);
 }
 
 
 function parseLambda(lexer) {
-    return P.and([
-        P.many1(
-            P.and([
-                P.symbol(Lexer.TokenEnum.LAMBDA),
-                P.symbol(Lexer.TokenEnum.IDENTIFIER)
-            ], elements => elements[1])),
-        P.symbol(Lexer.TokenEnum.MINUS_GREATER),
-        parseEXPR1
-    ], items => new AST.Lambda(items[0], items[2]))(lexer);
+    return compose(
+        P.map(items => new AST.Lambda(items[0], items[2])),
+        P.and([
+            P.many1(
+                P.and([
+                    P.symbol(Lexer.TokenEnum.LAMBDA),
+                    P.symbol(Lexer.TokenEnum.IDENTIFIER)
+                ], elements => elements[1])),
+            P.symbol(Lexer.TokenEnum.MINUS_GREATER),
+            parseEXPR1
+        ]))(lexer);
 }
 
 
 function parseParenthesisExpression(lexer) {
-    return P.and([
-        P.symbol(Lexer.TokenEnum.LEFT_PAREN),
-        parseEXPR1,
-        P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
-    ], elements => elements[1])(lexer);
+    return compose(
+        P.map(elements => elements[1]),
+        P.and([
+            P.symbol(Lexer.TokenEnum.LEFT_PAREN),
+            parseEXPR1,
+            P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
+        ]))(lexer);
 }
 
 
 function parsePrefixOperator(lexer) {
-    return P.and([
-        P.symbol(Lexer.TokenEnum.LEFT_PAREN),
-        P.or([
-            P.symbol(Lexer.TokenEnum.BAR_BAR),
-            P.symbol(Lexer.TokenEnum.AMPERSAND_AMPERSAND),
-            P.symbol(Lexer.TokenEnum.EQUAL_EQUAL),
-            P.symbol(Lexer.TokenEnum.BANG_EQUAL),
-            P.symbol(Lexer.TokenEnum.LESS),
-            P.symbol(Lexer.TokenEnum.LESS_EQUAL),
-            P.symbol(Lexer.TokenEnum.GREATER),
-            P.symbol(Lexer.TokenEnum.GREATER_EQUAL),
-            P.symbol(Lexer.TokenEnum.PLUS_PLUS),
-            P.symbol(Lexer.TokenEnum.PLUS),
-            P.symbol(Lexer.TokenEnum.MINUS),
-            P.symbol(Lexer.TokenEnum.STAR),
-            P.symbol(Lexer.TokenEnum.SLASH)
-        ]),
-        P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
-    ], e => new AST.InfixOperator(e[1]))(lexer);
+    return compose(
+        P.map(e => new AST.InfixOperator(e[1])),
+        P.and([
+            P.symbol(Lexer.TokenEnum.LEFT_PAREN),
+            P.or([
+                P.symbol(Lexer.TokenEnum.BAR_BAR),
+                P.symbol(Lexer.TokenEnum.AMPERSAND_AMPERSAND),
+                P.symbol(Lexer.TokenEnum.EQUAL_EQUAL),
+                P.symbol(Lexer.TokenEnum.BANG_EQUAL),
+                P.symbol(Lexer.TokenEnum.LESS),
+                P.symbol(Lexer.TokenEnum.LESS_EQUAL),
+                P.symbol(Lexer.TokenEnum.GREATER),
+                P.symbol(Lexer.TokenEnum.GREATER_EQUAL),
+                P.symbol(Lexer.TokenEnum.PLUS_PLUS),
+                P.symbol(Lexer.TokenEnum.PLUS),
+                P.symbol(Lexer.TokenEnum.MINUS),
+                P.symbol(Lexer.TokenEnum.STAR),
+                P.symbol(Lexer.TokenEnum.SLASH)
+            ]),
+            P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
+        ]))(lexer);
 }
 
 
 function parseConstantUnit(lexer) {
-    return P.and([
-        P.symbol(Lexer.TokenEnum.LEFT_PAREN),
-        P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
-    ], e => new AST.ConstantUnit())(lexer);
+    return compose(
+        P.map(e => new AST.ConstantUnit()),
+        P.and([
+            P.symbol(Lexer.TokenEnum.LEFT_PAREN),
+            P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
+        ]))(lexer);
 }
 
 
 function parseString(input, sourceName = 'stream') {
-    const parseResult =
-        P.and([parseMODULE, P.symbol(Lexer.TokenEnum.EOF)], (elements => elements[0]))(Lexer.fromString(input, sourceName));
+    const parseResult = compose(
+        P.map(elements => elements[0]),
+        P.and([parseMODULE, P.symbol(Lexer.TokenEnum.EOF)]))(Lexer.fromString(input, sourceName));
 
     return Result.map(_ => Tuple.first(_))(parseResult);
 }
 
 function parseExpressionString(input) {
-    const parseResult =
-        P.and([parseEXPR1, P.symbol(Lexer.TokenEnum.EOF)], (elements => elements[0]))(Lexer.fromString(input));
+    const parseResult = compose(
+        P.map(elements => elements[0]),
+        P.and([parseEXPR1, P.symbol(Lexer.TokenEnum.EOF)]))(Lexer.fromString(input));
 
     return Result.map(_ => Tuple.first(_))(parseResult);
 }
