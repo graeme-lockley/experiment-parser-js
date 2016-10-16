@@ -72,12 +72,12 @@ describe('Lexer', () => {
 
     describe('with selected input should return the correct tokens', () => {
         const items = [
-            Tuple.Tuple('\\ ( ) { }', [Lexer.TokenEnum.LAMBDA, Lexer.TokenEnum.LEFT_PAREN, Lexer.TokenEnum.RIGHT_PAREN, Lexer.TokenEnum.LEFT_CURLY, Lexer.TokenEnum.RIGHT_CURLY, Lexer.TokenEnum.EOF]),
-            Tuple.Tuple('== = ; ++ +', [Lexer.TokenEnum.EQUAL_EQUAL, Lexer.TokenEnum.EQUAL, Lexer.TokenEnum.SEMICOLON, Lexer.TokenEnum.PLUS_PLUS, Lexer.TokenEnum.PLUS, Lexer.TokenEnum.EOF]),
-            Tuple.Tuple('-> - <= < >=', [Lexer.TokenEnum.MINUS_GREATER, Lexer.TokenEnum.MINUS, Lexer.TokenEnum.LESS_EQUAL, Lexer.TokenEnum.LESS, Lexer.TokenEnum.GREATER_EQUAL, Lexer.TokenEnum.EOF]),
-            Tuple.Tuple('> * / ! as', [Lexer.TokenEnum.GREATER, Lexer.TokenEnum.STAR, Lexer.TokenEnum.SLASH, Lexer.TokenEnum.BANG, Lexer.TokenEnum.AS, Lexer.TokenEnum.EOF]),
-            Tuple.Tuple('else false if import o', [Lexer.TokenEnum.ELSE, Lexer.TokenEnum.FALSE, Lexer.TokenEnum.IF, Lexer.TokenEnum.IMPORT, Lexer.TokenEnum.O, Lexer.TokenEnum.EOF]),
-            Tuple.Tuple('then true hello\' h123_\'\' _123', [Lexer.TokenEnum.THEN, Lexer.TokenEnum.TRUE, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.EOF])
+            Tuple.Tuple('\\ ( ) { }')([Lexer.TokenEnum.LAMBDA, Lexer.TokenEnum.LEFT_PAREN, Lexer.TokenEnum.RIGHT_PAREN, Lexer.TokenEnum.LEFT_CURLY, Lexer.TokenEnum.RIGHT_CURLY, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('== = ; ++ +')([Lexer.TokenEnum.EQUAL_EQUAL, Lexer.TokenEnum.EQUAL, Lexer.TokenEnum.SEMICOLON, Lexer.TokenEnum.PLUS_PLUS, Lexer.TokenEnum.PLUS, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('-> - <= < >=')([Lexer.TokenEnum.MINUS_GREATER, Lexer.TokenEnum.MINUS, Lexer.TokenEnum.LESS_EQUAL, Lexer.TokenEnum.LESS, Lexer.TokenEnum.GREATER_EQUAL, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('> * / ! as')([Lexer.TokenEnum.GREATER, Lexer.TokenEnum.STAR, Lexer.TokenEnum.SLASH, Lexer.TokenEnum.BANG, Lexer.TokenEnum.AS, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('else false if import o')([Lexer.TokenEnum.ELSE, Lexer.TokenEnum.FALSE, Lexer.TokenEnum.IF, Lexer.TokenEnum.IMPORT, Lexer.TokenEnum.O, Lexer.TokenEnum.EOF]),
+            Tuple.Tuple('then true hello\' h123_\'\' _123')([Lexer.TokenEnum.THEN, Lexer.TokenEnum.TRUE, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.IDENTIFIER, Lexer.TokenEnum.EOF])
         ];
 
         items.forEach(tuple => {

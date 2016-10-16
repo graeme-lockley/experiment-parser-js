@@ -20,7 +20,7 @@ function mapError(result, errorMessage) {
 
 function symbol(tokenID, mapFunction = identity) {
     return lexer => (lexer.id == tokenID)
-        ? Result.Ok(Tuple.Tuple(mapFunction(lexer.text), lexer.next()))
+        ? Result.Ok(Tuple.Tuple(mapFunction(lexer.text))(lexer.next()))
         : Result.Error("Expected the symbol " + tokenID);
 }
 
@@ -55,7 +55,7 @@ function and(parsers, mapFunction = identity) {
                 }
             }
 
-            return Result.Ok(Tuple.Tuple(mapFunction(results), currentLexer));
+            return Result.Ok(Tuple.Tuple(mapFunction(results))(currentLexer));
         }
     }
 }
@@ -66,8 +66,8 @@ function option(parser, mapFunction = identity) {
         const result = parser(lexer);
 
         return Result.isOk(result)
-            ? Result.Ok(Tuple.Tuple(Maybe.Just(mapFunction(Result.withDefault()(result).fst)), Result.withDefault()(result).snd))
-            : Result.Ok(Tuple.Tuple(Maybe.Nothing, lexer));
+            ? Result.Ok(Tuple.Tuple(Maybe.Just(mapFunction(Result.withDefault()(result).fst)))(Result.withDefault()(result).snd))
+            : Result.Ok(Tuple.Tuple(Maybe.Nothing)(lexer));
     }
 }
 
@@ -84,7 +84,7 @@ function many(parser, mapFunction = identity) {
                 result.push(Result.withDefault()(currentResult).fst);
                 currentLexer = Result.withDefault()(currentResult).snd;
             } else {
-                return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
+                return Result.Ok(Tuple.Tuple(mapFunction(result))(currentLexer));
             }
         }
     }
@@ -106,11 +106,11 @@ function many1(parser, mapFunction = identity) {
                     result.push(Result.withDefault()(currentResult).fst);
                     currentLexer = Result.withDefault()(currentResult).snd;
                 } else {
-                    return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
+                    return Result.Ok(Tuple.Tuple(mapFunction(result))(currentLexer));
                 }
             }
         } else {
-            return Result.map(_ => Tuple.Tuple(mapFunction(_.fst), _.snd))(firstResult);
+            return Result.map(_ => Tuple.Tuple(mapFunction(_.fst))(_.snd))(firstResult);
         }
     }
 }
@@ -133,11 +133,11 @@ function sepBy1(parser, separatorParser, mapFunction = identity) {
                     result.push(Result.withDefault()(currentResult).fst);
                     currentLexer = Result.withDefault()(currentResult).snd;
                 } else {
-                    return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
+                    return Result.Ok(Tuple.Tuple(mapFunction(result))(currentLexer));
                 }
             }
         } else {
-            return Result.map(_ => Tuple.Tuple(mapFunction(_.fst), _.snd))(firstResult);
+            return Result.map(_ => Tuple.Tuple(mapFunction(_.fst))(_.snd))(firstResult);
         }
     }
 }
@@ -162,11 +162,11 @@ function chainl1(parser, separatorParser, mapFunction = identity) {
                     result = nextParseResult[0](result, nextParseResult[1]);
                     currentLexer = Result.withDefault()(currentResult).snd;
                 } else {
-                    return Result.Ok(Tuple.Tuple(mapFunction(result), currentLexer));
+                    return Result.Ok(Tuple.Tuple(mapFunction(result))(currentLexer));
                 }
             }
         } else {
-            return Result.map(ok => Tuple.Tuple(mapFunction(ok.fst), ok.snd))(firstResult);
+            return Result.map(ok => Tuple.Tuple(mapFunction(ok.fst))(ok.snd))(firstResult);
         }
     }
 }

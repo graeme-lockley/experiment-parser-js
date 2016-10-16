@@ -23,8 +23,8 @@ class TupleImpl {
     }
 }
 
-function Tuple(fst, snd) {
-    return new TupleImpl(fst, snd);
+function Tuple(fst) {
+    return snd => new TupleImpl(fst, snd);
 }
 
 module.exports = {

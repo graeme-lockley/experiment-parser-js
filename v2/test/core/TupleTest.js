@@ -5,7 +5,7 @@ const expect = require("chai").expect;
 
 describe('Core/Tuple', function () {
     describe('given a tuple of (10, "abc")', () => {
-        const tuple = Tuple.Tuple(10, 'abc');
+        const tuple = Tuple.Tuple(10)('abc');
 
         it('fst should return 10', () => expect(tuple.fst).to.equal(10));
         it('snd should return "abc"', () => expect(tuple.snd).to.equal('abc'));
