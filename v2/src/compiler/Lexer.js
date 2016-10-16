@@ -277,7 +277,7 @@ class Context {
                             cursor.markStartOfToken();
                             cursor.advanceIndex();
 
-                            return this.newContext(symbol.snd, cursor);
+                            return this.newContext(Tuple.second(symbol), cursor);
                         } else {
                             const tmpCursor = cursor.clone();
                             let matched = true;
@@ -290,7 +290,7 @@ class Context {
                             }
 
                             if (matched) {
-                                return this.newContext(symbol.snd, tmpCursor);
+                                return this.newContext(Tuple.second(symbol), tmpCursor);
                             }
                         }
                     }

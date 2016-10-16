@@ -84,7 +84,7 @@ describe('Lexer', () => {
             it(Tuple.first(tuple), () => {
                 let context = Lexer.fromString(Tuple.first(tuple));
 
-                tuple.snd.forEach(token => {
+                Tuple.second(tuple).forEach(token => {
                     expect(context.id).to.equal(token);
                     context = context.next();
                 })

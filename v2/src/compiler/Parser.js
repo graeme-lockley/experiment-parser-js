@@ -37,7 +37,7 @@ function markLocation(parser) {
     return lexer => {
         const startToken = lexer;
         const result = parser(lexer);
-        return Result.map(_ => Tuple.Tuple([startToken, _.snd, Tuple.first(_)])(_.snd))(result);
+        return Result.map(_ => Tuple.Tuple([startToken, Tuple.second(_), Tuple.first(_)])(Tuple.second(_)))(result);
     };
 }
 
