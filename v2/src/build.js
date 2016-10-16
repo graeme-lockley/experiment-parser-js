@@ -50,6 +50,4 @@ const result = Sequence.seq()
     .assign('result', s => s.repository.build(s.cmdLine.options, s.cmdLine.files))
     .return(s => s.result);
 
-result
-    .okay(success => console.log(success))
-    .error(msg => console.log(msg));
+console.log(result);

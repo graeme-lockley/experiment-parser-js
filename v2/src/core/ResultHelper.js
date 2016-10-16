@@ -10,15 +10,6 @@ class OkImpl {
     _flatMap(okFn, _) {
         return okFn(this._ok);
     }
-
-    okay(okFn) {
-        okFn(this._ok);
-        return this;
-    }
-
-    error(errorFn) {
-        return this;
-    }
 }
 
 class ErrorImpl {
@@ -32,15 +23,6 @@ class ErrorImpl {
 
     _flatMap(_, errorFn) {
         return errorFn(this._error);
-    }
-
-    okay(okFn) {
-        return this;
-    }
-
-    error(errorFn) {
-        errorFn(this._error);
-        return this;
     }
 }
 

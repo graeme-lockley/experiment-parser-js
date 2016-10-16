@@ -81,6 +81,4 @@ const result = Sequence.seq()
     )
     .return(s => s.result);
 
-result
-    .okay(success => console.log(success))
-    .error(msg => console.log(msg));
+console.log(result);
