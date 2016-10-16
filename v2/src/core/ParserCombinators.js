@@ -13,11 +13,6 @@ const Maybe = require('./Maybe');
 const identity = (x => x);
 
 
-function mapError(result, errorMessage) {
-    return Result.formatError(_ => errorMessage)(result);
-}
-
-
 function symbol(tokenID, mapFunction = identity) {
     return lexer => (lexer.id == tokenID)
         ? Result.Ok(Tuple.Tuple(mapFunction(lexer.text))(lexer.next()))
@@ -169,6 +164,16 @@ function chainl1(parser, separatorParser, mapFunction = identity) {
             return Result.map(ok => Tuple.Tuple(mapFunction(Tuple.first(ok)))(Tuple.second(ok)))(firstResult);
         }
     }
+}
+
+
+function map(f) {
+    return Result.map(f);
+}
+
+
+function mapError(result, errorMessage) {
+    return Result.formatError(_ => errorMessage)(result);
 }
 
 
