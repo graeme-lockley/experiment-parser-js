@@ -172,8 +172,8 @@ function map(f) {
 }
 
 
-function mapError(result, errorMessage) {
-    return Result.formatError(_ => errorMessage)(result);
+function errorMessage(errorMessage) {
+    return Result.formatError(_ => errorMessage);
 }
 
 
@@ -182,7 +182,7 @@ module.exports = {
     chainl1,
     many,
     many1,
-    mapError,
+    errorMessage,
     option,
     or,
     sepBy1,
