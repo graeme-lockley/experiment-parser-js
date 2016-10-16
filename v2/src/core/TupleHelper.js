@@ -13,14 +13,6 @@ class TupleImpl {
     get snd() {
         return this._snd;
     }
-
-    setFst(fst) {
-        return new TupleImpl(fst, this._snd);
-    }
-
-    setSnd(snd) {
-        return new TupleImpl(this._fst, snd);
-    }
 }
 
 function Tuple(fst) {
