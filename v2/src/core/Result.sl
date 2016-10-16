@@ -64,4 +64,13 @@ assumptions {
 };
 
 
+andThen result next =
+    RH.flatMap (\ok -> next ok) (\error -> Error error) result
+assumptions {
+    withDefault 0 (andThen (Ok 1) (\n -> Ok (n + 1))) == 2;
+    withDefault 0 (andThen (Ok 1) (\n -> Error "oops")) == 0;
+    withDefault 0 (andThen (Error "oops1") (\n -> Error "oops2")) == 0
+};
+
+
 is = RH.is;
