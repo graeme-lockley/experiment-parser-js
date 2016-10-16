@@ -5,10 +5,6 @@ class TupleImpl {
         this._fst = fst;
         this._snd = snd;
     }
-
-    get snd() {
-        return this._snd;
-    }
 }
 
 function Tuple(fst) {
