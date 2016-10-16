@@ -6,6 +6,8 @@ const VM = require('vm');
 const Parser = require('./compiler/Parser');
 const Translator = require('./compiler/Translator');
 
+const Result = require('./core/Result.sl');
+
 
 function runInContext(js, context, fileName) {
     return (context == global)
@@ -80,7 +82,7 @@ function javaScriptEval(input, context, filename, cb) {
 function safeLangEval(input, context, filename, cb) {
     const parsedResponse = Parser.parseString(input);
 
-    if (parsedResponse.isOk()) {
+    if (Result.isOk(parsedResponse)) {
         if (state.showAST) {
             console.log('--- AST ---');
             console.log(JSON.stringify(parsedResponse.getOkOrElse(), null, 2));

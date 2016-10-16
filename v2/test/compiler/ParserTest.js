@@ -14,7 +14,7 @@ describe('Parser', function () {
         const result = Parser.parseEXPR12(Lexer.fromString("123"));
 
         it("should parse without any errors", () =>
-            expect(result.isOk()).to.equal(true));
+            expect(Result.isOk(result)).to.equal(true));
         it("should parse a CONSTANT_INTEGER with value 123", () => {
             expect(result.getOkOrElse().fst).to.be.an.instanceOf(AST.ConstantInteger);
             expect(result.getOkOrElse().fst.value).to.equal(123);
@@ -27,7 +27,7 @@ describe('Parser', function () {
         const result = Parser.parseEXPR12(Lexer.fromString("abc 123"));
 
         it("should parse without any errors", () =>
-            expect(result.isOk()).to.equal(true));
+            expect(Result.isOk(result)).to.equal(true));
         it('should parse an IDENTIFIER with value "abc"', () => {
             expect(result.getOkOrElse().fst).to.be.an.instanceOf(AST.Identifier);
             expect(result.getOkOrElse().fst.name).to.equal('abc');
@@ -40,7 +40,7 @@ describe('Parser', function () {
         const result = Parser.parseEXPR12(Lexer.fromString('( 123)'));
 
         it("should parse without any errors", ()=>
-            expect(result.isOk(result)).to.equal(true));
+            expect(Result.isOk(result)).to.equal(true));
         it("should parse a CONSTANT_INTEGER with value 123", () => {
             expect(result.getOkOrElse().fst).to.be.an.instanceOf(AST.ConstantInteger);
             expect(result.getOkOrElse().fst.value).to.equal(123);
@@ -52,7 +52,7 @@ describe('Parser', function () {
     describe('given the input "\\a \\b -> (a)" to parseEXPR12', () => {
         const result = Parser.parseEXPR12(Lexer.fromString('\\a \\b -> (a)'));
 
-        it("should parse without any errors", () => expect(result.isOk()).to.equal(true));
+        it("should parse without any errors", () => expect(Result.isOk(result)).to.equal(true));
         it("should parse a LAMBDA with variables ['a', 'b'] and expression of IDENTIFIER with value 'a'", () => {
             expect(result.getOkOrElse().fst).to.be.an.instanceOf(AST.Lambda);
             expect(result.getOkOrElse().fst.variables.length).to.equal(2);

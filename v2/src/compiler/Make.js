@@ -74,7 +74,7 @@ class Repository {
                         const content = readFile(fileName);
 
                         const astResult = Parser.parseString(content, fileName);
-                        if (astResult.isOk()) {
+                        if (Result.isOk(astResult)) {
                             const translationResult = Translator.astToJavascript(astResult.getOkOrElse());
                             writeFile(targetFileName, translationResult);
 

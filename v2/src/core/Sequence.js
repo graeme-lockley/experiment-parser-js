@@ -9,7 +9,7 @@ class Sequence {
     }
 
     assign(n, e, logMessage = null) {
-        if (this._state.isOk()) {
+        if (Result.isOk(this._state)) {
             try {
                 if (logMessage != null) {
                     console.time(logMessage(this._state.getOkOrElse({})));
@@ -17,7 +17,7 @@ class Sequence {
                 const eResult = e(this._state.getOkOrElse());
 
                 if (Result.is(eResult)) {
-                    if (eResult.isOk()) {
+                    if (Result.isOk(eResult)) {
                         this._state.getOkOrElse()[n] = eResult.getOkOrElse();
                     } else {
                         this._state = eResult;
@@ -38,7 +38,7 @@ class Sequence {
     }
 
     return(e) {
-        if (this._state.isOk()) {
+        if (Result.isOk(this._state)) {
             const result = e(this._state.getOkOrElse());
 
             if (Result.is(result)) {

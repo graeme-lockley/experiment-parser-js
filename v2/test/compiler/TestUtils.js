@@ -5,6 +5,8 @@ const {NodeVM} = require('vm2');
 
 const Parser = require('../../src/compiler/Parser');
 const Translator = require('../../src/compiler/Translator');
+const Result = require('../../src/core/Result');
+
 const expect = require("chai").expect;
 
 function scenariosIn(directory) {
@@ -16,7 +18,7 @@ function scenariosIn(directory) {
             if ('js' in expectations) {
                     parseResponseIsTested = true;
                 it('should parse without any errors', () => {
-                    expect(parseResponse.isOk()).to.equal(true);
+                    expect(Result.isOk(parseResponse)).to.equal(true);
                 });
 
                 it('produces the expected JavaScript', () => {
@@ -38,7 +40,7 @@ function scenariosIn(directory) {
                 if (!parseResponseIsTested) {
                         parseResponseIsTested = true;
                     it('should parse without any errors', () => {
-                        expect(parseResponse.isOk()).to.equal(true);
+                        expect(Result.isOk(parseResponse)).to.equal(true);
                     });
                 }
                 it('produces the expected AST', () =>
@@ -48,7 +50,7 @@ function scenariosIn(directory) {
             if ('run' in expectations) {
                 if (!parseResponseIsTested) {
                     it('should parse without any errors', () => {
-                        expect(parseResponse.isOk()).to.equal(true);
+                        expect(Result.isOk(parseResponse)).to.equal(true);
                     });
                 }
 

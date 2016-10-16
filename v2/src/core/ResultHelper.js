@@ -3,14 +3,6 @@ class OkImpl {
         this._ok = value;
     }
 
-    isOk() {
-        return true;
-    }
-
-    isError() {
-        return false;
-    }
-
     getOkOrElse(elseValue) {
         return this._ok;
     }
@@ -40,14 +32,6 @@ class OkImpl {
 class ErrorImpl {
     constructor(value) {
         this._error = value;
-    }
-
-    isOk() {
-        return false;
-    }
-
-    isError() {
-        return true;
     }
 
     getOkOrElse(elseValue) {

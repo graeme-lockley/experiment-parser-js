@@ -29,7 +29,7 @@ function or(parsers) {
     return lexer => {
         for (let index = 0; index < parsers.length; index += 1) {
             const parserIndexResult = parsers[index](lexer);
-            if (parserIndexResult.isOk()) {
+            if (Result.isOk(parserIndexResult)) {
                 return parserIndexResult;
             }
         }
@@ -47,7 +47,7 @@ function and(parsers, mapFunction = identity) {
             let currentLexer = lexer;
             for (let index = 0; index < parsers.length; index += 1) {
                 const intermediateResult = parsers[index](currentLexer);
-                if (intermediateResult.isOk()) {
+                if (Result.isOk(intermediateResult)) {
                     results.push(intermediateResult.getOkOrElse().fst);
                     currentLexer = intermediateResult.getOkOrElse().snd;
                 } else {
@@ -65,7 +65,7 @@ function option(parser, mapFunction = identity) {
     return lexer => {
         const result = parser(lexer);
 
-        return result.isOk()
+        return Result.isOk(result)
             ? Result.Ok(Tuple.Tuple(Maybe.Just(mapFunction(result.getOkOrElse().fst)), result.getOkOrElse().snd))
             : Result.Ok(Tuple.Tuple(Maybe.Nothing, lexer));
     }
@@ -80,7 +80,7 @@ function many(parser, mapFunction = identity) {
         while (true) {
             const currentResult = parser(currentLexer);
 
-            if (currentResult.isOk()) {
+            if (Result.isOk(currentResult)) {
                 result.push(currentResult.getOkOrElse().fst);
                 currentLexer = currentResult.getOkOrElse().snd;
             } else {
@@ -95,14 +95,14 @@ function many1(parser, mapFunction = identity) {
     return lexer => {
         const firstResult = parser(lexer);
 
-        if (firstResult.isOk()) {
+        if (Result.isOk(firstResult)) {
             const result = [firstResult.getOkOrElse().fst];
             let currentLexer = firstResult.getOkOrElse().snd;
 
             while (true) {
                 const currentResult = parser(currentLexer);
 
-                if (currentResult.isOk()) {
+                if (Result.isOk(currentResult)) {
                     result.push(currentResult.getOkOrElse().fst);
                     currentLexer = currentResult.getOkOrElse().snd;
                 } else {
@@ -125,14 +125,14 @@ function sepBy1(parser, separatorParser, mapFunction = identity) {
     return lexer => {
         const firstResult = parser(lexer);
 
-        if (firstResult.isOk()) {
+        if (Result.isOk(firstResult)) {
             const result = [firstResult.getOkOrElse().fst];
             let currentLexer = firstResult.getOkOrElse().snd;
 
             while (true) {
                 const currentResult = nextParser(currentLexer);
 
-                if (currentResult.isOk()) {
+                if (Result.isOk(currentResult)) {
                     result.push(currentResult.getOkOrElse().fst);
                     currentLexer = currentResult.getOkOrElse().snd;
                 } else {
@@ -155,14 +155,14 @@ function chainl1(parser, separatorParser, mapFunction = identity) {
     return lexer => {
         const firstResult = parser(lexer);
 
-        if (firstResult.isOk()) {
+        if (Result.isOk(firstResult)) {
             let result = firstResult.getOkOrElse().fst;
             let currentLexer = firstResult.getOkOrElse().snd;
 
             while (true) {
                 const currentResult = nextParser(currentLexer);
 
-                if (currentResult.isOk()) {
+                if (Result.isOk(currentResult)) {
                     const nextParseResult = currentResult.getOkOrElse().fst;
 
                     result = nextParseResult[0](result, nextParseResult[1]);
