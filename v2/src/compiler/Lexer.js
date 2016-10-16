@@ -272,8 +272,8 @@ class Context {
                 for (let index = 0; index < symbols.length; index += 1) {
                     const symbol = symbols[index];
 
-                    if (symbol.fst.charCodeAt(0) == cursor.charCodeAtIndex()) {
-                        if (symbol.fst.length == 1) {
+                    if (Tuple.first(symbol).charCodeAt(0) == cursor.charCodeAtIndex()) {
+                        if (Tuple.first(symbol).length == 1) {
                             cursor.markStartOfToken();
                             cursor.advanceIndex();
 
@@ -284,8 +284,8 @@ class Context {
 
                             tmpCursor.markStartOfToken();
                             tmpCursor.advanceIndex();
-                            for (let tmpCursorIndex = 1; tmpCursorIndex < symbol.fst.length; tmpCursorIndex += 1) {
-                                matched = matched && symbol.fst.charCodeAt(tmpCursorIndex) == tmpCursor.charCodeAtIndex();
+                            for (let tmpCursorIndex = 1; tmpCursorIndex < Tuple.first(symbol).length; tmpCursorIndex += 1) {
+                                matched = matched && Tuple.first(symbol).charCodeAt(tmpCursorIndex) == tmpCursor.charCodeAtIndex();
                                 tmpCursor.advanceIndex();
                             }
 
