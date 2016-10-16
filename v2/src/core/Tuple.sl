@@ -16,3 +16,16 @@ second t =
 assumptions {
     second (Tuple 1 "hello") == "hello"
 };
+
+
+mapFirst f t =
+    Tuple (f (first t)) (second t)
+assumptions {
+    first (mapFirst ((+) 1) (Tuple 1 "hello")) == 2
+};
+
+mapSecond f t =
+    Tuple (first t) (f (second t))
+assumptions {
+    first (mapFirst ((+) 1) (Tuple "hello" 1)) == 2
+};
