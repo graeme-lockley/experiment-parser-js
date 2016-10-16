@@ -27,5 +27,5 @@ assumptions {
 mapSecond f t =
     Tuple (first t) (f (second t))
 assumptions {
-    first (mapFirst ((+) 1) (Tuple "hello" 1)) == 2
+    second (mapSecond ((+) 1) (Tuple "hello" 1)) == 2
 };
