@@ -6,8 +6,11 @@ Ok = RH.Ok;
 Error = RH.Error;
 
 
+flatMap = RH.flatMap;
+
+
 withDefault d =
-    RH.flatMap (\_ -> _) (\_ -> d)
+    flatMap (\_ -> _) (\_ -> d)
 assumptions {
     withDefault 10 (Ok 1) == 1;
     withDefault 10 (Error "oops") == 10
@@ -15,7 +18,7 @@ assumptions {
 
 
 errorWithDefault errorDefault =
-    RH.flatMap (\_ -> errorDefault) (\_ -> _)
+    flatMap (\_ -> errorDefault) (\_ -> _)
 assumptions {
     errorWithDefault "none" (Ok 1) == "none";
     errorWithDefault "none" (Error "oops") == "oops"
@@ -39,7 +42,7 @@ assumptions {
 
 
 toMaybe =
-    RH.flatMap (\x -> Maybe.Just x) (\_ -> Maybe.Nothing)
+    flatMap (\x -> Maybe.Just x) (\_ -> Maybe.Nothing)
 assumptions {
     Maybe.withDefault 0 (toMaybe (Ok 2)) == 2;
     Maybe.withDefault 0 (toMaybe (Error "oops")) == 0
@@ -57,7 +60,7 @@ assumptions {
 
 
 isOk =
-    RH.flatMap (\_ -> true) (\_ -> false)
+    flatMap (\_ -> true) (\_ -> false)
 assumptions {
     isOk (Ok 1);
     ! isOk (Error "oops")
@@ -65,7 +68,7 @@ assumptions {
 
 
 andThen result next =
-    RH.flatMap (\ok -> next ok) (\error -> Error error) result
+    flatMap (\ok -> next ok) (\error -> Error error) result
 assumptions {
     withDefault 0 (andThen (Ok 1) (\n -> Ok (n + 1))) == 2;
     withDefault 0 (andThen (Ok 1) (\n -> Error "oops")) == 0;
