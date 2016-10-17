@@ -174,7 +174,6 @@ function errorMessage(errorMessage) {
     return Result.formatError(_ => errorMessage);
 }
 
-
 function compose(f1, f2) {
     return x => f1(f2(x));
 }
