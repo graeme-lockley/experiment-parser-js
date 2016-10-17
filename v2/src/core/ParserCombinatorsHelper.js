@@ -46,25 +46,6 @@ function and(parsers) {
 }
 
 
-function many(parser) {
-    return lexer => {
-        const result = [];
-        let currentLexer = lexer;
-
-        while (true) {
-            const currentResult = parser(currentLexer);
-
-            if (Result.isOk(currentResult)) {
-                result.push(Tuple.first(Result.withDefault()(currentResult)));
-                currentLexer = Tuple.second(Result.withDefault()(currentResult));
-            } else {
-                return Result.Ok(Tuple.Tuple(result)(currentLexer));
-            }
-        }
-    }
-}
-
-
 function many1(parser) {
     return lexer => {
         const firstResult = parser(lexer);
@@ -164,7 +145,6 @@ module.exports = {
     and,
     chainl1,
     map,
-    many,
     many1,
     errorMessage,
     or,

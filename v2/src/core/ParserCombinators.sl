@@ -1,5 +1,6 @@
 import file:./ParserCombinatorsHelper as Helper;
 
+import file:./Array as Array;
 import file:./Result as Result;
 import file:./Tuple as Tuple;
 import file:./Maybe as Maybe;
@@ -22,7 +23,20 @@ option parser lexer =
     Result.Ok (Result.flatMap (\ok -> Tuple.mapFirst Maybe.Just ok) (\_ -> Tuple.Tuple Maybe.Nothing lexer) (parser lexer));
 
 
-many = Helper.many;
+many parser lexer =
+    (\result ->
+        if Result.isOk result then
+            map (\r -> Array.prepend (extractResult result) r) (many parser (extractLexer result))
+        else
+            Result.Ok (Tuple.Tuple Array.empty lexer)
+    ) (parser lexer);
+
+
+extractResult result =
+    Tuple.first (Result.withDefault () result);
+
+extractLexer result =
+    Tuple.second (Result.withDefault () result);
 
 
 many1 = Helper.many1;
