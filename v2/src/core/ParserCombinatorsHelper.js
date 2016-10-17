@@ -10,14 +10,6 @@ const Maybe = require('./Maybe');
  */
 
 
-function symbol(tokenID) {
-    return lexer => {
-        return (lexer.id == tokenID)
-            ? Result.Ok(Tuple.Tuple(lexer.text)(lexer.next()))
-            : Result.Error("Expected the symbol " + tokenID);
-    }
-}
-
 function or(parsers) {
     return lexer => {
         for (let index = 0; index < parsers.length; index += 1) {
@@ -188,6 +180,5 @@ module.exports = {
     errorMessage,
     option,
     or,
-    sepBy1,
-    symbol
+    sepBy1
 };

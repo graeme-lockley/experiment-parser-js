@@ -4,7 +4,11 @@ import file:./Result as Result;
 import file:./Tuple as Tuple;
 
 
-symbol = Helper.symbol;
+symbol tokenID lexer =
+    if (lexer.id == tokenID) then
+        Result.Ok (Tuple.Tuple lexer.text (lexer.next ()))
+    else
+        Result.Error ("Expected the symbol " ++ tokenID);
 
 
 or = Helper.or;
