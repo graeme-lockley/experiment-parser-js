@@ -3,6 +3,19 @@
 const Maybe = require('./Maybe');
 
 
+const empty = [];
+
+
+function append(e) {
+    return a => [...a, e];
+}
+
+
+function prepend(e) {
+    return a => [e, ...a];
+}
+
+
 function foldr(foldFunction) {
     return initValue => arr => {
         let result = initValue;
@@ -28,6 +41,14 @@ function findFirst(predicate) {
 }
 
 
+function at(i) {
+    return a => {
+        const result = a[i];
+        return result ? Maybe.Just(result) : Maybe.Nothing;
+    }
+}
+
+
 module.exports = {
-    foldr, findFirst
+    append, at, empty, foldr, findFirst, prepend
 };
