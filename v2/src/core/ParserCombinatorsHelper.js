@@ -46,17 +46,6 @@ function and(parsers) {
 }
 
 
-function option(parser) {
-    return lexer => {
-        const result = parser(lexer);
-
-        return Result.isOk(result)
-            ? Result.Ok(Tuple.Tuple(Maybe.Just(Tuple.first(Result.withDefault()(result))))(Tuple.second(Result.withDefault()(result))))
-            : Result.Ok(Tuple.Tuple(Maybe.Nothing)(lexer));
-    }
-}
-
-
 function many(parser) {
     return lexer => {
         const result = [];
@@ -178,7 +167,6 @@ module.exports = {
     many,
     many1,
     errorMessage,
-    option,
     or,
     sepBy1
 };

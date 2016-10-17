@@ -2,6 +2,7 @@ import file:./ParserCombinatorsHelper as Helper;
 
 import file:./Result as Result;
 import file:./Tuple as Tuple;
+import file:./Maybe as Maybe;
 
 
 symbol tokenID lexer =
@@ -17,7 +18,8 @@ or = Helper.or;
 and = Helper.and;
 
 
-option = Helper.option;
+option parser lexer =
+    Result.Ok (Result.flatMap (\ok -> Tuple.mapFirst Maybe.Just ok) (\_ -> Tuple.Tuple Maybe.Nothing lexer) (parser lexer));
 
 
 many = Helper.many;
