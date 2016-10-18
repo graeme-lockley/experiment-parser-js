@@ -1,6 +1,8 @@
 import file:./ArrayHelper as AH;
 import file:./Maybe as Maybe;
 
+import file:./Object as Object;
+
 
 append =
     AH.append;
@@ -33,8 +35,8 @@ assumptions {
 at =
     AH.at
 assumptions {
-    Maybe.withDefault (-1) (at 0 empty) == (-1);
-    Maybe.withDefault (-1) (at 0 (append 1 empty)) == 1;
-    Maybe.withDefault (-1) (at 0 (append 2 (append 1 empty))) == 1;
-    Maybe.withDefault (-1) (at 1 (append 2 (append 1 empty))) == 2
+    Object.eq (at 0 empty) Maybe.Nothing;
+    Object.eq (at 0 (append 1 empty)) (Maybe.Just 1);
+    Object.eq (at 0 (append 2 (append 1 empty))) (Maybe.Just 1);
+    Object.eq (at 1 (append 2 (append 1 empty))) (Maybe.Just 2)
 };

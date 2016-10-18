@@ -1,6 +1,9 @@
 import file:./MaybeHelper as MH;
 import file:./Boolean as Boolean;
 
+import file:./Object as Object;
+
+
 Just = MH.Just;
 
 
@@ -30,6 +33,6 @@ assumptions {
 
 map = MH.map
 assumptions {
-    withDefault 0 (map (\n -> n + 1) (Just 1)) == 2;
-    withDefault 0 (map (\n -> n + 1) Nothing) == 0
+    Object.eq (map (\n -> n + 1) (Just 1)) (Just 2);
+    Object.eq (map (\n -> n + 1) Nothing) Nothing
 };

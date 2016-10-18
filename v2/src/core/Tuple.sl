@@ -1,5 +1,8 @@
 import file:./TupleHelper as TH;
 
+import file:./Object as Object;
+
+
 Tuple f s =
     TH.Tuple f s;
 
@@ -21,11 +24,11 @@ assumptions {
 mapFirst f t =
     Tuple (f (first t)) (second t)
 assumptions {
-    first (mapFirst ((+) 1) (Tuple 1 "hello")) == 2
+    Object.eq (mapFirst ((+) 1) (Tuple 1 "hello")) (Tuple 2 "hello")
 };
 
 mapSecond f t =
     Tuple (first t) (f (second t))
 assumptions {
-    second (mapSecond ((+) 1) (Tuple "hello" 1)) == 2
+    Object.eq (mapSecond ((+) 1) (Tuple "hello" 1)) (Tuple "hello" 2)
 };

@@ -5,6 +5,8 @@ import file:./Result as Result;
 import file:./Tuple as Tuple;
 import file:./Maybe as Maybe;
 
+import file:./Object as Object;
+
 
 symbol tokenID lexer =
     if lexer.id == tokenID then
@@ -56,12 +58,12 @@ chainl1 = Helper.chainl1;
 map f result =
     Result.map (\t -> Tuple.mapFirst f t) result
 assumptions {
-    Tuple.first (Result.withDefault 0 (map ((+) 1) (Result.Ok (Tuple.Tuple 1 "Hello")))) == 2
+    Object.eq (map ((+) 1) (Result.Ok (Tuple.Tuple 1 "Hello")))) (Result.Ok (Tuple.Tuple 2 "Hello"))
 };
 
 
 errorMessage errorMessage =
     Result.formatError (\_ -> errorMessage)
 assumptions {
-    Result.errorWithDefault "none" (errorMessage "world" (Result.Error "hello")) == "world"
+    Object.eq (errorMessage "world" (Result.Error "hello")) (Result.Error "world")
 };
