@@ -7,7 +7,7 @@ import file:./Maybe as Maybe;
 
 
 symbol tokenID lexer =
-    if (lexer.id == tokenID) then
+    if lexer.id == tokenID then
         Result.Ok (Tuple.Tuple lexer.text (lexer.next ()))
     else
         Result.Error ("Expected the symbol " ++ tokenID);
