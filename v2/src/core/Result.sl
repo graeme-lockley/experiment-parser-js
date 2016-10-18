@@ -1,6 +1,9 @@
 import file:./ResultHelper as RH;
 import file:./Maybe as Maybe;
 
+import file:./Object as Object;
+
+
 Ok = RH.Ok;
 
 Error = RH.Error;
@@ -28,34 +31,32 @@ assumptions {
 map f =
     RH.map f (\_ -> _)
 assumptions {
-    withDefault 0 (map ((+) 1) (Ok 2)) == 3;
-    withDefault 0 (map ((+) 1) (Error "oops")) == 0
+    Object.eq (map ((+) 1) (Ok 2)) (Ok 3);
+    Object.eq (map ((+) 1) (Error "oops")) (Error "oops")
 };
 
 
 formatError f =
     RH.map (\_ -> _) f
 assumptions {
-    errorWithDefault "oops" (formatError ((++) "hello ") (Ok 2)) == "oops";
-    errorWithDefault "oops" (formatError ((++) "hello ") (Error "world")) == "hello world"
+    Object.eq (formatError ((++) "hello ") (Ok 2)) (Ok 2);
+    Object.eq (formatError ((++) "hello ") (Error "world")) (Error "hello world")
 };
 
 
 toMaybe =
     flatMap (\x -> Maybe.Just x) (\_ -> Maybe.Nothing)
 assumptions {
-    Maybe.withDefault 0 (toMaybe (Ok 2)) == 2;
-    Maybe.withDefault 0 (toMaybe (Error "oops")) == 0
+    Object.eq (toMaybe (Ok 2)) (Maybe.Just 2);
+    Object.eq (toMaybe (Error "oops")) Maybe.Nothing
 };
 
 
 fromMaybe errorMessage maybe =
     Maybe.withDefault (Error errorMessage) (Maybe.map (\_ -> Ok(_)) maybe)
 assumptions {
-    withDefault 0 (fromMaybe "oops" (Maybe.Just 1)) == 1;
-    withDefault 0 (fromMaybe "oops" (Maybe.Nothing)) == 0;
-    errorWithDefault "hello" (fromMaybe "oops" (Maybe.Just 1)) == "hello";
-    errorWithDefault "hello" (fromMaybe "oops" (Maybe.Nothing)) == "oops"
+    Object.eq (fromMaybe "oops" (Maybe.Just 1)) (Ok 1);
+    Object.eq (fromMaybe "oops" (Maybe.Nothing)) (Error "oops")
 };
 
 
@@ -70,9 +71,9 @@ assumptions {
 andThen result next =
     flatMap (\ok -> next ok) (\error -> Error error) result
 assumptions {
-    withDefault 0 (andThen (Ok 1) (\n -> Ok (n + 1))) == 2;
-    withDefault 0 (andThen (Ok 1) (\n -> Error "oops")) == 0;
-    withDefault 0 (andThen (Error "oops1") (\n -> Error "oops2")) == 0
+    Object.eq (andThen (Ok 1) (\n -> Ok (n + 1))) (Ok 2);
+    Object.eq (andThen (Ok 1) (\n -> Error "oops")) (Error "oops");
+    Object.eq (andThen (Error "oops1") (\n -> Error "oops2")) (Error "oops1")
 };
 
 
