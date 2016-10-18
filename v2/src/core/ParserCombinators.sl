@@ -24,12 +24,20 @@ option parser lexer =
 
 
 many parser lexer =
+    or (Array.prepend (many1 parser) (Array.prepend (empty Array.empty) Array.empty)) lexer;
+
+
+many1 parser lexer =
     (\result ->
         if Result.isOk result then
             map (\r -> Array.prepend (extractResult result) r) (many parser (extractLexer result))
         else
-            Result.Ok (Tuple.Tuple Array.empty lexer)
+            result
     ) (parser lexer);
+
+
+empty value lexer =
+    Result.Ok (Tuple.Tuple value lexer);
 
 
 extractResult result =
@@ -37,9 +45,6 @@ extractResult result =
 
 extractLexer result =
     Tuple.second (Result.withDefault () result);
-
-
-many1 = Helper.many1;
 
 
 sepBy1 = Helper.sepBy1;
@@ -60,4 +65,3 @@ errorMessage errorMessage =
 assumptions {
     Result.errorWithDefault "none" (errorMessage "world" (Result.Error "hello")) == "world"
 };
-

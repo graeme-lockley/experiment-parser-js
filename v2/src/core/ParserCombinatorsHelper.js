@@ -46,31 +46,6 @@ function and(parsers) {
 }
 
 
-function many1(parser) {
-    return lexer => {
-        const firstResult = parser(lexer);
-
-        if (Result.isOk(firstResult)) {
-            const result = [Tuple.first(Result.withDefault()(firstResult))];
-            let currentLexer = Tuple.second(Result.withDefault()(firstResult));
-
-            while (true) {
-                const currentResult = parser(currentLexer);
-
-                if (Result.isOk(currentResult)) {
-                    result.push(Tuple.first(Result.withDefault()(currentResult)));
-                    currentLexer = Tuple.second(Result.withDefault()(currentResult));
-                } else {
-                    return Result.Ok(Tuple.Tuple(result)(currentLexer));
-                }
-            }
-        } else {
-            return Result.map(_ => Tuple.Tuple(Tuple.first(_))(Tuple.second(_)))(firstResult);
-        }
-    }
-}
-
-
 function sepBy1(parser, separatorParser) {
     const nextParser = compose(map(elements => elements[1]), and([separatorParser, parser]));
 
@@ -145,7 +120,6 @@ module.exports = {
     and,
     chainl1,
     map,
-    many1,
     errorMessage,
     or,
     sepBy1
