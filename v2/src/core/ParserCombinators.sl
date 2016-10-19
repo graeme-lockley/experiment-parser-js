@@ -58,7 +58,7 @@ chainl1 = Helper.chainl1;
 map f result =
     Result.map (\t -> Tuple.mapFirst f t) result
 assumptions {
-    Object.eq (map ((+) 1) (Result.Ok (Tuple.Tuple 1 "Hello")))) (Result.Ok (Tuple.Tuple 2 "Hello"))
+    Object.eq (map ((+) 1) (Result.Ok (Tuple.Tuple 1 "Hello"))) (Result.Ok (Tuple.Tuple 2 "Hello"))
 };
 
 
