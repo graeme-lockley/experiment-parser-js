@@ -29,6 +29,19 @@ function foldr(foldFunction) {
 }
 
 
+function foldl(foldFunction) {
+    return initValue => arr => {
+        let result = initValue;
+
+        for (let index = 0; index < arr.length; index += 1) {
+            result = foldFunction(result)(arr[index]);
+        }
+
+        return result;
+    }
+}
+
+
 function findFirst(predicate) {
     return arr => {
         for (let index = 0; index < arr.length; index += 1) {
@@ -50,5 +63,5 @@ function at(i) {
 
 
 module.exports = {
-    append, at, empty, foldr, findFirst, prepend
+    append, at, empty, foldl, foldr, findFirst, prepend
 };

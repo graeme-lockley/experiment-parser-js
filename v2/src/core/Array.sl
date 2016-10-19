@@ -12,6 +12,13 @@ prepend =
     AH.prepend;
 
 
+foldl f z array =
+    AH.foldl f z array
+assumptions {
+    foldl (\acc \i -> acc ++ i) "" (AH.prepend "Hello" (AH.prepend "World" AH.empty)) == "HelloWorld"
+};
+
+
 foldr f z array =
     AH.foldr f z array;
 
