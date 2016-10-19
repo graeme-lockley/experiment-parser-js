@@ -15,7 +15,8 @@ symbol tokenID lexer =
         Result.Error ("Expected the symbol " ++ tokenID);
 
 
-or = Helper.or;
+or parsers lexer =
+    Array.foldl (\result \parser -> if (Result.isOk result) then result else (parser lexer)) (Result.Error "None of the OR terms could be matched") parsers;
 
 
 and = Helper.and;

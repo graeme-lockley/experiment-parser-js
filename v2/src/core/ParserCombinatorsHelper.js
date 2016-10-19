@@ -10,19 +10,6 @@ const Maybe = require('./Maybe');
  */
 
 
-function or(parsers) {
-    return lexer => {
-        for (let index = 0; index < parsers.length; index += 1) {
-            const parserIndexResult = parsers[index](lexer);
-            if (Result.isOk(parserIndexResult)) {
-                return parserIndexResult;
-            }
-        }
-        return Result.Error("None of the OR terms could be matched");
-    };
-}
-
-
 function and(parsers) {
     return lexer => {
         if (parsers.length == 0) {
@@ -121,6 +108,5 @@ module.exports = {
     chainl1,
     map,
     errorMessage,
-    or,
     sepBy1
 };
