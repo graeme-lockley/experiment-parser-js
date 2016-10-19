@@ -39,6 +39,10 @@ assumptions {
 };
 
 
+slice n a =
+    a.slice(n);
+
+
 at =
     AH.at
 assumptions {
