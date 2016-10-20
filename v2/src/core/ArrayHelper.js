@@ -21,7 +21,7 @@ function foldr(foldFunction) {
         let result = initValue;
 
         for (let index = arr.length - 1; index >= 0; index -= 1) {
-            result = foldFunction(result, arr[index]);
+            result = foldFunction(result)(arr[index]);
         }
 
         return result;
