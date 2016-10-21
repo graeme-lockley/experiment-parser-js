@@ -85,11 +85,25 @@ empty value lexer =
     Result.Ok (Tuple.Tuple value lexer);
 
 
-sepBy1 =
-    Helper.sepBy1
+sepBy1 parser separator lexer =
+    (\accumulatedResult \tailParser ->
+        if Result.isOk accumulatedResult then
+            sepBy1p (map (\item -> mk1Array item) accumulatedResult) tailParser
+        else
+            accumulatedResult
+    ) (parser lexer) ((map (\item -> Maybe.withDefault () (Array.at 1 item))) o (and (mk2Array separator parser)))
 assumptions {
     Object.eq (sepBy1 (symbol tokens.IDENTIFIER) (symbol tokens.BANG) testLexer) (empty (mk3Array "hello" "the" "world") (nextLexer 5 testLexer))
 };
+
+
+sepBy1p accumulatedResult parser =
+    (\newResult ->
+        if Result.isOk newResult then
+            sepBy1p (andOpResultMerge accumulatedResult newResult) parser
+        else
+            accumulatedResult
+    ) (parser (extractLexer accumulatedResult));
 
 
 chainl1 = Helper.chainl1;
