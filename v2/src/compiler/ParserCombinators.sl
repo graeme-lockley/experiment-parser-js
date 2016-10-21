@@ -1,5 +1,3 @@
-import file:./ParserCombinatorsHelper as Helper;
-
 import file:../core/Array as Array;
 import file:../core/Result as Result;
 import file:../core/Tuple as Tuple;
@@ -106,7 +104,26 @@ sepBy1p accumulatedResult parser =
     ) (parser (extractLexer accumulatedResult));
 
 
-chainl1 = Helper.chainl1;
+chainl1 parser separator lexer =
+    (\accumulatedResult \tailParser ->
+        if Result.isOk accumulatedResult then
+            chainl1p accumulatedResult tailParser
+        else
+            accumulatedResult
+    ) (parser lexer) (and (mk2Array separator parser));
+
+
+
+chainl1p accumulatedResult parser =
+    (\newResult ->
+        if Result.isOk newResult then
+            chainl1p (map (\item -> ((at 0 item) (extractResult accumulatedResult) (at 1 item))) newResult) parser
+        else
+            accumulatedResult
+    ) (parser (extractLexer accumulatedResult));
+
+
+at i a = Maybe.withDefault () (Array.at i a);
 
 
 map f result =
