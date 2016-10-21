@@ -69,13 +69,7 @@ function map(f) {
 }
 
 
-function errorMessage(errorMessage) {
-    return Result.formatError(_ => errorMessage);
-}
-
-
 module.exports = {
     chainl1,
-    map,
-    errorMessage
+    map
 };
