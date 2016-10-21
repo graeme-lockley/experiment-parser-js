@@ -1,7 +1,7 @@
 import file:./ArrayHelper as AH;
 import file:./Maybe as Maybe;
 
-import file:./Object as Object;
+import file:./Debug as DEBUG;
 
 
 append =
@@ -46,8 +46,8 @@ slice n a =
 at =
     AH.at
 assumptions {
-    Object.eq (at 0 empty) Maybe.Nothing;
-    Object.eq (at 0 (append 1 empty)) (Maybe.Just 1);
-    Object.eq (at 0 (append 2 (append 1 empty))) (Maybe.Just 1);
-    Object.eq (at 1 (append 2 (append 1 empty))) (Maybe.Just 2)
+    DEBUG.eq (at 0 empty) Maybe.Nothing;
+    DEBUG.eq (at 0 (append 1 empty)) (Maybe.Just 1);
+    DEBUG.eq (at 0 (append 2 (append 1 empty))) (Maybe.Just 1);
+    DEBUG.eq (at 1 (append 2 (append 1 empty))) (Maybe.Just 2)
 };

@@ -1,6 +1,6 @@
 import file:./TupleHelper as TH;
 
-import file:./Object as Object;
+import file:./Debug as DEBUG;
 
 
 Tuple f s =
@@ -24,11 +24,11 @@ assumptions {
 mapFirst f t =
     Tuple (f (first t)) (second t)
 assumptions {
-    Object.eq (mapFirst ((+) 1) (Tuple 1 "hello")) (Tuple 2 "hello")
+    DEBUG.eq (mapFirst ((+) 1) (Tuple 1 "hello")) (Tuple 2 "hello")
 };
 
 mapSecond f t =
     Tuple (first t) (f (second t))
 assumptions {
-    Object.eq (mapSecond ((+) 1) (Tuple "hello" 1)) (Tuple "hello" 2)
+    DEBUG.eq (mapSecond ((+) 1) (Tuple "hello" 1)) (Tuple "hello" 2)
 };

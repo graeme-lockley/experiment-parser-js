@@ -1,7 +1,7 @@
 import file:./MaybeHelper as MH;
 import file:./Boolean as Boolean;
 
-import file:./Object as Object;
+import file:./Debug as DEBUG;
 
 
 Just = MH.Just;
@@ -33,6 +33,6 @@ assumptions {
 
 map = MH.map
 assumptions {
-    Object.eq (map (\n -> n + 1) (Just 1)) (Just 2);
-    Object.eq (map (\n -> n + 1) Nothing) Nothing
+    DEBUG.eq (map (\n -> n + 1) (Just 1)) (Just 2);
+    DEBUG.eq (map (\n -> n + 1) Nothing) Nothing
 };

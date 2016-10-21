@@ -3,8 +3,6 @@ import file:../core/Result as Result;
 import file:../core/Tuple as Tuple;
 import file:../core/Maybe as Maybe;
 
-import file:../core/Object as Object;
-
 import file:./Lexer as Lexer;
 
 import file:../core/Debug as DEBUG;
@@ -20,8 +18,8 @@ symbol tokenID lexer =
     else
         Result.Error ("Expected the symbol " ++ tokenID)
 assumptions {
-    Object.eq (symbol tokens.IDENTIFIER testLexer) (empty "hello" (nextLexer 1 testLexer));
-    Object.eq (symbol tokens.CONSTANT_INTEGER testLexer) (Result.Error ("Expected the symbol " ++ tokens.CONSTANT_INTEGER))
+    DEBUG.eq (symbol tokens.IDENTIFIER testLexer) (empty "hello" (nextLexer 1 testLexer));
+    DEBUG.eq (symbol tokens.CONSTANT_INTEGER testLexer) (Result.Error ("Expected the symbol " ++ tokens.CONSTANT_INTEGER))
 };
 
 
@@ -36,10 +34,10 @@ and parsers lexer =
         else
             accumulatedResult) (empty Array.empty lexer) parsers
 assumptions {
-    Object.eq (and (mk1Array (symbol tokens.IDENTIFIER)) testLexer) (empty (mk1Array "hello") (nextLexer 1 testLexer));
-    Object.eq (and (mk2Array (symbol tokens.IDENTIFIER) (symbol tokens.BANG)) testLexer) (empty (mk2Array "hello" "!") (nextLexer 2 testLexer));
-    Object.eq (and (mk2Array (symbol tokens.IDENTIFIER) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.IDENTIFIER));
-    Object.eq (and (mk2Array (symbol tokens.BANG) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.BANG))
+    DEBUG.eq (and (mk1Array (symbol tokens.IDENTIFIER)) testLexer) (empty (mk1Array "hello") (nextLexer 1 testLexer));
+    DEBUG.eq (and (mk2Array (symbol tokens.IDENTIFIER) (symbol tokens.BANG)) testLexer) (empty (mk2Array "hello" "!") (nextLexer 2 testLexer));
+    DEBUG.eq (and (mk2Array (symbol tokens.IDENTIFIER) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.IDENTIFIER));
+    DEBUG.eq (and (mk2Array (symbol tokens.BANG) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.BANG))
 };
 
 
@@ -52,9 +50,9 @@ andOpResultMerge accumulatedResult newResult =
     else
         accumulatedResult
 assumptions {
-    Object.eq (andOpResultMerge (Result.Error "oops") (empty "hello" testLexer)) (Result.Error "oops");
-    Object.eq (andOpResultMerge (empty Array.empty testLexer) (Result.Error "oops")) (Result.Error "oops");
-    Object.eq (andOpResultMerge (empty (mk1Array "hello") testLexer) (empty "world" (nextLexer 1 testLexer))) (empty (mk2Array "hello" "world") (nextLexer 1 testLexer))
+    DEBUG.eq (andOpResultMerge (Result.Error "oops") (empty "hello" testLexer)) (Result.Error "oops");
+    DEBUG.eq (andOpResultMerge (empty Array.empty testLexer) (Result.Error "oops")) (Result.Error "oops");
+    DEBUG.eq (andOpResultMerge (empty (mk1Array "hello") testLexer) (empty "world" (nextLexer 1 testLexer))) (empty (mk2Array "hello" "world") (nextLexer 1 testLexer))
 };
 
 
@@ -91,7 +89,7 @@ sepBy1 parser separator lexer =
             accumulatedResult
     ) (parser lexer) ((map (\item -> Maybe.withDefault () (Array.at 1 item))) o (and (mk2Array separator parser)))
 assumptions {
-    Object.eq (sepBy1 (symbol tokens.IDENTIFIER) (symbol tokens.BANG) testLexer) (empty (mk3Array "hello" "the" "world") (nextLexer 5 testLexer))
+    DEBUG.eq (sepBy1 (symbol tokens.IDENTIFIER) (symbol tokens.BANG) testLexer) (empty (mk3Array "hello" "the" "world") (nextLexer 5 testLexer))
 };
 
 
@@ -129,14 +127,14 @@ at i a = Maybe.withDefault () (Array.at i a);
 map f result =
     Result.map (\t -> Tuple.mapFirst f t) result
 assumptions {
-    Object.eq (map ((+) 1) (Result.Ok (Tuple.Tuple 1 "Hello"))) (Result.Ok (Tuple.Tuple 2 "Hello"))
+    DEBUG.eq (map ((+) 1) (Result.Ok (Tuple.Tuple 1 "Hello"))) (Result.Ok (Tuple.Tuple 2 "Hello"))
 };
 
 
 errorMessage errorMessage =
     Result.formatError (\_ -> errorMessage)
 assumptions {
-    Object.eq (errorMessage "world" (Result.Error "hello")) (Result.Error "world")
+    DEBUG.eq (errorMessage "world" (Result.Error "hello")) (Result.Error "world")
 };
 
 
