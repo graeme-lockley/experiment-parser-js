@@ -63,7 +63,7 @@ function parseDECL(lexer) {
                             const startIndexXY = a[0].indexXY;
                             const endIndexXY = a[1].indexXY;
                             const text = lexer.streamText(startIndexXY, endIndexXY).trim();
-                            return new AST.Assumption(lexer.sourceName, a[0].y, text, a[2])
+                            return AST.assumption(lexer.sourceName)(a[0].y)(text)(a[2]);
                         });
                     }),
                     P.and([

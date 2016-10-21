@@ -20,13 +20,15 @@ function apply(expressions) {
 }
 
 
-class Assumption {
-    constructor(sourceName, line, text, expression) {
-        this.type = 'ASSUMPTION';
-        this.sourceName = sourceName;
-        this.line = line;
-        this.text = text;
-        this.expression = expression;
+function assumption(sourceName) {
+    return line => text => expression => {
+        return {
+            type: 'ASSUMPTION',
+            sourceName: sourceName,
+            line: line,
+            text: text,
+            expression: expression
+        };
     }
 }
 
@@ -298,9 +300,9 @@ class UnaryNegate {
 
 
 module.exports = {
-    Assumption,
     addition,
     apply,
+    assumption,
     BooleanAnd,
     BooleanNot,
     BooleanOr,
