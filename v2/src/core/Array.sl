@@ -27,10 +27,6 @@ findFirst =
     AH.findFirst;
 
 
-empty =
-    AH.empty;
-
-
 length a =
     a.length
 assumptions {
@@ -51,3 +47,21 @@ assumptions {
     DEBUG.eq (at 0 (append 2 (append 1 empty))) (Maybe.Just 1);
     DEBUG.eq (at 1 (append 2 (append 1 empty))) (Maybe.Just 2)
 };
+
+
+empty =
+    AH.empty;
+
+
+mk1 _1 =
+    prepend _1 empty;
+
+
+mk2 _1 _2 =
+    prepend _1 (mk1 _2);
+
+
+mk3 _1 _2 _3 =
+    prepend _1 (mk2 _2 _3);
+
+

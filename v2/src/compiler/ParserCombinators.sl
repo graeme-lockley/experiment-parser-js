@@ -34,10 +34,10 @@ and parsers lexer =
         else
             accumulatedResult) (empty Array.empty lexer) parsers
 assumptions {
-    DEBUG.eq (and (mk1Array (symbol tokens.IDENTIFIER)) testLexer) (empty (mk1Array "hello") (nextLexer 1 testLexer));
-    DEBUG.eq (and (mk2Array (symbol tokens.IDENTIFIER) (symbol tokens.BANG)) testLexer) (empty (mk2Array "hello" "!") (nextLexer 2 testLexer));
-    DEBUG.eq (and (mk2Array (symbol tokens.IDENTIFIER) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.IDENTIFIER));
-    DEBUG.eq (and (mk2Array (symbol tokens.BANG) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.BANG))
+    DEBUG.eq (and (Array.mk1 (symbol tokens.IDENTIFIER)) testLexer) (empty (Array.mk1 "hello") (nextLexer 1 testLexer));
+    DEBUG.eq (and (Array.mk2 (symbol tokens.IDENTIFIER) (symbol tokens.BANG)) testLexer) (empty (Array.mk2 "hello" "!") (nextLexer 2 testLexer));
+    DEBUG.eq (and (Array.mk2 (symbol tokens.IDENTIFIER) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.IDENTIFIER));
+    DEBUG.eq (and (Array.mk2 (symbol tokens.BANG) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.BANG))
 };
 
 
@@ -52,7 +52,7 @@ andOpResultMerge accumulatedResult newResult =
 assumptions {
     DEBUG.eq (andOpResultMerge (Result.Error "oops") (empty "hello" testLexer)) (Result.Error "oops");
     DEBUG.eq (andOpResultMerge (empty Array.empty testLexer) (Result.Error "oops")) (Result.Error "oops");
-    DEBUG.eq (andOpResultMerge (empty (mk1Array "hello") testLexer) (empty "world" (nextLexer 1 testLexer))) (empty (mk2Array "hello" "world") (nextLexer 1 testLexer))
+    DEBUG.eq (andOpResultMerge (empty (Array.mk1 "hello") testLexer) (empty "world" (nextLexer 1 testLexer))) (empty (Array.mk2 "hello" "world") (nextLexer 1 testLexer))
 };
 
 
@@ -65,7 +65,7 @@ option parser lexer =
 
 
 many parser lexer =
-    or (mk2Array (many1 parser) (empty Array.empty)) lexer;
+    or (Array.mk2 (many1 parser) (empty Array.empty)) lexer;
 
 
 many1 parser lexer =
@@ -84,12 +84,12 @@ empty value lexer =
 sepBy1 parser separator lexer =
     (\accumulatedResult \tailParser ->
         if Result.isOk accumulatedResult then
-            sepBy1p (map (\item -> mk1Array item) accumulatedResult) tailParser
+            sepBy1p (map (\item -> Array.mk1 item) accumulatedResult) tailParser
         else
             accumulatedResult
-    ) (parser lexer) ((map (\item -> Maybe.withDefault () (Array.at 1 item))) o (and (mk2Array separator parser)))
+    ) (parser lexer) ((map (\item -> Maybe.withDefault () (Array.at 1 item))) o (and (Array.mk2 separator parser)))
 assumptions {
-    DEBUG.eq (sepBy1 (symbol tokens.IDENTIFIER) (symbol tokens.BANG) testLexer) (empty (mk3Array "hello" "the" "world") (nextLexer 5 testLexer))
+    DEBUG.eq (sepBy1 (symbol tokens.IDENTIFIER) (symbol tokens.BANG) testLexer) (empty (Array.mk3 "hello" "the" "world") (nextLexer 5 testLexer))
 };
 
 
@@ -108,7 +108,7 @@ chainl1 parser separator lexer =
             chainl1p accumulatedResult tailParser
         else
             accumulatedResult
-    ) (parser lexer) (and (mk2Array separator parser));
+    ) (parser lexer) (and (Array.mk2 separator parser));
 
 
 
@@ -144,18 +144,6 @@ extractResult result =
 
 extractLexer result =
     Tuple.second (Result.withDefault () result);
-
-
-mk1Array _1 =
-    Array.prepend _1 Array.empty;
-
-
-mk2Array _1 _2 =
-    Array.prepend _1 (Array.prepend _2 Array.empty);
-
-
-mk3Array _1 _2 _3 =
-    Array.prepend _1 (mk2Array _2 _3);
 
 
 nextLexer n lexer =
