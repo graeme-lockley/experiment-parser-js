@@ -5,7 +5,7 @@ const Lexer = require('./Lexer');
 const Tuple = require('../core/Tuple');
 const AST = require('./AST');
 
-const P = require('../core/ParserCombinators');
+const P = require('./ParserCombinators');
 
 
 function compose(f1, f2) {

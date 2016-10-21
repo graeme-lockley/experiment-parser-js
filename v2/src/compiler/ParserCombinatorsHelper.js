@@ -1,8 +1,8 @@
 "use strict";
 
-const Result = require('./Result');
-const Tuple = require('./Tuple');
-const Maybe = require('./Maybe');
+const Result = require('../core/Result');
+const Tuple = require('../core/Tuple');
+const Maybe = require('../core/Maybe');
 
 
 /**

@@ -1,11 +1,11 @@
 import file:./ParserCombinatorsHelper as Helper;
 
-import file:./Array as Array;
-import file:./Result as Result;
-import file:./Tuple as Tuple;
-import file:./Maybe as Maybe;
+import file:../core/Array as Array;
+import file:../core/Result as Result;
+import file:../core/Tuple as Tuple;
+import file:../core/Maybe as Maybe;
 
-import file:./Object as Object;
+import file:../core/Object as Object;
 
 
 symbol tokenID lexer =
@@ -19,7 +19,16 @@ or parsers lexer =
     Array.foldl (\result \parser -> if (Result.isOk result) then result else (parser lexer)) (Result.Error "None of the OR terms could be matched") parsers;
 
 
-and = Helper.and;
+and parsers lexer =
+    Helper.and parsers lexer;
+
+
+and2 parsers lexer =
+    Array.foldl (\result \parser ->
+        if (Result.isOk result) then
+            Result.flatMap (\ok -> map (\item -> Array.append (Tuple.first ok) item) result) (\error -> Result.Error error) (parser (extractLexer result))
+        else
+            result) (Result.Ok (Tuple.Tuple Array.empty lexer)) parsers;
 
 
 option parser lexer =
