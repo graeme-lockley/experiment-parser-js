@@ -33,28 +33,30 @@ function and(parsers) {
 }
 
 
-function sepBy1(parser, separatorParser) {
-    const nextParser = compose(map(elements => elements[1]), and([separatorParser, parser]));
+function sepBy1(parser) {
+    return separatorParser => {
+        const nextParser = compose(map(elements => elements[1]), and([separatorParser, parser]));
 
-    return lexer => {
-        const firstResult = parser(lexer);
+        return lexer => {
+            const firstResult = parser(lexer);
 
-        if (Result.isOk(firstResult)) {
-            const result = [Tuple.first(Result.withDefault()(firstResult))];
-            let currentLexer = Tuple.second(Result.withDefault()(firstResult));
+            if (Result.isOk(firstResult)) {
+                const result = [Tuple.first(Result.withDefault()(firstResult))];
+                let currentLexer = Tuple.second(Result.withDefault()(firstResult));
 
-            while (true) {
-                const currentResult = nextParser(currentLexer);
+                while (true) {
+                    const currentResult = nextParser(currentLexer);
 
-                if (Result.isOk(currentResult)) {
-                    result.push(Tuple.first(Result.withDefault()(currentResult)));
-                    currentLexer = Tuple.second(Result.withDefault()(currentResult));
-                } else {
-                    return Result.Ok(Tuple.Tuple(result)(currentLexer));
+                    if (Result.isOk(currentResult)) {
+                        result.push(Tuple.first(Result.withDefault()(currentResult)));
+                        currentLexer = Tuple.second(Result.withDefault()(currentResult));
+                    } else {
+                        return Result.Ok(Tuple.Tuple(result)(currentLexer));
+                    }
                 }
+            } else {
+                return Result.map(_ => Tuple.Tuple(Tuple.first(_))(Tuple.second(_)))(firstResult);
             }
-        } else {
-            return Result.map(_ => Tuple.Tuple(Tuple.first(_))(Tuple.second(_)))(firstResult);
         }
     }
 }

@@ -69,7 +69,7 @@ function parseDECL(lexer) {
                     P.and([
                         P.symbol(Lexer.TokenEnum.ASSUMPTIONS),
                         P.symbol(Lexer.TokenEnum.LEFT_CURLY),
-                        P.sepBy1(markLocation(parseEXPR1), P.symbol(Lexer.TokenEnum.SEMICOLON)),
+                        P.sepBy1(markLocation(parseEXPR1))(P.symbol(Lexer.TokenEnum.SEMICOLON)),
                         P.symbol(Lexer.TokenEnum.RIGHT_CURLY)
                     ]))
             ),
@@ -99,7 +99,7 @@ function parseEXPR1(lexer) {
                 P.symbol(Lexer.TokenEnum.LEFT_CURLY),
                 compose(
                     P.map(e => new AST.Expressions(e)),
-                    P.sepBy1(parseEXPR1, P.symbol(Lexer.TokenEnum.SEMICOLON))),
+                    P.sepBy1(parseEXPR1)(P.symbol(Lexer.TokenEnum.SEMICOLON))),
                 P.symbol(Lexer.TokenEnum.RIGHT_CURLY)
             ]))
     ])(lexer);
@@ -109,14 +109,14 @@ function parseEXPR1(lexer) {
 function parseEXPR2(lexer) {
     return compose(
         P.map(e => e.length == 1 ? e[0] : new AST.BooleanOr(e)),
-        P.sepBy1(parseEXPR3, P.symbol(Lexer.TokenEnum.BAR_BAR)))(lexer);
+        P.sepBy1(parseEXPR3)(P.symbol(Lexer.TokenEnum.BAR_BAR)))(lexer);
 }
 
 
 function parseEXPR3(lexer) {
     return compose(
         P.map(e => e.length == 1 ? e[0] : new AST.BooleanAnd(e)),
-        P.sepBy1(parseEXPR4, P.symbol(Lexer.TokenEnum.AMPERSAND_AMPERSAND)))(lexer);
+        P.sepBy1(parseEXPR4)(P.symbol(Lexer.TokenEnum.AMPERSAND_AMPERSAND)))(lexer);
 }
 
 
