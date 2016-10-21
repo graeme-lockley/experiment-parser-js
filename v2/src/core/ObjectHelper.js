@@ -3,6 +3,13 @@
 
 function objectEquals(x) {
     return y => {
+        return JSON.stringify(x) == JSON.stringify(y);
+    }
+}
+
+
+function objectEquals2(x) {
+    return y => {
 
         if (x === null || x === undefined || y === null || y === undefined) {
             return x === y;
