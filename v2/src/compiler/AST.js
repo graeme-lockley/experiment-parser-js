@@ -12,11 +12,11 @@ function addition(left) {
 }
 
 
-class Apply {
-    constructor(expressions) {
-        this.type = 'APPLY';
-        this.expressions = expressions;
-    }
+function apply(expressions) {
+    return {
+        type: 'APPLY',
+        expressions: expressions
+    };
 }
 
 
@@ -300,7 +300,7 @@ class UnaryNegate {
 module.exports = {
     Assumption,
     addition,
-    Apply,
+    apply,
     BooleanAnd,
     BooleanNot,
     BooleanOr,

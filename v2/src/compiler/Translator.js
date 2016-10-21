@@ -35,7 +35,7 @@ function astToJavascript(ast, indentation = 0) {
 
     if (ast.type == "ADDITION") {
         return '(' + astToJavascript(ast.left, indentation) + " + " + astToJavascript(ast.right, indentation) + ')';
-    } else if (ast instanceof AST.Apply) {
+    } else if (ast.type == "APPLY") {
         return astToJavascript(ast.expressions[0], indentation) + ast.expressions.slice(1).map(x => "(" + astToJavascript(x, indentation) + ")").join('');
     } else if (ast instanceof AST.BooleanAnd) {
         return '(' + ast.expressions.map(e => astToJavascript(e, indentation)).join(' && ') + ')';

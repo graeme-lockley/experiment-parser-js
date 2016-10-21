@@ -91,7 +91,7 @@ function parseEXPR1(lexer) {
                 parseEXPR1
             ])),
         compose(
-            P.map(elements => elements.length == 1 ? elements[0] : new AST.Apply(elements)),
+            P.map(elements => elements.length == 1 ? elements[0] : AST.apply(elements)),
             P.many1(parseEXPR2)),
         compose(
             P.map(e => e[1]),
@@ -209,7 +209,7 @@ function parseEXPR10(lexer) {
 
 function parseEXPR11(lexer) {
     return compose(
-        P.map(elements => elements.length == 1 ? elements[0] : new AST.Apply(elements)),
+        P.map(elements => elements.length == 1 ? elements[0] : AST.apply(elements)),
         P.many1(parseEXPR12))(lexer);
 }
 
