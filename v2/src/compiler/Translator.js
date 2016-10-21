@@ -37,11 +37,11 @@ function astToJavascript(ast, indentation = 0) {
         return '(' + astToJavascript(ast.left, indentation) + " + " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast.type == "APPLY") {
         return astToJavascript(ast.expressions[0], indentation) + ast.expressions.slice(1).map(x => "(" + astToJavascript(x, indentation) + ")").join('');
-    } else if (ast instanceof AST.BooleanAnd) {
+    } else if (ast.type == "BOOLEAN_AND") {
         return '(' + ast.expressions.map(e => astToJavascript(e, indentation)).join(' && ') + ')';
-    } else if (ast instanceof AST.BooleanNot) {
+    } else if (ast.type == "BOOLEAN_NOT") {
         return '(!' + astToJavascript(ast.operand, indentation) + ')';
-    } else if (ast instanceof AST.BooleanOr) {
+    } else if (ast.type == "BOOLEAN_OR") {
         return '(' + ast.expressions.map(e => astToJavascript(e, indentation)).join(' || ') + ')';
     } else if (ast instanceof AST.Composition) {
         const variableName = '_$' + indentation;

@@ -33,27 +33,27 @@ function assumption(sourceName) {
 }
 
 
-class BooleanAnd {
-    constructor(expressions) {
-        this.type = 'BOOLEAN_AND';
-        this.expressions = expressions;
-    }
+function booleanAnd(expressions) {
+    return {
+        type: 'BOOLEAN_AND',
+        expressions: expressions
+    };
 }
 
 
-class BooleanNot {
-    constructor(operand) {
-        this.type = 'BOOLEAN_NOT';
-        this.operand = operand;
-    }
+function booleanNot(operand) {
+    return {
+        type: 'BOOLEAN_NOT',
+        operand: operand
+    };
 }
 
 
-class BooleanOr {
-    constructor(expressions) {
-        this.type = 'BOOLEAN_OR';
-        this.expressions = expressions;
-    }
+function booleanOr(expressions) {
+    return {
+        type: 'BOOLEAN_OR',
+        expressions: expressions
+    };
 }
 
 
@@ -303,9 +303,9 @@ module.exports = {
     addition,
     apply,
     assumption,
-    BooleanAnd,
-    BooleanNot,
-    BooleanOr,
+    booleanAnd,
+    booleanNot,
+    booleanOr,
     Composition,
     ConstantBoolean,
     ConstantCharacter,

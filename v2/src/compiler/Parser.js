@@ -108,14 +108,14 @@ function parseEXPR1(lexer) {
 
 function parseEXPR2(lexer) {
     return compose(
-        P.map(e => e.length == 1 ? e[0] : new AST.BooleanOr(e)),
+        P.map(e => e.length == 1 ? e[0] : AST.booleanOr(e)),
         P.sepBy1(parseEXPR3)(P.symbol(Lexer.TokenEnum.BAR_BAR)))(lexer);
 }
 
 
 function parseEXPR3(lexer) {
     return compose(
-        P.map(e => e.length == 1 ? e[0] : new AST.BooleanAnd(e)),
+        P.map(e => e.length == 1 ? e[0] : AST.booleanAnd(e)),
         P.sepBy1(parseEXPR4)(P.symbol(Lexer.TokenEnum.AMPERSAND_AMPERSAND)))(lexer);
 }
 
@@ -195,7 +195,7 @@ function parseEXPR9(lexer) {
 
 function parseUnaryOp(lexer) {
     return P.or([
-        compose(P.map(() => (op) => new AST.BooleanNot(op)), P.symbol(Lexer.TokenEnum.BANG)),
+        compose(P.map(() => (op) => AST.booleanNot(op)), P.symbol(Lexer.TokenEnum.BANG)),
         compose(P.map(() => (op) => new AST.UnaryPlus(op)), P.symbol(Lexer.TokenEnum.PLUS)),
         compose(P.map(() => (op) => new AST.UnaryNegate(op)), P.symbol(Lexer.TokenEnum.MINUS))
     ])(lexer);
