@@ -33,30 +33,32 @@ function and(parsers) {
 }
 
 
-function chainl1(parser, separatorParser) {
-    const nextParser = and([separatorParser, parser]);
+function chainl1(parser) {
+    return separatorParser => {
+        const nextParser = and([separatorParser, parser]);
 
-    return lexer => {
-        const firstResult = parser(lexer);
+        return lexer => {
+            const firstResult = parser(lexer);
 
-        if (Result.isOk(firstResult)) {
-            let result = Tuple.first(Result.withDefault()(firstResult));
-            let currentLexer = Tuple.second(Result.withDefault()(firstResult));
+            if (Result.isOk(firstResult)) {
+                let result = Tuple.first(Result.withDefault()(firstResult));
+                let currentLexer = Tuple.second(Result.withDefault()(firstResult));
 
-            while (true) {
-                const currentResult = nextParser(currentLexer);
+                while (true) {
+                    const currentResult = nextParser(currentLexer);
 
-                if (Result.isOk(currentResult)) {
-                    const nextParseResult = Tuple.first(Result.withDefault()(currentResult));
+                    if (Result.isOk(currentResult)) {
+                        const nextParseResult = Tuple.first(Result.withDefault()(currentResult));
 
-                    result = nextParseResult[0](result, nextParseResult[1]);
-                    currentLexer = Tuple.second(Result.withDefault()(currentResult));
-                } else {
-                    return Result.Ok(Tuple.Tuple(result)(currentLexer));
+                        result = nextParseResult[0](result, nextParseResult[1]);
+                        currentLexer = Tuple.second(Result.withDefault()(currentResult));
+                    } else {
+                        return Result.Ok(Tuple.Tuple(result)(currentLexer));
+                    }
                 }
+            } else {
+                return Result.map(ok => Tuple.Tuple(Tuple.first(ok))(Tuple.second(ok)))(firstResult);
             }
-        } else {
-            return Result.map(ok => Tuple.Tuple(Tuple.first(ok))(Tuple.second(ok)))(firstResult);
         }
     }
 }

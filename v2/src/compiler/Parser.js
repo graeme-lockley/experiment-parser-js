@@ -121,7 +121,7 @@ function parseEXPR3(lexer) {
 
 
 function parseEXPR4(lexer) {
-    return P.chainl1(parseEXPR5, parseEqualOp)(lexer);
+    return P.chainl1(parseEXPR5)(parseEqualOp)(lexer);
 }
 
 
@@ -134,7 +134,7 @@ function parseEqualOp(lexer) {
 
 
 function parseEXPR5(lexer) {
-    return P.chainl1(parseEXPR6, parseComparisonOp)(lexer);
+    return P.chainl1(parseEXPR6)(parseComparisonOp)(lexer);
 }
 
 
@@ -150,13 +150,12 @@ function parseComparisonOp(lexer) {
 
 function parseEXPR6(lexer) {
     return P.chainl1(
-        parseEXPR7,
-        compose(P.map(() => (l, r) => new AST.StringConcat(l, r)), P.symbol(Lexer.TokenEnum.PLUS_PLUS)))(lexer);
+        parseEXPR7)(compose(P.map(() => (l, r) => new AST.StringConcat(l, r)), P.symbol(Lexer.TokenEnum.PLUS_PLUS)))(lexer);
 }
 
 
 function parseEXPR7(lexer) {
-    return P.chainl1(parseEXPR8, parseAdditiveOp)(lexer);
+    return P.chainl1(parseEXPR8)(parseAdditiveOp)(lexer);
 }
 
 
@@ -169,7 +168,7 @@ function parseAdditiveOp(lexer) {
 
 
 function parseEXPR8(lexer) {
-    return P.chainl1(parseEXPR9, parseMultiplicativeOp)(lexer);
+    return P.chainl1(parseEXPR9)(parseMultiplicativeOp)(lexer);
 }
 
 
@@ -204,7 +203,7 @@ function parseUnaryOp(lexer) {
 
 
 function parseEXPR10(lexer) {
-    return P.chainl1(parseEXPR11, compose(P.map(() => (l, r) => new AST.Composition(l, r)), P.symbol(Lexer.TokenEnum.O)))(lexer);
+    return P.chainl1(parseEXPR11)(compose(P.map(() => (l, r) => new AST.Composition(l, r)), P.symbol(Lexer.TokenEnum.O)))(lexer);
 }
 
 
