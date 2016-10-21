@@ -50,7 +50,7 @@ function chainl1(parser) {
                     if (Result.isOk(currentResult)) {
                         const nextParseResult = Tuple.first(Result.withDefault()(currentResult));
 
-                        result = nextParseResult[0](result, nextParseResult[1]);
+                        result = nextParseResult[0](result)(nextParseResult[1]);
                         currentLexer = Tuple.second(Result.withDefault()(currentResult));
                     } else {
                         return Result.Ok(Tuple.Tuple(result)(currentLexer));
