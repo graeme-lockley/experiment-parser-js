@@ -161,7 +161,7 @@ function parseEXPR7(lexer) {
 
 function parseAdditiveOp(lexer) {
     return P.or([
-        compose(P.map(() => l => r => new AST.Addition(l, r)), P.symbol(Lexer.TokenEnum.PLUS)),
+        compose(P.map(() => l => r => AST.addition(l)(r)), P.symbol(Lexer.TokenEnum.PLUS)),
         compose(P.map(() => l => r => new AST.Subtraction(l, r)), P.symbol(Lexer.TokenEnum.MINUS))
     ])(lexer);
 }

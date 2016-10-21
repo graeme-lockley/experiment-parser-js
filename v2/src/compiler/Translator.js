@@ -33,7 +33,7 @@ function astToJavascript(ast, indentation = 0) {
         return '  '.repeat(count);
     }
 
-    if (ast instanceof AST.Addition) {
+    if (ast.type == "ADDITION") {
         return '(' + astToJavascript(ast.left, indentation) + " + " + astToJavascript(ast.right, indentation) + ')';
     } else if (ast instanceof AST.Apply) {
         return astToJavascript(ast.expressions[0], indentation) + ast.expressions.slice(1).map(x => "(" + astToJavascript(x, indentation) + ")").join('');

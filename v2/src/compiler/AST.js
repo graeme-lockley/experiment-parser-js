@@ -1,11 +1,13 @@
 "use strict";
 
 
-class Addition {
-    constructor(left, right) {
-        this.type = 'ADDITION';
-        this.left = left;
-        this.right = right;
+function addition(left) {
+    return right => {
+        return {
+            type: 'ADDITION',
+            left: left,
+            right: right
+        };
     }
 }
 
@@ -297,7 +299,7 @@ class UnaryNegate {
 
 module.exports = {
     Assumption,
-    Addition,
+    addition,
     Apply,
     BooleanAnd,
     BooleanNot,
