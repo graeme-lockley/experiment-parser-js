@@ -85,7 +85,11 @@ empty value lexer =
     Result.Ok (Tuple.Tuple value lexer);
 
 
-sepBy1 = Helper.sepBy1;
+sepBy1 =
+    Helper.sepBy1
+assumptions {
+    Object.eq (sepBy1 (symbol tokens.IDENTIFIER) (symbol tokens.BANG) testLexer) (empty (mk3Array "hello" "the" "world") (nextLexer 5 testLexer))
+};
 
 
 chainl1 = Helper.chainl1;
@@ -121,5 +125,9 @@ mk2Array _1 _2 =
     Array.prepend _1 (Array.prepend _2 Array.empty);
 
 
+mk3Array _1 _2 _3 =
+    Array.prepend _1 (mk2Array _2 _3);
+
+
 nextLexer n lexer =
-    if n <= 0 then lexer else (nextLexer (n - 1) (lexer.next ()));
+    if n <= 0 then lexer else (nextLexer (n - 1) (lexer.next()));
