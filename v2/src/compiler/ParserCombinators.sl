@@ -7,12 +7,24 @@ import file:../core/Maybe as Maybe;
 
 import file:../core/Object as Object;
 
+import file:./Lexer as Lexer;
+
+import file:../core/Debug as DEBUG;
+
+
+tokens = Lexer.TokenEnum;
+testLexer = Lexer.fromString("hello, the, world");
+
 
 symbol tokenID lexer =
     if lexer.id == tokenID then
         Result.Ok (Tuple.Tuple lexer.text (lexer.next ()))
     else
-        Result.Error ("Expected the symbol " ++ tokenID);
+        Result.Error ("Expected the symbol " ++ tokenID)
+assumptions {
+    Object.eq (symbol tokens.IDENTIFIER testLexer) (Result.Ok (Tuple.Tuple "hello" (testLexer.next())));
+    Object.eq (symbol tokens.CONSTANT_INTEGER testLexer) (Result.Error ("Expected the symbol " ++ tokens.CONSTANT_INTEGER))
+};
 
 
 or parsers lexer =
