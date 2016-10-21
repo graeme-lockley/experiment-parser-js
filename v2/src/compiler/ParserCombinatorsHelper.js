@@ -104,7 +104,6 @@ function compose(f1, f2) {
 
 
 module.exports = {
-    and,
     chainl1,
     map,
     errorMessage,

@@ -13,34 +13,55 @@ import file:../core/Debug as DEBUG;
 
 
 tokens = Lexer.TokenEnum;
-testLexer = Lexer.fromString("hello, the, world");
+testLexer = Lexer.fromString("hello ! the ! world");
 
 
 symbol tokenID lexer =
     if lexer.id == tokenID then
-        Result.Ok (Tuple.Tuple lexer.text (lexer.next ()))
+        empty lexer.text (lexer.next ())
     else
         Result.Error ("Expected the symbol " ++ tokenID)
 assumptions {
-    Object.eq (symbol tokens.IDENTIFIER testLexer) (Result.Ok (Tuple.Tuple "hello" (testLexer.next())));
+    Object.eq (symbol tokens.IDENTIFIER testLexer) (empty "hello" (nextLexer 1 testLexer));
     Object.eq (symbol tokens.CONSTANT_INTEGER testLexer) (Result.Error ("Expected the symbol " ++ tokens.CONSTANT_INTEGER))
 };
 
 
 or parsers lexer =
-    Array.foldl (\result \parser -> if (Result.isOk result) then result else (parser lexer)) (Result.Error "None of the OR terms could be matched") parsers;
+    Array.foldl (\result \parser -> if Result.isOk result then result else (parser lexer)) (Result.Error "None of the OR terms could be matched") parsers;
 
 
 and parsers lexer =
-    Helper.and parsers lexer;
-
-
-and2 parsers lexer =
-    Array.foldl (\result \parser ->
-        if (Result.isOk result) then
-            Result.flatMap (\ok -> map (\item -> Array.append (Tuple.first ok) item) result) (\error -> Result.Error error) (parser (extractLexer result))
+    Array.foldl (\accumulatedResult \parser ->
+        if Result.isOk accumulatedResult then
+            andOpResultMerge accumulatedResult (parser (extractLexer accumulatedResult))
         else
-            result) (Result.Ok (Tuple.Tuple Array.empty lexer)) parsers;
+            accumulatedResult) (empty Array.empty lexer) parsers
+assumptions {
+    Object.eq (and (mk1Array (symbol tokens.IDENTIFIER)) testLexer) (empty (mk1Array "hello") (nextLexer 1 testLexer));
+    Object.eq (and (mk2Array (symbol tokens.IDENTIFIER) (symbol tokens.BANG)) testLexer) (empty (mk2Array "hello" "!") (nextLexer 2 testLexer));
+    Object.eq (and (mk2Array (symbol tokens.IDENTIFIER) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.IDENTIFIER));
+    Object.eq (and (mk2Array (symbol tokens.BANG) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.BANG))
+};
+
+
+andOpResultMerge accumulatedResult newResult =
+    if Result.isOk accumulatedResult then
+        if Result.isOk newResult then
+            empty (Array.append (extractResult newResult) (extractResult accumulatedResult)) (extractLexer newResult)
+        else
+            newResult
+    else
+        accumulatedResult
+assumptions {
+    Object.eq (andOpResultMerge (Result.Error "oops") (empty "hello" testLexer)) (Result.Error "oops");
+    Object.eq (andOpResultMerge (empty Array.empty testLexer) (Result.Error "oops")) (Result.Error "oops");
+    Object.eq (andOpResultMerge (empty (mk1Array "hello") testLexer) (empty "world" (nextLexer 1 testLexer))) (empty (mk2Array "hello" "world") (nextLexer 1 testLexer))
+};
+
+
+empty value lexer =
+    Result.Ok (Tuple.Tuple value lexer);
 
 
 option parser lexer =
@@ -48,7 +69,7 @@ option parser lexer =
 
 
 many parser lexer =
-    or (Array.prepend (many1 parser) (Array.prepend (empty Array.empty) Array.empty)) lexer;
+    or (mk2Array (many1 parser) (empty Array.empty)) lexer;
 
 
 many1 parser lexer =
@@ -62,13 +83,6 @@ many1 parser lexer =
 
 empty value lexer =
     Result.Ok (Tuple.Tuple value lexer);
-
-
-extractResult result =
-    Tuple.first (Result.withDefault () result);
-
-extractLexer result =
-    Tuple.second (Result.withDefault () result);
 
 
 sepBy1 = Helper.sepBy1;
@@ -89,3 +103,23 @@ errorMessage errorMessage =
 assumptions {
     Object.eq (errorMessage "world" (Result.Error "hello")) (Result.Error "world")
 };
+
+
+extractResult result =
+    Tuple.first (Result.withDefault () result);
+
+
+extractLexer result =
+    Tuple.second (Result.withDefault () result);
+
+
+mk1Array _1 =
+    Array.prepend _1 Array.empty;
+
+
+mk2Array _1 _2 =
+    Array.prepend _1 (Array.prepend _2 Array.empty);
+
+
+nextLexer n lexer =
+    if n <= 0 then lexer else (nextLexer (n - 1) (lexer.next ()));
