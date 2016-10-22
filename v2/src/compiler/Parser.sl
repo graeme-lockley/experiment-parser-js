@@ -157,7 +157,8 @@ parseEXPR10 lexer =
 
 
 parseEXPR11 =
-    Helper.parseEXPR11;
+        (P.map (\e -> if (Array.length e) == 1 then at 0 e else AST.apply e)) o
+        (P.many1 parseEXPR12);
 
 
 parseEXPR12 =
