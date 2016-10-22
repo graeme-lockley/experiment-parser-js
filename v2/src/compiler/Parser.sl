@@ -59,11 +59,33 @@ parseDECL lexer =
 
 
 parseEXPR1 =
-    Helper.parseEXPR1;
+    P.or (Array.mk3
+        (
+            (P.map (\e -> AST.ifte (at 1 e) (at 3 e) (at 5 e))) o
+            (P.and (Array.mk6
+                (P.symbol Tokens.IF)
+                parseEXPR1
+                (P.symbol Tokens.THEN)
+                parseEXPR1
+                (P.symbol Tokens.ELSE)
+                parseEXPR1)))
+        (
+            (P.map (\elements -> if (Array.length elements) == 1 then (at 0 elements) else (AST.apply elements))) o
+            (P.many1 parseEXPR2))
+        (
+            (P.map (\e -> (at 1 e))) o
+            (P.and (Array.mk3
+                (P.symbol Tokens.LEFT_CURLY)
+                (
+                    (P.map (\e -> AST.expressions e)) o
+                    (P.sepBy1 parseEXPR1 (P.symbol Tokens.SEMICOLON)))
+                (P.symbol Tokens.RIGHT_CURLY)
+            ))));
 
 
 parseEXPR2 =
-    Helper.parseEXPR2;
+    (P.map (\e -> if (Array.length e) == 1 then (at 0 e) else (AST.booleanOr e))) o
+    (P.sepBy1 parseEXPR3 (P.symbol Tokens.BAR_BAR));
 
 
 parseEXPR3 =
