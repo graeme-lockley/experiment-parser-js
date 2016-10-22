@@ -38,8 +38,22 @@ markLocation =
     Helper.markLocation;
 
 
-parseDECL =
-    Helper.parseDECL;
+parseDECL lexer =
+    (
+        (P.map Helper.parseDECLMap) o
+        (P.and (Array.mk5
+            (P.many1 parseIdentifier)
+            (P.symbol Tokens.EQUAL)
+            parseEXPR1
+            (P.option (
+                (P.map (Helper.parseDECLAssumptionMap lexer)) o
+                (P.and (Array.mk4
+                    (P.symbol Tokens.ASSUMPTIONS)
+                    (P.symbol Tokens.LEFT_CURLY)
+                    (P.sepBy1 (markLocation parseEXPR1) (P.symbol Tokens.SEMICOLON))
+                    (P.symbol Tokens.RIGHT_CURLY)))))
+            (P.symbol Tokens.SEMICOLON)))
+    ) lexer;
 
 
 parseEXPR1 =

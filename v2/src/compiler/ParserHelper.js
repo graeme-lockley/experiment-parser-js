@@ -22,28 +22,6 @@ function markLocation(parser) {
 }
 
 
-function parseDECL(lexer) {
-    return compose(
-        P.map(parseDECLMap),
-        P.and([
-            P.many1(parseIdentifier),
-            P.symbol(Lexer.TokenEnum.EQUAL),
-            parseEXPR1,
-            P.option(
-                compose(
-                    P.map(parseDECLAssumptionMap(lexer)),
-                    P.and([
-                        P.symbol(Lexer.TokenEnum.ASSUMPTIONS),
-                        P.symbol(Lexer.TokenEnum.LEFT_CURLY),
-                        P.sepBy1(markLocation(parseEXPR1))(P.symbol(Lexer.TokenEnum.SEMICOLON)),
-                        P.symbol(Lexer.TokenEnum.RIGHT_CURLY)
-                    ]))
-            ),
-            P.symbol(Lexer.TokenEnum.SEMICOLON)
-        ]))(lexer);
-}
-
-
 function parseDECLMap(elements) {
     const assumptions = elements[3].withDefault([]);
     return elements[0].length == 1 ? AST.declaration(elements[0][0].name)(elements[2])(assumptions) : AST.declaration(elements[0][0].name)(AST.lambda(elements[0].slice(1).map(n => n.name))(elements[2]))(assumptions)
@@ -340,7 +318,6 @@ function parseExpressionString(input) {
 
 module.exports = {
     markLocation,
-    parseDECL,
     parseDECLMap,
     parseDECLAssumptionMap,
     parseEXPR1,
