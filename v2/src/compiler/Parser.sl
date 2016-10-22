@@ -140,15 +140,17 @@ parseMultiplicativeOp =
 
 
 parseEXPR9 =
-    Helper.parseEXPR9;
+    P.or (Array.mk2
+        ((P.map (\e -> (at 0 e)(at 1 e))) o (P.and (Array.mk2 parseUnaryOp parseEXPR9)))
+        parseEXPR10);
 
 
 parseUnaryOp =
     Helper.parseUnaryOp;
 
 
-parseEXPR10 =
-    Helper.parseEXPR10;
+parseEXPR10 lexer =
+    Helper.parseEXPR10 lexer;
 
 
 parseEXPR11 =
