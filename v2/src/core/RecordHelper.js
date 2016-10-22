@@ -1,6 +1,11 @@
 "use strict";
 
 
+function get(name) {
+    return d => d[name];
+}
+
+
 function mk0() {
     return {};
 }
@@ -62,6 +67,7 @@ function mk5(k1) {
 
 
 module.exports = {
+    get,
     mk0,
     mk1,
     mk2,
