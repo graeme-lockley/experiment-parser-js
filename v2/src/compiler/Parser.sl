@@ -25,7 +25,13 @@ parseMODULE lexer =
 
 
 parseIMPORT =
-    Helper.parseIMPORT;
+        (P.map (\e -> AST.importModule (AST.constantURL (at 1 e)) (AST.identifier (at 3 e)))) o
+        (P.and (Array.mk5
+            (P.symbol Tokens.IMPORT)
+            (P.symbol Tokens.CONSTANT_URL)
+            (P.symbol Tokens.AS)
+            (P.symbol Tokens.IDENTIFIER)
+            (P.symbol Tokens.SEMICOLON)));
 
 
 markLocation =

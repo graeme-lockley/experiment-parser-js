@@ -13,19 +13,6 @@ function compose(f1, f2) {
 }
 
 
-function parseIMPORT(lexer) {
-    return compose(
-        P.map(e => AST.importModule(AST.constantURL(e[1]))(AST.identifier(e[3]))),
-        P.and([
-            P.symbol(Lexer.TokenEnum.IMPORT),
-            P.symbol(Lexer.TokenEnum.CONSTANT_URL),
-            P.symbol(Lexer.TokenEnum.AS),
-            P.symbol(Lexer.TokenEnum.IDENTIFIER),
-            P.symbol(Lexer.TokenEnum.SEMICOLON)
-        ]))(lexer);
-}
-
-
 function markLocation(parser) {
     return lexer => {
         const startToken = lexer;
@@ -346,7 +333,6 @@ function parseExpressionString(input) {
 
 
 module.exports = {
-    parseIMPORT,
     markLocation,
     parseDECL,
     parseEXPR1,
