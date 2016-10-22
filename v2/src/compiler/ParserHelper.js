@@ -24,24 +24,14 @@ function markLocation(parser) {
 
 function parseDECL(lexer) {
     return compose(
-        P.map(elements => {
-            const assumptions = elements[3].withDefault([]);
-            return elements[0].length == 1 ? AST.declaration(elements[0][0].name)(elements[2])(assumptions) : AST.declaration(elements[0][0].name)(AST.lambda(elements[0].slice(1).map(n => n.name))(elements[2]))(assumptions)
-        }),
+        P.map(parseDECLMap),
         P.and([
             P.many1(parseIdentifier),
             P.symbol(Lexer.TokenEnum.EQUAL),
             parseEXPR1,
             P.option(
                 compose(
-                    P.map(es => {
-                        return es[2].map(a => {
-                            const startIndexXY = a[0].indexXY;
-                            const endIndexXY = a[1].indexXY;
-                            const text = (lexer.streamText(startIndexXY)(endIndexXY)).trim();
-                            return AST.assumption(lexer.sourceName)(a[0].y)(text)(a[2]);
-                        });
-                    }),
+                    P.map(parseDECLAssumptionMap(lexer)),
                     P.and([
                         P.symbol(Lexer.TokenEnum.ASSUMPTIONS),
                         P.symbol(Lexer.TokenEnum.LEFT_CURLY),
@@ -51,6 +41,22 @@ function parseDECL(lexer) {
             ),
             P.symbol(Lexer.TokenEnum.SEMICOLON)
         ]))(lexer);
+}
+
+
+function parseDECLMap(elements) {
+    const assumptions = elements[3].withDefault([]);
+    return elements[0].length == 1 ? AST.declaration(elements[0][0].name)(elements[2])(assumptions) : AST.declaration(elements[0][0].name)(AST.lambda(elements[0].slice(1).map(n => n.name))(elements[2]))(assumptions)
+}
+
+
+function parseDECLAssumptionMap(lexer) {
+    return es => es[2].map(a => {
+        const startIndexXY = a[0].indexXY;
+        const endIndexXY = a[1].indexXY;
+        const text = (lexer.streamText(startIndexXY)(endIndexXY)).trim();
+        return AST.assumption(lexer.sourceName)(a[0].y)(text)(a[2]);
+    });
 }
 
 
@@ -335,6 +341,8 @@ function parseExpressionString(input) {
 module.exports = {
     markLocation,
     parseDECL,
+    parseDECLMap,
+    parseDECLAssumptionMap,
     parseEXPR1,
     parseEXPR2,
     parseEXPR3,
