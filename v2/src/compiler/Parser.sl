@@ -120,15 +120,15 @@ parseEXPR6 lexer =
 
 
 parseEXPR7 =
-    Helper.parseEXPR7;
+    P.chainl1 parseEXPR8 parseAdditiveOp;
 
 
-parseAdditiveOp =
-    Helper.parseAdditiveOp;
+parseAdditiveOp lexer =
+    Helper.parseAdditiveOp lexer;
 
 
-parseEXPR8 =
-    Helper.parseEXPR8;
+parseEXPR8 lexer =
+    Helper.parseEXPR8 lexer;
 
 
 parseMultiplicativeOp =
