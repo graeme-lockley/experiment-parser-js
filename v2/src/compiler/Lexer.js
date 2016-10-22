@@ -346,8 +346,8 @@ function initialContext(input, sourceName) {
     return new Context(lexerInput, 0, 1, 1, 0, 1, 1, '').next();
 }
 
-function fromString(input, sourceName = 'stream') {
-    return initialContext(input, sourceName);
+function fromString(input) {
+    return sourceName => initialContext(input, sourceName);
 }
 
 

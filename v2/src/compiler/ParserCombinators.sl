@@ -9,7 +9,7 @@ import file:../core/Debug as DEBUG;
 
 
 tokens = Lexer.TokenEnum;
-testLexer = Lexer.fromString("hello ! the ! world");
+testLexer = Lexer.fromString "hello ! the ! world" "stream";
 
 
 symbol tokenID lexer =

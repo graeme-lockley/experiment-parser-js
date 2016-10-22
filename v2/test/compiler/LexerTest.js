@@ -6,7 +6,7 @@ const expect = require('chai').expect;
 
 describe('Lexer', () => {
     describe('with input "Hello 123"', () => {
-        const context = Lexer.fromString('Hello 123');
+        const context = Lexer.fromString('Hello 123')("stream");
 
         describe('after initialisation', () => {
             it('should match to an IDENTIFIER', () => expect(context.id).to.equal(Lexer.TokenEnum.IDENTIFIER));
@@ -52,7 +52,7 @@ describe('Lexer', () => {
     });
 
     describe('with input "a\\ b) c("', () => {
-        const context = Lexer.fromString('a\\ b) c(');
+        const context = Lexer.fromString('a\\ b) c(')("stream");
 
         it('first token should be IDENTIFIER', () =>
             expect(context.id).to.equal(Lexer.TokenEnum.IDENTIFIER));
@@ -82,7 +82,7 @@ describe('Lexer', () => {
 
         items.forEach(tuple => {
             it(Tuple.first(tuple), () => {
-                let context = Lexer.fromString(Tuple.first(tuple));
+                let context = Lexer.fromString(Tuple.first(tuple))("stream");
 
                 Tuple.second(tuple).forEach(token => {
                     expect(context.id).to.equal(token);
@@ -93,7 +93,7 @@ describe('Lexer', () => {
     });
 
     describe('with input "\'a\'"', () => {
-        const context = Lexer.fromString('\'a\'');
+        const context = Lexer.fromString('\'a\'')("stream");
 
         it('should return CONSTANT_CHAR', () => expect(context.id).to.equal(Lexer.TokenEnum.CONSTANT_CHAR));
         it('should return text of "\'a\'"', () => expect(context.text).to.equal('\'a\''));
@@ -101,7 +101,7 @@ describe('Lexer', () => {
     });
 
     describe('with input "\'\\\'\'"', () => {
-        const context = Lexer.fromString('\'\\\'\'');
+        const context = Lexer.fromString('\'\\\'\'')("stream");
 
         it('should return CONSTANT_CHAR', () => expect(context.id).to.equal(Lexer.TokenEnum.CONSTANT_CHAR));
         it('should return text of "\'\\\'\'"', () => expect(context.text).to.equal('\'\\\'\''));
@@ -109,7 +109,7 @@ describe('Lexer', () => {
     });
 
     describe('with input "\"hello \\"world\\"\""', () => {
-        const context = Lexer.fromString('"hello \\" world"');
+        const context = Lexer.fromString('"hello \\" world"')("stream");
 
         it('should return CONSTANT_STRING', () => expect(context.id).to.equal(Lexer.TokenEnum.CONSTANT_STRING));
         it('should return text of "\\"hello \\" world\\""', () => expect(context.text).to.equal('"hello \\" world"'));
@@ -117,7 +117,7 @@ describe('Lexer', () => {
     });
 
     describe('with input "file:../src/hello\\ world as"', () => {
-        const context = Lexer.fromString('file:../src/hello\\ world as');
+        const context = Lexer.fromString('file:../src/hello\\ world as')("stream");
 
         it('should return CONSTANT_URL', () => expect(context.id).to.equal(Lexer.TokenEnum.CONSTANT_URL));
         it('should return text of "file:../src/hello\\ world"', () => expect(context.text).to.equal('file:../src/hello\\ world'));
@@ -125,7 +125,7 @@ describe('Lexer', () => {
     });
 
     describe('with input "someID\n1 { a = b }" against the named source "bob.sl"', () => {
-        const context = Lexer.fromString("someID\n1 { a = b }", 'bob.sl');
+        const context = Lexer.fromString("someID\n1 { a = b }")('bob.sl');
         const contents = scanSource(context);
 
         it('should return 8 tokens', () => expect(contents.length).to.equal(8));

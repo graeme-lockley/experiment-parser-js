@@ -12,7 +12,7 @@ const expect = require("chai").expect;
 
 describe('Parser', function () {
     describe('given the input "123" to parseEXPR12', () => {
-        const result = Parser.parseEXPR12(Lexer.fromString("123"));
+        const result = Parser.parseEXPR12(Lexer.fromString("123")("stream"));
 
         it("should parse without any errors", () =>
             expect(Result.isOk(result)).to.equal(true));
@@ -25,7 +25,7 @@ describe('Parser', function () {
     });
 
     describe('given the input "abc 123" to parseEXPR12', () => {
-        const result = Parser.parseEXPR12(Lexer.fromString("abc 123"));
+        const result = Parser.parseEXPR12(Lexer.fromString("abc 123")("stream"));
 
         it("should parse without any errors", () =>
             expect(Result.isOk(result)).to.equal(true));
@@ -38,7 +38,7 @@ describe('Parser', function () {
     });
 
     describe('given the input "( 123)" to parseEXPR12', () => {
-        const result = Parser.parseEXPR12(Lexer.fromString('( 123)'));
+        const result = Parser.parseEXPR12(Lexer.fromString('( 123)')("stream"));
 
         it("should parse without any errors", ()=>
             expect(Result.isOk(result)).to.equal(true));
@@ -51,7 +51,7 @@ describe('Parser', function () {
     });
 
     describe('given the input "\\a \\b -> (a)" to parseEXPR12', () => {
-        const result = Parser.parseEXPR12(Lexer.fromString('\\a \\b -> (a)'));
+        const result = Parser.parseEXPR12(Lexer.fromString('\\a \\b -> (a)')("stream"));
 
         it("should parse without any errors", () => expect(Result.isOk(result)).to.equal(true));
         it("should parse a LAMBDA with variables ['a', 'b'] and expression of IDENTIFIER with value 'a'", () => {
