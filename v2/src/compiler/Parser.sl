@@ -219,7 +219,17 @@ parseIdentifier lexer =
 
 
 parseLambda lexer =
-    Helper.parseLambda lexer;
+    (
+        (P.map (\items -> AST.lambda (at 0 items) (at 2 items))) o
+        (P.and (Array.mk3
+            (P.many1 (
+                (P.map (\elements -> (at 1 elements))) o
+                (P.and (Array.mk2
+                    (P.symbol Tokens.LAMBDA)
+                    (P.symbol Tokens.IDENTIFIER)))))
+            (P.symbol Tokens.MINUS_GREATER)
+            parseEXPR1))
+    ) lexer;
 
 
 parseParenthesisExpression lexer =

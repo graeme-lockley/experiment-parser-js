@@ -312,7 +312,6 @@ module.exports = {
     parseDECLMap,
     parseDECLAssumptionMap,
     convertString,
-    parseLambda,
     parseParenthesisExpression,
     parsePrefixOperator,
     parseConstantUnit,
