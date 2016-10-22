@@ -94,15 +94,15 @@ parseEXPR3 =
 
 
 parseEXPR4 =
-    Helper.parseEXPR4;
+    P.chainl1 parseEXPR5 parseEqualOp;
 
 
-parseEqualOp =
-    Helper.parseEqualOp;
+parseEqualOp lexer =
+    Helper.parseEqualOp lexer;
 
 
-parseEXPR5 =
-    Helper.parseEXPR5;
+parseEXPR5 lexer =
+    Helper.parseEXPR5 lexer;
 
 
 parseComparisonOp =
