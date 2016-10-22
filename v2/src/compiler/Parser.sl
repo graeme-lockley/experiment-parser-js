@@ -146,7 +146,10 @@ parseEXPR9 =
 
 
 parseUnaryOp =
-    Helper.parseUnaryOp;
+    P.or (Array.mk3
+        ((P.map (\_ -> AST.booleanNot)) o (P.symbol Tokens.BANG))
+        ((P.map (\_ -> AST.unaryPlus)) o (P.symbol Tokens.PLUS))
+        ((P.map (\_ -> AST.unaryNegate)) o (P.symbol Tokens.MINUS)));
 
 
 parseEXPR10 lexer =
