@@ -134,7 +134,9 @@ parseEXPR8 lexer =
 
 
 parseMultiplicativeOp =
-    Helper.parseMultiplicativeOp;
+    P.or (Array.mk2
+        ((P.map (\_ -> AST.multiplication)) o (P.symbol Tokens.STAR))
+        ((P.map (\_ -> AST.division)) o (P.symbol Tokens.SLASH)));
 
 
 parseEXPR9 =
