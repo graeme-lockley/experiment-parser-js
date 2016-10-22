@@ -25,3 +25,7 @@ toChar s =
 
 charAt i s =
     Helper.charAt i s;
+
+
+trim s =
+    s.trim();
