@@ -176,7 +176,7 @@ parseEXPR12 =
 
 
 parseConstantInteger lexer =
-    Helper.parseConstantInteger lexer;
+    P.errorMessage "Expected a constant integer" ((P.map (AST.constantInteger o parseInt)) (P.symbol Tokens.CONSTANT_INTEGER lexer));
 
 
 convertCharacter lexer =
