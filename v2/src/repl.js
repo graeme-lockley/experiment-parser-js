@@ -80,7 +80,7 @@ function javaScriptEval(input, context, filename, cb) {
 
 
 function safeLangEval(input, context, filename, cb) {
-    const parsedResponse = Parser.parseString(input);
+    const parsedResponse = Parser.parseString(input)("stream");
 
     if (Result.isOk(parsedResponse)) {
         if (state.showAST) {

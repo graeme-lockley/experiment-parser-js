@@ -12,7 +12,7 @@ const expect = require("chai").expect;
 function scenariosIn(directory) {
     forAllScenariosIn(directory, (name, input, expectations) =>
         describe(name, () => {
-            const parseResponse = Parser.parseString(input);
+            const parseResponse = Parser.parseString(input)("stream");
             let parseResponseIsTested = false;
 
             if ('js' in expectations) {

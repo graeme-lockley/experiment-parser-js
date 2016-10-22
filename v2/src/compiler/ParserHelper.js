@@ -347,12 +347,14 @@ function parseConstantUnit(lexer) {
 }
 
 
-function parseString(input, sourceName = 'stream') {
-    const parseResult = compose(
-        P.map(elements => elements[0]),
-        P.and([parseMODULE, P.symbol(Lexer.TokenEnum.EOF)]))(Lexer.fromString(input)(sourceName));
+function parseString(input) {
+    return sourceName => {
+        const parseResult = compose(
+            P.map(elements => elements[0]),
+            P.and([parseMODULE, P.symbol(Lexer.TokenEnum.EOF)]))(Lexer.fromString(input)(sourceName));
 
-    return Result.map(_ => Tuple.first(_))(parseResult);
+        return Result.map(_ => Tuple.first(_))(parseResult);
+    }
 }
 
 function parseExpressionString(input) {

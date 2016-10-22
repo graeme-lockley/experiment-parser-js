@@ -21,7 +21,7 @@ class Repository {
         if (scriptName.endsWith('.sl')) {
             const seq = Sequence.seq()
                 .assign('content', s => readFile(scriptName))
-                .assign('ast', s => Parser.parseString(s.content, scriptName), s => 'Parsing ' + scriptName)
+                .assign('ast', s => Parser.parseString(s.content)(scriptName), s => 'Parsing ' + scriptName)
                 .assign('dirname', s => this.translateName(Path.dirname(scriptName)))
                 .assign('_', s => {
                     mkdirp(s.dirname);
@@ -73,7 +73,7 @@ class Repository {
                         console.log(`Compiling: ${fileName}`);
                         const content = readFile(fileName);
 
-                        const astResult = Parser.parseString(content, fileName);
+                        const astResult = Parser.parseString(content)(fileName);
                         if (Result.isOk(astResult)) {
                             const translationResult = Translator.astToJavascript(Result.withDefault()(astResult));
                             writeFile(targetFileName, translationResult);
