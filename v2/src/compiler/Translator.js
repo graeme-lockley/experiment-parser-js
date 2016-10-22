@@ -43,57 +43,57 @@ function astToJavascript(ast, indentation = 0) {
         return '(!' + astToJavascript(ast.operand, indentation) + ')';
     } else if (ast.type == "BOOLEAN_OR") {
         return '(' + ast.expressions.map(e => astToJavascript(e, indentation)).join(' || ') + ')';
-    } else if (ast instanceof AST.Composition) {
+    } else if (ast.type == "COMPOSITION") {
         const variableName = '_$' + indentation;
         return '(' + variableName + ' => ' + astToJavascript(ast.left, indentation) + '(' + astToJavascript(ast.right, indentation) + '(' + variableName + ')))';
-    } else if (ast instanceof AST.ConstantBoolean) {
+    } else if (ast.type == "CONSTANT_BOOLEAN") {
         return ast.value ? 'true' : 'false';
-    } else if (ast instanceof AST.ConstantCharacter) {
+    } else if (ast.type == "CONSTANT_CHARACTER") {
         return '"' + ast.value + '"';
-    } else if (ast instanceof AST.ConstantInteger) {
+    } else if (ast.type == "CONSTANT_INTEGER") {
         return ast.value;
-    } else if (ast instanceof AST.ConstantString) {
+    } else if (ast.type == "CONSTANT_STRING") {
         return '"' + encodeString(ast.value) + '"';
-    } else if (ast instanceof AST.ConstantUnit) {
+    } else if (ast.type == "CONSTANT_UNIT") {
         return 'undefined';
-    } else if (ast instanceof AST.Declaration) {
-        if (ast.expression instanceof AST.Lambda) {
-            return spaces() + 'function ' + ast.name + '(' + ast.expression.variables[0] + ') {\n' + (ast.expression.variables.length == 1 ? '  return ' + astToJavascript(ast.expression.expression, indentation + 1) + ';\n' : '  return ' + astToJavascript(new AST.Lambda(ast.expression.variables.slice(1), ast.expression.expression), indentation + 1) + ';\n') + '}';
+    } else if (ast.type == "DECLARATION") {
+        if (ast.expression.type == "LAMBDA") {
+            return spaces() + 'function ' + ast.name + '(' + ast.expression.variables[0] + ') {\n' + (ast.expression.variables.length == 1 ? '  return ' + astToJavascript(ast.expression.expression, indentation + 1) + ';\n' : '  return ' + astToJavascript(AST.lambda(ast.expression.variables.slice(1))(ast.expression.expression), indentation + 1) + ';\n') + '}';
         } else {
             return spaces() + 'const ' + ast.name + ' = ' + astToJavascript(ast.expression) + ';';
         }
-    } else if (ast instanceof AST.Division) {
+    } else if (ast.type == "DIVISION") {
         return '(' + astToJavascript(ast.left, indentation) + ' / ' + astToJavascript(ast.right, indentation) + ')';
-    } else if (ast instanceof AST.Equal) {
+    } else if (ast.type == "EQUAL") {
         return '(' + astToJavascript(ast.left, indentation) + " == " + astToJavascript(ast.right, indentation) + ')';
-    } else if (ast instanceof AST.Expressions) {
+    } else if (ast.type == "EXPRESSIONS") {
         return '(() => {\n' + spaces(indentation + 2)
             + ast.expressions.slice(0, ast.expressions.length - 1).map(e => astToJavascript(e, indentation + 2)).join(";\n" + spaces(indentation + 2))
             + (ast.expressions.length > 1 ? ';\n' : '')
             + spaces(indentation + 2) + 'return ' + astToJavascript(ast.expressions[ast.expressions.length - 1]) + ';\n'
             + spaces(indentation + 1) + "})()";
-    } else if (ast instanceof AST.GreaterThan) {
+    } else if (ast.type == "GREATER_THAN") {
         return '(' + astToJavascript(ast.left, indentation) + " > " + astToJavascript(ast.right, indentation) + ')';
-    } else if (ast instanceof AST.GreaterThanEqual) {
+    } else if (ast.type == "GREATER_THAN_EQUAL") {
         return '(' + astToJavascript(ast.left, indentation) + " >= " + astToJavascript(ast.right, indentation) + ')';
-    } else if (ast instanceof AST.Identifier) {
+    } else if (ast.type == "IDENTIFIER") {
         return ast.name;
-    } else if (ast instanceof AST.If) {
+    } else if (ast.type == "IF") {
         return '(' + astToJavascript(ast.ifExpr, indentation) + "\n" + spaces(indentation + 1) + "? " + astToJavascript(ast.thenExpr, indentation + 1) + "\n" + spaces(indentation + 1) + ": " + astToJavascript(ast.elseExpr, indentation + 1) + ')';
-    } else if (ast instanceof AST.Import) {
+    } else if (ast.type == "IMPORT") {
         const fileName = ast.url.value.substring(5);
 
         return 'const ' + ast.id.name + " = require('" + (fileName.startsWith('./') || fileName.startsWith('/') ? fileName : './' + fileName) + "');";
-    } else if (ast instanceof AST.InfixOperator) {
+    } else if (ast.type == "INFIX_OPERATOR") {
         return infixOperators[ast.operator];
-    } else if (ast instanceof AST.Lambda) {
+    } else if (ast.type == "LAMBDA") {
         const tmpResult = '(' + Array.foldr(accumulator => item => "(" + item + " => " + accumulator + ")")(astToJavascript(ast.expression, indentation))(ast.variables) + ')';
         return tmpResult.substr(1, tmpResult.length - 2);
-    } else if (ast instanceof AST.LessThan) {
+    } else if (ast.type == "LESS_THAN") {
         return '(' + astToJavascript(ast.left, indentation) + " < " + astToJavascript(ast.right, indentation) + ')';
-    } else if (ast instanceof AST.LessThanEqual) {
+    } else if (ast.type == "LESS_THAN_EQUAL") {
         return '(' + astToJavascript(ast.left, indentation) + " <= " + astToJavascript(ast.right, indentation) + ')';
-    } else if (ast instanceof AST.Module) {
+    } else if (ast.type == "MODULE") {
         const imports = ast.imports.map(i => astToJavascript(i, indentation)).join('\n');
 
         const suffix = ast.declarations.length == 0 && !ast.optionalExpression.isJust() ? '\nmodule.exports = {\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
@@ -124,17 +124,17 @@ function astToJavascript(ast, indentation = 0) {
             + '  ]\n'
             + '});\n\n'
             + suffix;
-    } else if (ast instanceof AST.Multiplication) {
+    } else if (ast.type == "MULTIPLICATION") {
         return '(' + astToJavascript(ast.left, indentation) + " * " + astToJavascript(ast.right, indentation) + ')';
-    } else if (ast instanceof AST.QualifiedIdentifier) {
+    } else if (ast.type == "QUALIFIED_IDENTIFIER") {
         return ast.module + "." + ast.identifier;
-    } else if (ast instanceof AST.StringConcat) {
+    } else if (ast.type == "STRING_CONCAT") {
         return '(' + astToJavascript(ast.left, indentation) + " + " + astToJavascript(ast.right, indentation) + ')';
-    } else if (ast instanceof AST.Subtraction) {
+    } else if (ast.type == "SUBTRACTION") {
         return '(' + astToJavascript(ast.left, indentation) + " - " + astToJavascript(ast.right, indentation) + ')';
-    } else if (ast instanceof AST.UnaryPlus) {
+    } else if (ast.type == "UNARY_PLUS") {
         return '(+' + astToJavascript(ast.operand) + ')';
-    } else if (ast instanceof AST.UnaryNegate) {
+    } else if (ast.type == "UNARY_NEGATE") {
         return '(-' + astToJavascript(ast.operand) + ')';
     }
 }

@@ -15,7 +15,7 @@ function compose(f1, f2) {
 
 function parseMODULE(lexer) {
     return compose(
-        P.map(e => new AST.Module(lexer.sourceName, e[0], e[1], e[2])),
+        P.map(e => AST.moduleDeclaration(lexer.sourceName)(e[0])(e[1])(e[2])),
         P.and([
             P.many(parseIMPORT),
             P.many(parseDECL),
@@ -26,7 +26,7 @@ function parseMODULE(lexer) {
 
 function parseIMPORT(lexer) {
     return compose(
-        P.map(e => new AST.Import(new AST.ConstantURL(e[1]), new AST.Identifier(e[3]))),
+        P.map(e => AST.importModule(AST.constantURL(e[1]))(AST.identifier(e[3]))),
         P.and([
             P.symbol(Lexer.TokenEnum.IMPORT),
             P.symbol(Lexer.TokenEnum.CONSTANT_URL),
@@ -50,7 +50,7 @@ function parseDECL(lexer) {
     return compose(
         P.map(elements => {
             const assumptions = elements[3].withDefault([]);
-            return elements[0].length == 1 ? new AST.Declaration(elements[0][0].name, elements[2], assumptions) : new AST.Declaration(elements[0][0].name, new AST.Lambda(elements[0].slice(1).map(n => n.name), elements[2]), assumptions)
+            return elements[0].length == 1 ? AST.declaration(elements[0][0].name)(elements[2])(assumptions) : AST.declaration(elements[0][0].name)(AST.lambda(elements[0].slice(1).map(n => n.name))(elements[2]))(assumptions)
         }),
         P.and([
             P.many1(parseIdentifier),
@@ -81,7 +81,7 @@ function parseDECL(lexer) {
 function parseEXPR1(lexer) {
     return P.or([
         compose(
-            P.map(e => new AST.If(e[1], e[3], e[5])),
+            P.map(e => AST.ifte(e[1])(e[3])(e[5])),
             P.and([
                 P.symbol(Lexer.TokenEnum.IF),
                 parseEXPR1,
@@ -98,7 +98,7 @@ function parseEXPR1(lexer) {
             P.and([
                 P.symbol(Lexer.TokenEnum.LEFT_CURLY),
                 compose(
-                    P.map(e => new AST.Expressions(e)),
+                    P.map(e => AST.expressions(e)),
                     P.sepBy1(parseEXPR1)(P.symbol(Lexer.TokenEnum.SEMICOLON))),
                 P.symbol(Lexer.TokenEnum.RIGHT_CURLY)
             ]))
@@ -127,8 +127,8 @@ function parseEXPR4(lexer) {
 
 function parseEqualOp(lexer) {
     return P.or([
-        compose(P.map(() => l => r => new AST.Equal(l, r)), P.symbol(Lexer.TokenEnum.EQUAL_EQUAL)),
-        compose(P.map(() => l => r => new AST.NotEqual(l, r)), P.symbol(Lexer.TokenEnum.BANG_EQUAL))
+        compose(P.map(() => l => r => AST.equal(l)(r)), P.symbol(Lexer.TokenEnum.EQUAL_EQUAL)),
+        compose(P.map(() => l => r => AST.notEqual(l)(r)), P.symbol(Lexer.TokenEnum.BANG_EQUAL))
     ])(lexer);
 }
 
@@ -140,17 +140,17 @@ function parseEXPR5(lexer) {
 
 function parseComparisonOp(lexer) {
     return P.or([
-        compose(P.map(() => l => r => new AST.LessThan(l, r)), P.symbol(Lexer.TokenEnum.LESS)),
-        compose(P.map(() => l => r => new AST.LessThanEqual(l, r)), P.symbol(Lexer.TokenEnum.LESS_EQUAL)),
-        compose(P.map(() => l => r => new AST.GreaterThan(l, r)), P.symbol(Lexer.TokenEnum.GREATER)),
-        compose(P.map(() => l => r => new AST.GreaterThanEqual(l, r)), P.symbol(Lexer.TokenEnum.GREATER_EQUAL))
+        compose(P.map(() => l => r => AST.lessThan(l)(r)), P.symbol(Lexer.TokenEnum.LESS)),
+        compose(P.map(() => l => r => AST.lessThanEqual(l)(r)), P.symbol(Lexer.TokenEnum.LESS_EQUAL)),
+        compose(P.map(() => l => r => AST.greaterThan(l)(r)), P.symbol(Lexer.TokenEnum.GREATER)),
+        compose(P.map(() => l => r => AST.greaterThanEqual(l)(r)), P.symbol(Lexer.TokenEnum.GREATER_EQUAL))
     ])(lexer);
 }
 
 
 function parseEXPR6(lexer) {
     return P.chainl1(
-        parseEXPR7)(compose(P.map(() => l => r => new AST.StringConcat(l, r)), P.symbol(Lexer.TokenEnum.PLUS_PLUS)))(lexer);
+        parseEXPR7)(compose(P.map(() => l => r => AST.stringConcat(l)(r)), P.symbol(Lexer.TokenEnum.PLUS_PLUS)))(lexer);
 }
 
 
@@ -162,7 +162,7 @@ function parseEXPR7(lexer) {
 function parseAdditiveOp(lexer) {
     return P.or([
         compose(P.map(() => l => r => AST.addition(l)(r)), P.symbol(Lexer.TokenEnum.PLUS)),
-        compose(P.map(() => l => r => new AST.Subtraction(l, r)), P.symbol(Lexer.TokenEnum.MINUS))
+        compose(P.map(() => l => r => AST.subtraction(l)(r)), P.symbol(Lexer.TokenEnum.MINUS))
     ])(lexer);
 }
 
@@ -174,8 +174,8 @@ function parseEXPR8(lexer) {
 
 function parseMultiplicativeOp(lexer) {
     return P.or([
-        compose(P.map(() => l => r => new AST.Multiplication(l, r)), P.symbol(Lexer.TokenEnum.STAR)),
-        compose(P.map(() => l => r => new AST.Division(l, r)), P.symbol(Lexer.TokenEnum.SLASH))
+        compose(P.map(() => l => r => AST.multiplication(l)(r)), P.symbol(Lexer.TokenEnum.STAR)),
+        compose(P.map(() => l => r => AST.division(l)(r)), P.symbol(Lexer.TokenEnum.SLASH))
     ])(lexer);
 }
 
@@ -196,14 +196,14 @@ function parseEXPR9(lexer) {
 function parseUnaryOp(lexer) {
     return P.or([
         compose(P.map(() => (op) => AST.booleanNot(op)), P.symbol(Lexer.TokenEnum.BANG)),
-        compose(P.map(() => (op) => new AST.UnaryPlus(op)), P.symbol(Lexer.TokenEnum.PLUS)),
-        compose(P.map(() => (op) => new AST.UnaryNegate(op)), P.symbol(Lexer.TokenEnum.MINUS))
+        compose(P.map(() => (op) => AST.unaryPlus(op)), P.symbol(Lexer.TokenEnum.PLUS)),
+        compose(P.map(() => (op) => AST.unaryNegate(op)), P.symbol(Lexer.TokenEnum.MINUS))
     ])(lexer);
 }
 
 
 function parseEXPR10(lexer) {
-    return P.chainl1(parseEXPR11)(compose(P.map(() => l => r => new AST.Composition(l, r)), P.symbol(Lexer.TokenEnum.O)))(lexer);
+    return P.chainl1(parseEXPR11)(compose(P.map(() => l => r => AST.composition(l)(r)), P.symbol(Lexer.TokenEnum.O)))(lexer);
 }
 
 
@@ -219,8 +219,8 @@ function parseEXPR12(lexer) {
         parseConstantInteger,
         parseConstantCharacter,
         parseConstantString,
-        compose(P.map(() => new AST.ConstantBoolean(true)), P.symbol(Lexer.TokenEnum.TRUE)),
-        compose(P.map(() => new AST.ConstantBoolean(false)), P.symbol(Lexer.TokenEnum.FALSE)),
+        compose(P.map(() => AST.constantBoolean(true)), P.symbol(Lexer.TokenEnum.TRUE)),
+        compose(P.map(() => AST.constantBoolean(false)), P.symbol(Lexer.TokenEnum.FALSE)),
         parseIdentifier,
         parseLambda,
         parseParenthesisExpression,
@@ -231,7 +231,7 @@ function parseEXPR12(lexer) {
 
 
 function parseConstantInteger(lexer) {
-    return P.errorMessage("Expected a constant integer")(P.map(compose(c => new AST.ConstantInteger(c), parseInt))(P.symbol(Lexer.TokenEnum.CONSTANT_INTEGER)(lexer)));
+    return P.errorMessage("Expected a constant integer")(P.map(compose(c => AST.constantInteger(c), parseInt))(P.symbol(Lexer.TokenEnum.CONSTANT_INTEGER)(lexer)));
 }
 
 
@@ -247,7 +247,7 @@ function convertCharacter(c) {
 
 
 function parseConstantCharacter(lexer) {
-    return compose(P.map(x => new AST.ConstantCharacter(convertCharacter(x.substring(1, x.length - 1)))), P.symbol(Lexer.TokenEnum.CONSTANT_CHAR))(lexer);
+    return compose(P.map(x => AST.constantCharacter(convertCharacter(x.substring(1, x.length - 1)))), P.symbol(Lexer.TokenEnum.CONSTANT_CHAR))(lexer);
 }
 
 
@@ -266,13 +266,13 @@ function parseConstantString(lexer) {
         }
     }
 
-    return compose(P.map(x => new AST.ConstantString(convertString(x.substring(1, x.length - 1)))), P.symbol(Lexer.TokenEnum.CONSTANT_STRING))(lexer);
+    return compose(P.map(x => AST.constantString(convertString(x.substring(1, x.length - 1)))), P.symbol(Lexer.TokenEnum.CONSTANT_STRING))(lexer);
 }
 
 
 function parseIdentifier(lexer) {
     return compose(
-        P.map(e => e[1].isJust() ? new AST.QualifiedIdentifier(e[0], e[1].withDefault()[1]) : new AST.Identifier(e[0])),
+        P.map(e => e[1].isJust() ? AST.qualifiedIdentifier(e[0])(e[1].withDefault()[1]) : AST.identifier(e[0])),
         P.and([
             P.symbol(Lexer.TokenEnum.IDENTIFIER),
             P.option(
@@ -286,7 +286,7 @@ function parseIdentifier(lexer) {
 
 function parseLambda(lexer) {
     return compose(
-        P.map(items => new AST.Lambda(items[0], items[2])),
+        P.map(items => AST.lambda(items[0])(items[2])),
         P.and([
             P.many1(
                 compose(
@@ -314,7 +314,7 @@ function parseParenthesisExpression(lexer) {
 
 function parsePrefixOperator(lexer) {
     return compose(
-        P.map(e => new AST.InfixOperator(e[1])),
+        P.map(e => AST.infixOperator(e[1])),
         P.and([
             P.symbol(Lexer.TokenEnum.LEFT_PAREN),
             P.or([
@@ -339,7 +339,7 @@ function parsePrefixOperator(lexer) {
 
 function parseConstantUnit(lexer) {
     return compose(
-        P.map(e => new AST.ConstantUnit()),
+        P.map(e => AST.constantUnit()),
         P.and([
             P.symbol(Lexer.TokenEnum.LEFT_PAREN),
             P.symbol(Lexer.TokenEnum.RIGHT_PAREN)

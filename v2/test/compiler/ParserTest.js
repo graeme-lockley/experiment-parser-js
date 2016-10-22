@@ -17,7 +17,7 @@ describe('Parser', function () {
         it("should parse without any errors", () =>
             expect(Result.isOk(result)).to.equal(true));
         it("should parse a CONSTANT_INTEGER with value 123", () => {
-            expect(Tuple.first(Result.withDefault()(result))).to.be.an.instanceOf(AST.ConstantInteger);
+            expect(Tuple.first(Result.withDefault()(result)).type).to.equal("CONSTANT_INTEGER");
             expect(Tuple.first(Result.withDefault()(result)).value).to.equal(123);
         });
         it("should have the next token of EOF", () =>
@@ -30,7 +30,7 @@ describe('Parser', function () {
         it("should parse without any errors", () =>
             expect(Result.isOk(result)).to.equal(true));
         it('should parse an IDENTIFIER with value "abc"', () => {
-            expect(Tuple.first(Result.withDefault()(result))).to.be.an.instanceOf(AST.Identifier);
+            expect(Tuple.first(Result.withDefault()(result)).type).to.equal("IDENTIFIER");
             expect(Tuple.first(Result.withDefault()(result)).name).to.equal('abc');
         });
         it("should have the next token of CONSTANT_INTEGER", () =>
@@ -43,7 +43,7 @@ describe('Parser', function () {
         it("should parse without any errors", ()=>
             expect(Result.isOk(result)).to.equal(true));
         it("should parse a CONSTANT_INTEGER with value 123", () => {
-            expect(Tuple.first(Result.withDefault()(result))).to.be.an.instanceOf(AST.ConstantInteger);
+            expect(Tuple.first(Result.withDefault()(result)).type).to.equal("CONSTANT_INTEGER");
             expect(Tuple.first(Result.withDefault()(result)).value).to.equal(123);
         });
         it("should have the next token of EOF", () =>
@@ -55,7 +55,7 @@ describe('Parser', function () {
 
         it("should parse without any errors", () => expect(Result.isOk(result)).to.equal(true));
         it("should parse a LAMBDA with variables ['a', 'b'] and expression of IDENTIFIER with value 'a'", () => {
-            expect(Tuple.first(Result.withDefault()(result))).to.be.an.instanceOf(AST.Lambda);
+            expect(Tuple.first(Result.withDefault()(result)).type).to.equal("LAMBDA");
             expect(Tuple.first(Result.withDefault()(result)).variables.length).to.equal(2);
             expect(Tuple.first(Result.withDefault()(result)).variables[0]).to.equal('a');
             expect(Tuple.first(Result.withDefault()(result)).variables[1]).to.equal('b');

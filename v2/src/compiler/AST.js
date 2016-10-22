@@ -57,245 +57,279 @@ function booleanOr(expressions) {
 }
 
 
-class Composition {
-    constructor(left, right) {
-        this.type = 'COMPOSITION';
-        this.left = left;
-        this.right = right;
-    }
+function composition(left) {
+    return right => {
+        return {
+            type: 'COMPOSITION',
+            left: left,
+            right: right
+        };
+    };
 }
 
 
-class ConstantBoolean {
-    constructor(value) {
-        this.type = 'CONSTANT_BOOLEAN';
-        this.value = value;
-    }
+function constantBoolean(value) {
+    return {
+        type: 'CONSTANT_BOOLEAN',
+        value: value
+    };
 }
 
 
-class ConstantCharacter {
-    constructor(value) {
-        this.type = 'CONSTANT_CHARACTER';
-        this.value = value;
-    }
+function constantCharacter(value) {
+    return {
+        type: 'CONSTANT_CHARACTER',
+        value: value
+    };
 }
 
 
-class ConstantInteger {
-    constructor(value) {
-        this.type = 'CONSTANT_INTEGER';
-        this.value = value;
-    }
+function constantInteger(value) {
+    return {
+        type: 'CONSTANT_INTEGER',
+        value: value
+    };
 }
 
 
-class ConstantString {
-    constructor(value) {
-        this.type = 'CONSTANT_STRING';
-        this.value = value;
-    }
+function constantString(value) {
+    return {
+        type: 'CONSTANT_STRING',
+        value: value
+    };
 }
 
 
-class ConstantUnit {
-    constructor() {
-        this.type = 'CONSTANT_UNIT';
-    }
+function constantUnit() {
+    return {
+        type: 'CONSTANT_UNIT'
+    };
 }
 
 
-class ConstantURL {
-    constructor(value) {
-        this.type = 'CONSTANT_URL';
-        this.value = value;
-    }
+function constantURL(value) {
+    return {
+        type: 'CONSTANT_URL',
+        value: value
+    };
 }
 
 
-class Declaration {
-    constructor(name, expression, assumptions) {
-        this.type = 'DECLARATION';
-        this.name = name;
-        this.expression = expression;
-        this.assumptions = assumptions;
-    }
+function declaration(name) {
+    return expression=> assumptions=> {
+        return {
+            type: 'DECLARATION',
+            name: name,
+            expression: expression,
+            assumptions: assumptions
+        };
+    };
 }
 
 
-class Division {
-    constructor(left, right) {
-        this.type = 'DIVISION';
-        this.left = left;
-        this.right = right;
-    }
+function division(left) {
+    return right => {
+        return {
+            type: 'DIVISION',
+            left: left,
+            right: right
+        };
+    };
 }
 
 
-class Equal {
-    constructor(left, right) {
-        this.type = 'EQUAL';
-        this.left = left;
-        this.right = right;
-    }
+function equal(left) {
+    return right => {
+        return {
+            type: 'EQUAL',
+            left: left,
+            right: right
+        };
+    };
 }
 
 
-class Expressions {
-    constructor(expressions) {
-        this.type = 'EXPRESSIONS';
-        this.expressions = expressions;
-    }
+function expressions(expressions) {
+    return {
+        type: 'EXPRESSIONS',
+        expressions: expressions,
+    };
 }
 
 
-class GreaterThan {
-    constructor(left, right) {
-        this.type = 'GREATER_THAN';
-        this.left = left;
-        this.right = right;
-    }
+function greaterThan(left) {
+    return right => {
+        return {
+            type: 'GREATER_THAN',
+            left: left,
+            right: right
+        };
+    };
 }
 
 
-class GreaterThanEqual {
-    constructor(left, right) {
-        this.type = 'GREATER_THAN_EQUAL';
-        this.left = left;
-        this.right = right;
-    }
+function greaterThanEqual(left) {
+    return right => {
+        return {
+            type: 'GREATER_THAN_EQUAL',
+            left: left,
+            right: right
+        };
+    };
 }
 
 
-class Identifier {
-    constructor(name) {
-        this.type = 'IDENTIFIER';
-        this.name = name;
-    }
+function identifier(name) {
+    return {
+        type: 'IDENTIFIER',
+        name: name
+    };
 }
 
 
-class If {
-    constructor(ifExpr, thenExpr, elseExpr) {
-        this.type = 'IF';
-        this.ifExpr = ifExpr;
-        this.thenExpr = thenExpr;
-        this.elseExpr = elseExpr;
-    }
+function ifte(ifExpr) {
+    return thenExpr=> elseExpr => {
+        return {
+            type: 'IF',
+            ifExpr: ifExpr,
+            thenExpr: thenExpr,
+            elseExpr: elseExpr
+        };
+    };
 }
 
 
-class Import {
-    constructor(url, id) {
-        this.type = 'IMPORT';
-        this.url = url;
-        this.id = id;
-    }
+function importModule(url) {
+    return id => {
+        return {
+            type: 'IMPORT',
+            url: url,
+            id: id
+        };
+    };
 }
 
-class InfixOperator {
-    constructor(operator) {
-        this.type = 'INFIX_OPERATOR';
-        this.operator = operator;
-    }
+function infixOperator(operator) {
+    return {
+        type: 'INFIX_OPERATOR',
+        operator: operator
+    };
 }
 
-class Lambda {
-    constructor(variables, expression) {
-        this.type = 'LAMBDA';
-        this.variables = variables;
-        this.expression = expression;
-    }
-}
-
-
-class LessThan {
-    constructor(left, right) {
-        this.type = 'LESS_THAN';
-        this.left = left;
-        this.right = right;
-    }
+function lambda(variables) {
+    return expression => {
+        return {
+            type: 'LAMBDA',
+            variables: variables,
+            expression: expression
+        };
+    };
 }
 
 
-class LessThanEqual {
-    constructor(left, right) {
-        this.type = 'LESS_THAN_EQUAL';
-        this.left = left;
-        this.right = right;
-    }
+function lessThan(left) {
+    return right => {
+        return {
+            type: 'LESS_THAN',
+            left: left,
+            right: right
+        };
+    };
 }
 
 
-class Module {
-    constructor(sourceName, imports, declarations, optionalExpression) {
-        this.type = 'MODULE';
-        this.sourceName = sourceName;
-        this.imports = imports;
-        this.declarations = declarations;
-        this.optionalExpression = optionalExpression;
-    }
+function lessThanEqual(left) {
+    return right => {
+        return {
+            type: 'LESS_THAN_EQUAL',
+            left: left,
+            right: right
+        };
+    };
 }
 
 
-class Multiplication {
-    constructor(left, right) {
-        this.type = 'MULTIPLICATION';
-        this.left = left;
-        this.right = right;
-    }
+function moduleDeclaration(sourceName) {
+    return imports => declarations => optionalExpression => {
+        return {
+            type: 'MODULE',
+            sourceName: sourceName,
+            imports: imports,
+            declarations: declarations,
+            optionalExpression: optionalExpression
+        };
+    };
 }
 
 
-class NotEqual {
-    constructor(left, right) {
-        this.type = 'NOT_EQUAL';
-        this.left = left;
-        this.right = right;
-    }
+function multiplication(left) {
+    return right => {
+        return {
+            type: 'MULTIPLICATION',
+            left: left,
+            right: right
+        };
+    };
 }
 
 
-class QualifiedIdentifier {
-    constructor(module, identifier) {
-        this.type = "QUALIFIED_IDENTIFIER";
-        this.module = module;
-        this.identifier = identifier;
-    }
+function notEqual(left) {
+    return right => {
+        return {
+            type: 'NOT_EQUAL',
+            left: left,
+            right: right
+        };
+    };
 }
 
 
-class StringConcat {
-    constructor(left, right) {
-        this.type = 'STRING_CONCAT';
-        this.left = left;
-        this.right = right;
-    }
+function qualifiedIdentifier(module) {
+    return identifier => {
+        return {
+            type: "QUALIFIED_IDENTIFIER",
+            module: module,
+            identifier: identifier
+        };
+    };
 }
 
 
-class Subtraction {
-    constructor(left, right) {
-        this.type = 'SUBTRACTION';
-        this.left = left;
-        this.right = right;
-    }
+function stringConcat(left) {
+    return right => {
+        return {
+            type: 'STRING_CONCAT',
+            left: left,
+            right: right
+        };
+    };
 }
 
 
-class UnaryPlus {
-    constructor(operand) {
-        this.type = 'UNARY_PLUS';
-        this.operand = operand;
-    }
+function subtraction(left) {
+    return right => {
+        return {
+            type: 'SUBTRACTION',
+            left: left,
+            right: right
+        };
+    };
 }
 
 
-class UnaryNegate {
-    constructor(operand) {
-        this.type = 'UNARY_NEGATE';
-        this.operand = operand;
-    }
+function unaryPlus(operand) {
+    return {
+        type: 'UNARY_PLUS',
+        operand: operand
+    };
+}
+
+
+function unaryNegate(operand) {
+    return {
+        type: 'UNARY_NEGATE',
+        operand: operand
+    };
 }
 
 
@@ -306,32 +340,32 @@ module.exports = {
     booleanAnd,
     booleanNot,
     booleanOr,
-    Composition,
-    ConstantBoolean,
-    ConstantCharacter,
-    ConstantInteger,
-    ConstantString,
-    ConstantUnit,
-    ConstantURL,
-    Declaration,
-    Division,
-    Equal,
-    Expressions,
-    GreaterThan,
-    GreaterThanEqual,
-    Identifier,
-    If,
-    Import,
-    InfixOperator,
-    Lambda,
-    LessThan,
-    LessThanEqual,
-    Module,
-    Multiplication,
-    NotEqual,
-    QualifiedIdentifier,
-    StringConcat,
-    Subtraction,
-    UnaryPlus,
-    UnaryNegate
+    composition,
+    constantBoolean,
+    constantCharacter,
+    constantInteger,
+    constantString,
+    constantUnit,
+    constantURL,
+    declaration,
+    division,
+    equal,
+    expressions,
+    greaterThan,
+    greaterThanEqual,
+    identifier,
+    ifte,
+    importModule,
+    infixOperator,
+    lambda,
+    lessThan,
+    lessThanEqual,
+    moduleDeclaration,
+    multiplication,
+    notEqual,
+    qualifiedIdentifier,
+    stringConcat,
+    subtraction,
+    unaryPlus,
+    unaryNegate
 };
