@@ -13,15 +13,6 @@ function compose(f1, f2) {
 }
 
 
-function markLocation(parser) {
-    return lexer => {
-        const startToken = lexer;
-        const result = parser(lexer);
-        return Result.map(_ => Tuple.Tuple([startToken, Tuple.second(_), Tuple.first(_)])(Tuple.second(_)))(result);
-    };
-}
-
-
 function parseDECLMap(elements) {
     const assumptions = elements[3].withDefault([]);
     return elements[0].length == 1 ? AST.declaration(elements[0][0].name)(elements[2])(assumptions) : AST.declaration(elements[0][0].name)(AST.lambda(elements[0].slice(1).map(n => n.name))(elements[2]))(assumptions)
@@ -317,7 +308,6 @@ function parseExpressionString(input) {
 
 
 module.exports = {
-    markLocation,
     parseDECLMap,
     parseDECLAssumptionMap,
     parseEXPR1,

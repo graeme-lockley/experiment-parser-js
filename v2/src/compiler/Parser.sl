@@ -34,8 +34,10 @@ parseIMPORT =
             (P.symbol Tokens.SEMICOLON)));
 
 
-markLocation =
-    Helper.markLocation;
+markLocation parser lexer =
+    (\startToken \result ->
+        Result.map (\t -> Tuple.Tuple (Array.mk3 startToken (Tuple.second t) (Tuple.first t)) (Tuple.second t)) result
+    ) lexer (parser lexer);
 
 
 parseDECL lexer =
