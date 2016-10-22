@@ -196,8 +196,14 @@ parseConstantCharacter lexer =
     ) lexer;
 
 
+convertString s = Helper.convertString s;
+
+
 parseConstantString lexer =
-    Helper.parseConstantString lexer;
+    (
+        (P.map (\x -> AST.constantString (convertString (String.substring 1 ((String.length x) - 1) x)))) o
+        (P.symbol Tokens.CONSTANT_STRING)
+    ) lexer;
 
 
 parseIdentifier lexer =
