@@ -339,7 +339,7 @@ function parsePrefixOperator(lexer) {
 
 function parseConstantUnit(lexer) {
     return compose(
-        P.map(e => AST.constantUnit()),
+        P.map(e => AST.constantUnit),
         P.and([
             P.symbol(Lexer.TokenEnum.LEFT_PAREN),
             P.symbol(Lexer.TokenEnum.RIGHT_PAREN)
