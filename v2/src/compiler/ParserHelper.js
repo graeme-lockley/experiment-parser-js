@@ -2,12 +2,6 @@
 
 const AST = require('./AST');
 
-function parseDECLMap(elements) {
-    const assumptions = elements[3].withDefault([]);
-    return elements[0].length == 1 ? AST.declaration(elements[0][0].name)(elements[2])(assumptions) : AST.declaration(elements[0][0].name)(AST.lambda(elements[0].slice(1).map(n => n.name))(elements[2]))(assumptions)
-}
-
-
 function convertCharacter(c) {
     if (c == '\\n') {
         return '\n';
@@ -34,6 +28,5 @@ function convertString(s) {
 }
 
 module.exports = {
-    parseDECLMap,
     convertString,
 };

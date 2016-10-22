@@ -44,7 +44,7 @@ markLocation parser lexer =
 
 parseDECL lexer =
     (
-        (P.map Helper.parseDECLMap) o
+        (P.map parseDECLMap) o
         (P.and (Array.mk5
             (P.many1 parseIdentifier)
             (P.symbol Tokens.EQUAL)
@@ -68,6 +68,15 @@ parseDECLAssumptionMap lexer es =
             (String.trim (Lexer.streamText (Lexer.indexXY (at 0 a)) (Lexer.indexXY (at 1 a)) (at 0 a)))
             (at 2 a)
     ) (at 2 es);
+
+
+parseDECLMap elements =
+    (\a ->
+            if (Array.length (at 0 elements)) == 1 then
+                AST.declaration ((\assumption -> assumption.name) (at 0 (at 0 elements))) (at 2 elements) a
+            else
+                AST.declaration ((\assumption -> assumption.name) (at 0 (at 0 elements))) (AST.lambda (Array.map (\n -> n.name) (Array.slice 1 (at 0 elements))) (at 2 elements)) a
+    ) (Maybe.withDefault Array.empty (at 3 elements));
 
 
 parseEXPR1 =
