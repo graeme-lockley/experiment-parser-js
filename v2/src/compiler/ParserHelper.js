@@ -13,17 +13,6 @@ function compose(f1, f2) {
 }
 
 
-function parseMODULE(lexer) {
-    return compose(
-        P.map(e => AST.moduleDeclaration(lexer.sourceName)(e[0])(e[1])(e[2])),
-        P.and([
-            P.many(parseIMPORT),
-            P.many(parseDECL),
-            P.option(parseEXPR1)
-        ]))(lexer);
-}
-
-
 function parseIMPORT(lexer) {
     return compose(
         P.map(e => AST.importModule(AST.constantURL(e[1]))(AST.identifier(e[3]))),
@@ -357,7 +346,6 @@ function parseExpressionString(input) {
 
 
 module.exports = {
-    parseMODULE,
     parseIMPORT,
     markLocation,
     parseDECL,

@@ -1,5 +1,6 @@
 import file:./ParserHelper as Helper;
 
+import file:./AST as AST;
 import file:./Lexer as Lexer;
 import file:./ParserCombinators as P;
 
@@ -13,8 +14,14 @@ Tokens =
     Lexer.TokenEnum;
 
 
-parseMODULE =
-    Helper.parseMODULE;
+parseMODULE lexer =
+    (
+        (P.map (\e -> AST.moduleDeclaration (lexer.sourceName) (at 0 e) (at 1 e)(at 2 e))) o
+        (P.and (Array.mk3
+            (P.many parseIMPORT)
+            (P.many parseDECL)
+            (P.option parseEXPR1)))
+    ) lexer;
 
 
 parseIMPORT =
