@@ -104,7 +104,7 @@ parseEqualOp lexer =
 
 
 parseEXPR5 lexer =
-    Helper.parseEXPR5 lexer;
+    P.chainl1 parseEXPR6 parseComparisonOp lexer;
 
 
 parseComparisonOp =
