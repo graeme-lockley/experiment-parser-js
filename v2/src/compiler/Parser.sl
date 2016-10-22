@@ -116,7 +116,7 @@ parseComparisonOp lexer =
 
 
 parseEXPR6 lexer =
-    P.chainl1 parseEXPR7 ((P.map(\_ -> AST.stringConcat)) o (P.symbol Tokens.PLUS_PLUS)) lexer;
+    P.chainl1 parseEXPR7 ((P.map (\_ -> AST.stringConcat)) o (P.symbol Tokens.PLUS_PLUS)) lexer;
 
 
 parseEXPR7 =
@@ -153,7 +153,7 @@ parseUnaryOp =
 
 
 parseEXPR10 lexer =
-    Helper.parseEXPR10 lexer;
+    P.chainl1 parseEXPR11 ((P.map (\_ -> AST.composition)) o (P.symbol Tokens.O)) lexer;
 
 
 parseEXPR11 =
