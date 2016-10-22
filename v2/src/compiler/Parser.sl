@@ -233,7 +233,13 @@ parseLambda lexer =
 
 
 parseParenthesisExpression lexer =
-    Helper.parseParenthesisExpression lexer;
+    (
+        (P.map (\elements -> (at 1 elements))) o
+        (P.and (Array.mk3
+            (P.symbol Tokens.LEFT_PAREN)
+            parseEXPR1
+            (P.symbol Tokens.RIGHT_PAREN)))
+    ) lexer;
 
 
 parsePrefixOperator lexer =
