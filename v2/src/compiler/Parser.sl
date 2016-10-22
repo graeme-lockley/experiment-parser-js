@@ -107,8 +107,12 @@ parseEXPR5 lexer =
     P.chainl1 parseEXPR6 parseComparisonOp lexer;
 
 
-parseComparisonOp =
-    Helper.parseComparisonOp;
+parseComparisonOp lexer =
+    P.or (Array.mk4
+        ((P.map (\_ -> AST.lessThan)) o (P.symbol Tokens.LESS))
+        ((P.map (\_ -> AST.lessThanEqual)) o (P.symbol Tokens.LESS_EQUAL))
+        ((P.map (\_ -> AST.greaterThan)) o (P.symbol Tokens.GREATER))
+        ((P.map (\_ -> AST.greaterThanEqual)) o (P.symbol Tokens.GREATER_EQUAL))) lexer;
 
 
 parseEXPR6 =
