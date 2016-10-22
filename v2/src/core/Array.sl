@@ -35,6 +35,10 @@ assumptions {
 };
 
 
+map f a =
+    AH.map f a;
+
+
 slice n a =
     a.slice(n);
 

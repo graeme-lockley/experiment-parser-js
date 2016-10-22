@@ -54,6 +54,17 @@ function findFirst(predicate) {
 }
 
 
+function map(f) {
+    return a => {
+        const result = [];
+        for (let index = 0; index < a.length; index += 1) {
+            result.push(f(a[index]));
+        }
+        return result;
+    };
+}
+
+
 function at(i) {
     return a => {
         const result = a[i];
@@ -63,5 +74,12 @@ function at(i) {
 
 
 module.exports = {
-    append, at, empty, foldl, foldr, findFirst, prepend
+    append,
+    at,
+    empty,
+    foldl,
+    foldr,
+    findFirst,
+    map,
+    prepend
 };
