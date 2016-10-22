@@ -1,5 +1,17 @@
 import file:./ParserHelper as Helper;
 
+import file:./Lexer as Lexer;
+import file:./ParserCombinators as P;
+
+import file:../core/Array as Array;
+import file:../core/Maybe as Maybe;
+import file:../core/Result as Result;
+import file:../core/Tuple as Tuple;
+
+
+Tokens =
+    Lexer.TokenEnum;
+
 
 parseMODULE =
     Helper.parseMODULE;
@@ -121,9 +133,19 @@ parseConstantUnit =
     Helper.parseConstantUnit;
 
 
-parseString =
-    Helper.parseString;
+parseString input sourceName =
+    (\input ->
+        (\parser ->
+            (\parseResult ->
+                Result.map (\value -> Tuple.first value) parseResult
+            ) (parser input)
+        ) ((P.map (\elements -> at 0 elements)) o (P.and (Array.mk2 parseMODULE (P.symbol Tokens.EOF))))
+    ) (Lexer.fromString input sourceName);
 
 
 parseExpressionString =
     Helper.parseExpressionString;
+
+
+at i a =
+    Maybe.withDefault () (Array.at i a);
