@@ -266,7 +266,13 @@ parsePrefixOperator lexer =
 
 
 parseConstantUnit lexer =
-    Helper.parseConstantUnit lexer;
+    (
+        (P.map (\_ -> AST.constantUnit)) o
+        (P.and (Array.mk2
+            (P.symbol Tokens.LEFT_PAREN)
+            (P.symbol Tokens.RIGHT_PAREN)))
+    ) lexer;
+
 
 
 parseString input sourceName =

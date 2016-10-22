@@ -312,6 +312,5 @@ module.exports = {
     parseDECLMap,
     parseDECLAssumptionMap,
     convertString,
-    parseConstantUnit,
     parseExpressionString
 };
