@@ -11,8 +11,8 @@ eq l r =
     if (Object.eq l r) then
         true
     else {
-        DEBUG.log "Expected" l;
-        DEBUG.log "   to eq" r;
+        log "Expected" l;
+        log "   to eq" r;
         false
     };
 
@@ -21,7 +21,7 @@ neq l r =
     if (Object.neq l r) then
         true
     else {
-        DEBUG.log "Expected" l;
-        DEBUG.log "  to !eq" r;
+        log "Expected" l;
+        log "  to !eq" r;
         false
     };
