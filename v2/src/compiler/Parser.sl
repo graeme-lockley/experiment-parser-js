@@ -285,8 +285,17 @@ parseString input sourceName =
     ) (Lexer.fromString input sourceName);
 
 
-parseExpressionString =
-    Helper.parseExpressionString;
+parseExpressionString input =
+    (
+        (\parseResult ->
+            Result.map (\_ -> Tuple.first _) parseResult
+        ) o (
+            (P.map (\e -> (at 0 e))) o
+            (P.and (Array.mk2 parseEXPR1 (P.symbol Tokens.EOF)))
+        ) o (
+            Lexer.fromString input
+        )
+     ) "stream";
 
 
 at i a =

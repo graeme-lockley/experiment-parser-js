@@ -299,18 +299,8 @@ function parseConstantUnit(lexer) {
 }
 
 
-function parseExpressionString(input) {
-    const parseResult = compose(
-        P.map(elements => elements[0]),
-        P.and([parseEXPR1, P.symbol(Lexer.TokenEnum.EOF)]))(Lexer.fromString(input)("stream"));
-
-    return Result.map(_ => Tuple.first(_))(parseResult);
-}
-
-
 module.exports = {
     parseDECLMap,
     parseDECLAssumptionMap,
     convertString,
-    parseExpressionString
 };
