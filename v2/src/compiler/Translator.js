@@ -49,7 +49,7 @@ function astToJavascript(ast, indentation = 0) {
     } else if (ast.type == "CONSTANT_BOOLEAN") {
         return ast.value ? 'true' : 'false';
     } else if (ast.type == "CONSTANT_CHARACTER") {
-        return '"' + ast.value + '"';
+        return '"' + encodeString(ast.value) + '"';
     } else if (ast.type == "CONSTANT_INTEGER") {
         return ast.value;
     } else if (ast.type == "CONSTANT_STRING") {
