@@ -1,10 +1,9 @@
-import file:./ParserHelper as Helper;
-
 import file:./AST as AST;
 import file:./Lexer as Lexer;
 import file:./ParserCombinators as P;
 
 import file:../core/Array as Array;
+import file:../core/Character as Character;
 import file:../core/Debug as DEBUG;
 import file:../core/Maybe as Maybe;
 import file:../core/Result as Result;
@@ -200,28 +199,16 @@ parseConstantInteger lexer =
     P.errorMessage "Expected a constant integer" ((P.map (AST.constantInteger o parseInt)) (P.symbol Tokens.CONSTANT_INTEGER lexer));
 
 
-convertCharacter c =
-    if c == "\\\\n" then
-        "\n"
-    else if String.length c == 2 then
-        String.charAt 1 c
-    else
-        String.toChar c;
-
-
 parseConstantCharacter lexer =
     (
-        (P.map (\x -> AST.constantCharacter (convertCharacter (String.substring 1 ((String.length x) - 1) x)))) o
+        (P.map (\x -> AST.constantCharacter (Character.fromLiteral (String.substring 1 ((String.length x) - 1) x)))) o
         (P.symbol Tokens.CONSTANT_CHAR)
     ) lexer;
 
 
-convertString s = Helper.convertString s;
-
-
 parseConstantString lexer =
     (
-        (P.map (\x -> AST.constantString (convertString (String.substring 1 ((String.length x) - 1) x)))) o
+        (P.map (\x -> AST.constantString (String.fromLiteral (String.substring 1 ((String.length x) - 1) x)))) o
         (P.symbol Tokens.CONSTANT_STRING)
     ) lexer;
 
