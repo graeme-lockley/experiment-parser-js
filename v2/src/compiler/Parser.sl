@@ -70,7 +70,7 @@ parseEXPR1 =
                 (P.symbol Tokens.ELSE)
                 parseEXPR1)))
         (
-            (P.map (\elements -> if (Array.length elements) == 1 then (at 0 elements) else (AST.apply elements))) o
+            (P.map (\e -> if (Array.length e) == 1 then (at 0 e) else (AST.apply e))) o
             (P.many1 parseEXPR2))
         (
             (P.map (\e -> (at 1 e))) o
