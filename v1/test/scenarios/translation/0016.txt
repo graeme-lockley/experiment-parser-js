@@ -1,0 +1,4 @@
+-- given a set of escaped constants
+x = '\n';
+-- run
+x == '\n'

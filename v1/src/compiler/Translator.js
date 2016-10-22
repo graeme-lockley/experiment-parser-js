@@ -49,7 +49,7 @@ function astToJavascript(ast, indentation = 0) {
     } else if (ast instanceof AST.ConstantBoolean) {
         return ast.value ? 'true' : 'false';
     } else if (ast instanceof AST.ConstantCharacter) {
-        return '"' + ast.value + '"';
+        return '"' + encodeString(ast.value) + '"';
     } else if (ast instanceof AST.ConstantInteger) {
         return ast.value;
     } else if (ast instanceof AST.ConstantString) {
