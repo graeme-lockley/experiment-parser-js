@@ -115,8 +115,8 @@ parseComparisonOp lexer =
         ((P.map (\_ -> AST.greaterThanEqual)) o (P.symbol Tokens.GREATER_EQUAL))) lexer;
 
 
-parseEXPR6 =
-    Helper.parseEXPR6;
+parseEXPR6 lexer =
+    P.chainl1 parseEXPR7 ((P.map(\_ -> AST.stringConcat)) o (P.symbol Tokens.PLUS_PLUS)) lexer;
 
 
 parseEXPR7 =
