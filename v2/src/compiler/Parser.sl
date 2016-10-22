@@ -124,11 +124,13 @@ parseEXPR7 =
 
 
 parseAdditiveOp lexer =
-    Helper.parseAdditiveOp lexer;
+    P.or (Array.mk2
+        ((P.map (\_ -> AST.addition)) o (P.symbol Tokens.PLUS))
+        ((P.map (\_ -> AST.subtraction)) o (P.symbol Tokens.MINUS))) lexer;
 
 
 parseEXPR8 lexer =
-    Helper.parseEXPR8 lexer;
+    P.chainl1 parseEXPR9 parseMultiplicativeOp lexer;
 
 
 parseMultiplicativeOp =
