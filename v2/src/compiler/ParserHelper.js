@@ -38,7 +38,7 @@ function parseDECL(lexer) {
                         return es[2].map(a => {
                             const startIndexXY = a[0].indexXY;
                             const endIndexXY = a[1].indexXY;
-                            const text = lexer.streamText(startIndexXY, endIndexXY).trim();
+                            const text = (lexer.streamText(startIndexXY)(endIndexXY)).trim();
                             return AST.assumption(lexer.sourceName)(a[0].y)(text)(a[2]);
                         });
                     }),

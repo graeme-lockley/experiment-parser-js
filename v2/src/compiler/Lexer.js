@@ -324,8 +324,8 @@ class Context {
         return this._indexXY;
     }
 
-    streamText(indexStart, indexEnd) {
-        return this.input.content.substring(indexStart, indexEnd);
+    streamText(indexStart) {
+        return indexEnd => this.input.content.substring(indexStart, indexEnd);
     }
 
     get sourceName() {
