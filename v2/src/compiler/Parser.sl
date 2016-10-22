@@ -5,6 +5,7 @@ import file:./Lexer as Lexer;
 import file:./ParserCombinators as P;
 
 import file:../core/Array as Array;
+import file:../core/Debug as DEBUG;
 import file:../core/Maybe as Maybe;
 import file:../core/Result as Result;
 import file:../core/String as String;
@@ -26,12 +27,12 @@ parseMODULE lexer =
 
 
 parseIMPORT =
-        (P.map (\e -> AST.importModule (AST.constantURL (at 1 e)) (AST.identifier (at 3 e)))) o
-        (P.and (Array.mk5
-            (P.symbol Tokens.IMPORT)
-            (P.symbol Tokens.CONSTANT_URL)
-            (P.symbol Tokens.AS)
-            (P.symbol Tokens.IDENTIFIER)
+    (P.map (\e -> AST.importModule (AST.constantURL (at 1 e)) (AST.identifier (at 3 e)))) o
+    (P.and (Array.mk5
+        (P.symbol Tokens.IMPORT)
+        (P.symbol Tokens.CONSTANT_URL)
+        (P.symbol Tokens.AS)
+        (P.symbol Tokens.IDENTIFIER)
             (P.symbol Tokens.SEMICOLON)));
 
 
@@ -49,7 +50,7 @@ parseDECL lexer =
             (P.symbol Tokens.EQUAL)
             parseEXPR1
             (P.option (
-                (P.map (Helper.parseDECLAssumptionMap lexer)) o
+                (P.map (parseDECLAssumptionMap lexer)) o
                 (P.and (Array.mk4
                     (P.symbol Tokens.ASSUMPTIONS)
                     (P.symbol Tokens.LEFT_CURLY)
@@ -57,6 +58,16 @@ parseDECL lexer =
                     (P.symbol Tokens.RIGHT_CURLY)))))
             (P.symbol Tokens.SEMICOLON)))
     ) lexer;
+
+
+parseDECLAssumptionMap lexer es =
+    Array.map (\a ->
+        AST.assumption
+            (Lexer.sourceName lexer)
+            (Lexer.y (at 0 a))
+            (String.trim (Lexer.streamText (Lexer.indexXY (at 0 a)) (Lexer.indexXY (at 1 a)) (at 0 a)))
+            (at 2 a)
+    ) (at 2 es);
 
 
 parseEXPR1 =
@@ -142,7 +153,7 @@ parseMultiplicativeOp =
 
 parseEXPR9 =
     P.or (Array.mk2
-        ((P.map (\e -> (at 0 e)(at 1 e))) o (P.and (Array.mk2 parseUnaryOp parseEXPR9)))
+        ((P.map (\e -> (at 0 e) (at 1 e))) o (P.and (Array.mk2 parseUnaryOp parseEXPR9)))
         parseEXPR10);
 
 

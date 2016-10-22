@@ -131,7 +131,7 @@ describe('Lexer', () => {
         it('should return 8 tokens', () => expect(contents.length).to.equal(8));
         it('should return the source name', () => expect(context.sourceName).to.equal('bob.sl'));
         it('should return 2 for line number of left curly', () => expect(contents[2].y).to.equal(2));
-        it('should return " a = b " for the content between { and }', () => expect(context.streamText(contents[2].indexXY + 1)(contents[6].indexXY - 1)))
+        it('should return " a = b " for the content between { and }', () => expect(Lexer.streamText(contents[2].indexXY + 1)(contents[6].indexXY - 1)(context)))
     });
 });
 

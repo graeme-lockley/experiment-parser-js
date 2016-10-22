@@ -351,6 +351,31 @@ function fromString(input) {
 }
 
 
+function sourceName(lexer) {
+    return lexer.sourceName;
+}
+
+
+function y(lexer) {
+    return lexer.y;
+}
+
+
+function indexXY(lexer) {
+    return lexer.indexXY;
+}
+
+
+function streamText(startXY) {
+    return endXY => lexer => lexer.streamText(startXY)(endXY);
+}
+
+
 module.exports = {
-    fromString, TokenEnum
+    fromString,
+    sourceName,
+    y,
+    indexXY,
+    streamText,
+    TokenEnum
 };
