@@ -17,3 +17,11 @@ assumptions {
     DEBUG.eq (substring 1 3 "hello") "el";
     DEBUG.eq (substring 1 10 "hello") "ello"
 };
+
+
+toChar s =
+    charAt 0 s;
+
+
+charAt i s =
+    Helper.charAt i s;
