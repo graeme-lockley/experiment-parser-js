@@ -23,9 +23,14 @@ toChar s =
     charAt 0 s;
 
 
+fromLiteral =
+    Helper.stringFromLiteral;
+
+
 charAt i s =
     Helper.charAt i s;
 
 
 trim s =
     s.trim();
+
