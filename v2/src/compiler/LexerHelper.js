@@ -48,6 +48,7 @@ const TokenEnum = {
     TRUE: 38
 };
 
+
 const symbols = [
     Tuple.Tuple('\\')(TokenEnum.LAMBDA),
     Tuple.Tuple('.')(TokenEnum.PERIOD),
@@ -73,6 +74,7 @@ const symbols = [
     Tuple.Tuple('||')(TokenEnum.BAR_BAR),
     Tuple.Tuple('&&')(TokenEnum.AMPERSAND_AMPERSAND)
 ];
+
 
 const reservedIdentifiers = {
     'as': TokenEnum.AS,
