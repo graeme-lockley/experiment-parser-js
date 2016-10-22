@@ -365,7 +365,36 @@ function parseExpressionString(input) {
 
 
 module.exports = {
+    parseMODULE,
+    parseIMPORT,
+    markLocation,
+    parseDECL,
+    parseEXPR1,
+    parseEXPR2,
+    parseEXPR3,
+    parseEXPR4,
+    parseEqualOp,
+    parseEXPR5,
+    parseComparisonOp,
+    parseEXPR6,
+    parseEXPR7,
+    parseAdditiveOp,
+    parseEXPR8,
+    parseMultiplicativeOp,
+    parseEXPR9,
+    parseUnaryOp,
+    parseEXPR10,
+    parseEXPR11,
     parseEXPR12,
-    parseExpressionString,
-    parseString
+    parseConstantInteger,
+    convertCharacter,
+    parseConstantCharacter,
+    parseConstantString,
+    parseIdentifier,
+    parseLambda,
+    parseParenthesisExpression,
+    parsePrefixOperator,
+    parseConstantUnit,
+    parseString,
+    parseExpressionString
 };
