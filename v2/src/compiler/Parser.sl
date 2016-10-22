@@ -89,7 +89,8 @@ parseEXPR2 =
 
 
 parseEXPR3 =
-    Helper.parseEXPR3;
+    (P.map (\e -> if (Array.length e) == 1 then (at 0 e) else (AST.booleanAnd e))) o
+    (P.sepBy1 parseEXPR4 (P.symbol Tokens.AMPERSAND_AMPERSAND));
 
 
 parseEXPR4 =
