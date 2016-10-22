@@ -243,7 +243,26 @@ parseParenthesisExpression lexer =
 
 
 parsePrefixOperator lexer =
-    Helper.parsePrefixOperator lexer;
+    (
+        (P.map (\e -> AST.infixOperator (at 1 e))) o
+        (P.and (Array.mk3
+            (P.symbol Tokens.LEFT_PAREN)
+            (P.or (Array.mk13
+                (P.symbol Tokens.BAR_BAR)
+                (P.symbol Tokens.AMPERSAND_AMPERSAND)
+                (P.symbol Tokens.EQUAL_EQUAL)
+                (P.symbol Tokens.BANG_EQUAL)
+                (P.symbol Tokens.LESS)
+                (P.symbol Tokens.LESS_EQUAL)
+                (P.symbol Tokens.GREATER)
+                (P.symbol Tokens.GREATER_EQUAL)
+                (P.symbol Tokens.PLUS_PLUS)
+                (P.symbol Tokens.PLUS)
+                (P.symbol Tokens.MINUS)
+                (P.symbol Tokens.STAR)
+                (P.symbol Tokens.SLASH)))
+            (P.symbol Tokens.RIGHT_PAREN)))
+    ) lexer;
 
 
 parseConstantUnit lexer =
