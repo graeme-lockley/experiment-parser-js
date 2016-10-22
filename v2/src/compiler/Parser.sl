@@ -98,7 +98,9 @@ parseEXPR4 =
 
 
 parseEqualOp lexer =
-    Helper.parseEqualOp lexer;
+    P.or (Array.mk2
+        ((P.map (\_ -> AST.equal)) o (P.symbol Tokens.EQUAL_EQUAL))
+        ((P.map (\_ -> AST.notEqual)) o (P.symbol Tokens.BANG_EQUAL))) lexer;
 
 
 parseEXPR5 lexer =

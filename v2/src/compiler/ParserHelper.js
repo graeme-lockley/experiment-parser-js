@@ -310,7 +310,6 @@ function parseExpressionString(input) {
 module.exports = {
     parseDECLMap,
     parseDECLAssumptionMap,
-    parseEqualOp,
     parseEXPR5,
     parseComparisonOp,
     parseEXPR6,
