@@ -162,43 +162,53 @@ parseEXPR11 =
 
 
 parseEXPR12 =
-    Helper.parseEXPR12;
+    P.or (Array.mk10
+        parseConstantInteger
+        parseConstantCharacter
+        parseConstantString
+        ((P.map (\_ -> AST.constantBoolean true)) o (P.symbol Tokens.TRUE))
+        ((P.map (\_ -> AST.constantBoolean false)) o (P.symbol Tokens.FALSE))
+        parseIdentifier
+        parseLambda
+        parseParenthesisExpression
+        parsePrefixOperator
+        parseConstantUnit);
 
 
-parseConstantInteger =
-    Helper.parseConstantInteger;
+parseConstantInteger lexer =
+    Helper.parseConstantInteger lexer;
 
 
-convertCharacter =
-    Helper.convertCharacter;
+convertCharacter lexer =
+    Helper.convertCharacter lexer;
 
 
-parseConstantCharacter =
-    Helper.parseConstantCharacter;
+parseConstantCharacter lexer =
+    Helper.parseConstantCharacter lexer;
 
 
-parseConstantString =
-    Helper.parseConstantString;
+parseConstantString lexer =
+    Helper.parseConstantString lexer;
 
 
-parseIdentifier =
-    Helper.parseIdentifier;
+parseIdentifier lexer =
+    Helper.parseIdentifier lexer;
 
 
-parseLambda =
-    Helper.parseLambda;
+parseLambda lexer =
+    Helper.parseLambda lexer;
 
 
-parseParenthesisExpression =
-    Helper.parseParenthesisExpression;
+parseParenthesisExpression lexer =
+    Helper.parseParenthesisExpression lexer;
 
 
-parsePrefixOperator =
-    Helper.parsePrefixOperator;
+parsePrefixOperator lexer =
+    Helper.parsePrefixOperator lexer;
 
 
-parseConstantUnit =
-    Helper.parseConstantUnit;
+parseConstantUnit lexer =
+    Helper.parseConstantUnit lexer;
 
 
 parseString input sourceName =
