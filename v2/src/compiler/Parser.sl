@@ -7,6 +7,7 @@ import file:./ParserCombinators as P;
 import file:../core/Array as Array;
 import file:../core/Maybe as Maybe;
 import file:../core/Result as Result;
+import file:../core/String as String;
 import file:../core/Tuple as Tuple;
 
 
@@ -184,7 +185,10 @@ convertCharacter lexer =
 
 
 parseConstantCharacter lexer =
-    Helper.parseConstantCharacter lexer;
+    (
+        (P.map (\x -> AST.constantCharacter (convertCharacter (String.substring 1 ((String.length x) - 1) x)))) o
+        (P.symbol Tokens.CONSTANT_CHAR)
+    ) lexer;
 
 
 parseConstantString lexer =
