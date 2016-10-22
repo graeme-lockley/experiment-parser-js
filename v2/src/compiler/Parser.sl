@@ -180,8 +180,13 @@ parseConstantInteger lexer =
     P.errorMessage "Expected a constant integer" ((P.map (AST.constantInteger o parseInt)) (P.symbol Tokens.CONSTANT_INTEGER lexer));
 
 
-convertCharacter lexer =
-    Helper.convertCharacter lexer;
+convertCharacter c =
+    if c == "\\\\n" then
+        "\n"
+    else if String.length c == 2 then
+        String.charAt 1 c
+    else
+        String.toChar c;
 
 
 parseConstantCharacter lexer =
