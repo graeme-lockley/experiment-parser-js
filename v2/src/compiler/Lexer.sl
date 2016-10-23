@@ -1,5 +1,9 @@
 import file:./LexerHelper as Helper;
 
+import file:../core/Debug as DEBUG;
+import file:../core/Record as Record;
+import file:../core/String as String;
+
 
 TokenEnum =
     Helper.TokenEnum;
@@ -53,6 +57,9 @@ indexXY =
     Helper.indexXY;
 
 
-streamText =
-    Helper.streamText;
+content lexer =
+    Record.get "content" (Record.get "input" lexer);
 
+
+streamText startXY endXY lexer =
+    String.substring startXY endXY (content lexer);

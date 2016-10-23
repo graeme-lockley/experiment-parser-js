@@ -1,5 +1,7 @@
 "use strict";
 
+const Record = require('../core/Record');
+const String = require('../core/String');
 const Tuple = require('../core/Tuple');
 
 const TokenEnum = {
@@ -326,10 +328,6 @@ class Context {
         return this._indexXY;
     }
 
-    streamText(indexStart) {
-        return indexEnd => this.input.content.substring(indexStart, indexEnd);
-    }
-
     get sourceName() {
         return this.input.sourceName;
     }
@@ -365,11 +363,6 @@ function y(lexer) {
 
 function indexXY(lexer) {
     return lexer.indexXY;
-}
-
-
-function streamText(startXY) {
-    return endXY => lexer => lexer.streamText(startXY)(endXY);
 }
 
 
