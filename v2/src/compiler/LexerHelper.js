@@ -113,8 +113,8 @@ function isIdentifierRest(c) {
         c == '_'.charCodeAt(0) || c == '\''.charCodeAt(0);
 }
 
-function newLexer(input, id, x, y, index, indexX, indexY, indexXY, text) {
-    return Record.mk9
+function newLexer(input) {
+    return id => x => y => index => indexX => indexY => indexXY => text => Record.mk9
         ("input")(input)
         ("_id")(id)
         ("_x")(x)
@@ -241,7 +241,7 @@ function next(context) {
 }
 
 function newContext(context) {
-    return id => cursor => newLexer(context.input, id, cursor.x, cursor.y, cursor.index, cursor.indexX, cursor.indexY, cursor._indexXY, Cursor.text(cursor));
+    return id => cursor => newLexer(context.input)(id)(cursor.x)(cursor.y)(cursor.index)(cursor.indexX)(cursor.indexY)(cursor._indexXY)(Cursor.text(cursor));
 }
 
 
@@ -251,7 +251,7 @@ function initialContext(input) {
             ("content")(input)
             ("length")(input.length)
             ("sourceName")(sourceName);
-        return next(newLexer(lexerInput, 0, 1, 1, 0, 1, 1, ''));
+        return next(newLexer(lexerInput)(0)(1)(1)(0)(1)(1)(0)(''));
     }
 }
 
