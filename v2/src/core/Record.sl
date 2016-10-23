@@ -9,6 +9,18 @@ assumptions {
 };
 
 
+set1 =
+    Helper.set1;
+
+
+set2 =
+    Helper.set2;
+
+
+set3 =
+    Helper.set3;
+
+
 mk0 =
     Helper.mk0;
 
