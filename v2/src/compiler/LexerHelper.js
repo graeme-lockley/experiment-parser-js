@@ -113,18 +113,18 @@ function isIdentifierRest(c) {
         c == '_'.charCodeAt(0) || c == '\''.charCodeAt(0);
 }
 
-class Context {
-    constructor(input, id, x, y, index, indexX, indexY, indexXY, text) {
-        this.input = input;
-        this._id = id;
-        this._x = x;
-        this._y = y;
-        this.index = index;
-        this.indexX = indexX;
-        this.indexY = indexY;
-        this._indexXY = indexXY;
-        this._text = text;
-    }
+function newLexer(input, id, x, y, index, indexX, indexY, indexXY, text) {
+    return {
+        input: input,
+        _id: id,
+        _x: x,
+        _y: y,
+        index: index,
+        indexX: indexX,
+        indexY: indexY,
+        _indexXY: indexXY,
+        _text: text,
+    };
 }
 
 function next(context) {
@@ -242,7 +242,7 @@ function next(context) {
 }
 
 function newContext(context) {
-    return id => cursor => new Context(context.input, id, cursor.x, cursor.y, cursor.index, cursor.indexX, cursor.indexY, cursor._indexXY, Cursor.text(cursor));
+    return id => cursor => newLexer(context.input, id, cursor.x, cursor.y, cursor.index, cursor.indexX, cursor.indexY, cursor._indexXY, Cursor.text(cursor));
 }
 
 
@@ -253,7 +253,7 @@ function initialContext(input) {
             length: input.length,
             sourceName: sourceName
         };
-        return next(new Context(lexerInput, 0, 1, 1, 0, 1, 1, ''));
+        return next(newLexer(lexerInput, 0, 1, 1, 0, 1, 1, ''));
     }
 }
 
