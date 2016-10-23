@@ -131,96 +131,96 @@ class Context {
             return this;
         } else {
             const cursor = Cursor.createCursor(this);
-            while (cursor.is(isWhitespace)) {
-                cursor.advanceIndex();
+            while (Cursor.is(isWhitespace)(cursor)) {
+                Cursor.advanceIndex(cursor);
             }
 
-            if (cursor.isEndOfFile()) {
+            if (Cursor.isEndOfFile(cursor)) {
                 return this.newContext(TokenEnum.EOF, cursor);
-            } else if (cursor.is(isDigit)) {
-                cursor.markStartOfToken();
-                while (cursor.is(isDigit)) {
-                    cursor.advanceIndex();
+            } else if (Cursor.is(isDigit)(cursor)) {
+                Cursor.markStartOfToken(cursor);
+                while (Cursor.is(isDigit)(cursor)) {
+                    Cursor.advanceIndex(cursor);
                 }
                 return this.newContext(TokenEnum.CONSTANT_INTEGER, cursor);
-            } else if (cursor.is(isIdentifierStart)) {
-                cursor.markStartOfToken();
+            } else if (Cursor.is(isIdentifierStart)(cursor)) {
+                Cursor.markStartOfToken(cursor);
 
-                while (cursor.is(isIdentifierRest)) {
-                    cursor.advanceIndex();
+                while (Cursor.is(isIdentifierRest)(cursor)) {
+                    Cursor.advanceIndex(cursor);
                 }
 
-                if (cursor.text() == "file" && cursor.isChar(':')) {
-                    cursor.advanceIndex();
-                    while (cursor.isNot(isWhitespace)) {
-                        if (cursor.isChar('\\')) {
-                            cursor.advanceIndex();
+                if (Cursor.text(cursor) == "file" && Cursor.isChar(':')(cursor)) {
+                    Cursor.advanceIndex(cursor);
+                    while (Cursor.isNot(isWhitespace)(cursor)) {
+                        if (Cursor.isChar('\\')(cursor)) {
+                            Cursor.advanceIndex(cursor);
                         }
-                        cursor.advanceIndex();
+                        Cursor.advanceIndex(cursor);
                     }
                     return this.newContext(TokenEnum.CONSTANT_URL, cursor);
                 } else {
-                    const reserved = reservedIdentifiers[cursor.text()];
+                    const reserved = reservedIdentifiers[Cursor.text(cursor)];
 
                     return reserved
                         ? this.newContext(reserved, cursor)
                         : this.newContext(TokenEnum.IDENTIFIER, cursor);
                 }
-            } else if (cursor.isChar("'")) {
-                cursor.markStartOfToken();
-                cursor.advanceIndex();
-                if (cursor.isChar('\\')) {
-                    cursor.advanceIndex();
-                    cursor.advanceIndex();
-                    if (cursor.isChar("'")) {
-                        cursor.advanceIndex();
+            } else if (Cursor.isChar("'")(cursor)) {
+                Cursor.markStartOfToken(cursor);
+                Cursor.advanceIndex(cursor);
+                if (Cursor.isChar('\\')(cursor)) {
+                    Cursor.advanceIndex(cursor);
+                    Cursor.advanceIndex(cursor);
+                    if (Cursor.isChar("'")(cursor)) {
+                        Cursor.advanceIndex(cursor);
                         return this.newContext(TokenEnum.CONSTANT_CHAR, cursor);
                     } else {
                         return this.newContext(TokenEnum.UNKNOWN, cursor);
                     }
                 } else {
-                    cursor.advanceIndex();
-                    if (cursor.isChar("'")) {
-                        cursor.advanceIndex();
+                    Cursor.advanceIndex(cursor);
+                    if (Cursor.isChar("'")(cursor)) {
+                        Cursor.advanceIndex(cursor);
                         return this.newContext(TokenEnum.CONSTANT_CHAR, cursor);
                     } else {
                         return this.newContext(TokenEnum.UNKNOWN, cursor);
                     }
                 }
-            } else if (cursor.isChar('"')) {
-                cursor.markStartOfToken();
-                cursor.advanceIndex();
-                while (cursor.isNotChar('"')) {
-                    if (cursor.isChar('\\')) {
-                        cursor.advanceIndex();
+            } else if (Cursor.isChar('"')(cursor)) {
+                Cursor.markStartOfToken(cursor);
+                Cursor.advanceIndex(cursor);
+                while (Cursor.isNotChar('"')(cursor)) {
+                    if (Cursor.isChar('\\')(cursor)) {
+                        Cursor.advanceIndex(cursor);
                     }
-                    cursor.advanceIndex();
+                    Cursor.advanceIndex(cursor);
                 }
-                if (cursor.isEndOfFile()) {
+                if (Cursor.isEndOfFile(cursor)) {
                     return this.newContext(TokenEnum.UNKNOWN, cursor);
                 } else {
-                    cursor.advanceIndex();
+                    Cursor.advanceIndex(cursor);
                     return this.newContext(TokenEnum.CONSTANT_STRING, cursor);
                 }
             } else {
                 for (let index = 0; index < symbols.length; index += 1) {
                     const symbol = symbols[index];
 
-                    if (Tuple.first(symbol).charCodeAt(0) == cursor.charCodeAtIndex()) {
+                    if (Tuple.first(symbol).charCodeAt(0) == Cursor.charCodeAtIndex(cursor)) {
                         if (Tuple.first(symbol).length == 1) {
-                            cursor.markStartOfToken();
-                            cursor.advanceIndex();
+                            Cursor.markStartOfToken(cursor);
+                            Cursor.advanceIndex(cursor);
 
                             return this.newContext(Tuple.second(symbol), cursor);
                         } else {
-                            const tmpCursor = cursor.clone();
+                            const tmpCursor = Cursor.clone(cursor);
                             let matched = true;
 
-                            tmpCursor.markStartOfToken();
-                            tmpCursor.advanceIndex();
+                            Cursor.markStartOfToken(tmpCursor);
+                            Cursor.advanceIndex(tmpCursor);
                             for (let tmpCursorIndex = 1; tmpCursorIndex < Tuple.first(symbol).length; tmpCursorIndex += 1) {
-                                matched = matched && Tuple.first(symbol).charCodeAt(tmpCursorIndex) == tmpCursor.charCodeAtIndex();
-                                tmpCursor.advanceIndex();
+                                matched = matched && Tuple.first(symbol).charCodeAt(tmpCursorIndex) == Cursor.charCodeAtIndex(tmpCursor);
+                                Cursor.advanceIndex(tmpCursor);
                             }
 
                             if (matched) {
@@ -230,8 +230,8 @@ class Context {
                     }
                 }
 
-                cursor.markStartOfToken();
-                cursor.advanceIndex();
+                Cursor.markStartOfToken(cursor);
+                Cursor.advanceIndex(cursor);
 
                 return this.newContext(TokenEnum.UNKNOWN, cursor);
             }
@@ -239,7 +239,7 @@ class Context {
     }
 
     newContext(id, cursor) {
-        return new Context(this.input, id, cursor.x, cursor.y, cursor.index, cursor.indexX, cursor.indexY, cursor._indexXY, cursor.text());
+        return new Context(this.input, id, cursor.x, cursor.y, cursor.index, cursor.indexX, cursor.indexY, cursor._indexXY, Cursor.text(cursor));
     }
 }
 

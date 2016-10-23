@@ -16,61 +16,82 @@ function createCursor(context) {
         content: context.input.content,
         length: context.input.length,
 
-        charCodeAtIndex: function () {
-            return this.content.charCodeAt(this.index);
-        },
-
-        is: function (predicate) {
-            return this.isNotEndOfFile() && predicate(this.charCodeAtIndex());
-        },
-        isNot: function (predicate) {
-            return this.isNotEndOfFile() && !predicate(this.charCodeAtIndex());
-        },
-        isChar: function (c) {
-            return this.isNotEndOfFile() && this.charCodeAtIndex() == c.charCodeAt(0);
-        },
-        isNotChar: function (c) {
-            return this.isNotEndOfFile() && this.charCodeAtIndex() != c.charCodeAt(0);
-        },
-        isEndOfFile: function () {
-            return this.index >= this.length;
-        },
-        isNotEndOfFile: function () {
-            return !this.isEndOfFile();
-        },
-        advanceIndex: function () {
-            if (this.isNotEndOfFile()) {
-                if (this.is(isEndOfLine)) {
-                    this.indexX = 1;
-                    this.indexY += 1;
-                } else {
-                    this.indexX += 1;
-                }
-                this.index += 1;
-            }
-        },
-        markStartOfToken: function () {
-            this._indexXY = this.index;
-            this.x = this.indexX;
-            this.y = this.indexY;
-        },
-        text: function () {
-            return this.content.substr(this._indexXY, this.index - this._indexXY);
-        },
-        clone: function () {
-            var temp = this.constructor();
-            for (var key in this) {
-                if (this.hasOwnProperty(key)) {
-                    temp[key] = this[key];
-                }
-            }
-
-            return temp;
-        }
     };
+}
+
+function charCodeAtIndex(cursor) {
+    return cursor.content.charCodeAt(cursor.index);
+}
+
+function is(predicate) {
+    return cursor => isNotEndOfFile(cursor) && predicate(charCodeAtIndex(cursor));
+}
+
+function isNot(predicate) {
+    return cursor => isNotEndOfFile(cursor) && !predicate(charCodeAtIndex(cursor));
+}
+
+function isChar(c) {
+    return cursor => isNotEndOfFile(cursor) && charCodeAtIndex(cursor) == c.charCodeAt(0);
+}
+
+function isNotChar(c) {
+    return cursor => isNotEndOfFile(cursor) && charCodeAtIndex(cursor) != c.charCodeAt(0);
+}
+
+function isEndOfFile(cursor) {
+    return cursor.index >= cursor.length;
+}
+
+function isNotEndOfFile(cursor) {
+    return !isEndOfFile(cursor);
+}
+
+function advanceIndex(cursor) {
+    if (isNotEndOfFile(cursor)) {
+        if (is(isEndOfLine)(cursor)) {
+            cursor.indexX = 1;
+            cursor.indexY += 1;
+        } else {
+            cursor.indexX += 1;
+        }
+        cursor.index += 1;
+    }
+}
+
+function markStartOfToken(cursor) {
+    cursor._indexXY = cursor.index;
+    cursor.x = cursor.indexX;
+    cursor.y = cursor.indexY;
+}
+
+function text(cursor) {
+    return cursor.content.substr(cursor._indexXY, cursor.index - cursor._indexXY);
+}
+
+function clone(cursor) {
+    var temp = cursor.constructor();
+    for (var key in cursor) {
+        if (cursor.hasOwnProperty(key)) {
+            temp[key] = cursor[key];
+        }
+    }
+
+    return temp;
 }
 
 
 module.exports = {
-    createCursor
+    createCursor,
+    charCodeAtIndex,
+    is,
+    isNot,
+    isChar,
+    isNotChar,
+    isEndOfFile,
+    isNotEndOfFile,
+    advanceIndex,
+    markStartOfToken,
+    text,
+    clone
 };
