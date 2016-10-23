@@ -126,9 +126,7 @@ function newLexer(input) {
         ("_text")(text);
 }
 
-function next(context) {
-    const lexer = context;
-
+function next(lexer) {
     if (lexer._id == TokenEnum.EOF) {
         return lexer;
     } else {
