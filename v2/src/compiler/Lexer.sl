@@ -71,3 +71,7 @@ indexXY =
 
 streamText startXY endXY =
     (String.substring startXY endXY) o (Record.get "content") o (Record.get "input");
+
+
+next =
+    Helper.next;

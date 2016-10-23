@@ -125,122 +125,121 @@ class Context {
         this._indexXY = indexXY;
         this._text = text;
     }
+}
 
-    next() {
-        const lexer = this;
+function next(context) {
+    const lexer = context;
 
-        if (this._id == TokenEnum.EOF) {
-            return this;
-        } else {
-            let cursor = Cursor.createCursor(this);
-            while (Cursor.is(isWhitespace)(cursor)) {
+    if (lexer._id == TokenEnum.EOF) {
+        return lexer;
+    } else {
+        let cursor = Cursor.createCursor(lexer);
+        while (Cursor.is(isWhitespace)(cursor)) {
+            cursor = Cursor.advanceIndex(cursor);
+        }
+
+        if (Cursor.isEndOfFile(cursor)) {
+            return newContext(lexer)(TokenEnum.EOF)(cursor);
+        } else if (Cursor.is(isDigit)(cursor)) {
+            cursor = Cursor.markStartOfToken(cursor);
+            while (Cursor.is(isDigit)(cursor)) {
+                cursor = Cursor.advanceIndex(cursor);
+            }
+            return newContext(lexer)(TokenEnum.CONSTANT_INTEGER)(cursor);
+        } else if (Cursor.is(isIdentifierStart)(cursor)) {
+            cursor = Cursor.markStartOfToken(cursor);
+
+            while (Cursor.is(isIdentifierRest)(cursor)) {
                 cursor = Cursor.advanceIndex(cursor);
             }
 
-            if (Cursor.isEndOfFile(cursor)) {
-                return newContext(lexer)(TokenEnum.EOF)(cursor);
-            } else if (Cursor.is(isDigit)(cursor)) {
-                cursor = Cursor.markStartOfToken(cursor);
-                while (Cursor.is(isDigit)(cursor)) {
-                    cursor = Cursor.advanceIndex(cursor);
-                }
-                return newContext(lexer)(TokenEnum.CONSTANT_INTEGER)(cursor);
-            } else if (Cursor.is(isIdentifierStart)(cursor)) {
-                cursor = Cursor.markStartOfToken(cursor);
-
-                while (Cursor.is(isIdentifierRest)(cursor)) {
-                    cursor = Cursor.advanceIndex(cursor);
-                }
-
-                if (Cursor.text(cursor) == "file" && Cursor.isChar(':')(cursor)) {
-                    cursor = Cursor.advanceIndex(cursor);
-                    while (Cursor.isNot(isWhitespace)(cursor)) {
-                        if (Cursor.isChar('\\')(cursor)) {
-                            cursor = Cursor.advanceIndex(cursor);
-                        }
-                        cursor = Cursor.advanceIndex(cursor);
-                    }
-                    return newContext(lexer)(TokenEnum.CONSTANT_URL)(cursor);
-                } else {
-                    const reserved = reservedIdentifiers[Cursor.text(cursor)];
-
-                    return reserved
-                        ? newContext(lexer)(reserved)(cursor)
-                        : newContext(lexer)(TokenEnum.IDENTIFIER)(cursor);
-                }
-            } else if (Cursor.isChar("'")(cursor)) {
-                cursor = Cursor.markStartOfToken(cursor);
+            if (Cursor.text(cursor) == "file" && Cursor.isChar(':')(cursor)) {
                 cursor = Cursor.advanceIndex(cursor);
-                if (Cursor.isChar('\\')(cursor)) {
-                    cursor = Cursor.advanceIndex(cursor);
-                    cursor = Cursor.advanceIndex(cursor);
-                    if (Cursor.isChar("'")(cursor)) {
-                        cursor = Cursor.advanceIndex(cursor);
-                        return newContext(lexer)(TokenEnum.CONSTANT_CHAR)(cursor);
-                    } else {
-                        return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
-                    }
-                } else {
-                    cursor = Cursor.advanceIndex(cursor);
-                    if (Cursor.isChar("'")(cursor)) {
-                        cursor = Cursor.advanceIndex(cursor);
-                        return newContext(lexer)(TokenEnum.CONSTANT_CHAR)(cursor);
-                    } else {
-                        return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
-                    }
-                }
-            } else if (Cursor.isChar('"')(cursor)) {
-                cursor = Cursor.markStartOfToken(cursor);
-                cursor = Cursor.advanceIndex(cursor);
-                while (Cursor.isNotChar('"')(cursor)) {
+                while (Cursor.isNot(isWhitespace)(cursor)) {
                     if (Cursor.isChar('\\')(cursor)) {
                         cursor = Cursor.advanceIndex(cursor);
                     }
                     cursor = Cursor.advanceIndex(cursor);
                 }
-                if (Cursor.isEndOfFile(cursor)) {
-                    return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
-                } else {
+                return newContext(lexer)(TokenEnum.CONSTANT_URL)(cursor);
+            } else {
+                const reserved = reservedIdentifiers[Cursor.text(cursor)];
+
+                return reserved
+                    ? newContext(lexer)(reserved)(cursor)
+                    : newContext(lexer)(TokenEnum.IDENTIFIER)(cursor);
+            }
+        } else if (Cursor.isChar("'")(cursor)) {
+            cursor = Cursor.markStartOfToken(cursor);
+            cursor = Cursor.advanceIndex(cursor);
+            if (Cursor.isChar('\\')(cursor)) {
+                cursor = Cursor.advanceIndex(cursor);
+                cursor = Cursor.advanceIndex(cursor);
+                if (Cursor.isChar("'")(cursor)) {
                     cursor = Cursor.advanceIndex(cursor);
-                    return newContext(lexer)(TokenEnum.CONSTANT_STRING)(cursor);
+                    return newContext(lexer)(TokenEnum.CONSTANT_CHAR)(cursor);
+                } else {
+                    return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
                 }
             } else {
-                for (let index = 0; index < symbols.length; index += 1) {
-                    const symbol = symbols[index];
+                cursor = Cursor.advanceIndex(cursor);
+                if (Cursor.isChar("'")(cursor)) {
+                    cursor = Cursor.advanceIndex(cursor);
+                    return newContext(lexer)(TokenEnum.CONSTANT_CHAR)(cursor);
+                } else {
+                    return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
+                }
+            }
+        } else if (Cursor.isChar('"')(cursor)) {
+            cursor = Cursor.markStartOfToken(cursor);
+            cursor = Cursor.advanceIndex(cursor);
+            while (Cursor.isNotChar('"')(cursor)) {
+                if (Cursor.isChar('\\')(cursor)) {
+                    cursor = Cursor.advanceIndex(cursor);
+                }
+                cursor = Cursor.advanceIndex(cursor);
+            }
+            if (Cursor.isEndOfFile(cursor)) {
+                return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
+            } else {
+                cursor = Cursor.advanceIndex(cursor);
+                return newContext(lexer)(TokenEnum.CONSTANT_STRING)(cursor);
+            }
+        } else {
+            for (let index = 0; index < symbols.length; index += 1) {
+                const symbol = symbols[index];
 
-                    if (Tuple.first(symbol).charCodeAt(0) == Cursor.charCodeAtIndex(cursor)) {
-                        if (Tuple.first(symbol).length == 1) {
-                            cursor = Cursor.markStartOfToken(cursor);
-                            cursor = Cursor.advanceIndex(cursor);
+                if (Tuple.first(symbol).charCodeAt(0) == Cursor.charCodeAtIndex(cursor)) {
+                    if (Tuple.first(symbol).length == 1) {
+                        cursor = Cursor.markStartOfToken(cursor);
+                        cursor = Cursor.advanceIndex(cursor);
 
-                            return newContext(lexer)(Tuple.second(symbol))(cursor);
-                        } else {
-                            let tmpCursor = cursor;
-                            let matched = true;
+                        return newContext(lexer)(Tuple.second(symbol))(cursor);
+                    } else {
+                        let tmpCursor = cursor;
+                        let matched = true;
 
-                            tmpCursor = Cursor.markStartOfToken(tmpCursor);
+                        tmpCursor = Cursor.markStartOfToken(tmpCursor);
+                        tmpCursor = Cursor.advanceIndex(tmpCursor);
+                        for (let tmpCursorIndex = 1; tmpCursorIndex < Tuple.first(symbol).length; tmpCursorIndex += 1) {
+                            matched = matched && Tuple.first(symbol).charCodeAt(tmpCursorIndex) == Cursor.charCodeAtIndex(tmpCursor);
                             tmpCursor = Cursor.advanceIndex(tmpCursor);
-                            for (let tmpCursorIndex = 1; tmpCursorIndex < Tuple.first(symbol).length; tmpCursorIndex += 1) {
-                                matched = matched && Tuple.first(symbol).charCodeAt(tmpCursorIndex) == Cursor.charCodeAtIndex(tmpCursor);
-                                tmpCursor = Cursor.advanceIndex(tmpCursor);
-                            }
+                        }
 
-                            if (matched) {
-                                return newContext(lexer)(Tuple.second(symbol))(tmpCursor);
-                            }
+                        if (matched) {
+                            return newContext(lexer)(Tuple.second(symbol))(tmpCursor);
                         }
                     }
                 }
-
-                cursor = Cursor.markStartOfToken(cursor);
-                cursor = Cursor.advanceIndex(cursor);
-
-                return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
             }
+
+            cursor = Cursor.markStartOfToken(cursor);
+            cursor = Cursor.advanceIndex(cursor);
+
+            return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
         }
     }
 }
-
 
 function newContext(context) {
     return id => cursor => new Context(context.input, id, cursor.x, cursor.y, cursor.index, cursor.indexX, cursor.indexY, cursor._indexXY, Cursor.text(cursor));
@@ -254,11 +253,12 @@ function initialContext(input) {
             length: input.length,
             sourceName: sourceName
         };
-        return new Context(lexerInput, 0, 1, 1, 0, 1, 1, '').next();
+        return next(new Context(lexerInput, 0, 1, 1, 0, 1, 1, ''));
     }
 }
 
 module.exports = {
     initialContext,
+    next,
     TokenEnum
 };

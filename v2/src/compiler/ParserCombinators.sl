@@ -14,7 +14,7 @@ testLexer = Lexer.fromString "hello ! the ! world" "stream";
 
 symbol tokenID lexer =
     if (Lexer.id lexer) == tokenID then
-        empty (Lexer.text lexer) (lexer.next ())
+        empty (Lexer.text lexer) (Lexer.next lexer)
     else
         Result.Error ("Expected the symbol " ++ tokenID)
 assumptions {
@@ -147,4 +147,4 @@ extractLexer result =
 
 
 nextLexer n lexer =
-    if n <= 0 then lexer else (nextLexer (n - 1) (lexer.next()));
+    if n <= 0 then lexer else (nextLexer (n - 1) (Lexer lexer));

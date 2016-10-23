@@ -18,7 +18,7 @@ describe('Lexer', () => {
         });
 
         describe('next token', () => {
-            const nextContext = context.next();
+            const nextContext = Lexer.next(context);
 
             it('should match to a CONSTANT_INTEGER', () => expect(Lexer.id(nextContext)).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER));
             it('should have the coordinates (7, 1)', ()=> {
@@ -29,7 +29,7 @@ describe('Lexer', () => {
         });
 
         describe('next next token', () => {
-            const nextNextContext = context.next().next();
+            const nextNextContext = Lexer.next(Lexer.next(context));
 
             it('should report end-of-file', () => expect(Lexer.id(nextNextContext)).to.equal(Lexer.TokenEnum.EOF));
             it('should have the coordinates (10, 1)', ()=> {
@@ -40,7 +40,7 @@ describe('Lexer', () => {
         });
 
         describe('next next next token', () => {
-            const nextNextContext = context.next().next().next();
+            const nextNextContext = Lexer.next(Lexer.next(Lexer.next(context)));
 
             it('should still report end-of-file', () => expect(Lexer.id(nextNextContext)).to.equal(Lexer.TokenEnum.EOF));
             it('should have the coordinates (10, 1)', () => {
@@ -57,17 +57,17 @@ describe('Lexer', () => {
         it('first token should be IDENTIFIER', () =>
             expect(Lexer.id(context)).to.equal(Lexer.TokenEnum.IDENTIFIER));
         it('second token should be LAMBDA', () =>
-            expect(Lexer.id(context.next())).to.equal(Lexer.TokenEnum.LAMBDA));
+            expect(Lexer.id(Lexer.next(context))).to.equal(Lexer.TokenEnum.LAMBDA));
         it('third token should be IDENTIFIER', () =>
-            expect(Lexer.id(context.next().next())).to.equal(Lexer.TokenEnum.IDENTIFIER));
+            expect(Lexer.id(Lexer.next(Lexer.next(context)))).to.equal(Lexer.TokenEnum.IDENTIFIER));
         it('forth token should be RIGHT_PAREN', () =>
-            expect(Lexer.id(context.next().next().next())).to.equal(Lexer.TokenEnum.RIGHT_PAREN));
+            expect(Lexer.id(Lexer.next(Lexer.next(Lexer.next(context))))).to.equal(Lexer.TokenEnum.RIGHT_PAREN));
         it('fifth token should be IDENTIFIER', () =>
-            expect(Lexer.id(context.next().next().next().next())).to.equal(Lexer.TokenEnum.IDENTIFIER));
+            expect(Lexer.id(Lexer.next(Lexer.next(Lexer.next(Lexer.next(context)))))).to.equal(Lexer.TokenEnum.IDENTIFIER));
         it('sixth token should be LEFT_PAREN', () =>
-            expect(Lexer.id(context.next().next().next().next().next())).to.equal(Lexer.TokenEnum.LEFT_PAREN));
+            expect(Lexer.id(Lexer.next(Lexer.next(Lexer.next(Lexer.next(Lexer.next(context))))))).to.equal(Lexer.TokenEnum.LEFT_PAREN));
         it('seventh token should be EOF', () =>
-            expect(Lexer.id(context.next().next().next().next().next().next())).to.equal(Lexer.TokenEnum.EOF));
+            expect(Lexer.id(Lexer.next(Lexer.next(Lexer.next(Lexer.next(Lexer.next(Lexer.next(context)))))))).to.equal(Lexer.TokenEnum.EOF));
     });
 
     describe('with selected input should return the correct tokens', () => {
@@ -86,7 +86,7 @@ describe('Lexer', () => {
 
                 Tuple.second(tuple).forEach(token => {
                     expect(Lexer.id(context)).to.equal(token);
-                    context = context.next();
+                    context = Lexer.next(context);
                 })
             });
         });
@@ -97,7 +97,7 @@ describe('Lexer', () => {
 
         it('should return CONSTANT_CHAR', () => expect(Lexer.id(context)).to.equal(Lexer.TokenEnum.CONSTANT_CHAR));
         it('should return text of "\'a\'"', () => expect(Lexer.text(context)).to.equal('\'a\''));
-        it('should return EOF for next', () => expect(Lexer.id(context.next())).to.equal(Lexer.TokenEnum.EOF));
+        it('should return EOF for next', () => expect(Lexer.id(Lexer.next(context))).to.equal(Lexer.TokenEnum.EOF));
     });
 
     describe('with input "\'\\\'\'"', () => {
@@ -105,7 +105,7 @@ describe('Lexer', () => {
 
         it('should return CONSTANT_CHAR', () => expect(Lexer.id(context)).to.equal(Lexer.TokenEnum.CONSTANT_CHAR));
         it('should return text of "\'\\\'\'"', () => expect(Lexer.text(context)).to.equal('\'\\\'\''));
-        it('should return EOF for next', () => expect(Lexer.id(context.next())).to.equal(Lexer.TokenEnum.EOF));
+        it('should return EOF for next', () => expect(Lexer.id(Lexer.next(context))).to.equal(Lexer.TokenEnum.EOF));
     });
 
     describe('with input "\"hello \\"world\\"\""', () => {
@@ -113,7 +113,7 @@ describe('Lexer', () => {
 
         it('should return CONSTANT_STRING', () => expect(Lexer.id(context)).to.equal(Lexer.TokenEnum.CONSTANT_STRING));
         it('should return text of "\\"hello \\" world\\""', () => expect(Lexer.text(context)).to.equal('"hello \\" world"'));
-        it('should return EOF for next', () => expect(Lexer.id(context.next())).to.equal(Lexer.TokenEnum.EOF));
+        it('should return EOF for next', () => expect(Lexer.id(Lexer.next(context))).to.equal(Lexer.TokenEnum.EOF));
     });
 
     describe('with input "file:../src/hello\\ world as"', () => {
@@ -121,7 +121,7 @@ describe('Lexer', () => {
 
         it('should return CONSTANT_URL', () => expect(Lexer.id(context)).to.equal(Lexer.TokenEnum.CONSTANT_URL));
         it('should return text of "file:../src/hello\\ world"', () => expect(Lexer.text(context)).to.equal('file:../src/hello\\ world'));
-        it('should return AS for next', () => expect(Lexer.id(context.next())).to.equal(Lexer.TokenEnum.AS));
+        it('should return AS for next', () => expect(Lexer.id(Lexer.next(context))).to.equal(Lexer.TokenEnum.AS));
     });
 
     describe('with input "someID\n1 { a = b }" against the named source "bob.sl"', () => {
@@ -144,7 +144,7 @@ function scanSource(source) {
         if (Lexer.id(token) == Lexer.TokenEnum.EOF) {
             return result;
         } else {
-            token = token.next();
+            token = Lexer.next(token);
         }
     }
 }
