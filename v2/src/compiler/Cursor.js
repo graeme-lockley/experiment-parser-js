@@ -15,7 +15,6 @@ function createCursor(context) {
 
         content: context.input.content,
         length: context.input.length,
-
     };
 }
 
