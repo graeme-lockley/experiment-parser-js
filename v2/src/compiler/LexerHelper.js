@@ -312,26 +312,6 @@ class Context {
         return this._id;
     }
 
-    get text() {
-        return this._text;
-    }
-
-    get x() {
-        return this._x;
-    }
-
-    get y() {
-        return this._y;
-    }
-
-    get indexXY() {
-        return this._indexXY;
-    }
-
-    get sourceName() {
-        return this.input.sourceName;
-    }
-
     newContext(id, cursor) {
         return new Context(this.input, id, cursor.x, cursor.y, cursor.index, cursor.indexX, cursor.indexY, cursor._indexXY, cursor.text());
     }
@@ -351,25 +331,7 @@ function fromString(input) {
 }
 
 
-function sourceName(lexer) {
-    return lexer.sourceName;
-}
-
-
-function y(lexer) {
-    return lexer.y;
-}
-
-
-function indexXY(lexer) {
-    return lexer.indexXY;
-}
-
-
 module.exports = {
     fromString,
-    sourceName,
-    y,
-    indexXY,
     TokenEnum
 };

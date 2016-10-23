@@ -46,20 +46,24 @@ fromString =
 
 
 sourceName =
-    Helper.sourceName;
+    (Record.get "sourceName") o (Record.get "input");
+
+
+text =
+    Record.get "_text";
+
+
+x =
+    Record.get "_x";
 
 
 y =
-    Helper.y;
+    Record.get "_y";
 
 
 indexXY =
-    Helper.indexXY;
+    Record.get "_indexXY";
 
 
-content lexer =
-    Record.get "content" (Record.get "input" lexer);
-
-
-streamText startXY endXY lexer =
-    String.substring startXY endXY (content lexer);
+streamText startXY endXY =
+    (String.substring startXY endXY) o (Record.get "content") o (Record.get "input");
