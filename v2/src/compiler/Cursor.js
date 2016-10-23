@@ -49,34 +49,32 @@ function isNotEndOfFile(cursor) {
 function advanceIndex(cursor) {
     if (isNotEndOfFile(cursor)) {
         if (is(isEndOfLine)(cursor)) {
-            cursor.indexX = 1;
-            cursor.indexY += 1;
+            return Record.set3
+                ("indexX")(1)
+                ("indexY")(cursor.indexY + 1)
+                ("index")(cursor.index + 1)
+                (cursor);
         } else {
-            cursor.indexX += 1;
+            return Record.set2
+                ("indexX")(cursor.indexX + 1)
+                ("index")(cursor.index + 1)
+                (cursor);
         }
-        cursor.index += 1;
+    } else {
+        return cursor;
     }
 }
 
 function markStartOfToken(cursor) {
-    cursor._indexXY = cursor.index;
-    cursor.x = cursor.indexX;
-    cursor.y = cursor.indexY;
+    return Record.set3
+        ("_indexXY")(cursor.index)
+        ("x")(cursor.indexX)
+        ("y")(cursor.indexY)
+        (cursor);
 }
 
 function text(cursor) {
     return cursor.content.substr(cursor._indexXY, cursor.index - cursor._indexXY);
-}
-
-function clone(cursor) {
-    var temp = cursor.constructor();
-    for (var key in cursor) {
-        if (cursor.hasOwnProperty(key)) {
-            temp[key] = cursor[key];
-        }
-    }
-
-    return temp;
 }
 
 
@@ -91,6 +89,5 @@ module.exports = {
     isNotEndOfFile,
     advanceIndex,
     markStartOfToken,
-    text,
-    clone
+    text
 };

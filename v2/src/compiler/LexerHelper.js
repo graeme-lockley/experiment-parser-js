@@ -130,33 +130,33 @@ class Context {
         if (this._id == TokenEnum.EOF) {
             return this;
         } else {
-            const cursor = Cursor.createCursor(this);
+            let cursor = Cursor.createCursor(this);
             while (Cursor.is(isWhitespace)(cursor)) {
-                Cursor.advanceIndex(cursor);
+                cursor = Cursor.advanceIndex(cursor);
             }
 
             if (Cursor.isEndOfFile(cursor)) {
                 return this.newContext(TokenEnum.EOF, cursor);
             } else if (Cursor.is(isDigit)(cursor)) {
-                Cursor.markStartOfToken(cursor);
+                cursor = Cursor.markStartOfToken(cursor);
                 while (Cursor.is(isDigit)(cursor)) {
-                    Cursor.advanceIndex(cursor);
+                    cursor = Cursor.advanceIndex(cursor);
                 }
                 return this.newContext(TokenEnum.CONSTANT_INTEGER, cursor);
             } else if (Cursor.is(isIdentifierStart)(cursor)) {
-                Cursor.markStartOfToken(cursor);
+                cursor = Cursor.markStartOfToken(cursor);
 
                 while (Cursor.is(isIdentifierRest)(cursor)) {
-                    Cursor.advanceIndex(cursor);
+                    cursor = Cursor.advanceIndex(cursor);
                 }
 
                 if (Cursor.text(cursor) == "file" && Cursor.isChar(':')(cursor)) {
-                    Cursor.advanceIndex(cursor);
+                    cursor = Cursor.advanceIndex(cursor);
                     while (Cursor.isNot(isWhitespace)(cursor)) {
                         if (Cursor.isChar('\\')(cursor)) {
-                            Cursor.advanceIndex(cursor);
+                            cursor = Cursor.advanceIndex(cursor);
                         }
-                        Cursor.advanceIndex(cursor);
+                        cursor = Cursor.advanceIndex(cursor);
                     }
                     return this.newContext(TokenEnum.CONSTANT_URL, cursor);
                 } else {
@@ -167,39 +167,39 @@ class Context {
                         : this.newContext(TokenEnum.IDENTIFIER, cursor);
                 }
             } else if (Cursor.isChar("'")(cursor)) {
-                Cursor.markStartOfToken(cursor);
-                Cursor.advanceIndex(cursor);
+                cursor = Cursor.markStartOfToken(cursor);
+                cursor = Cursor.advanceIndex(cursor);
                 if (Cursor.isChar('\\')(cursor)) {
-                    Cursor.advanceIndex(cursor);
-                    Cursor.advanceIndex(cursor);
+                    cursor = Cursor.advanceIndex(cursor);
+                    cursor = Cursor.advanceIndex(cursor);
                     if (Cursor.isChar("'")(cursor)) {
-                        Cursor.advanceIndex(cursor);
+                        cursor = Cursor.advanceIndex(cursor);
                         return this.newContext(TokenEnum.CONSTANT_CHAR, cursor);
                     } else {
                         return this.newContext(TokenEnum.UNKNOWN, cursor);
                     }
                 } else {
-                    Cursor.advanceIndex(cursor);
+                    cursor = Cursor.advanceIndex(cursor);
                     if (Cursor.isChar("'")(cursor)) {
-                        Cursor.advanceIndex(cursor);
+                        cursor = Cursor.advanceIndex(cursor);
                         return this.newContext(TokenEnum.CONSTANT_CHAR, cursor);
                     } else {
                         return this.newContext(TokenEnum.UNKNOWN, cursor);
                     }
                 }
             } else if (Cursor.isChar('"')(cursor)) {
-                Cursor.markStartOfToken(cursor);
-                Cursor.advanceIndex(cursor);
+                cursor = Cursor.markStartOfToken(cursor);
+                cursor = Cursor.advanceIndex(cursor);
                 while (Cursor.isNotChar('"')(cursor)) {
                     if (Cursor.isChar('\\')(cursor)) {
-                        Cursor.advanceIndex(cursor);
+                        cursor = Cursor.advanceIndex(cursor);
                     }
-                    Cursor.advanceIndex(cursor);
+                    cursor = Cursor.advanceIndex(cursor);
                 }
                 if (Cursor.isEndOfFile(cursor)) {
                     return this.newContext(TokenEnum.UNKNOWN, cursor);
                 } else {
-                    Cursor.advanceIndex(cursor);
+                    cursor = Cursor.advanceIndex(cursor);
                     return this.newContext(TokenEnum.CONSTANT_STRING, cursor);
                 }
             } else {
@@ -208,19 +208,19 @@ class Context {
 
                     if (Tuple.first(symbol).charCodeAt(0) == Cursor.charCodeAtIndex(cursor)) {
                         if (Tuple.first(symbol).length == 1) {
-                            Cursor.markStartOfToken(cursor);
-                            Cursor.advanceIndex(cursor);
+                            cursor = Cursor.markStartOfToken(cursor);
+                            cursor = Cursor.advanceIndex(cursor);
 
                             return this.newContext(Tuple.second(symbol), cursor);
                         } else {
-                            const tmpCursor = Cursor.clone(cursor);
+                            let tmpCursor = cursor;
                             let matched = true;
 
-                            Cursor.markStartOfToken(tmpCursor);
-                            Cursor.advanceIndex(tmpCursor);
+                            tmpCursor = Cursor.markStartOfToken(tmpCursor);
+                            tmpCursor = Cursor.advanceIndex(tmpCursor);
                             for (let tmpCursorIndex = 1; tmpCursorIndex < Tuple.first(symbol).length; tmpCursorIndex += 1) {
                                 matched = matched && Tuple.first(symbol).charCodeAt(tmpCursorIndex) == Cursor.charCodeAtIndex(tmpCursor);
-                                Cursor.advanceIndex(tmpCursor);
+                                tmpCursor = Cursor.advanceIndex(tmpCursor);
                             }
 
                             if (matched) {
@@ -230,8 +230,8 @@ class Context {
                     }
                 }
 
-                Cursor.markStartOfToken(cursor);
-                Cursor.advanceIndex(cursor);
+                cursor = Cursor.markStartOfToken(cursor);
+                cursor = Cursor.advanceIndex(cursor);
 
                 return this.newContext(TokenEnum.UNKNOWN, cursor);
             }
