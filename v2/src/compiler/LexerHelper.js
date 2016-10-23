@@ -127,6 +127,8 @@ class Context {
     }
 
     next() {
+        const lexer = this;
+
         if (this._id == TokenEnum.EOF) {
             return this;
         } else {
@@ -136,13 +138,13 @@ class Context {
             }
 
             if (Cursor.isEndOfFile(cursor)) {
-                return this.newContext(TokenEnum.EOF, cursor);
+                return newContext(lexer, TokenEnum.EOF, cursor);
             } else if (Cursor.is(isDigit)(cursor)) {
                 cursor = Cursor.markStartOfToken(cursor);
                 while (Cursor.is(isDigit)(cursor)) {
                     cursor = Cursor.advanceIndex(cursor);
                 }
-                return this.newContext(TokenEnum.CONSTANT_INTEGER, cursor);
+                return newContext(lexer, TokenEnum.CONSTANT_INTEGER, cursor);
             } else if (Cursor.is(isIdentifierStart)(cursor)) {
                 cursor = Cursor.markStartOfToken(cursor);
 
@@ -158,13 +160,13 @@ class Context {
                         }
                         cursor = Cursor.advanceIndex(cursor);
                     }
-                    return this.newContext(TokenEnum.CONSTANT_URL, cursor);
+                    return newContext(lexer, TokenEnum.CONSTANT_URL, cursor);
                 } else {
                     const reserved = reservedIdentifiers[Cursor.text(cursor)];
 
                     return reserved
-                        ? this.newContext(reserved, cursor)
-                        : this.newContext(TokenEnum.IDENTIFIER, cursor);
+                        ? newContext(lexer, reserved, cursor)
+                        : newContext(lexer, TokenEnum.IDENTIFIER, cursor);
                 }
             } else if (Cursor.isChar("'")(cursor)) {
                 cursor = Cursor.markStartOfToken(cursor);
@@ -174,17 +176,17 @@ class Context {
                     cursor = Cursor.advanceIndex(cursor);
                     if (Cursor.isChar("'")(cursor)) {
                         cursor = Cursor.advanceIndex(cursor);
-                        return this.newContext(TokenEnum.CONSTANT_CHAR, cursor);
+                        return newContext(lexer, TokenEnum.CONSTANT_CHAR, cursor);
                     } else {
-                        return this.newContext(TokenEnum.UNKNOWN, cursor);
+                        return newContext(lexer, TokenEnum.UNKNOWN, cursor);
                     }
                 } else {
                     cursor = Cursor.advanceIndex(cursor);
                     if (Cursor.isChar("'")(cursor)) {
                         cursor = Cursor.advanceIndex(cursor);
-                        return this.newContext(TokenEnum.CONSTANT_CHAR, cursor);
+                        return newContext(lexer, TokenEnum.CONSTANT_CHAR, cursor);
                     } else {
-                        return this.newContext(TokenEnum.UNKNOWN, cursor);
+                        return newContext(lexer, TokenEnum.UNKNOWN, cursor);
                     }
                 }
             } else if (Cursor.isChar('"')(cursor)) {
@@ -197,10 +199,10 @@ class Context {
                     cursor = Cursor.advanceIndex(cursor);
                 }
                 if (Cursor.isEndOfFile(cursor)) {
-                    return this.newContext(TokenEnum.UNKNOWN, cursor);
+                    return newContext(lexer, TokenEnum.UNKNOWN, cursor);
                 } else {
                     cursor = Cursor.advanceIndex(cursor);
-                    return this.newContext(TokenEnum.CONSTANT_STRING, cursor);
+                    return newContext(lexer, TokenEnum.CONSTANT_STRING, cursor);
                 }
             } else {
                 for (let index = 0; index < symbols.length; index += 1) {
@@ -211,7 +213,7 @@ class Context {
                             cursor = Cursor.markStartOfToken(cursor);
                             cursor = Cursor.advanceIndex(cursor);
 
-                            return this.newContext(Tuple.second(symbol), cursor);
+                            return newContext(lexer, Tuple.second(symbol), cursor);
                         } else {
                             let tmpCursor = cursor;
                             let matched = true;
@@ -224,7 +226,7 @@ class Context {
                             }
 
                             if (matched) {
-                                return this.newContext(Tuple.second(symbol), tmpCursor);
+                                return newContext(lexer, Tuple.second(symbol), tmpCursor);
                             }
                         }
                     }
@@ -233,15 +235,17 @@ class Context {
                 cursor = Cursor.markStartOfToken(cursor);
                 cursor = Cursor.advanceIndex(cursor);
 
-                return this.newContext(TokenEnum.UNKNOWN, cursor);
+                return newContext(lexer, TokenEnum.UNKNOWN, cursor);
             }
         }
     }
-
-    newContext(id, cursor) {
-        return new Context(this.input, id, cursor.x, cursor.y, cursor.index, cursor.indexX, cursor.indexY, cursor._indexXY, Cursor.text(cursor));
-    }
 }
+
+
+function newContext(context, id, cursor) {
+    return new Context(context.input, id, cursor.x, cursor.y, cursor.index, cursor.indexX, cursor.indexY, cursor._indexXY, Cursor.text(cursor));
+}
+
 
 function initialContext(input) {
     return sourceName => {
