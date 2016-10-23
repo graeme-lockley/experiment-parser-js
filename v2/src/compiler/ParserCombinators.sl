@@ -147,4 +147,4 @@ extractLexer result =
 
 
 nextLexer n lexer =
-    if n <= 0 then lexer else (nextLexer (n - 1) (Lexer lexer));
+    if n <= 0 then lexer else (nextLexer (n - 1) (Lexer.next lexer));
