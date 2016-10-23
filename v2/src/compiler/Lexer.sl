@@ -42,7 +42,7 @@ initialContext =
 
 
 fromString =
-    Helper.fromString;
+    Helper.initialContext;
 
 
 id =

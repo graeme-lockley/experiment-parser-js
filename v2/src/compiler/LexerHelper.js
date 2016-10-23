@@ -324,12 +324,7 @@ function initialContext(input) {
     }
 }
 
-function fromString(input) {
-    return sourceName => initialContext(input)(sourceName);
-}
-
-
 module.exports = {
-    fromString,
+    initialContext,
     TokenEnum
 };
