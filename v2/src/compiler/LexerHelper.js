@@ -247,11 +247,10 @@ function newContext(context) {
 
 function initialContext(input) {
     return sourceName => {
-        const lexerInput = {
-            content: input,
-            length: input.length,
-            sourceName: sourceName
-        };
+        const lexerInput = Record.mk3
+            ("content")(input)
+            ("length")(input.length)
+            ("sourceName")(sourceName);
         return next(newLexer(lexerInput, 0, 1, 1, 0, 1, 1, ''));
     }
 }
