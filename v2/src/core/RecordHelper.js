@@ -96,6 +96,51 @@ function mk5(k1) {
 }
 
 
+function mk6(k1) {
+    return v1 => k2 => v2 => k3 => v3 => k4 => v4 => k5 => v5 => k6 => v6 =>{
+        const result = {};
+        result[k1] = v1;
+        result[k2] = v2;
+        result[k3] = v3;
+        result[k4] = v4;
+        result[k5] = v5;
+        result[k6] = v6;
+        return result;
+    };
+}
+
+
+function mk7(k1) {
+    return v1 => k2 => v2 => k3 => v3 => k4 => v4 => k5 => v5 => k6 => v6 => k7 => v7 => {
+        const result = {};
+        result[k1] = v1;
+        result[k2] = v2;
+        result[k3] = v3;
+        result[k4] = v4;
+        result[k5] = v5;
+        result[k6] = v6;
+        result[k7] = v7;
+        return result;
+    };
+}
+
+
+function mk8(k1) {
+    return v1 => k2 => v2 => k3 => v3 => k4 => v4 => k5 => v5 => k6 => v6 => k7 => v7 => k8 => v8 => {
+        const result = {};
+        result[k1] = v1;
+        result[k2] = v2;
+        result[k3] = v3;
+        result[k4] = v4;
+        result[k5] = v5;
+        result[k6] = v6;
+        result[k7] = v7;
+        result[k8] = v8;
+        return result;
+    };
+}
+
+
 function clone(record) {
     var temp = record.constructor();
     for (var key in record) {
@@ -118,5 +163,8 @@ module.exports = {
     mk2,
     mk3,
     mk4,
-    mk5
+    mk5,
+    mk6,
+    mk7,
+    mk8
 };
