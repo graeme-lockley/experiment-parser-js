@@ -313,17 +313,19 @@ class Context {
     }
 }
 
-function initialContext(input, sourceName) {
-    const lexerInput = {
-        content: input,
-        length: input.length,
-        sourceName: sourceName
-    };
-    return new Context(lexerInput, 0, 1, 1, 0, 1, 1, '').next();
+function initialContext(input) {
+    return sourceName => {
+        const lexerInput = {
+            content: input,
+            length: input.length,
+            sourceName: sourceName
+        };
+        return new Context(lexerInput, 0, 1, 1, 0, 1, 1, '').next();
+    }
 }
 
 function fromString(input) {
-    return sourceName => initialContext(input, sourceName);
+    return sourceName => initialContext(input)(sourceName);
 }
 
 
