@@ -158,6 +158,26 @@ function many(parser) {
 }
 
 
+function many1(parser) {
+    return cursor => {
+        let runner = parser(cursor);
+        if (Maybe.isJust(runner)) {
+            while(true) {
+                const nextRunner = parser(Maybe.withDefault()(runner));
+                if (Maybe.isJust(nextRunner)) {
+                    runner = nextRunner;
+                } else {
+                    return runner;
+                }
+            }
+        } else {
+            return runner;
+        }
+    }
+}
+
+
+
 function skipWhiteSpace(cursor) {
     return many(oneOf(isWhitespace))(cursor);
 }
@@ -172,11 +192,7 @@ function next(lexer) {
         if (Cursor.isEndOfFile(cursor)) {
             return newContext(lexer)(TokenEnum.EOF)(cursor);
         } else if (Cursor.is(isDigit)(cursor)) {
-            cursor = Cursor.markStartOfToken(cursor);
-            while (Cursor.is(isDigit)(cursor)) {
-                cursor = Cursor.advanceIndex(cursor);
-            }
-            return newContext(lexer)(TokenEnum.CONSTANT_INTEGER)(cursor);
+            return newContext(lexer)(TokenEnum.CONSTANT_INTEGER)(Maybe.withDefault()(many1(oneOf(isDigit))(Cursor.markStartOfToken(cursor))));
         } else if (Cursor.is(isIdentifierStart)(cursor)) {
             cursor = Cursor.markStartOfToken(cursor);
 
