@@ -114,17 +114,16 @@ function isIdentifierRest(c) {
 }
 
 function newLexer(input, id, x, y, index, indexX, indexY, indexXY, text) {
-    return {
-        input: input,
-        _id: id,
-        _x: x,
-        _y: y,
-        index: index,
-        indexX: indexX,
-        indexY: indexY,
-        _indexXY: indexXY,
-        _text: text,
-    };
+    return Record.mk9
+        ("input")(input)
+        ("_id")(id)
+        ("_x")(x)
+        ("_y")(y)
+        ("index")(index)
+        ("indexX")(indexX)
+        ("indexY")(indexY)
+        ("_indexXY")(indexXY)
+        ("_text")(text);
 }
 
 function next(context) {
