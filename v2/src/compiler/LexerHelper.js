@@ -115,7 +115,7 @@ function isIdentifierRest(c) {
         c == '_'.charCodeAt(0) || c == '\''.charCodeAt(0);
 }
 
-function createACursor(context) {
+function createCursor(context) {
     return {
         index: context.index,
         indexX: context.indexX,
@@ -200,7 +200,7 @@ class Context {
         if (this._id == TokenEnum.EOF) {
             return this;
         } else {
-            const cursor = createACursor(this);
+            const cursor = createCursor(this);
             while (cursor.is(isWhitespace)) {
                 cursor.advanceIndex();
             }
