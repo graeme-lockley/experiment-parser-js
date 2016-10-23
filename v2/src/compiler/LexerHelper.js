@@ -196,16 +196,11 @@ class Context {
         this._text = text;
     }
 
-    createCursor() {
-        return createACursor(this);
-    }
-
     next() {
         if (this._id == TokenEnum.EOF) {
             return this;
         } else {
-            const cursor = this.createCursor();
-
+            const cursor = createACursor(this);
             while (cursor.is(isWhitespace)) {
                 cursor.advanceIndex();
             }
