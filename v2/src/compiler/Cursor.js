@@ -1,21 +1,21 @@
+const Record = require("../core/Record");
+
+
 function isEndOfLine(c) {
     return c == 10;
 }
 
 
 function createCursor(context) {
-    return {
-        index: context.index,
-        indexX: context.indexX,
-        indexY: context.indexY,
-
-        _indexXY: context.index,
-        x: context.indexX,
-        y: context.indexY,
-
-        content: context.input.content,
-        length: context.input.length,
-    };
+    return Record.mk8
+        ("index")(context.index)
+        ("indexX")(context.indexX)
+        ("indexY")(context.indexY)
+        ("_indexXY")(context.index)
+        ("x")(context.indexX)
+        ("y")(context.indexY)
+        ("content")(context.input.content)
+        ("length")(context.input.length);
 }
 
 function charCodeAtIndex(cursor) {
