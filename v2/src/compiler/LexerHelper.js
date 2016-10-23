@@ -196,7 +196,7 @@ class Context {
     }
 
     next() {
-        if (this.id == TokenEnum.EOF) {
+        if (this._id == TokenEnum.EOF) {
             return this;
         } else {
             const cursor = this.createCursor();
@@ -306,10 +306,6 @@ class Context {
                 return this.newContext(TokenEnum.UNKNOWN, cursor);
             }
         }
-    }
-
-    get id() {
-        return this._id;
     }
 
     newContext(id, cursor) {

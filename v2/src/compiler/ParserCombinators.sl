@@ -13,7 +13,7 @@ testLexer = Lexer.fromString "hello ! the ! world" "stream";
 
 
 symbol tokenID lexer =
-    if lexer.id == tokenID then
+    if (Lexer.id lexer) == tokenID then
         empty (Lexer.text lexer) (lexer.next ())
     else
         Result.Error ("Expected the symbol " ++ tokenID)

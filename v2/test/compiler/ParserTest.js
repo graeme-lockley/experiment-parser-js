@@ -21,7 +21,7 @@ describe('Parser', function () {
             expect(Tuple.first(Result.withDefault()(result)).value).to.equal(123);
         });
         it("should have the next token of EOF", () =>
-            expect(Tuple.second(Result.withDefault()(result)).id).to.equal(Lexer.TokenEnum.EOF));
+            expect(Lexer.id(Tuple.second(Result.withDefault()(result)))).to.equal(Lexer.TokenEnum.EOF));
     });
 
     describe('given the input "abc 123" to parseEXPR12', () => {
@@ -34,7 +34,7 @@ describe('Parser', function () {
             expect(Tuple.first(Result.withDefault()(result)).name).to.equal('abc');
         });
         it("should have the next token of CONSTANT_INTEGER", () =>
-            expect(Tuple.second(Result.withDefault()(result)).id).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER));
+            expect(Lexer.id(Tuple.second(Result.withDefault()(result)))).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER));
     });
 
     describe('given the input "( 123)" to parseEXPR12', () => {
@@ -47,7 +47,7 @@ describe('Parser', function () {
             expect(Tuple.first(Result.withDefault()(result)).value).to.equal(123);
         });
         it("should have the next token of EOF", () =>
-            expect(Tuple.second(Result.withDefault()(result)).id).to.equal(Lexer.TokenEnum.EOF));
+            expect(Lexer.id(Tuple.second(Result.withDefault()(result)))).to.equal(Lexer.TokenEnum.EOF));
     });
 
     describe('given the input "\\a \\b -> (a)" to parseEXPR12', () => {
@@ -61,7 +61,7 @@ describe('Parser', function () {
             expect(Tuple.first(Result.withDefault()(result)).variables[1]).to.equal('b');
         });
         it("should have the next token of EOF", () =>
-            expect(Tuple.second(Result.withDefault()(result)).id).to.equal(Lexer.TokenEnum.EOF));
+            expect(Lexer.id(Tuple.second(Result.withDefault()(result)))).to.equal(Lexer.TokenEnum.EOF));
     });
 
     TestUtils.scenariosIn('./test/scenarios/parser');

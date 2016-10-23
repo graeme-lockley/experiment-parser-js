@@ -45,6 +45,10 @@ fromString =
     Helper.fromString;
 
 
+id =
+    Record.get "_id";
+
+
 sourceName =
     (Record.get "sourceName") o (Record.get "input");
 
