@@ -2,6 +2,7 @@
 
 const Cursor = require("./Cursor");
 
+const Maybe = require('../core/Maybe');
 const Record = require('../core/Record');
 const String = require('../core/String');
 const Tuple = require('../core/Tuple');
@@ -126,14 +127,47 @@ function newLexer(input) {
         ("_text")(text);
 }
 
+
+
+// create combinator for the cursor
+//   type: Cursor -> Maybe Cursor
+
+
+function oneOf(predicate) {
+    return cursor => {
+        if (Cursor.is(predicate)(cursor)) {
+            return Maybe.Just(Cursor.advanceIndex(cursor));
+        } else {
+            return Maybe.Nothing;
+        }
+    }
+}
+
+function many(parser) {
+    return cursor => {
+        let runner = Maybe.Just(cursor);
+        while (true) {
+            const nextRunner = parser(Maybe.withDefault()(runner));
+            if (Maybe.isJust(nextRunner)) {
+                runner = nextRunner;
+            } else {
+                return runner;
+            }
+        }
+    };
+}
+
+
+function skipWhiteSpace(cursor) {
+    return many(oneOf(isWhitespace))(cursor);
+}
+
+
 function next(lexer) {
     if (lexer._id == TokenEnum.EOF) {
         return lexer;
     } else {
-        let cursor = Cursor.createCursor(lexer);
-        while (Cursor.is(isWhitespace)(cursor)) {
-            cursor = Cursor.advanceIndex(cursor);
-        }
+        let cursor = Maybe.withDefault()(skipWhiteSpace(Cursor.createCursor(lexer)));
 
         if (Cursor.isEndOfFile(cursor)) {
             return newContext(lexer)(TokenEnum.EOF)(cursor);
