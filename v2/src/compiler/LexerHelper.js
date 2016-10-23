@@ -371,6 +371,5 @@ module.exports = {
     sourceName,
     y,
     indexXY,
-    streamText,
     TokenEnum
 };
