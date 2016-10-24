@@ -54,33 +54,6 @@ const TokenEnum = {
 };
 
 
-const symbols = [
-    Tuple.Tuple('\\')(TokenEnum.LAMBDA),
-    Tuple.Tuple('.')(TokenEnum.PERIOD),
-    Tuple.Tuple('(')(TokenEnum.LEFT_PAREN),
-    Tuple.Tuple(')')(TokenEnum.RIGHT_PAREN),
-    Tuple.Tuple('{')(TokenEnum.LEFT_CURLY),
-    Tuple.Tuple('}')(TokenEnum.RIGHT_CURLY),
-    Tuple.Tuple('==')(TokenEnum.EQUAL_EQUAL),
-    Tuple.Tuple('=')(TokenEnum.EQUAL),
-    Tuple.Tuple(';')(TokenEnum.SEMICOLON),
-    Tuple.Tuple('++')(TokenEnum.PLUS_PLUS),
-    Tuple.Tuple('+')(TokenEnum.PLUS),
-    Tuple.Tuple('->')(TokenEnum.MINUS_GREATER),
-    Tuple.Tuple('-')(TokenEnum.MINUS),
-    Tuple.Tuple('<=')(TokenEnum.LESS_EQUAL),
-    Tuple.Tuple('<')(TokenEnum.LESS),
-    Tuple.Tuple('>=')(TokenEnum.GREATER_EQUAL),
-    Tuple.Tuple('>')(TokenEnum.GREATER),
-    Tuple.Tuple('*')(TokenEnum.STAR),
-    Tuple.Tuple('/')(TokenEnum.SLASH),
-    Tuple.Tuple('!=')(TokenEnum.BANG_EQUAL),
-    Tuple.Tuple('!')(TokenEnum.BANG),
-    Tuple.Tuple('||')(TokenEnum.BAR_BAR),
-    Tuple.Tuple('&&')(TokenEnum.AMPERSAND_AMPERSAND)
-];
-
-
 const reservedIdentifiers = {
     'as': TokenEnum.AS,
     'assumptions': TokenEnum.ASSUMPTIONS,
@@ -93,26 +66,11 @@ const reservedIdentifiers = {
     'true': TokenEnum.TRUE
 };
 
+
 function isWhitespace(c) {
     return c <= 32;
 }
 
-function isDigit(c) {
-    return c >= 48 && c <= 57;
-}
-
-function isIdentifierStart(c) {
-    return c >= 'a'.charCodeAt(0) && c <= 'z'.charCodeAt(0) ||
-        c >= 'A'.charCodeAt(0) && c <= 'Z'.charCodeAt(0) ||
-        c == '_'.charCodeAt(0);
-}
-
-function isIdentifierRest(c) {
-    return c >= 'a'.charCodeAt(0) && c <= 'z'.charCodeAt(0) ||
-        c >= 'A'.charCodeAt(0) && c <= 'Z'.charCodeAt(0) ||
-        c >= '0'.charCodeAt(0) && c <= '9'.charCodeAt(0) ||
-        c == '_'.charCodeAt(0) || c == '\''.charCodeAt(0);
-}
 
 function newLexer(input) {
     return id => x => y => index => indexX => indexY => indexXY => text => Record.mk9
@@ -126,7 +84,6 @@ function newLexer(input) {
         ("_indexXY")(indexXY)
         ("_text")(text);
 }
-
 
 
 function oneOf(predicate) {
@@ -168,7 +125,33 @@ const tokenPatterns = [
         return reserved
             ? reserved
             : TokenEnum.IDENTIFIER;
-    })
+    }),
+    Tuple.Tuple (/'(\\.|.)'/iy) (text => TokenEnum.CONSTANT_CHAR),
+    Tuple.Tuple (/"(\\.|[^"\\])*"/iy) (text => TokenEnum.CONSTANT_STRING),
+    Tuple.Tuple (/\\/iy) (text => TokenEnum.LAMBDA),
+    Tuple.Tuple (/\./iy) (text => TokenEnum.PERIOD),
+    Tuple.Tuple (/\(/iy) (text => TokenEnum.LEFT_PAREN),
+    Tuple.Tuple (/\)/iy) (text => TokenEnum.RIGHT_PAREN),
+    Tuple.Tuple (/\{/iy) (text => TokenEnum.LEFT_CURLY),
+    Tuple.Tuple (/\}/iy) (text => TokenEnum.RIGHT_CURLY),
+    Tuple.Tuple (/==/iy) (text => TokenEnum.EQUAL_EQUAL),
+    Tuple.Tuple (/=/iy) (text => TokenEnum.EQUAL),
+    Tuple.Tuple (/;/iy) (text => TokenEnum.SEMICOLON),
+    Tuple.Tuple (/\+\+/iy) (text => TokenEnum.PLUS_PLUS),
+    Tuple.Tuple (/\+/iy) (text => TokenEnum.PLUS),
+    Tuple.Tuple (/->/iy) (text => TokenEnum.MINUS_GREATER),
+    Tuple.Tuple (/-/iy) (text => TokenEnum.MINUS),
+    Tuple.Tuple (/<=/iy) (text => TokenEnum.LESS_EQUAL),
+    Tuple.Tuple (/</iy) (text => TokenEnum.LESS),
+    Tuple.Tuple (/>=/iy) (text => TokenEnum.GREATER_EQUAL),
+    Tuple.Tuple (/>/iy) (text => TokenEnum.GREATER),
+    Tuple.Tuple (/\*/iy) (text => TokenEnum.STAR),
+    Tuple.Tuple (/\//iy) (text => TokenEnum.SLASH),
+    Tuple.Tuple (/!=/iy) (text => TokenEnum.BANG_EQUAL),
+    Tuple.Tuple (/!/iy) (text => TokenEnum.BANG),
+    Tuple.Tuple (/\|\|/iy) (text => TokenEnum.BAR_BAR),
+    Tuple.Tuple (/&&/iy) (text => TokenEnum.AMPERSAND_AMPERSAND),
+    Tuple.Tuple (/./iy) (text => TokenEnum.UNKNOWN)
 ];
 
 
@@ -195,75 +178,6 @@ function next(lexer) {
                     }
                     return newContext(lexer)(Tuple.second(pattern)(Cursor.text(tmpCursor)))(tmpCursor);
                 }
-            }
-            if (Cursor.isChar("'")(cursor)) {
-                cursor = Cursor.markStartOfToken(cursor);
-                cursor = Cursor.advanceIndex(cursor);
-                if (Cursor.isChar('\\')(cursor)) {
-                    cursor = Cursor.advanceIndex(cursor);
-                    cursor = Cursor.advanceIndex(cursor);
-                    if (Cursor.isChar("'")(cursor)) {
-                        cursor = Cursor.advanceIndex(cursor);
-                        return newContext(lexer)(TokenEnum.CONSTANT_CHAR)(cursor);
-                    } else {
-                        return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
-                    }
-                } else {
-                    cursor = Cursor.advanceIndex(cursor);
-                    if (Cursor.isChar("'")(cursor)) {
-                        cursor = Cursor.advanceIndex(cursor);
-                        return newContext(lexer)(TokenEnum.CONSTANT_CHAR)(cursor);
-                    } else {
-                        return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
-                    }
-                }
-            } else if (Cursor.isChar('"')(cursor)) {
-                cursor = Cursor.markStartOfToken(cursor);
-                cursor = Cursor.advanceIndex(cursor);
-                while (Cursor.isNotChar('"')(cursor)) {
-                    if (Cursor.isChar('\\')(cursor)) {
-                        cursor = Cursor.advanceIndex(cursor);
-                    }
-                    cursor = Cursor.advanceIndex(cursor);
-                }
-                if (Cursor.isEndOfFile(cursor)) {
-                    return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
-                } else {
-                    cursor = Cursor.advanceIndex(cursor);
-                    return newContext(lexer)(TokenEnum.CONSTANT_STRING)(cursor);
-                }
-            } else {
-                for (let index = 0; index < symbols.length; index += 1) {
-                    const symbol = symbols[index];
-
-                    if (Tuple.first(symbol).charCodeAt(0) == Cursor.charCodeAtIndex(cursor)) {
-                        if (Tuple.first(symbol).length == 1) {
-                            cursor = Cursor.markStartOfToken(cursor);
-                            cursor = Cursor.advanceIndex(cursor);
-
-                            return newContext(lexer)(Tuple.second(symbol))(cursor);
-                        } else {
-                            let tmpCursor = cursor;
-                            let matched = true;
-
-                            tmpCursor = Cursor.markStartOfToken(tmpCursor);
-                            tmpCursor = Cursor.advanceIndex(tmpCursor);
-                            for (let tmpCursorIndex = 1; tmpCursorIndex < Tuple.first(symbol).length; tmpCursorIndex += 1) {
-                                matched = matched && Tuple.first(symbol).charCodeAt(tmpCursorIndex) == Cursor.charCodeAtIndex(tmpCursor);
-                                tmpCursor = Cursor.advanceIndex(tmpCursor);
-                            }
-
-                            if (matched) {
-                                return newContext(lexer)(Tuple.second(symbol))(tmpCursor);
-                            }
-                        }
-                    }
-                }
-
-                cursor = Cursor.markStartOfToken(cursor);
-                cursor = Cursor.advanceIndex(cursor);
-
-                return newContext(lexer)(TokenEnum.UNKNOWN)(cursor);
             }
         }
     }
