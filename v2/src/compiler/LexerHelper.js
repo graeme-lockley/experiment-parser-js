@@ -1,5 +1,6 @@
 "use strict";
 
+const Array = require('../core/Array');
 const Maybe = require('../core/Maybe');
 const Record = require('../core/Record');
 const RegularExpression = require('../core/RegularExpression');
@@ -133,17 +134,12 @@ function next(lexer) {
         if (isEndOfFile(newLexer)) {
             return advanceLexer(lexer)(TokenEnum.EOF)("");
         } else {
-            for (let lp = 0; lp < tokenPatterns.length; lp += 1) {
-                const pattern = tokenPatterns[lp];
-                const patternRegEx = Tuple.first (pattern);
+            return Maybe.withDefault () (Array.findMap (pattern => {
+                    const patternRegEx = Tuple.first (pattern);
+                    const searchResult = RegularExpression.matchFromIndex (patternRegEx) (newLexer.index) (newLexer.input.content);
 
-                const searchResult = RegularExpression.matchFromIndex(patternRegEx)(newLexer.index)(newLexer.input.content);
-
-                if (Maybe.isJust(searchResult)) {
-                    const text = Maybe.withDefault () (searchResult);
-                    return advanceLexer (newLexer) (Tuple.second (pattern)(text)) (text);
-                }
-            }
+                    return Maybe.map(text => advanceLexer (newLexer) (Tuple.second (pattern)(text)) (text)) (searchResult);
+                }) (tokenPatterns));
         }
     }
 }
