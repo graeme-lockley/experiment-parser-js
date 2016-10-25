@@ -39,6 +39,10 @@ map f a =
     AH.map f a;
 
 
+findMap =
+    AH.findMap;
+
+
 slice n a =
     a.slice(n);
 

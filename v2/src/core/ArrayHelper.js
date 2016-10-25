@@ -65,6 +65,21 @@ function map(f) {
 }
 
 
+function findMap(f) {
+    return a => {
+        for (let i = 0; i < a.length; i += 1) {
+            const potentialResult = f(a[i]);
+
+            if (Maybe.isJust (potentialResult)) {
+                return potentialResult;
+            }
+        }
+
+        return Maybe.Nothing;
+    }
+}
+
+
 function at(i) {
     return a => {
         const result = a[i];
@@ -80,6 +95,7 @@ module.exports = {
     foldl,
     foldr,
     findFirst,
+    findMap,
     map,
     prepend
 };
