@@ -2,8 +2,10 @@
 
 const Maybe = require('../core/Maybe');
 const Record = require('../core/Record');
+const RegularExpression = require('../core/RegularExpression');
 const String = require('../core/String');
 const Tuple = require('../core/Tuple');
+
 
 const TokenEnum = {
     UNKNOWN: 0,
@@ -65,20 +67,6 @@ const reservedIdentifiers = {
 };
 
 
-function newLexerRecord(input) {
-    return id => x => y => index => indexX => indexY => indexXY => text => Record.mk9
-        ("input")(input)
-        ("_id")(id)
-        ("_x")(x)
-        ("_y")(y)
-        ("index")(index)
-        ("indexX")(indexX)
-        ("indexY")(indexY)
-        ("_indexXY")(indexXY)
-        ("_text")(text);
-}
-
-
 const tokenPatterns = [
     Tuple.Tuple (/[0-9]+/iy) (text => TokenEnum.CONSTANT_INTEGER),
     Tuple.Tuple (/file:(\\.|[^\s])+/iy) (text => TokenEnum.CONSTANT_URL),
@@ -118,12 +106,20 @@ const tokenPatterns = [
 ];
 
 
-function match(regex) {
-    return fromIndex => content => {
-        regex.lastIndex = fromIndex;
-        const result = regex.exec(content);
-        return result ? Maybe.Just(result[0]) : Maybe.Nothing;
-    };
+const whiteSpaceRegEx = compileRegExp("\\s*");
+
+
+function newLexerRecord(input) {
+    return id => x => y => index => indexX => indexY => indexXY => text => Record.mk9
+    ("input")(input)
+    ("_id")(id)
+    ("_x")(x)
+    ("_y")(y)
+    ("index")(index)
+    ("indexX")(indexX)
+    ("indexY")(indexY)
+    ("_indexXY")(indexXY)
+    ("_text")(text);
 }
 
 
@@ -131,8 +127,7 @@ function next(lexer) {
     if (lexer._id == TokenEnum.EOF) {
         return lexer;
     } else {
-        const whiteSpaceRegEx = /\s*/iy;
-        const whiteSpaceMatch = match(whiteSpaceRegEx)(lexer.index)(lexer.input.content);
+        const whiteSpaceMatch = RegularExpression.matchFromIndex(whiteSpaceRegEx)(lexer.index)(lexer.input.content);
         const newLexer = Maybe.withDefault (lexer) (Maybe.map(whitespace => advanceLexer (lexer) (TokenEnum.UNKNOWN) (whitespace)) (whiteSpaceMatch));
 
         if (isEndOfFile(newLexer)) {
@@ -142,7 +137,7 @@ function next(lexer) {
                 const pattern = tokenPatterns[lp];
                 const patternRegEx = Tuple.first (pattern);
 
-                const searchResult = match(patternRegEx)(newLexer.index)(newLexer.input.content);
+                const searchResult = RegularExpression.matchFromIndex(patternRegEx)(newLexer.index)(newLexer.input.content);
 
                 if (Maybe.isJust(searchResult)) {
                     const text = Maybe.withDefault () (searchResult);
@@ -172,6 +167,11 @@ function advanceLexer(lexer) {
 
         return newLexerRecord(lexer.input)(id)(_x)(_y)(cursor.index)(cursor.indexX)(cursor.indexY)(_indexXY)(text);
     };
+}
+
+
+function compileRegExp(regExp) {
+    return Maybe.withDefault () (RegularExpression.compileWithOptions(regExp)("iy"))
 }
 
 
