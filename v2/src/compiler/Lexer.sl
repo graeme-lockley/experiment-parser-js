@@ -9,40 +9,12 @@ TokenEnum =
     Helper.TokenEnum;
 
 
-symbols =
-    Helper.symbols;
-
-
-reservedIdentifiers =
-    Helper.reservedIdentifiers;
-
-
-isWhitespace =
-    Helper.isWhitespace;
-
-
-isEndOfLine =
-    Helper.isEndOfLine;
-
-
-isDigit =
-    Helper.isDigit;
-
-
-isIdentifierStart =
-    Helper.isIdentifierStart;
-
-
-isIdentifierRest =
-    Helper.isIdentifierRest;
-
-
-initialContext =
-    Helper.initialContext;
-
-
-fromString =
-    Helper.initialContext;
+fromString input sourceName =
+    (\lexerInput -> Helper.next (Helper.newLexerRecord lexerInput 0 1 1 0 1 1 0 ""))
+        (Record.mk3
+            "content" input
+            "length" (String.length input)
+            "sourceName" sourceName);
 
 
 id =

@@ -65,7 +65,7 @@ const reservedIdentifiers = {
 };
 
 
-function newLexer(input) {
+function newLexerRecord(input) {
     return id => x => y => index => indexX => indexY => indexXY => text => Record.mk9
         ("input")(input)
         ("_id")(id)
@@ -133,10 +133,10 @@ function next(lexer) {
     } else {
         const whiteSpaceRegEx = /\s*/iy;
         const whiteSpaceMatch = match(whiteSpaceRegEx)(lexer.index)(lexer.input.content);
-        const newLexer = Maybe.isJust(whiteSpaceMatch) ? newNewContext(lexer)(TokenEnum.UNKNOWN)(Maybe.withDefault ()(whiteSpaceMatch)) : lexer;
+        const newLexer = Maybe.withDefault (lexer) (Maybe.map(whitespace => advanceLexer (lexer) (TokenEnum.UNKNOWN) (whitespace)) (whiteSpaceMatch));
 
         if (isEndOfFile(newLexer)) {
-            return newNewContext(lexer)(TokenEnum.EOF)("");
+            return advanceLexer(lexer)(TokenEnum.EOF)("");
         } else {
             for (let lp = 0; lp < tokenPatterns.length; lp += 1) {
                 const pattern = tokenPatterns[lp];
@@ -146,7 +146,7 @@ function next(lexer) {
 
                 if (Maybe.isJust(searchResult)) {
                     const text = Maybe.withDefault () (searchResult);
-                    return newNewContext (newLexer) (Tuple.second (pattern)(text)) (text);
+                    return advanceLexer (newLexer) (Tuple.second (pattern)(text)) (text);
                 }
             }
         }
@@ -154,54 +154,29 @@ function next(lexer) {
 }
 
 
-function isEndOfFile(context) {
-    return context.index >= context.input.content.length;
+function isEndOfFile(kexer) {
+    return kexer.index >= kexer.input.length;
 }
 
 
-function newNewContext(context) {
+function advanceLexer(lexer) {
     return id => text => {
-        const _x = context.indexX;
-        const _y = context.indexY;
-        const _indexXY = context.index;
+        const _x = lexer.indexX;
+        const _y = lexer.indexY;
+        const _indexXY = lexer.index;
 
-        let cursor = Record.mk3
-            ("indexX")(_x)
-            ("indexY")(_y)
-            ("index")(_indexXY);
+        const cursor = String.foldl
+                            (cursor => c => (c == 10) ? Record.set3("indexX")(1)("indexY")(cursor.indexY + 1)("index")(cursor.index + 1)(cursor) : Record.set2("indexX")(cursor.indexX + 1)("index")(cursor.index + 1)(cursor))
+                            (Record.mk3("indexX")(_x)("indexY")(_y)("index")(_indexXY))
+                            (text);
 
-        for (let i = 0; i < text.length; i +=1) {
-            if (text.charCodeAt(i) == 10) {
-                cursor = Record.set3
-                    ("indexX")(1)
-                    ("indexY")(cursor.indexY + 1)
-                    ("index")(cursor.index + 1)
-                    (cursor);
-            } else {
-                cursor = Record.set2
-                    ("indexX")(cursor.indexX + 1)
-                    ("index")(cursor.index + 1)
-                    (cursor);
-            }
-        }
-
-        return newLexer(context.input)(id)(_x)(_y)(cursor.index)(cursor.indexX)(cursor.indexY)(_indexXY)(text);
+        return newLexerRecord(lexer.input)(id)(_x)(_y)(cursor.index)(cursor.indexX)(cursor.indexY)(_indexXY)(text);
     };
 }
 
 
-function initialContext(input) {
-    return sourceName => {
-        const lexerInput = Record.mk3
-            ("content")(input)
-            ("length")(input.length)
-            ("sourceName")(sourceName);
-        return next(newLexer(lexerInput)(0)(1)(1)(0)(1)(1)(0)(''));
-    }
-}
-
 module.exports = {
-    initialContext,
     next,
+    newLexerRecord,
     TokenEnum
 };
