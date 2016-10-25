@@ -154,8 +154,8 @@ function next(lexer) {
 }
 
 
-function isEndOfFile(kexer) {
-    return kexer.index >= kexer.input.length;
+function isEndOfFile(lexer) {
+    return lexer.index >= lexer.input.length;
 }
 
 
