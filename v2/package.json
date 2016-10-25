@@ -11,7 +11,8 @@
     "repl": "node output/src/repl.js",
     "exec": "node output/src/exec.js",
     "build": "export NODE_PATH=./node_modules:`npm root -g` && node ../v1/src/build.js --outputDir=./output/src --srcDir=./src . && node ../v1/src/build.js --outputDir=./output/test --srcDir=./test .",
-    "clean": "rm -rf output"
+    "clean": "rm -rf output",
+    "all": "npm run clean && npm run build && npm test"
   },
   "repository": {
     "type": "git",
