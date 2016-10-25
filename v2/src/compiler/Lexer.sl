@@ -10,12 +10,24 @@ TokenEnum =
 
 
 fromString input sourceName =
-    (\lexerInput -> Helper.next (Helper.newLexerRecord lexerInput 0 1 1 0 1 1 0 ""))
+    (\lexerInput -> Helper.next (newLexerRecord lexerInput 0 1 1 0 1 1 0 ""))
         (Record.mk3
             "content" input
             "length" (String.length input)
             "sourceName" sourceName);
 
+
+newLexerRecord input id x y index indexX indexY indexXY text =
+    Record.mk9
+        "input" input
+        "_id" id
+        "_x" x
+        "_y" y
+        "index" index
+        "indexX" indexX
+        "indexY" indexY
+        "_indexXY" indexXY
+        "_text" text;
 
 id =
     Record.get "_id";

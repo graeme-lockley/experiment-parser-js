@@ -177,6 +177,5 @@ function advanceLexer(lexer) {
 
 module.exports = {
     next,
-    newLexerRecord,
     TokenEnum
 };
