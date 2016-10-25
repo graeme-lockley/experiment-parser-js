@@ -36,8 +36,21 @@ function stringFromLiteral(s) {
     }
 }
 
+
+function foldl(f) {
+    return z => s => {
+        let result = z;
+        for (let i = 0; i < s.length; i += 1) {
+            result = f(result)(s.charCodeAt(i));
+        }
+        return result;
+    }
+}
+
+
 module.exports = {
     charAt,
+    foldl,
     substring,
     characterFromLiteral,
     stringFromLiteral

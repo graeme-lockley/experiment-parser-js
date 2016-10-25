@@ -19,6 +19,15 @@ assumptions {
 };
 
 
+
+foldl f z s =
+    Helper.foldl f z s
+assumptions {
+    foldl (\acc \_ -> acc + 1) 0 "hello" == 5
+};
+
+
+
 toChar s =
     charAt 0 s;
 
