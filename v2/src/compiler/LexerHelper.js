@@ -130,31 +130,6 @@ function newLexerRecord(input) {
 }
 
 
-function next(lexer) {
-    if (lexer._id == TokenEnum.EOF) {
-        return lexer;
-    } else {
-        const newLexer = Maybe.withDefault (lexer) (Maybe.map(whitespace => advanceLexer (lexer) (TokenEnum.UNKNOWN) (whitespace)) (RegularExpression.matchFromIndex(whiteSpaceRegEx)(lexer.index)(lexer.input.content)));
-
-        if (isEndOfFile(newLexer)) {
-            return advanceLexer(lexer)(TokenEnum.EOF)("");
-        } else {
-            return Maybe.withDefault () (Array.findMap (pattern => {
-                    const patternRegEx = Tuple.first (pattern);
-                    const searchResult = RegularExpression.matchFromIndex (patternRegEx) (newLexer.index) (newLexer.input.content);
-
-                    return Maybe.map(text => advanceLexer (newLexer) (Tuple.second (pattern)(text)) (text)) (searchResult);
-                }) (tokenPatterns));
-        }
-    }
-}
-
-
-function isEndOfFile(lexer) {
-    return lexer.index >= lexer.input.length;
-}
-
-
 function advanceLexer(lexer) {
     return id => text => {
         const _x = lexer.indexX;
@@ -172,8 +147,9 @@ function advanceLexer(lexer) {
 
 
 module.exports = {
-    next,
     TokenEnum,
+    advanceLexer,
+    tokenPatterns,
     reservedIdentifiers,
     whiteSpaceRegEx
 };
