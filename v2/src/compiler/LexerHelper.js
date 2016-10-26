@@ -134,8 +134,7 @@ function next(lexer) {
     if (lexer._id == TokenEnum.EOF) {
         return lexer;
     } else {
-        const whiteSpaceMatch = RegularExpression.matchFromIndex(whiteSpaceRegEx)(lexer.index)(lexer.input.content);
-        const newLexer = Maybe.withDefault (lexer) (Maybe.map(whitespace => advanceLexer (lexer) (TokenEnum.UNKNOWN) (whitespace)) (whiteSpaceMatch));
+        const newLexer = Maybe.withDefault (lexer) (Maybe.map(whitespace => advanceLexer (lexer) (TokenEnum.UNKNOWN) (whitespace)) (RegularExpression.matchFromIndex(whiteSpaceRegEx)(lexer.index)(lexer.input.content)));
 
         if (isEndOfFile(newLexer)) {
             return advanceLexer(lexer)(TokenEnum.EOF)("");
