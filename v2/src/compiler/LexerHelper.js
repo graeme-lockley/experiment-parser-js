@@ -1,6 +1,5 @@
 "use strict";
 
-const Array = require('../core/Array');
 const Maybe = require('../core/Maybe');
 const Record = require('../core/Record');
 const RegularExpression = require('../core/RegularExpression');
@@ -115,40 +114,8 @@ function compileRegExp(regExp) {
 }
 
 
-
-function newLexerRecord(input) {
-    return id => x => y => index => indexX => indexY => indexXY => text => Record.mk9
-    ("input")(input)
-    ("_id")(id)
-    ("_x")(x)
-    ("_y")(y)
-    ("index")(index)
-    ("indexX")(indexX)
-    ("indexY")(indexY)
-    ("_indexXY")(indexXY)
-    ("_text")(text);
-}
-
-
-function advanceLexer(lexer) {
-    return id => text => {
-        const _x = lexer.indexX;
-        const _y = lexer.indexY;
-        const _indexXY = lexer.index;
-
-        const cursor = String.foldl
-                            (cursor => c => (c == 10) ? Record.set3("indexX")(1)("indexY")(cursor.indexY + 1)("index")(cursor.index + 1)(cursor) : Record.set2("indexX")(cursor.indexX + 1)("index")(cursor.index + 1)(cursor))
-                            (Record.mk3("indexX")(_x)("indexY")(_y)("index")(_indexXY))
-                            (text);
-
-        return newLexerRecord(lexer.input)(id)(_x)(_y)(cursor.index)(cursor.indexX)(cursor.indexY)(_indexXY)(text);
-    };
-}
-
-
 module.exports = {
     TokenEnum,
-    advanceLexer,
     tokenPatterns,
     reservedIdentifiers,
     whiteSpaceRegEx
