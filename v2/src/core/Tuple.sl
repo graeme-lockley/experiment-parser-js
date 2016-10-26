@@ -1,10 +1,11 @@
 import file:./TupleHelper as TH;
+import file:./Record as Record;
 
 import file:./Debug as DEBUG;
 
 
 Tuple f s =
-    TH.Tuple f s;
+    Record.mk2 "_fst" f "_snd" s;
 
 
 first t =
