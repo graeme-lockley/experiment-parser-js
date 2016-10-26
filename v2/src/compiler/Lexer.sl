@@ -29,6 +29,11 @@ newLexerRecord input id x y index indexX indexY indexXY text =
         "_indexXY" indexXY
         "_text" text;
 
+
+isEndOfFile lexer =
+    (index lexer) >= (contentLength lexer);
+
+
 id =
     Record.get "_id";
 
@@ -51,6 +56,14 @@ y =
 
 indexXY =
     Record.get "_indexXY";
+
+
+index =
+    Record.get "index";
+
+
+contentLength =
+    (Record.get "length") o (Record.get "input");
 
 
 streamText startXY endXY =
