@@ -110,6 +110,12 @@ const tokenPatterns = [
 const whiteSpaceRegEx = compileRegExp("\\s*");
 
 
+function compileRegExp(regExp) {
+    return Maybe.withDefault () (RegularExpression.compileWithOptions(regExp)("iy"))
+}
+
+
+
 function newLexerRecord(input) {
     return id => x => y => index => indexX => indexY => indexXY => text => Record.mk9
     ("input")(input)
@@ -166,12 +172,9 @@ function advanceLexer(lexer) {
 }
 
 
-function compileRegExp(regExp) {
-    return Maybe.withDefault () (RegularExpression.compileWithOptions(regExp)("iy"))
-}
-
-
 module.exports = {
     next,
-    TokenEnum
+    TokenEnum,
+    reservedIdentifiers,
+    whiteSpaceRegEx
 };
