@@ -29,7 +29,7 @@ class Repository {
                     writeFile(astFileName, JSON.stringify(s.ast, null, 2));
                 })
                 .assign('jsFileName', s => s.dirname + Path.sep + Path.basename(scriptName, '.sl') + '.js')
-                .assign('js', s => Translator.astToJavascript(s.ast), s => 'Translating ' + scriptName)
+                .assign('js', s => Translator.astToJavascript(s.ast)(0), s => 'Translating ' + scriptName)
                 .assign('_', s => writeFile(s.jsFileName, s.js), s => 'Writing ' + s.jsFileName);
 
             const ast = seq.return(s => s.ast);
@@ -75,7 +75,7 @@ class Repository {
 
                         const astResult = Parser.parseString(content)(fileName);
                         if (Result.isOk(astResult)) {
-                            const translationResult = Translator.astToJavascript(Result.withDefault()(astResult));
+                            const translationResult = Translator.astToJavascript(Result.withDefault()(astResult))(0);
                             writeFile(targetFileName, translationResult);
 
                             testFileNames[targetFileName] = true;

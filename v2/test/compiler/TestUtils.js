@@ -22,7 +22,7 @@ function scenariosIn(directory) {
                 });
 
                 it('produces the expected JavaScript', () => {
-                    const translation = Translator.astToJavascript(Result.withDefault()(parseResponse));
+                    const translation = Translator.astToJavascript(Result.withDefault()(parseResponse))(0);
 
                     expect(translation).to.equal(expectations['js']);
                 });
@@ -55,8 +55,8 @@ function scenariosIn(directory) {
                 }
 
                 it('should return the expected result', () => {
-                    const programme = Translator.astToJavascript(Result.withDefault()(parseResponse));
-                    const assertion = Translator.astToJavascript(Result.withDefault()(Parser.parseExpressionString(expectations['run'])));
+                    const programme = Translator.astToJavascript(Result.withDefault()(parseResponse))(0);
+                    const assertion = Translator.astToJavascript(Result.withDefault()(Parser.parseExpressionString(expectations['run'])))(0);
 
                     const vm = new NodeVM({
                         console: 'inherit',
