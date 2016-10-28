@@ -2,6 +2,7 @@
 
 const AST = require('./AST');
 const Array = require('../core/Array');
+const Maybe = require("../core/Maybe");
 
 
 const infixOperators = {
@@ -96,14 +97,14 @@ function astToJavascript(ast, indentation = 0) {
     } else if (ast.type == "MODULE") {
         const imports = ast.imports.map(i => astToJavascript(i, indentation)).join('\n');
 
-        const suffix = ast.declarations.length == 0 && !ast.optionalExpression.isJust() ? '\nmodule.exports = {\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
-            ast.declarations.length > 0 && !ast.optionalExpression.isJust() ? '\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + ',\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
-                ast.declarations.length > 0 && ast.optionalExpression.isJust() ? '\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + ',\n' + spaces(1) + '_$EXPR,\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
+        const suffix = ast.declarations.length == 0 && !Maybe.isJust(ast.optionalExpression()) ? '\nmodule.exports = {\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
+            ast.declarations.length > 0 && !Maybe.isJust(ast.optionalExpression) ? '\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + ',\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
+                ast.declarations.length > 0 && Maybe.isJust(ast.optionalExpression) ? '\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + ',\n' + spaces(1) + '_$EXPR,\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
                 '\nmodule.exports = {\n' + spaces(1) + '_$EXPR,\n' + spaces(1) + '_$ASSUMPTIONS\n};';
 
         return (imports.length == 0 ? '' : imports + '\n\n')
             + ast.declarations.map(d => astToJavascript(d, indentation)).join('\n\n')
-            + (ast.optionalExpression.isJust() ? '\n\nconst _$EXPR = ' + astToJavascript(ast.optionalExpression.withDefault(), indentation) + ';' : '')
+            + (Maybe.isJust(ast.optionalExpression) ? '\n\nconst _$EXPR = ' + astToJavascript(Maybe.withDefault()(ast.optionalExpression), indentation) + ';' : '')
             + '\n\nconst _$ASSUMPTIONS = [].concat(\n'
             + ast.imports.map(i => '  ' + i.id.name + '._$ASSUMPTIONS || []').join(',\n') + ');\n\n'
             + '_$ASSUMPTIONS.push({\n'

@@ -1,16 +1,20 @@
-import file:./MaybeHelper as MH;
 import file:./Boolean as Boolean;
+import file:./Record as Record;
 
 import file:./Debug as DEBUG;
 
 
-Just = MH.Just;
+Just value =
+    Record.mk1
+        "value" value;
 
 
-Nothing = MH.Nothing;
+Nothing =
+    Record.mk0 ();
 
 
-isJust = MH.isJust
+isJust maybe =
+    Record.get "value" maybe
 assumptions {
     isJust (Just 1);
     Boolean.not o isJust Nothing
@@ -24,14 +28,22 @@ assumptions {
 };
 
 
-withDefault = MH.withDefault
+withDefault defaultValue maybe =
+    if isJust maybe then
+        Record.get "value" maybe
+    else
+        defaultValue
 assumptions {
     withDefault 0 (Just 1) == 1;
     withDefault 0 Nothing == 0
 };
 
 
-map = MH.map
+map f maybe =
+    if isJust maybe then
+        Just (f (Record.get "value" maybe))
+    else
+        maybe
 assumptions {
     DEBUG.eq (map (\n -> n + 1) (Just 1)) (Just 2);
     DEBUG.eq (map (\n -> n + 1) Nothing) Nothing
