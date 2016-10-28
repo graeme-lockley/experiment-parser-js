@@ -155,5 +155,8 @@ function simplifyPath(path) {
 
 
 module.exports = {
-    astToJavascript
+    astToJavascript,
+    infixOperators,
+    encodeString,
+    simplifyPath
 };
