@@ -1,15 +1,22 @@
-import file:./ResultHelper as RH;
 import file:./Maybe as Maybe;
+import file:./Record as Record;
 
 import file:./Debug as DEBUG;
 
 
-Ok = RH.Ok;
+Ok value =
+    Record.mk1 "_ok" value;
 
-Error = RH.Error;
+
+Error value =
+    Record.mk1 "_error" value;
 
 
-flatMap = RH.flatMap;
+flatMap okFn errorFn result =
+    if Record.get "_ok" result then
+        okFn (Record.get "_ok" result)
+    else
+        errorFn (Record.get "_error" result);
 
 
 withDefault d =
@@ -28,16 +35,22 @@ assumptions {
 };
 
 
-map f =
-    RH.map f (\_ -> _)
+map f result =
+    if Record.get "_ok" result then
+        Ok (f (Record.get "_ok" result))
+    else
+        result
 assumptions {
     DEBUG.eq (map ((+) 1) (Ok 2)) (Ok 3);
     DEBUG.eq (map ((+) 1) (Error "oops")) (Error "oops")
 };
 
 
-formatError f =
-    RH.map (\_ -> _) f
+formatError f value =
+    if Record.get "_error" value then
+        Error (f (Record.get "_error" value))
+    else
+        value
 assumptions {
     DEBUG.eq (formatError ((++) "hello ") (Ok 2)) (Ok 2);
     DEBUG.eq (formatError ((++) "hello ") (Error "world")) (Error "hello world")
@@ -77,4 +90,5 @@ assumptions {
 };
 
 
-is = RH.is;
+is value =
+    (Record.get "_ok" value) || (Record.get "_error" value);
