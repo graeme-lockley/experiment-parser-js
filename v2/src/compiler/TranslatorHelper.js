@@ -59,12 +59,6 @@ function astToJavascript(ast) {
             return '"' + encodeString(ast.value) + '"';
         } else if (ast.type == "CONSTANT_UNIT") {
             return 'undefined';
-        } else if (ast.type == "DECLARATION") {
-            if (ast.expression.type == "LAMBDA") {
-                return spaces() + 'function ' + ast.name + '(' + ast.expression.variables[0] + ') {\n' + (ast.expression.variables.length == 1 ? '  return ' + astToJavascript(ast.expression.expression)(indentation + 1) + ';\n' : '  return ' + astToJavascript(AST.lambda(ast.expression.variables.slice(1))(ast.expression.expression))(indentation + 1) + ';\n') + '}';
-            } else {
-                return spaces() + 'const ' + ast.name + ' = ' + astToJavascript(ast.expression)(0) + ';';
-            }
         } else if (ast.type == "DIVISION") {
             return '(' + astToJavascript(ast.left)(indentation) + ' / ' + astToJavascript(ast.right)(indentation) + ')';
         } else if (ast.type == "EQUAL") {

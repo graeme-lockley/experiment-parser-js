@@ -17,7 +17,18 @@ encodeString =
 
 
 astToJavascript ast indentation =
-    if ast.type == "MODULE" then
+    if ast.type == "DECLARATION" then
+        if (Record.get "type" (Record.get "expression" ast)) == "LAMBDA" then
+            (spaces indentation) ++ "function " ++ ast.name ++ "(" ++ (at 0 (Record.get "variables" (Record.get "expression" ast))) ++ ") {\n" ++
+            (
+                if (Array.length (Record.get "variables" (Record.get "expression" ast))) == 1 then
+                    "  return " ++ (astToJavascript (Record.get "expression" (Record.get "expression" ast)) (indentation + 1)) ++ ";\n"
+                else
+                    "  return " ++ (astToJavascript (AST.lambda (Array.slice 1 (Record.get "variables" (Record.get "expression" ast))) (Record.get "expression" (Record.get "expression" ast))) (indentation + 1)) ++ ";\n"
+            ) ++ "}"
+        else
+            (spaces indentation) ++ "const " ++ ast.name ++ " = " ++ (astToJavascript (ast.expression) 0) ++ ";"
+    else if ast.type == "MODULE" then
         (\imports \suffix ->
             (if (String.length imports) == 0 then
                 ""
@@ -108,3 +119,6 @@ spaces count =
 simplifyPath =
     Helper.simplifyPath;
 
+
+at i a =
+    Maybe.withDefault () (Array.at i a);
