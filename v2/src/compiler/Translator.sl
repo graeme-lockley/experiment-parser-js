@@ -17,7 +17,11 @@ encodeString =
 
 
 astToJavascript ast indentation =
-    if ast.type == "DECLARATION" then
+    if ast.type == "APPLY" then
+        (astToJavascript (at 0 ast.expressions) indentation) ++
+        Array.join "" (Array.map (\x -> "(" ++ (astToJavascript x indentation) ++ ")") (Array.slice 1 ast.expressions))
+
+    else if ast.type == "DECLARATION" then
         if (Record.get "type" (Record.get "expression" ast)) == "LAMBDA" then
             (spaces indentation) ++ "function " ++ ast.name ++ "(" ++ (at 0 (Record.get "variables" (Record.get "expression" ast))) ++ ") {\n" ++
             (
