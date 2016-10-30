@@ -30,6 +30,9 @@ astToJavascript ast indentation =
     else if ast.type == "BOOLEAN_NOT" then
         "(!" ++ (astToJavascript ast.operand indentation) ++ ")"
 
+    else if ast.type == "BOOLEAN_OR" then
+        "(" ++ (Array.join " || " (Array.map (\e -> astToJavascript e indentation) ast.expressions)) ++ ")"
+
     else if ast.type == "DECLARATION" then
         if (Record.get "type" (Record.get "expression" ast)) == "LAMBDA" then
             (spaces indentation) ++ "function " ++ ast.name ++ "(" ++ (at 0 (Record.get "variables" (Record.get "expression" ast))) ++ ") {\n" ++
