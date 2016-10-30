@@ -94,6 +94,9 @@ astToJavascript ast indentation =
     else if ast.type == "GREATER_THAN_EQUAL" then
         "(" ++ (astToJavascript ast.left indentation) ++ " >= " ++ (astToJavascript ast.right indentation) ++ ")"
 
+    else if ast.type == "IDENTIFIER" then
+        ast.name
+
     else if (ast.type == "IMPORT") then
         (\fileName ->
             "const " ++ (Record.get "name" (Record.get "id" ast)) ++ " = require('" ++
