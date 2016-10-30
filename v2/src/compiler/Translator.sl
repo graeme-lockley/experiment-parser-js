@@ -102,10 +102,7 @@ astToJavascript ast indentation =
         (spaces (indentation + 1)) ++ "? " ++ (astToJavascript ast.thenExpr (indentation + 1)) ++ "\n" ++
         (spaces (indentation + 1)) ++ ": " ++ (astToJavascript ast.elseExpr (indentation + 1)) ++ ")"
 
-    else if ast.type == "INFIX_OPERATOR" then
-        at ast.operator infixOperators
-
-    else if (ast.type == "IMPORT") then
+    else if ast.type == "IMPORT" then
         (\fileName ->
             "const " ++ (Record.get "name" (Record.get "id" ast)) ++ " = require('" ++
             (
@@ -115,6 +112,9 @@ astToJavascript ast indentation =
                     "./" ++ fileName
             ) ++ "');"
         ) (String.substring 5 (String.length (Record.get "value" (Record.get "url" ast))) (Record.get "value" (Record.get "url" ast)))
+
+    else if ast.type == "INFIX_OPERATOR" then
+        at ast.operator infixOperators
 
     else if ast.type == "LAMBDA" then
         (\tmpResult -> String.substring 1 (String.length tmpResult - 1) tmpResult)
