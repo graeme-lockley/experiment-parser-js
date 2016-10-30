@@ -35,6 +35,10 @@ assumptions {
 };
 
 
+replace pattern replacement s =
+    Helper.replace pattern replacement s;
+
+
 toChar s =
     charAt 0 s;
 

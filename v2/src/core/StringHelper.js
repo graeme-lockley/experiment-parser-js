@@ -42,6 +42,11 @@ function startsWith(prefix) {
 }
 
 
+function replace(pattern) {
+    return replacement => s => s.replace(pattern, replacement);
+}
+
+
 function foldl(f) {
     return z => s => {
         let result = z;
@@ -56,6 +61,7 @@ function foldl(f) {
 module.exports = {
     charAt,
     foldl,
+    replace,
     startsWith,
     substring,
     characterFromLiteral,
