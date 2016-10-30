@@ -22,14 +22,6 @@ const infixOperators = {
 };
 
 
-function encodeString(s) {
-    return s
-        .replace('\n', '\\n')
-        .replace('"', '\\"');
-}
-
-
-
 function simplifyPath(path) {
     let candidateResult = path;
     while (true) {
@@ -45,6 +37,5 @@ function simplifyPath(path) {
 
 module.exports = {
     infixOperators,
-    encodeString,
     simplifyPath
 };
