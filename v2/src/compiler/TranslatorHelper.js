@@ -77,10 +77,6 @@ function astToJavascript(ast) {
             return ast.name;
         } else if (ast.type == "IF") {
             return '(' + astToJavascript(ast.ifExpr)(indentation) + "\n" + spaces(indentation + 1) + "? " + astToJavascript(ast.thenExpr)(indentation + 1) + "\n" + spaces(indentation + 1) + ": " + astToJavascript(ast.elseExpr)(indentation + 1) + ')';
-        } else if (ast.type == "IMPORT") {
-            const fileName = ast.url.value.substring(5);
-
-            return 'const ' + ast.id.name + " = require('" + (fileName.startsWith('./') || fileName.startsWith('/') ? fileName : './' + fileName) + "');";
         } else if (ast.type == "INFIX_OPERATOR") {
             return infixOperators[ast.operator];
         } else if (ast.type == "LAMBDA") {

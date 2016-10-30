@@ -28,6 +28,18 @@ astToJavascript ast indentation =
             ) ++ "}"
         else
             (spaces indentation) ++ "const " ++ ast.name ++ " = " ++ (astToJavascript (ast.expression) 0) ++ ";"
+
+    else if (ast.type == "IMPORT") then
+        (\fileName ->
+            "const " ++ (Record.get "name" (Record.get "id" ast)) ++ " = require('" ++
+            (
+                if (String.startsWith "./" fileName) || (String.startsWith "/" fileName) then
+                    fileName
+                else
+                    "./" ++ fileName
+            ) ++ "');"
+        ) (String.substring 5 (String.length (Record.get "value" (Record.get "url" ast))) (Record.get "value" (Record.get "url" ast)))
+
     else if ast.type == "MODULE" then
         (\imports \suffix ->
             (if (String.length imports) == 0 then
