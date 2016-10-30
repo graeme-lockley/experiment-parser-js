@@ -201,8 +201,13 @@ astToJavascript ast indentation =
     else if ast.type == "SUBTRACTION" then
         "(" ++ (astToJavascript ast.left indentation) ++ " - " ++ (astToJavascript ast.right indentation) ++ ")"
 
+    else if ast.type == "UNARY_PLUS" then
+        "(+" ++ (astToJavascript ast.operand indentation) ++ ")"
+
+    else if ast.type == "UNARY_NEGATE" then
+        "(-" ++ (astToJavascript ast.operand indentation) ++ ")"
     else
-        Helper.astToJavascript ast indentation;
+        "undefined";
 
 
 moduleImports imports indentation =
