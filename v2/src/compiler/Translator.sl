@@ -38,6 +38,12 @@ astToJavascript ast indentation =
             "(" ++ variableName ++ " => " ++ (astToJavascript ast.left indentation) ++ "(" ++ (astToJavascript ast.right indentation) ++ "(" ++ variableName ++ ")))"
         ) ("_$" ++ indentation)
 
+    else if ast.type == "CONSTANT_BOOLEAN" then
+        if ast.value then
+            "true"
+        else
+            "false"
+
     else if ast.type == "DECLARATION" then
         if (Record.get "type" (Record.get "expression" ast)) == "LAMBDA" then
             (spaces indentation) ++ "function " ++ ast.name ++ "(" ++ (at 0 (Record.get "variables" (Record.get "expression" ast))) ++ ") {\n" ++
