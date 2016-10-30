@@ -120,6 +120,12 @@ astToJavascript ast indentation =
         (\tmpResult -> String.substring 1 (String.length tmpResult - 1) tmpResult)
         ("(" ++ Array.foldr (\accumulator \item -> "(" ++ item ++ " => " ++ accumulator ++ ")") (astToJavascript ast.expression indentation) ast.variables ++ ")")
 
+    else if ast.type == "LESS_THAN" then
+        "(" ++ (astToJavascript ast.left indentation) ++ " < " ++ (astToJavascript ast.right indentation) ++ ")"
+
+    else if ast.type == "LESS_THAN_EQUAL" then
+        "(" ++ (astToJavascript ast.left indentation) ++ " <= " ++ (astToJavascript ast.right indentation) ++ ")"
+
     else if ast.type == "MODULE" then
         (\imports \suffix ->
             (if (String.length imports) == 0 then
