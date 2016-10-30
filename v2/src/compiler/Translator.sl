@@ -102,6 +102,9 @@ astToJavascript ast indentation =
         (spaces (indentation + 1)) ++ "? " ++ (astToJavascript ast.thenExpr (indentation + 1)) ++ "\n" ++
         (spaces (indentation + 1)) ++ ": " ++ (astToJavascript ast.elseExpr (indentation + 1)) ++ ")"
 
+    else if ast.type == "INFIX_OPERATOR" then
+        at ast.operator infixOperators
+
     else if (ast.type == "IMPORT") then
         (\fileName ->
             "const " ++ (Record.get "name" (Record.get "id" ast)) ++ " = require('" ++
