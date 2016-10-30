@@ -191,6 +191,10 @@ astToJavascript ast indentation =
             suffix
         ) (moduleImports (Record.get "imports" ast) indentation)
           (moduleSuffix (Record.get "declarations" ast) (Record.get "optionalExpression" ast))
+
+    else if ast.type == "QUALIFIED_IDENTIFIER" then
+        ast.module ++ "." ++ ast.identifier
+
     else
         Helper.astToJavascript ast indentation;
 
