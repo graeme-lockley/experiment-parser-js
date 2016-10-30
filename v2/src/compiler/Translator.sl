@@ -88,6 +88,12 @@ astToJavascript ast indentation =
         (spaces (indentation + 2)) ++ "return " ++ (astToJavascript (at (Array.length ast.expressions - 1) ast.expressions) 0) ++ ";\n" ++
         (spaces (indentation + 1)) ++ "})()"
 
+    else if ast.type == "GREATER_THAN" then
+        "(" ++ (astToJavascript ast.left indentation) ++ " > " ++ (astToJavascript ast.right indentation) ++ ")"
+
+    else if ast.type == "GREATER_THAN_EQUAL" then
+        "(" ++ (astToJavascript ast.left indentation) ++ " >= " ++ (astToJavascript ast.right indentation) ++ ")"
+
     else if (ast.type == "IMPORT") then
         (\fileName ->
             "const " ++ (Record.get "name" (Record.get "id" ast)) ++ " = require('" ++
