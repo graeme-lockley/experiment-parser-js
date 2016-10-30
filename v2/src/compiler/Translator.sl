@@ -58,6 +58,10 @@ astToJavascript ast indentation =
             ) ++ "');"
         ) (String.substring 5 (String.length (Record.get "value" (Record.get "url" ast))) (Record.get "value" (Record.get "url" ast)))
 
+    else if ast.type == "LAMBDA" then
+        (\tmpResult -> String.substring 1 (String.length tmpResult - 1) tmpResult)
+        ("(" ++ Array.foldr (\accumulator \item -> "(" ++ item ++ " => " ++ accumulator ++ ")") (astToJavascript ast.expression indentation) ast.variables ++ ")")
+
     else if ast.type == "MODULE" then
         (\imports \suffix ->
             (if (String.length imports) == 0 then
