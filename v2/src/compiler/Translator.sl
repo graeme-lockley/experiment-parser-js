@@ -29,6 +29,20 @@ astToJavascript ast indentation =
         else
             (spaces indentation) ++ "const " ++ ast.name ++ " = " ++ (astToJavascript (ast.expression) 0) ++ ";"
 
+    else if (ast.type == "EXPRESSIONS") then
+        "(() => {\n" ++ (spaces (indentation + 2)) ++
+
+        Array.join (";\n" ++ (spaces (indentation + 2)))
+            ( Array.map (\e -> astToJavascript e (indentation + 2)) (Array.take (Array.length (ast.expressions) - 1) ast.expressions) ) ++
+        (
+            if (Array.length ast.expressions) > 1 then
+                ";\n"
+            else
+                ""
+        ) ++
+        (spaces (indentation + 2)) ++ "return " ++ (astToJavascript (at (Array.length ast.expressions - 1) ast.expressions) 0) ++ ";\n" ++
+        (spaces (indentation + 1)) ++ "})()"
+
     else if (ast.type == "IMPORT") then
         (\fileName ->
             "const " ++ (Record.get "name" (Record.get "id" ast)) ++ " = require('" ++
