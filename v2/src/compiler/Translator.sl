@@ -126,6 +126,9 @@ astToJavascript ast indentation =
     else if ast.type == "LESS_THAN_EQUAL" then
         "(" ++ (astToJavascript ast.left indentation) ++ " <= " ++ (astToJavascript ast.right indentation) ++ ")"
 
+    else if ast.type == "MULTIPLICATION" then
+        "(" ++ (astToJavascript ast.left indentation) ++ " * " ++ (astToJavascript ast.right indentation) ++ ")"
+
     else if ast.type == "MODULE" then
         (\imports \suffix ->
             (if (String.length imports) == 0 then
