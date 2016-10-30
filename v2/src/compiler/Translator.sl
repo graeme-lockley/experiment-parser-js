@@ -44,6 +44,12 @@ astToJavascript ast indentation =
         else
             "false"
 
+    else if ast.type == "CONSTANT_CHARACTER" then
+        '"' + (encodeString ast.value) + '"'
+
+    else if ast.type == "CONSTANT_INTEGER" then
+        ast.value
+
     else if ast.type == "DECLARATION" then
         if (Record.get "type" (Record.get "expression" ast)) == "LAMBDA" then
             (spaces indentation) ++ "function " ++ ast.name ++ "(" ++ (at 0 (Record.get "variables" (Record.get "expression" ast))) ++ ") {\n" ++
