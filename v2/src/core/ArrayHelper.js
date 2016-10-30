@@ -101,6 +101,11 @@ function at(i) {
 }
 
 
+function slice(startIndex) {
+    return endIndex => array => array.slice(startIndex, endIndex);
+}
+
+
 module.exports = {
     append,
     at,
@@ -111,5 +116,6 @@ module.exports = {
     findFirst,
     findMap,
     map,
-    prepend
+    prepend,
+    slice
 };

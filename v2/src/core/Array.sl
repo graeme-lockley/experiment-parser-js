@@ -55,6 +55,10 @@ filter f a =
     AH.filter f a;
 
 
+take n a =
+    AH.slice 0 n a;
+
+
 at =
     AH.at
 assumptions {
