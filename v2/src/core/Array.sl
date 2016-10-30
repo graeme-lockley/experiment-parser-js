@@ -35,6 +35,10 @@ assumptions {
 };
 
 
+join separator a =
+    a.join(separator);
+
+
 map f a =
     AH.map f a;
 
@@ -45,6 +49,10 @@ findMap =
 
 slice n a =
     a.slice(n);
+
+
+filter f a =
+    AH.filter f a;
 
 
 at =

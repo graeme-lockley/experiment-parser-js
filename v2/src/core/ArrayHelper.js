@@ -65,6 +65,19 @@ function map(f) {
 }
 
 
+function filter(f) {
+    return a => {
+        const result = [];
+        for (let index = 0; index < a.length; index += 1) {
+            if (f(a[index])) {
+                result.push(a[index]);
+            }
+        }
+        return result;
+    }
+}
+
+
 function findMap(f) {
     return a => {
         for (let i = 0; i < a.length; i += 1) {
@@ -92,6 +105,7 @@ module.exports = {
     append,
     at,
     empty,
+    filter,
     foldl,
     foldr,
     findFirst,
