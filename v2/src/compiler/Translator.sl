@@ -195,6 +195,9 @@ astToJavascript ast indentation =
     else if ast.type == "QUALIFIED_IDENTIFIER" then
         ast.module ++ "." ++ ast.identifier
 
+    else if ast.type == "STRING_CONCAT" then
+        "(" ++ (astToJavascript ast.left indentation) ++ " + " ++ (astToJavascript ast.right indentation) ++ ")"
+
     else
         Helper.astToJavascript ast indentation;
 
