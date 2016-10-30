@@ -198,6 +198,9 @@ astToJavascript ast indentation =
     else if ast.type == "STRING_CONCAT" then
         "(" ++ (astToJavascript ast.left indentation) ++ " + " ++ (astToJavascript ast.right indentation) ++ ")"
 
+    else if ast.type == "SUBTRACTION" then
+        "(" ++ (astToJavascript ast.left indentation) ++ " - " ++ (astToJavascript ast.right indentation) ++ ")"
+
     else
         Helper.astToJavascript ast indentation;
 
