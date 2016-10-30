@@ -27,6 +27,13 @@ assumptions {
 };
 
 
+startsWith prefix s =
+    Helper.startsWith prefix s
+assumptions {
+    startsWith "hello" "hello world";
+    !startsWith "hello" "Hello World"
+};
+
 
 toChar s =
     charAt 0 s;

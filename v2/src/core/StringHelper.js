@@ -37,6 +37,11 @@ function stringFromLiteral(s) {
 }
 
 
+function startsWith(prefix) {
+    return s => s.startsWith(prefix);
+}
+
+
 function foldl(f) {
     return z => s => {
         let result = z;
@@ -51,6 +56,7 @@ function foldl(f) {
 module.exports = {
     charAt,
     foldl,
+    startsWith,
     substring,
     characterFromLiteral,
     stringFromLiteral
