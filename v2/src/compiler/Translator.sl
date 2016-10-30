@@ -45,10 +45,13 @@ astToJavascript ast indentation =
             "false"
 
     else if ast.type == "CONSTANT_CHARACTER" then
-        '"' + (encodeString ast.value) + '"'
+        '"' ++ (encodeString ast.value) ++ '"'
 
     else if ast.type == "CONSTANT_INTEGER" then
         ast.value
+
+    else if ast.type == "CONSTANT_STRING" then
+        '"' ++ (encodeString ast.value) ++ '"'
 
     else if ast.type == "DECLARATION" then
         if (Record.get "type" (Record.get "expression" ast)) == "LAMBDA" then
