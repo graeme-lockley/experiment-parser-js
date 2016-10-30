@@ -96,37 +96,6 @@ function astToJavascript(ast) {
             return '(' + astToJavascript(ast.left)(indentation) + " < " + astToJavascript(ast.right)(indentation) + ')';
         } else if (ast.type == "LESS_THAN_EQUAL") {
             return '(' + astToJavascript(ast.left)(indentation) + " <= " + astToJavascript(ast.right)(indentation) + ')';
-        } else if (ast.type == "MODULE") {
-            const imports = ast.imports.map(i => astToJavascript(i)(indentation)).join('\n');
-
-            const suffix = ast.declarations.length == 0 && !Maybe.isJust(ast.optionalExpression()) ? '\nmodule.exports = {\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
-                ast.declarations.length > 0 && !Maybe.isJust(ast.optionalExpression) ? '\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + ',\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
-                    ast.declarations.length > 0 && Maybe.isJust(ast.optionalExpression) ? '\nmodule.exports = {\n' + ast.declarations.map(d => spaces(1) + d.name).join(',\n') + ',\n' + spaces(1) + '_$EXPR,\n' + spaces(1) + '_$ASSUMPTIONS\n};' :
-                    '\nmodule.exports = {\n' + spaces(1) + '_$EXPR,\n' + spaces(1) + '_$ASSUMPTIONS\n};';
-
-            return (imports.length == 0 ? '' : imports + '\n\n')
-                + ast.declarations.map(d => astToJavascript(d)(indentation)).join('\n\n')
-                + (Maybe.isJust(ast.optionalExpression) ? '\n\nconst _$EXPR = ' + astToJavascript(Maybe.withDefault()(ast.optionalExpression))(indentation) + ';' : '')
-                + '\n\nconst _$ASSUMPTIONS = [].concat(\n'
-                + ast.imports.map(i => '  ' + i.id.name + '._$ASSUMPTIONS || []').join(',\n') + ');\n\n'
-                + '_$ASSUMPTIONS.push({\n'
-                + '  source: \'' + simplifyPath(encodeString(ast.sourceName)) + '\',\n'
-                + '  declarations: [\n'
-                + ast.declarations.filter(d => d.assumptions.length > 0).map(d => '    {\n'
-                + '      name: \'' + d.name + '\',\n'
-                + '      predicates: [\n'
-                + d.assumptions.map(a =>
-                '        {\n'
-                + '          line: ' + a.line + ',\n'
-                + '          source: \'' + simplifyPath(encodeString(a.sourceName)) + '\',\n'
-                + '          text: \'' + encodeString(a.text) + '\',\n'
-                + '          predicate: () => ' + astToJavascript(a.expression)(6) + '\n'
-                + '        }').join(',\n') + '\n'
-                + '      ]\n'
-                + '    }').join(',\n') + '\n'
-                + '  ]\n'
-                + '});\n\n'
-                + suffix;
         } else if (ast.type == "MULTIPLICATION") {
             return '(' + astToJavascript(ast.left)(indentation) + " * " + astToJavascript(ast.right)(indentation) + ')';
         } else if (ast.type == "QUALIFIED_IDENTIFIER") {
