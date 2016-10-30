@@ -97,6 +97,11 @@ astToJavascript ast indentation =
     else if ast.type == "IDENTIFIER" then
         ast.name
 
+    else if ast.type == "IF" then
+        "(" ++ (astToJavascript ast.ifExpr indentation) ++ "\n" ++
+        (spaces (indentation + 1)) ++ "? " ++ (astToJavascript ast.thenExpr (indentation + 1)) ++ "\n" ++
+        (spaces (indentation + 1)) ++ ": " ++ (astToJavascript ast.elseExpr (indentation + 1)) ++ ")"
+
     else if (ast.type == "IMPORT") then
         (\fileName ->
             "const " ++ (Record.get "name" (Record.get "id" ast)) ++ " = require('" ++
