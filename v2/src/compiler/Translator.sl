@@ -17,7 +17,10 @@ encodeString =
 
 
 astToJavascript ast indentation =
-    if ast.type == "APPLY" then
+    if ast.type == "ADDITION" then
+         "(" ++ (astToJavascript ast.left indentation) ++ " + " ++ (astToJavascript ast.right indentation) ++ ")"
+
+    else if ast.type == "APPLY" then
         (astToJavascript (at 0 ast.expressions) indentation) ++
         Array.join "" (Array.map (\x -> "(" ++ (astToJavascript x indentation) ++ ")") (Array.slice 1 ast.expressions))
 
