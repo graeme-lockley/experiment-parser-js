@@ -1,5 +1,3 @@
-import file:./TranslatorHelper as Helper;
-
 import file:./AST as AST;
 import file:../core/Array as Array;
 import file:../core/Debug as DEBUG;
