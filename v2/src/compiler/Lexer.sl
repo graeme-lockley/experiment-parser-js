@@ -18,28 +18,42 @@ fromString input sourceName =
 
 
 next lexer =
-    if (lexer._id == TokenEnum.EOF) then
+    if (id lexer) == TokenEnum.EOF then
         lexer
     else
         (\newLexer ->
-            if (isEndOfFile (newLexer)) then
-                advanceLexer(lexer)(TokenEnum.EOF)("")
+            if isEndOfFile newLexer then
+                advanceLexer lexer TokenEnum.EOF ""
             else
                 Maybe.withDefault () (Array.findMap (\pattern ->
-                        Maybe.map(\text -> advanceLexer (newLexer) (Tuple.second (pattern)(text)) (text)) (RegularExpression.matchFromIndex (Tuple.first (pattern)) (newLexer.index) (content newLexer))
-                    ) (tokenPatterns))
-        ) (Maybe.withDefault (lexer) (Maybe.map(\whitespace -> advanceLexer (lexer) (TokenEnum.UNKNOWN) (whitespace)) (RegularExpression.matchFromIndex(whiteSpaceRegEx)(lexer.index) (content lexer))));
+                        Maybe.map (\text -> advanceLexer newLexer (Tuple.second pattern text) text) (RegularExpression.matchFromIndex (Tuple.first pattern) newLexer.index (content newLexer))
+                    ) tokenPatterns)
+        ) (Maybe.withDefault lexer (Maybe.map (\whitespace -> advanceLexer lexer TokenEnum.UNKNOWN whitespace) (RegularExpression.matchFromIndex whiteSpaceRegEx lexer.index (content lexer))));
 
 
 advanceLexer lexer id text =
     (\_x \_y \_indexXY ->
         (\cursor ->
-            newLexerRecord(lexer.input)(id)(_x)(_y)(cursor.index)(cursor.indexX)(cursor.indexY)(_indexXY)(text)
+            newLexerRecord lexer.input id _x _y cursor.index cursor.indexX cursor.indexY _indexXY text
         ) (String.foldl
-                            (\cursor \c -> if (c == 10) then Record.set3("indexX")(1)("indexY")(cursor.indexY + 1)("index")(cursor.index + 1)(cursor) else Record.set2("indexX")(cursor.indexX + 1)("index")(cursor.index + 1)(cursor))
-                            (Record.mk3("indexX")(_x)("indexY")(_y)("index")(_indexXY))
-                            (text))
-    ) (lexer.indexX) (lexer.indexY) (lexer.index);
+            (\cursor \c ->
+                if (c == 10) then
+                    Record.set3
+                        "indexX" 1
+                        "indexY" (cursor.indexY + 1)
+                        "index" (cursor.index + 1)
+                        cursor
+                else
+                    Record.set2
+                        "indexX" (cursor.indexX + 1)
+                        "index" (cursor.index + 1)
+                        cursor)
+            (Record.mk3
+                "indexX" _x
+                "indexY" _y
+                "index" _indexXY)
+            text)
+    ) lexer.indexX lexer.indexY lexer.index;
 
 
 newLexerRecord input id x y index indexX indexY indexXY text =
