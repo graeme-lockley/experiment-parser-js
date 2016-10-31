@@ -169,18 +169,10 @@ astToJavascript ast indentation =
                             Array.map
                                 (\a ->
                                     "        {\n" ++
-                                    "          line: " ++
-                                    a.line ++
-                                    ",\n" ++
-                                    "          source: \'" ++
-                                    simplifyPath(encodeString(a.sourceName)) ++
-                                    "\',\n" ++
-                                    "          text: \'" ++
-                                    encodeString(a.text) ++
-                                    "\',\n" ++
-                                    "          predicate: () => " ++
-                                    astToJavascript (a.expression)(6) ++
-                                    "\n" ++
+                                    "          line: " ++ a.line ++ ",\n" ++
+                                    "          source: \'" ++ simplifyPath (encodeString a.sourceName) ++ "\',\n" ++
+                                    "          text: \'" ++ encodeString a.text ++ "\',\n" ++
+                                    "          predicate: () => " ++ astToJavascript a.expression 6 ++ "\n" ++
                                     "        }")
                                 (Record.get "assumptions" d)) ++
                         "\n" ++
