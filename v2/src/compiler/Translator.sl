@@ -17,7 +17,7 @@ infixOperator operator =
 
 
 encodeString =
-    (String.replace "\n" "\\n") o (String.replace "\""  "\\\\\"");
+    (String.replace "\n" "\\n") o (String.replace "\"" "\\\\\"");
 
 
 astToJavascript ast indentation =
