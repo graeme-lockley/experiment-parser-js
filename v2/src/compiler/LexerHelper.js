@@ -1,9 +1,7 @@
 "use strict";
 
 const Maybe = require('../core/Maybe');
-const Record = require('../core/Record');
 const RegularExpression = require('../core/RegularExpression');
-const String = require('../core/String');
 const Tuple = require('../core/Tuple');
 
 
