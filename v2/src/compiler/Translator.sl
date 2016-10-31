@@ -8,8 +8,14 @@ import file:../core/Record as Record;
 import file:../core/String as String;
 
 
-infixOperators =
-    Helper.infixOperators;
+infixOperator operator =
+    (\jsOperator -> "(_$a => (_$b => (_$a " ++ jsOperator ++ " _$b)))")
+    (
+        if operator == "++" then
+            "+"
+        else
+            operator
+    );
 
 
 encodeString =
@@ -114,7 +120,7 @@ astToJavascript ast indentation =
         ) (String.substring 5 (String.length (Record.get "value" (Record.get "url" ast))) (Record.get "value" (Record.get "url" ast)))
 
     else if ast.type == "INFIX_OPERATOR" then
-        at ast.operator infixOperators
+         infixOperator ast.operator
 
     else if ast.type == "LAMBDA" then
         (\tmpResult -> String.substring 1 (String.length tmpResult - 1) tmpResult)
@@ -232,8 +238,13 @@ spaces count =
     blanks.repeat count;
 
 
-simplifyPath =
-    Helper.simplifyPath;
+simplifyPath path =
+    (\candidateResult ->
+        if (candidateResult == path) then
+            path
+        else
+            simplifyPath candidateResult
+    ) (String.replace "/./" "/" path);
 
 
 at i a =
