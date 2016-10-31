@@ -32,7 +32,7 @@ parseIMPORT =
         (P.symbol Tokens.CONSTANT_URL)
         (P.symbol Tokens.AS)
         (P.symbol Tokens.IDENTIFIER)
-            (P.symbol Tokens.SEMICOLON)));
+        (P.symbol Tokens.SEMICOLON)));
 
 
 markLocation parser lexer =
