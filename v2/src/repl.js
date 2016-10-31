@@ -6,7 +6,7 @@ const VM = require('vm');
 const Parser = require('./compiler/Parser');
 const Translator = require('./compiler/Translator');
 
-const Result = require('./core/Result.sl');
+const Result = require('./core/Result');
 
 
 function runInContext(js, context, fileName) {
