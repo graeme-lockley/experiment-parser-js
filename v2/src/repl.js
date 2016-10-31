@@ -89,7 +89,9 @@ function safeLangEval(input, context, filename, cb) {
             console.log('-----------');
         }
 
-        const jsText = Translator.astToJavascript(Result.withDefault()(parsedResponse))(0);
+        let jsText = Translator.astToJavascript(Result.withDefault()(parsedResponse))(0)
+            .replace("const _$EXPR", "global._$EXPR")
+            .replace("const _$ASSUMPTIONS", "global._$ASSUMPTIONS");
 
         if (state.showTranslatedSafeLang) {
             console.log('--- JavaScript ---');
