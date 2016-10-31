@@ -51,20 +51,23 @@ I am certain that as I work through this experiment more ideas will pop out to b
 
 The approach that I am going to take is to bootstrap this language using a JavaScript compiler using a minimal feature
 set and then, through subsequent versions, implement the entire language.
+
+In the table below v1 will be implemented in JavaScript while all of the subsequent version will be written using the
+pervious version of the language.
  
 | Category | Features                          | v1 | v2 | v3 | v4 | v5 | v6 | v7 | v8 | v9 |
 |----------|-----------------------------------|----|----|----|----|----|----|----|----|----|
 | Lexical  | Layout based                      |    |    |    |    |    |    |    |    | *  |
 | Syntax   | module/imports                    | *  |    |    |    |    |    |    |    |    |
 |          | if-then-else                      | *  |    |    |    |    |    |    |    |    |
-|          | let ... in                        |    | *  |    |    |    |    |    |    |    |
+|          | let ... in                        |    |    | *  |    |    |    |    |    |    |
 |          | ... where                         |    |    | *  |    |    |    |    |    |    |
 |          | ... assumption ...                | *  |    |    |    |    |    |    |    |    |
 |          | match                             |    |    |    |    |    | *  |    |    |    |
 |          | Pattern matching on definition    |    |    |    |    |    | *  |    |    |    |
 |          | Operator overloading              |    |    |    |    |    |    | *  |    |    |
 | Typing   | Int, String, Char, Boolean, Float | *  |    |    |    |    |    |    |    |    |
-|          | Long, Double                      |    |    | *  |    |    |    |    |    |    |
+|          | Long, Double                      |    |    |    | *  |    |    |    |    |    |
 |          | Lists                             | *  |    |    |    |    |    |    |    |    |
 |          | String as a list of Char          |    |    |    |    |    |    | *  |    |    |
 |          | Dictionary                        | *  |    |    |    |    |    |    |    |    |
