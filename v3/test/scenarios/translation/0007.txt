@@ -1,0 +1,5 @@
+-- given an invocation on an expression with a unit value
+delayCalculation = \_ -> 10;
+ten = delayCalculation ();
+-- run
+ten == 10

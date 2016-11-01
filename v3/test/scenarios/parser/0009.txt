@@ -1,0 +1,74 @@
+-- given an expression containing binary operators * and /
+add2 a b = a * b;
+sumLots a b c d = a * b / c * d;
+-- ast
+{
+  "type": "MODULE",
+  "sourceName": "stream",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "add2",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "MULTIPLICATION",
+          "left": {
+            "type": "IDENTIFIER",
+            "name": "a"
+          },
+          "right": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
+        }
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "sumLots",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b",
+          "c",
+          "d"
+        ],
+        "expression": {
+          "type": "MULTIPLICATION",
+          "left": {
+            "type": "DIVISION",
+            "left": {
+              "type": "MULTIPLICATION",
+              "left": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              },
+              "right": {
+                "type": "IDENTIFIER",
+                "name": "b"
+              }
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "c"
+            }
+          },
+          "right": {
+            "type": "IDENTIFIER",
+            "name": "d"
+          }
+        }
+      },
+      "assumptions": []
+    }
+  ],
+  "optionalExpression": {}
+}

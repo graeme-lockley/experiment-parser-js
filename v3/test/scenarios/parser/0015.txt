@@ -1,0 +1,70 @@
+-- given expressions with constants
+constantInt = 10;
+constantChar = 'w';
+constantEscapedChar = '\n';
+constantEscapedString = "Hello\n\"\\World";
+constantTrue = true;
+constantFalse = false;
+-- ast
+{
+  "type": "MODULE",
+  "sourceName": "stream",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "constantInt",
+      "expression": {
+        "type": "CONSTANT_INTEGER",
+        "value": 10
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "constantChar",
+      "expression": {
+        "type": "CONSTANT_CHARACTER",
+        "value": "w"
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "constantEscapedChar",
+      "expression": {
+        "type": "CONSTANT_CHARACTER",
+        "value": "\n"
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "constantEscapedString",
+      "expression": {
+        "type": "CONSTANT_STRING",
+        "value": "Hello\n\"\\World"
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "constantTrue",
+      "expression": {
+        "type": "CONSTANT_BOOLEAN",
+        "value": true
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "constantFalse",
+      "expression": {
+        "type": "CONSTANT_BOOLEAN",
+        "value": false
+      },
+      "assumptions": []
+    }
+  ],
+  "optionalExpression": {}
+}
