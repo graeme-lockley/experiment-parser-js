@@ -3,6 +3,7 @@ import file:../core/Array as Array;
 import file:../core/Debug as DEBUG;
 import file:../core/Maybe as Maybe;
 import file:../core/Record as Record;
+import file:../core/RegularExpression as RegularExpression;
 import file:../core/String as String;
 
 
@@ -16,8 +17,16 @@ infixOperator operator =
     );
 
 
+searchNewlinePattern =
+    Maybe.withDefault () (RegularExpression.compileWithOptions "\n" "g");
+
+
+searchEscapedQuote =
+    Maybe.withDefault () (RegularExpression.compileWithOptions "\"" "g");
+
+
 encodeString =
-    (String.replace "\n" "\\n") o (String.replace "\"" "\\\\\"");
+    (String.replace searchNewlinePattern "\\\\n") o (String.replace searchEscapedQuote "\\\\\"");
 
 
 astToJavascript ast indentation =
