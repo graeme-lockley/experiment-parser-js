@@ -45,10 +45,13 @@ const TokenEnum = {
     ELSE: 32,
     FALSE: 33,
     IF: 34,
-    IMPORT: 35,
-    O: 36,
-    THEN: 37,
-    TRUE: 38
+    IN: 35,
+    IMPORT: 36,
+    LET: 37,
+    O: 38,
+    THEN: 39,
+    TRUE: 40,
+    WHERE: 41
 };
 
 
@@ -58,10 +61,13 @@ const reservedIdentifiers = {
     'else': TokenEnum.ELSE,
     'false': TokenEnum.FALSE,
     'if': TokenEnum.IF,
+    'in': TokenEnum.IN,
     'import': TokenEnum.IMPORT,
+    'let': TokenEnum.LET,
     'o': TokenEnum.O,
     'then': TokenEnum.THEN,
-    'true': TokenEnum.TRUE
+    'true': TokenEnum.TRUE,
+    'where': TokenEnum.WHERE
 };
 
 
