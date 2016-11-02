@@ -78,43 +78,46 @@ parseDECLMap elements =
     ) (Maybe.withDefault Array.empty (at 3 elements));
 
 
-parseEXPR1 =
+parseEXPR1 lexer = parseEXPR2 lexer;
+
+
+parseEXPR2 =
     P.or (Array.mk3
         (
             (P.map (\e -> AST.ifte (at 1 e) (at 3 e) (at 5 e))) o
             (P.and (Array.mk6
                 (P.symbol Tokens.IF)
-                parseEXPR1
+                parseEXPR2
                 (P.symbol Tokens.THEN)
-                parseEXPR1
+                parseEXPR2
                 (P.symbol Tokens.ELSE)
-                parseEXPR1)))
+                parseEXPR2)))
         (
             (P.map (\e -> if (Array.length e) == 1 then (at 0 e) else (AST.apply e))) o
-            (P.many1 parseEXPR2))
+            (P.many1 parseEXPR3))
         (
             (P.map (\e -> (at 1 e))) o
             (P.and (Array.mk3
                 (P.symbol Tokens.LEFT_CURLY)
                 (
                     (P.map (\e -> AST.expressions e)) o
-                    (P.sepBy1 parseEXPR1 (P.symbol Tokens.SEMICOLON)))
+                    (P.sepBy1 parseEXPR2 (P.symbol Tokens.SEMICOLON)))
                 (P.symbol Tokens.RIGHT_CURLY)
             ))));
 
 
-parseEXPR2 =
-    (P.map (\e -> if (Array.length e) == 1 then (at 0 e) else (AST.booleanOr e))) o
-    (P.sepBy1 parseEXPR3 (P.symbol Tokens.BAR_BAR));
-
-
 parseEXPR3 =
-    (P.map (\e -> if (Array.length e) == 1 then (at 0 e) else (AST.booleanAnd e))) o
-    (P.sepBy1 parseEXPR4 (P.symbol Tokens.AMPERSAND_AMPERSAND));
+    (P.map (\e -> if (Array.length e) == 1 then (at 0 e) else (AST.booleanOr e))) o
+    (P.sepBy1 parseEXPR4 (P.symbol Tokens.BAR_BAR));
 
 
 parseEXPR4 =
-    P.chainl1 parseEXPR5 parseEqualOp;
+    (P.map (\e -> if (Array.length e) == 1 then (at 0 e) else (AST.booleanAnd e))) o
+    (P.sepBy1 parseEXPR5 (P.symbol Tokens.AMPERSAND_AMPERSAND));
+
+
+parseEXPR5 =
+    P.chainl1 parseEXPR6 parseEqualOp;
 
 
 parseEqualOp lexer =
@@ -123,8 +126,8 @@ parseEqualOp lexer =
         ((P.map (\_ -> AST.notEqual)) o (P.symbol Tokens.BANG_EQUAL))) lexer;
 
 
-parseEXPR5 lexer =
-    P.chainl1 parseEXPR6 parseComparisonOp lexer;
+parseEXPR6 lexer =
+    P.chainl1 parseEXPR7 parseComparisonOp lexer;
 
 
 parseComparisonOp lexer =
@@ -135,12 +138,12 @@ parseComparisonOp lexer =
         ((P.map (\_ -> AST.greaterThanEqual)) o (P.symbol Tokens.GREATER_EQUAL))) lexer;
 
 
-parseEXPR6 lexer =
-    P.chainl1 parseEXPR7 ((P.map (\_ -> AST.stringConcat)) o (P.symbol Tokens.PLUS_PLUS)) lexer;
+parseEXPR7 lexer =
+    P.chainl1 parseEXPR8 ((P.map (\_ -> AST.stringConcat)) o (P.symbol Tokens.PLUS_PLUS)) lexer;
 
 
-parseEXPR7 =
-    P.chainl1 parseEXPR8 parseAdditiveOp;
+parseEXPR8 =
+    P.chainl1 parseEXPR9 parseAdditiveOp;
 
 
 parseAdditiveOp lexer =
@@ -149,8 +152,8 @@ parseAdditiveOp lexer =
         ((P.map (\_ -> AST.subtraction)) o (P.symbol Tokens.MINUS))) lexer;
 
 
-parseEXPR8 lexer =
-    P.chainl1 parseEXPR9 parseMultiplicativeOp lexer;
+parseEXPR9 lexer =
+    P.chainl1 parseEXPR10 parseMultiplicativeOp lexer;
 
 
 parseMultiplicativeOp =
@@ -159,10 +162,10 @@ parseMultiplicativeOp =
         ((P.map (\_ -> AST.division)) o (P.symbol Tokens.SLASH)));
 
 
-parseEXPR9 =
+parseEXPR10 =
     P.or (Array.mk2
-        ((P.map (\e -> (at 0 e) (at 1 e))) o (P.and (Array.mk2 parseUnaryOp parseEXPR9)))
-        parseEXPR10);
+        ((P.map (\e -> (at 0 e) (at 1 e))) o (P.and (Array.mk2 parseUnaryOp parseEXPR10)))
+        parseEXPR11);
 
 
 parseUnaryOp =
@@ -172,16 +175,16 @@ parseUnaryOp =
         ((P.map (\_ -> AST.unaryNegate)) o (P.symbol Tokens.MINUS)));
 
 
-parseEXPR10 lexer =
-    P.chainl1 parseEXPR11 ((P.map (\_ -> AST.composition)) o (P.symbol Tokens.O)) lexer;
-
-
-parseEXPR11 =
-        (P.map (\e -> if (Array.length e) == 1 then at 0 e else AST.apply e)) o
-        (P.many1 parseEXPR12);
+parseEXPR11 lexer =
+    P.chainl1 parseEXPR12 ((P.map (\_ -> AST.composition)) o (P.symbol Tokens.O)) lexer;
 
 
 parseEXPR12 =
+        (P.map (\e -> if (Array.length e) == 1 then at 0 e else AST.apply e)) o
+        (P.many1 parseEXPR13);
+
+
+parseEXPR13 =
     P.or (Array.mk10
         parseConstantInteger
         parseConstantCharacter
