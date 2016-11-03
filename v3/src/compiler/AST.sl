@@ -201,6 +201,13 @@ qualifiedIdentifier m identifier =
         "identifier" identifier;
 
 
+scopedDeclarations declarations expression =
+    Record.mk3
+        "type" "SCOPE"
+        "declarations" declarations
+        "expression" expression;
+
+
 stringConcat left right =
     Record.mk3
         "type" "STRING_CONCAT"
