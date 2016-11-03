@@ -1,0 +1,141 @@
+-- given a definition with a number of let expressions
+fold op i xs =
+    let {
+        isListEmpty = List.isNil xs;
+        head = List.head xs;
+        tail = List.tail xs
+    } in
+        if isListEmpty then
+            List.Nil
+        else
+            fold op (op i head) tail;
+-- ast
+{
+  "type": "MODULE",
+  "sourceName": "stream",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "fold",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "op",
+          "i",
+          "xs"
+        ],
+        "expression": {
+          "type": "SCOPE",
+          "declarations": [
+            {
+              "type": "DECLARATION",
+              "name": "isListEmpty",
+              "expression": {
+                "type": "APPLY",
+                "expressions": [
+                  {
+                    "type": "QUALIFIED_IDENTIFIER",
+                    "module": "List",
+                    "identifier": "isNil"
+                  },
+                  {
+                    "type": "IDENTIFIER",
+                    "name": "xs"
+                  }
+                ]
+              },
+              "assumptions": []
+            },
+            {
+              "type": "DECLARATION",
+              "name": "head",
+              "expression": {
+                "type": "APPLY",
+                "expressions": [
+                  {
+                    "type": "QUALIFIED_IDENTIFIER",
+                    "module": "List",
+                    "identifier": "head"
+                  },
+                  {
+                    "type": "IDENTIFIER",
+                    "name": "xs"
+                  }
+                ]
+              },
+              "assumptions": []
+            },
+            {
+              "type": "DECLARATION",
+              "name": "tail",
+              "expression": {
+                "type": "APPLY",
+                "expressions": [
+                  {
+                    "type": "QUALIFIED_IDENTIFIER",
+                    "module": "List",
+                    "identifier": "tail"
+                  },
+                  {
+                    "type": "IDENTIFIER",
+                    "name": "xs"
+                  }
+                ]
+              },
+              "assumptions": []
+            }
+          ],
+          "expression": {
+            "type": "IF",
+            "ifExpr": {
+              "type": "IDENTIFIER",
+              "name": "isListEmpty"
+            },
+            "thenExpr": {
+              "type": "QUALIFIED_IDENTIFIER",
+              "module": "List",
+              "identifier": "Nil"
+            },
+            "elseExpr": {
+              "type": "APPLY",
+              "expressions": [
+                {
+                  "type": "IDENTIFIER",
+                  "name": "fold"
+                },
+                {
+                  "type": "IDENTIFIER",
+                  "name": "op"
+                },
+                {
+                  "type": "APPLY",
+                  "expressions": [
+                    {
+                      "type": "IDENTIFIER",
+                      "name": "op"
+                    },
+                    {
+                      "type": "IDENTIFIER",
+                      "name": "i"
+                    },
+                    {
+                      "type": "IDENTIFIER",
+                      "name": "head"
+                    }
+                  ]
+                },
+                {
+                  "type": "IDENTIFIER",
+                  "name": "tail"
+                }
+              ]
+            }
+          }
+        }
+      },
+      "assumptions": []
+    }
+  ],
+  "optionalExpression": {}
+}

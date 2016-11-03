@@ -20,7 +20,12 @@ parseMODULE lexer =
         (P.map (\e -> AST.moduleDeclaration (Lexer.sourceName lexer) (at 0 e) (at 1 e)(at 2 e))) o
         (P.and (Array.mk3
             (P.many parseIMPORT)
-            (P.many parseDECL)
+            (P.many (
+                (P.map (\es -> at 0 es)) o
+                (P.and (Array.mk2
+                    parseDECL
+                    (P.symbol Tokens.SEMICOLON))))
+            )
             (P.option parseEXPR1)))
     ) lexer;
 
@@ -44,7 +49,7 @@ markLocation parser lexer =
 parseDECL lexer =
     (
         (P.map parseDECLMap) o
-        (P.and (Array.mk5
+        (P.and (Array.mk4
             (P.many1 parseIdentifier)
             (P.symbol Tokens.EQUAL)
             parseEXPR1
@@ -54,8 +59,7 @@ parseDECL lexer =
                     (P.symbol Tokens.ASSUMPTIONS)
                     (P.symbol Tokens.LEFT_CURLY)
                     (P.sepBy1 (markLocation parseEXPR1) (P.symbol Tokens.SEMICOLON))
-                    (P.symbol Tokens.RIGHT_CURLY)))))
-            (P.symbol Tokens.SEMICOLON)))
+                    (P.symbol Tokens.RIGHT_CURLY)))))))
     ) lexer;
 
 
@@ -78,7 +82,32 @@ parseDECLMap elements =
     ) (Maybe.withDefault Array.empty (at 3 elements));
 
 
-parseEXPR1 lexer = parseEXPR2 lexer;
+parseEXPR1 lexer =
+    P.or (Array.mk2
+        (
+            (P.map (\e -> DEBUG.log "scopeDeclarations" (AST.scopedDeclarations (DEBUG.log "at 2 e" (at 2 e)) (DEBUG.log "at 5 e" (at 5 e))))) o
+            (P.and (Array.mk6
+                (P.symbol Tokens.LET)
+                (P.symbol Tokens.LEFT_CURLY)
+                (P.sepBy1 parseDECL (P.symbol Tokens.SEMICOLON))
+                (P.symbol Tokens.RIGHT_CURLY)
+                (P.symbol Tokens.IN)
+                parseEXPR1)))
+        (
+            (P.map (\e ->
+                if Maybe.isNothing (at 1 e) then
+                    at 0 e
+                else
+                    AST.scopedDeclarations (at 2 (Maybe.withDefault () (at 1 e))) (at 0 e))) o
+            (P.and (Array.mk2
+                parseEXPR2
+                (P.option
+                    (P.and (Array.mk4
+                        (P.symbol Tokens.WHERE)
+                        (P.symbol Tokens.LEFT_CURLY)
+                        (P.sepBy1 parseDECL (P.symbol Tokens.SEMICOLON))
+                        (P.symbol Tokens.RIGHT_CURLY)))))))
+    ) lexer;
 
 
 parseEXPR2 =
