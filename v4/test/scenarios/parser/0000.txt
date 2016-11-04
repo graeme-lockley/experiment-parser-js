@@ -1,0 +1,34 @@
+-- given multiple import statements
+import file:../src/core/Maybe as Maybe;
+import file:../src/core/Tuple as Tuple;
+-- ast
+{
+  "type": "MODULE",
+  "sourceName": "stream",
+  "imports": [
+    {
+      "type": "IMPORT",
+      "url": {
+        "type": "CONSTANT_URL",
+        "value": "file:../src/core/Maybe"
+      },
+      "id": {
+        "type": "IDENTIFIER",
+        "name": "Maybe"
+      }
+    },
+    {
+      "type": "IMPORT",
+      "url": {
+        "type": "CONSTANT_URL",
+        "value": "file:../src/core/Tuple"
+      },
+      "id": {
+        "type": "IDENTIFIER",
+        "name": "Tuple"
+      }
+    }
+  ],
+  "declarations": [],
+  "optionalExpression": {}
+}

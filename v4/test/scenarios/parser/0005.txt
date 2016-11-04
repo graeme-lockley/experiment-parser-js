@@ -1,0 +1,122 @@
+-- given expressions containing == and !=
+intEq a b = a == b;
+intNq a b = a != b;
+intEqBool a b c = a == b == c;
+intNqBool a b c = a != b != c;
+-- ast
+{
+  "type": "MODULE",
+  "sourceName": "stream",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "intEq",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "EQUAL",
+          "left": {
+            "type": "IDENTIFIER",
+            "name": "a"
+          },
+          "right": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
+        }
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "intNq",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b"
+        ],
+        "expression": {
+          "type": "NOT_EQUAL",
+          "left": {
+            "type": "IDENTIFIER",
+            "name": "a"
+          },
+          "right": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
+        }
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "intEqBool",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b",
+          "c"
+        ],
+        "expression": {
+          "type": "EQUAL",
+          "left": {
+            "type": "EQUAL",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          },
+          "right": {
+            "type": "IDENTIFIER",
+            "name": "c"
+          }
+        }
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "intNqBool",
+      "expression": {
+        "type": "LAMBDA",
+        "variables": [
+          "a",
+          "b",
+          "c"
+        ],
+        "expression": {
+          "type": "NOT_EQUAL",
+          "left": {
+            "type": "NOT_EQUAL",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          },
+          "right": {
+            "type": "IDENTIFIER",
+            "name": "c"
+          }
+        }
+      },
+      "assumptions": []
+    }
+  ],
+  "optionalExpression": {}
+}

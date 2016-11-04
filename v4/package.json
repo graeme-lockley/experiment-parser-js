@@ -1,0 +1,35 @@
+{
+  "name": "experiment-parser-js",
+  "version": "1.0.0",
+  "description": "A compiler for a lambda based language written in JavaScript written in the language",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+	"setup": "( cd ../v3 ; npm run setup ) ; npm install ; npm run all",
+    "test": "cd output && mocha --recursive",
+    "repl": "node output/src/repl.js",
+    "exec": "node output/src/exec.js",
+    "build": "export NODE_PATH=./node_modules:`npm root -g` && node ../v3/output/src/build.js --outputDir=./output/src --srcDir=./src . && node ../v3/output/src/build.js --outputDir=./output/test --srcDir=./test .",
+    "clean": "rm -rf output",
+    "all": "npm run clean && npm run build && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/graeme-lockley/experiment-parser-js.git"
+  },
+  "author": "Graeme Lockley <graemel@no9.co.za>",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/graeme-lockley/experiment-parser-js/issues"
+  },
+  "homepage": "https://github.com/graeme-lockley/experiment-parser-js#readme",
+  "dependencies": {
+    "vm2": "^3.1.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2"
+  }
+}

@@ -1,0 +1,8 @@
+-- given an expression containing unary operators
+unaryNot a = !a;
+unaryMinus a = -a;
+unaryPlus a = +a;
+-- run
+unaryNot true == false &&
+unaryMinus 10 == -10 &&
+unaryPlus (-10) == -10

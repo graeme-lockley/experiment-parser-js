@@ -1,0 +1,45 @@
+-- given an expression containing relational operators
+lessThan a b = a < b;
+lessThanEqual a b = a <= b;
+greaterThan a b = a > b;
+greaterThanEqual a b = a >= b;
+-- js
+function lessThan(a) {
+  return (b => (a < b));
+}
+
+function lessThanEqual(a) {
+  return (b => (a <= b));
+}
+
+function greaterThan(a) {
+  return (b => (a > b));
+}
+
+function greaterThanEqual(a) {
+  return (b => (a >= b));
+}
+
+const _$ASSUMPTIONS = [].concat(
+);
+
+_$ASSUMPTIONS.push({
+  source: 'stream',
+  declarations: [
+
+  ]
+});
+
+
+module.exports = {
+  lessThan,
+  lessThanEqual,
+  greaterThan,
+  greaterThanEqual,
+  _$ASSUMPTIONS
+};
+-- run
+lessThan 10 11 && !(lessThan 11 10) &&
+lessThanEqual 11 11 && !(lessThanEqual 12 11) &&
+greaterThan 11 10 && !(greaterThan 10 11) &&
+greaterThanEqual 11 11 && !(greaterThanEqual 11 12)

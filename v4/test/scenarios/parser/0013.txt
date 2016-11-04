@@ -1,0 +1,37 @@
+-- given expressions containing a unit value
+unitValue = ();
+callFunctionWithUnit = unitValue ();
+-- ast
+{
+  "type": "MODULE",
+  "sourceName": "stream",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "unitValue",
+      "expression": {
+        "type": "CONSTANT_UNIT"
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "callFunctionWithUnit",
+      "expression": {
+        "type": "APPLY",
+        "expressions": [
+          {
+            "type": "IDENTIFIER",
+            "name": "unitValue"
+          },
+          {
+            "type": "CONSTANT_UNIT"
+          }
+        ]
+      },
+      "assumptions": []
+    }
+  ],
+  "optionalExpression": {}
+}
