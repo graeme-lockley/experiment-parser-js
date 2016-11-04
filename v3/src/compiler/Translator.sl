@@ -80,10 +80,10 @@ astToJavascript ast indentation =
             (spaces indentation) ++ "function " ++ ast.name ++ "(" ++ (at 0 (Record.get "variables" (Record.get "expression" ast))) ++ ") {\n" ++
             (
                 if (Array.length (Record.get "variables" (Record.get "expression" ast))) == 1 then
-                    "  return " ++ (astToJavascript (Record.get "expression" (Record.get "expression" ast)) (indentation + 1)) ++ ";\n"
+                    (spaces indentation) ++ "  return " ++ (astToJavascript (Record.get "expression" (Record.get "expression" ast)) (indentation + 1)) ++ ";\n"
                 else
-                    "  return " ++ (astToJavascript (AST.lambda (Array.slice 1 (Record.get "variables" (Record.get "expression" ast))) (Record.get "expression" (Record.get "expression" ast))) (indentation + 1)) ++ ";\n"
-            ) ++ "}"
+                    (spaces indentation) ++ "  return " ++ (astToJavascript (AST.lambda (Array.slice 1 (Record.get "variables" (Record.get "expression" ast))) (Record.get "expression" (Record.get "expression" ast))) (indentation + 1)) ++ ";\n"
+            ) ++ (spaces indentation) ++ "}"
         else
             (spaces indentation) ++ "const " ++ ast.name ++ " = " ++ (astToJavascript (ast.expression) 0) ++ ";"
 
@@ -199,6 +199,12 @@ astToJavascript ast indentation =
 
     else if ast.type == "QUALIFIED_IDENTIFIER" then
         ast.module ++ "." ++ ast.identifier
+
+    else if ast.type == "SCOPE" then
+        "(() => {\n" ++
+        Array.join ("\n" ++ "\n") (Array.map  (\d -> astToJavascript d (indentation + 1)) (Record.get "declarations" ast)) ++
+        "\n\n" ++ (spaces (indentation + 1)) ++ "return " ++ (astToJavascript ast.expression (indentation + 2)) ++ ";\n" ++
+        (spaces indentation) ++ "})()"
 
     else if ast.type == "STRING_CONCAT" then
         "(" ++ (astToJavascript ast.left indentation) ++ " + " ++ (astToJavascript ast.right indentation) ++ ")"

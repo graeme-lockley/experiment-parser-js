@@ -1,0 +1,34 @@
+-- given a set of let expressions
+quad x =
+    let {
+        square n = n * n
+    } in
+        square (square x);
+-- js
+function quad(x) {
+  return (() => {
+    function square(n) {
+      return (n * n);
+    }
+
+    return square(square(x));
+  })();
+}
+
+const _$ASSUMPTIONS = [].concat(
+);
+
+_$ASSUMPTIONS.push({
+  source: 'stream',
+  declarations: [
+
+  ]
+});
+
+
+module.exports = {
+  quad,
+  _$ASSUMPTIONS
+};
+-- run
+quad(2) == 16
