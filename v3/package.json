@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-	"setup": "cd ../v2 ; npm install ; npm run all",
+	"setup": "( cd ../v2 ; npm run setup ) ; npm install ; npm run all",
     "test": "cd output && mocha --recursive",
     "repl": "node output/src/repl.js",
     "exec": "node output/src/exec.js",

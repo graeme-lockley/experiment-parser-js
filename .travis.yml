@@ -10,4 +10,4 @@ env:
   - BASE=v2
   - BASE=v3
 
-script: cd $BASE ; npm install ; npm run setup ; npm run build ; npm test
+script: cd $BASE ; npm run setup

@@ -10,7 +10,7 @@
     "test": "mocha --recursive",
     "repl": "node src/repl.js",
     "exec": "node src/exec.js",
-	"setup": "echo nothing to do",
+	"setup": "npm install ; npm test",
     "build": "echo done"
   },
   "repository": {
