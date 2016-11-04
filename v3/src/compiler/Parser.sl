@@ -85,7 +85,7 @@ parseDECLMap elements =
 parseEXPR1 lexer =
     P.or (Array.mk2
         (
-            (P.map (\e -> DEBUG.log "scopeDeclarations" (AST.scopedDeclarations (DEBUG.log "at 2 e" (at 2 e)) (DEBUG.log "at 5 e" (at 5 e))))) o
+            (P.map (\e -> AST.scopedDeclarations (at 2 e) (at 5 e))) o
             (P.and (Array.mk6
                 (P.symbol Tokens.LET)
                 (P.symbol Tokens.LEFT_CURLY)
