@@ -1,0 +1,32 @@
+-- given a set of let expressions
+quad =
+    square o square
+        where {
+            square n = n * n
+        };
+-- js
+const quad = (() => {
+  function square(n) {
+    return (n * n);
+  }
+
+  return (_$2 => square(square(_$2)));
+})();
+
+const _$ASSUMPTIONS = [].concat(
+);
+
+_$ASSUMPTIONS.push({
+  source: 'stream',
+  declarations: [
+
+  ]
+});
+
+
+module.exports = {
+  quad,
+  _$ASSUMPTIONS
+};
+-- run
+quad(2) == 16
