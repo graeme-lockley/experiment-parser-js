@@ -10,6 +10,5 @@ env:
   - BASE=v2
   - BASE=v3
   - BASE=v4
-  - BASE=v5
 
 script: cd $BASE ; npm run setup
