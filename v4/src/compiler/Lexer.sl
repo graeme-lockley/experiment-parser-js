@@ -10,15 +10,18 @@ import file:../core/Tuple as Tuple;
 
 
 fromString input sourceName =
-    (\lexerInput -> next (newLexerRecord lexerInput 0 1 1 0 1 1 0 ""))
-        (Record.mk3
-            "content" input
-            "length" (String.length input)
-            "sourceName" sourceName);
+    next lexerState
+        where {
+            lexerInput = Record.mk3
+                "content" input
+                "length" (String.length input)
+                "sourceName" sourceName;
+            lexerState = newLexerRecord lexerInput 0 1 1 0 1 1 0 ""
+        };
 
 
 next lexer =
-    if (id lexer) == TokenEnum.EOF then
+    if id lexer == TokenEnum.EOF then
         lexer
     else
         (\newLexer ->
@@ -32,28 +35,31 @@ next lexer =
 
 
 advanceLexer lexer id text =
-    (\_x \_y \_indexXY ->
-        (\cursor ->
-            newLexerRecord lexer.input id _x _y cursor.index cursor.indexX cursor.indexY _indexXY text
-        ) (String.foldl
-            (\cursor \c ->
-                if (c == 10) then
-                    Record.set3
-                        "indexX" 1
-                        "indexY" (cursor.indexY + 1)
-                        "index" (cursor.index + 1)
-                        cursor
-                else
-                    Record.set2
-                        "indexX" (cursor.indexX + 1)
-                        "index" (cursor.index + 1)
-                        cursor)
-            (Record.mk3
-                "indexX" _x
-                "indexY" _y
-                "index" _indexXY)
-            text)
-    ) lexer.indexX lexer.indexY lexer.index;
+    newLexerRecord lexer.input id _x _y cursor.index cursor.indexX cursor.indexY _indexXY text
+        where {
+            _x = lexer.indexX;
+            _y = lexer.indexY;
+            _indexXY = lexer.index;
+            cursor = String.foldl foldFunction foldInit text
+                         where {
+                            foldFunction cursor c =
+                                 if (c == 10) then
+                                     Record.set3
+                                         "indexX" 1
+                                         "indexY" (cursor.indexY + 1)
+                                         "index" (cursor.index + 1)
+                                         cursor
+                                 else
+                                     Record.set2
+                                         "indexX" (cursor.indexX + 1)
+                                         "index" (cursor.index + 1)
+                                         cursor;
+                             foldInit = Record.mk3
+                                 "indexX" _x
+                                 "indexY" _y
+                                 "index" _indexXY
+                         }
+        };
 
 
 newLexerRecord input id x y index indexX indexY indexXY text =
