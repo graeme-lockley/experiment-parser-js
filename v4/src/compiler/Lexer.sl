@@ -39,7 +39,7 @@ skipWhiteSpace lexer =
 
 
 findToken lexer =
-    Maybe.withDefault () (Array.findMap (\pattern -> matchRegularExpressionAndAdvanceLexer (Tuple.first pattern) (Tuple.second pattern) lexer ) tokenPatterns);
+    Maybe.withDefault () (Array.findMap (\pattern -> matchRegularExpressionAndAdvanceLexer (Tuple.first pattern) (Tuple.second pattern) lexer) tokenPatterns);
 
 
 matchRegularExpressionAndAdvanceLexer regex resolveToken lexer =
