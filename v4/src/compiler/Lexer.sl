@@ -24,14 +24,26 @@ next lexer =
     if id lexer == TokenEnum.EOF then
         lexer
     else
-        (\newLexer ->
-            if isEndOfFile newLexer then
-                advanceLexer lexer TokenEnum.EOF ""
-            else
-                Maybe.withDefault () (Array.findMap (\pattern ->
-                        Maybe.map (\text -> advanceLexer newLexer (Tuple.second pattern text) text) (RegularExpression.matchFromIndex (Tuple.first pattern) newLexer.index (content newLexer))
-                    ) tokenPatterns)
-        ) (Maybe.withDefault lexer (Maybe.map (\whitespace -> advanceLexer lexer TokenEnum.UNKNOWN whitespace) (RegularExpression.matchFromIndex whiteSpaceRegEx lexer.index (content lexer))));
+        nextToken (skipWhiteSpace lexer);
+
+
+nextToken lexer =
+    if isEndOfFile lexer then
+        advanceLexer lexer TokenEnum.EOF ""
+    else
+        findToken lexer;
+
+
+skipWhiteSpace lexer =
+    Maybe.withDefault lexer (matchRegularExpressionAndAdvanceLexer whiteSpaceRegEx (\_ -> TokenEnum.UNKNOWN) lexer);
+
+
+findToken lexer =
+    Maybe.withDefault () (Array.findMap (\pattern -> matchRegularExpressionAndAdvanceLexer (Tuple.first pattern) (Tuple.second pattern) lexer ) tokenPatterns);
+
+
+matchRegularExpressionAndAdvanceLexer regex resolveToken lexer =
+    Maybe.map (\text -> advanceLexer lexer (resolveToken text) text) (RegularExpression.matchFromIndex regex lexer.index (content lexer));
 
 
 advanceLexer lexer id text =
