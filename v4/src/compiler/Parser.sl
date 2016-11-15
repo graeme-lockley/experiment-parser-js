@@ -17,7 +17,7 @@ Tokens =
 
 parseMODULE lexer =
     (
-        (P.map (\e -> AST.moduleDeclaration (Lexer.sourceName lexer) (at 0 e) (at 1 e)(at 2 e))) o
+        (P.map (\e -> AST.moduleDeclaration (Lexer.sourceName lexer) (at 0 e) (at 1 e)(Maybe.withDefault AST.constantUnit (at 2 e)))) o
         (P.and (Array.mk3
             (P.many parseIMPORT)
             (P.many (

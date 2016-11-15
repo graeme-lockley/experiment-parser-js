@@ -72,5 +72,7 @@ funnyPlus a b c x = (a o b o c) x;
       "assumptions": []
     }
   ],
-  "optionalExpression": {}
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
 }

@@ -11,6 +11,8 @@ function add(a) {
 
 const ln = 3;
 
+const _$EXPR = undefined;
+
 const _$ASSUMPTIONS = [].concat(
 );
 
@@ -26,5 +28,6 @@ module.exports = {
   pi,
   add,
   ln,
+  _$EXPR,
   _$ASSUMPTIONS
 };

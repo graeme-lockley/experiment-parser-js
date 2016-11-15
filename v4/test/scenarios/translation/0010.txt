@@ -20,6 +20,8 @@ function greaterThanEqual(a) {
   return (b => (a >= b));
 }
 
+const _$EXPR = undefined;
+
 const _$ASSUMPTIONS = [].concat(
 );
 
@@ -36,6 +38,7 @@ module.exports = {
   lessThanEqual,
   greaterThan,
   greaterThanEqual,
+  _$EXPR,
   _$ASSUMPTIONS
 };
 -- run

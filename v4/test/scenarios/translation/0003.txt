@@ -141,7 +141,9 @@ length xs =
       "assumptions": []
     }
   ],
-  "optionalExpression": {}
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
 }
 -- js
 const List = require('./lib/List');
@@ -153,6 +155,8 @@ function length(xs) {
     ? 0
     : (1 + length(List.tail(xs))));
 }
+
+const _$EXPR = undefined;
 
 const _$ASSUMPTIONS = [].concat(
   List._$ASSUMPTIONS || []);
@@ -168,6 +172,7 @@ _$ASSUMPTIONS.push({
 module.exports = {
   myList,
   length,
+  _$EXPR,
   _$ASSUMPTIONS
 };
 -- run

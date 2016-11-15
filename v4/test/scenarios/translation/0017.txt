@@ -13,6 +13,8 @@ const quad = (() => {
   return (_$2 => square(square(_$2)));
 })();
 
+const _$EXPR = undefined;
+
 const _$ASSUMPTIONS = [].concat(
 );
 
@@ -26,6 +28,7 @@ _$ASSUMPTIONS.push({
 
 module.exports = {
   quad,
+  _$EXPR,
   _$ASSUMPTIONS
 };
 -- run

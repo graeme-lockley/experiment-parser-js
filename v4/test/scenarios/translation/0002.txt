@@ -11,6 +11,8 @@ function fib(n) {
     : (n + fib((n - 1))));
 }
 
+const _$EXPR = undefined;
+
 const _$ASSUMPTIONS = [].concat(
 );
 
@@ -24,6 +26,7 @@ _$ASSUMPTIONS.push({
 
 module.exports = {
   fib,
+  _$EXPR,
   _$ASSUMPTIONS
 };
 -- run

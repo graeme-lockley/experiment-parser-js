@@ -124,5 +124,7 @@ funnyMinus a b = -a + -b / - + b;
       "assumptions": []
     }
   ],
-  "optionalExpression": {}
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
 }

@@ -44,5 +44,7 @@ maxNumber = Integer.max 10 20;
       "assumptions": []
     }
   ],
-  "optionalExpression": {}
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
 }

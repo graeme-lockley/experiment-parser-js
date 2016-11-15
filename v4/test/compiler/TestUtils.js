@@ -9,6 +9,7 @@ const Types = require('../../src/compiler/Types');
 
 const Maybe = require('../../src/core/Maybe');
 const Result = require('../../src/core/Result');
+const Tuple = require('../../src/core/Tuple');
 
 const expect = require("chai").expect;
 
@@ -86,8 +87,8 @@ function scenariosIn(directory) {
                     expect(Result.isOk(typedAST)).to.equal(true);
                 });
                 it("should have the corresponding type", () => {
-                    const expression = Maybe.withDefault()(Result.withDefault()(typedAST).optionalExpression);
-                    expect(JSON.stringify(expression.inferred_type)).to.equal(expectations['type']);
+                    const tuple = Result.withDefault()(typedAST);
+                    expect(JSON.stringify(Tuple.second(tuple))).to.equal(expectations['type']);
                 });
             }
         })

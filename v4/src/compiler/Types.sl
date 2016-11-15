@@ -30,6 +30,9 @@ typeInteger = constantType "Integer";
 typeString = constantType "String";
 
 
+typeUnit = constantType "Unit";
+
+
 initSubstitution =
     Record.mk0 ();
 
@@ -54,30 +57,30 @@ nameOf names =
 
 infer state ast =
     if ast.type == "CONSTANT_BOOLEAN" then
-        Result.Ok (Tuple.Tuple state (Record.set1 "inferred_type" typeBoolean ast))
+        Result.Ok (Tuple.Tuple state typeBoolean)
 
     else if ast.type == "CONSTANT_CHARACTER" then
-        Result.Ok (Tuple.Tuple state (Record.set1 "inferred_type" typeCharacter ast))
+        Result.Ok (Tuple.Tuple state typeCharacter)
 
     else if ast.type == "CONSTANT_INTEGER" then
-        Result.Ok (Tuple.Tuple state (Record.set1 "inferred_type" typeInteger ast))
+        Result.Ok (Tuple.Tuple state typeInteger)
 
     else if ast.type == "CONSTANT_STRING" then
-        Result.Ok (Tuple.Tuple state (Record.set1 "inferred_type" typeString ast))
+        Result.Ok (Tuple.Tuple state typeString)
 
     else if ast.type == "DECLARATION" then
         if (Record.get "type" (Record.get "expression" ast)) == "LAMBDA" then
-            Result.Ok (Tuple.Tuple state ast)
+            Result.Ok (Tuple.Tuple state typeUnit)
         else
             let {
                 typedExpressionState = infer state ast.expression
             } in
-                Result.Ok (Tuple.Tuple state ast)
+                Result.Ok (Tuple.Tuple state typeUnit)
 
     else if ast.type == "MODULE" then
         let {
             startResult =
-                Result.Ok (Tuple.Tuple state ast);
+                Result.Ok (Tuple.Tuple state typeUnit);
 
             expressionFoldFunction currentResult declaration =
                 Result.andThen currentResult (\resultState -> infer (Tuple.first resultState) declaration);
@@ -85,18 +88,15 @@ infer state ast =
             typedDeclarations =
                 Array.foldl expressionFoldFunction startResult ast.declarations;
 
-            typedOptionalExpression =
-                if Maybe.isJust ast.optionalExpression then
-                    Result.map (\r -> Tuple.Tuple (Tuple.first r) (Maybe.Just (Tuple.second r))) (expressionFoldFunction typedDeclarations (Maybe.withDefault () ast.optionalExpression))
-                else
-                    Result.Ok (Maybe.Nothing)
+            typedExpression =
+                expressionFoldFunction typedDeclarations ast.expression
         } in
-            Result.map (\tuple -> Tuple.Tuple (Tuple.first tuple) (Record.set1 "optionalExpression" (Tuple.second tuple) ast)) typedOptionalExpression
+            typedExpression
 
     else
-        Result.Ok (Tuple.Tuple state ast);
+        Result.Ok (Tuple.Tuple state typeUnit);
 
 
 
 typeCheckAST ast =
-    Result.map (\r -> Tuple.second r) (infer (Tuple.Tuple initNames initSubstitution) ast);
+    infer (Tuple.Tuple initNames initSubstitution) ast;

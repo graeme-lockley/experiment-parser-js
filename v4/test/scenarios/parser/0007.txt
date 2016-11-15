@@ -76,5 +76,7 @@ concat4 a b c d = (concat2 a b) ++ c ++ d;
       "assumptions": []
     }
   ],
-  "optionalExpression": {}
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
 }

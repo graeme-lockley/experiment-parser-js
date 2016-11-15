@@ -30,5 +30,7 @@ import file:../src/core/Tuple as Tuple;
     }
   ],
   "declarations": [],
-  "optionalExpression": {}
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
 }

@@ -213,5 +213,7 @@ assumptions {
       ]
     }
   ],
-  "optionalExpression": {}
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
 }

@@ -18,6 +18,8 @@ function funnyIdentityPlusOne(a) {
       })());
 }
 
+const _$EXPR = undefined;
+
 const _$ASSUMPTIONS = [].concat(
 );
 
@@ -31,6 +33,7 @@ _$ASSUMPTIONS.push({
 
 module.exports = {
   funnyIdentityPlusOne,
+  _$EXPR,
   _$ASSUMPTIONS
 };
 -- run

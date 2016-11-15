@@ -10,6 +10,8 @@ function succ(n) {
   return (f => (x => f(n(f)(x))));
 }
 
+const _$EXPR = undefined;
+
 const _$ASSUMPTIONS = [].concat(
 );
 
@@ -24,5 +26,6 @@ _$ASSUMPTIONS.push({
 module.exports = {
   zero,
   succ,
+  _$EXPR,
   _$ASSUMPTIONS
 };

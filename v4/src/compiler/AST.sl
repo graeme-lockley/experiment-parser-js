@@ -171,13 +171,13 @@ lessThanEqual left right =
         "right" right;
 
 
-moduleDeclaration sourceName imports declarations optionalExpression =
+moduleDeclaration sourceName imports declarations expression =
     Record.mk5
         "type" "MODULE"
         "sourceName" sourceName
         "imports" imports
         "declarations" declarations
-        "optionalExpression" optionalExpression;
+        "expression" expression;
 
 
 multiplication left right =

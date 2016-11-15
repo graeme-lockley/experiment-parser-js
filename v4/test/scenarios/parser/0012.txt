@@ -396,5 +396,7 @@ prefixDivide a b = (/) a b;
       "assumptions": []
     }
   ],
-  "optionalExpression": {}
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
 }

@@ -70,5 +70,7 @@ sumLots a b c d = a * b / c * d;
       "assumptions": []
     }
   ],
-  "optionalExpression": {}
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
 }

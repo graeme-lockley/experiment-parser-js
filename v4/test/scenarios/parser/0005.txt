@@ -118,5 +118,7 @@ intNqBool a b c = a != b != c;
       "assumptions": []
     }
   ],
-  "optionalExpression": {}
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
 }

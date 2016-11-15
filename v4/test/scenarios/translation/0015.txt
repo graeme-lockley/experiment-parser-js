@@ -19,6 +19,8 @@ function fold(op) {
     : fold(op)(op(i)(List.head))(List.tail))));
 }
 
+const _$EXPR = undefined;
+
 const _$ASSUMPTIONS = [].concat(
   List._$ASSUMPTIONS || []);
 
@@ -48,5 +50,6 @@ _$ASSUMPTIONS.push({
 
 module.exports = {
   fold,
+  _$EXPR,
   _$ASSUMPTIONS
 };

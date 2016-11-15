@@ -149,10 +149,7 @@ astToJavascript ast indentation =
             else
                 imports ++ "\n" ++ "\n") ++
             Array.join ("\n" ++ "\n") (Array.map  (\d -> astToJavascript d indentation) (Record.get "declarations" ast)) ++
-            (   if Maybe.isJust (Record.get "optionalExpression" ast) then
-                    "\n" ++ "\nconst _$EXPR = " ++ (astToJavascript (Maybe.withDefault () (Record.get "optionalExpression" ast)) indentation) ++ ";"
-                else
-                    "") ++
+            "\n" ++ "\nconst _$EXPR = " ++ (astToJavascript (Record.get "expression" ast) indentation) ++ ";" ++
             "\n" ++ "\n" ++ "const _$ASSUMPTIONS = [].concat(\n" ++
             Array.join ",\n" (
                 Array.map (\i ->
@@ -226,11 +223,7 @@ moduleImports imports indentation =
 
 
 moduleSuffix declarations optionalExpression =
-        if (Array.length declarations) == 0 && !Maybe.isJust optionalExpression then
-            "\n" ++ "module.exports = {\n" ++ (spaces 1) ++ "_$ASSUMPTIONS\n};"
-        else if (Array.length declarations) > 0 && !Maybe.isJust optionalExpression then
-            "\n" ++ "module.exports = {\n" ++ (Array.join ",\n" (Array.map (\d -> (spaces 1) ++ (Record.get "name" d)) declarations)) ++ ",\n" ++ (spaces 1) ++ "_$ASSUMPTIONS\n};"
-        else if (Array.length declarations) > 0 && Maybe.isJust optionalExpression then
+        if (Array.length declarations) > 0 then
             "\n" ++ "module.exports = {\n" ++ (Array.join ",\n" (Array.map (\d -> (spaces 1) ++ (Record.get "name" d)) declarations)) ++ ",\n" ++ (spaces 1) ++ "_$EXPR,\n" ++ (spaces 1) ++ "_$ASSUMPTIONS\n};"
         else
             "\n" ++ "module.exports = {\n" ++ (spaces 1) ++ "_$EXPR,\n" ++ (spaces 1) ++ "_$ASSUMPTIONS\n};";
