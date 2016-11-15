@@ -1,0 +1,4 @@
+-- given a constant character expression
+'c'
+-- type
+{"type":"CONSTANT","name":"Character"}

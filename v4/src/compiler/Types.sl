@@ -19,6 +19,9 @@ variableType name =
 typeBoolean = constantType "Boolean";
 
 
+typeCharacter = constantType "Character";
+
+
 typeInteger = constantType "Integer";
 
 
@@ -34,6 +37,8 @@ extend typeEnvironment variable schema =
 typeCheckAST ast =
     if ast.type == "CONSTANT_BOOLEAN" then
         Result.Ok (Record.set1 "inferred_type" typeBoolean ast)
+    else if ast.type == "CONSTANT_CHARACTER" then
+        Result.Ok (Record.set1 "inferred_type" typeCharacter ast)
     else if ast.type == "CONSTANT_INTEGER" then
         Result.Ok (Record.set1 "inferred_type" typeInteger ast)
     else if ast.type == "CONSTANT_STRING" then
