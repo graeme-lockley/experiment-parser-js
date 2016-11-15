@@ -1,9 +1,9 @@
 -- given a definition with a number of where expressions
 fold op i xs =
-    if isListEmpty then
+    (if isListEmpty then
         List.Nil
     else
-        fold op (op i head) tail
+        fold op (op i head) tail)
     where {
         isListEmpty = List.isNil xs;
         head = List.head xs;
