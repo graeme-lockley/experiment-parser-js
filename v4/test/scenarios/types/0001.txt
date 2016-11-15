@@ -1,4 +1,4 @@
--- given a constant integer expression
+-- given a constant boolean expression
 true
 -- type
 {"type":"CONSTANT","name":"Boolean"}
