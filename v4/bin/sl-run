@@ -2,4 +2,4 @@
 
 MY_PATH="`dirname \"$0\"`"
 
-node $MY_PATH/../src/exec $*
+node $MY_PATH/../output/src/exec $*
