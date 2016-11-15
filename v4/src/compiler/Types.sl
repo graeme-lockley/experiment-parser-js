@@ -16,10 +16,13 @@ variableType name =
         "name" name;
 
 
+typeBoolean = constantType "Boolean";
+
+
 typeInteger = constantType "Integer";
 
 
-typeBoolean = constantType "Boolean";
+typeString = constantType "String";
 
 
 extend typeEnvironment variable schema =
@@ -33,6 +36,8 @@ typeCheckAST ast =
         Result.Ok (Record.set1 "inferred_type" typeBoolean ast)
     else if ast.type == "CONSTANT_INTEGER" then
         Result.Ok (Record.set1 "inferred_type" typeInteger ast)
+    else if ast.type == "CONSTANT_STRING" then
+        Result.Ok (Record.set1 "inferred_type" typeString ast)
     else if ast.type == "MODULE" then
         let {
             oe =
