@@ -1,0 +1,4 @@
+-- given a constant integer expression
+10
+-- type
+{"type":"CONSTANT","name":"Integer"}

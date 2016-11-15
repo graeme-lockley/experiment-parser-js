@@ -5,6 +5,9 @@ const {NodeVM} = require('vm2');
 
 const Parser = require('../../src/compiler/Parser');
 const Translator = require('../../src/compiler/Translator');
+const Types = require('../../src/compiler/Types');
+
+const Maybe = require('../../src/core/Maybe');
 const Result = require('../../src/core/Result');
 
 const expect = require("chai").expect;
@@ -69,6 +72,22 @@ function scenariosIn(directory) {
                     const result = vm.run(programme + '\n\n' + 'return ' + assertion + ';', process.cwd() + '/test/lib');
 
                     expect(result).to.equal(true);
+                });
+            }
+
+            if ('type' in expectations) {
+                if (!parseResponseIsTested) {
+                    it('should parse without any errors', () => {
+                        expect(Result.isOk(parseResponse)).to.equal(true);
+                    });
+                }
+                const typedAST = Types.typeCheckAST(Result.withDefault()(parseResponse));
+                it("should be type checked", () => {
+                    expect(Result.isOk(typedAST)).to.equal(true);
+                });
+                it("should have the corresponding type", () => {
+                    const expression = Maybe.withDefault()(Result.withDefault()(typedAST).optionalExpression);
+                    expect(JSON.stringify(expression.inferred_type)).to.equal(expectations['type']);
                 });
             }
         })
