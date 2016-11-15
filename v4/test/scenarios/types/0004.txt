@@ -1,0 +1,6 @@
+-- given a declaration with a constant integer expression
+x = 10;
+
+x
+-- type
+{"type":"CONSTANT","name":"Integer"}

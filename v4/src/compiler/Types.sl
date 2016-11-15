@@ -55,6 +55,20 @@ nameOf names =
     "a" + names;
 
 
+addBinding name type state =
+    Tuple.Tuple (Tuple.first state) (Record.set1 name type (Tuple.second state));
+
+
+findBinding name state =
+    let {
+        bindingValue = Record.get name (Tuple.second state)
+    } in
+        if bindingValue then
+            Maybe.Just bindingValue
+        else
+            Maybe.Nothing;
+
+
 infer state ast =
     if ast.type == "CONSTANT_BOOLEAN" then
         Result.Ok (Tuple.Tuple state typeBoolean)
@@ -73,9 +87,20 @@ infer state ast =
             Result.Ok (Tuple.Tuple state typeUnit)
         else
             let {
-                typedExpressionState = infer state ast.expression
+                typedExpressionState =
+                    infer state ast.expression;
+
+                resultState =
+                    Result.map (\r -> addBinding ast.name (Tuple.second r) (Tuple.first r)) typedExpressionState
             } in
-                Result.Ok (Tuple.Tuple state typeUnit)
+                Result.map (\r -> Tuple.Tuple r typeUnit) resultState
+
+    else if ast.type == "IDENTIFIER" then
+        let {
+            bindingType = findBinding ast.name state;
+            bindingResult = Maybe.map (\type -> Result.Ok (Tuple.Tuple state type)) bindingType
+        } in
+            Maybe.withDefault (Result.Error "Unknown identifier " ++ ast.name) bindingResult
 
     else if ast.type == "MODULE" then
         let {
