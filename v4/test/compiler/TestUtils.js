@@ -91,6 +91,22 @@ function scenariosIn(directory) {
                     expect(JSON.stringify(Tuple.second(tuple))).to.equal(expectations['type']);
                 });
             }
+
+            if ('typeError' in expectations) {
+                if (!parseResponseIsTested) {
+                    it('should parse without any errors', () => {
+                        expect(Result.isOk(parseResponse)).to.equal(true);
+                    });
+                }
+                const typedAST = Types.typeCheckAST(Result.withDefault()(parseResponse));
+                it("should fail when attempting to type check", () => {
+                    expect(Result.isOk(typedAST)).to.equal(false);
+                });
+                it("should have the expected error message", () => {
+                    const errorMessage = Result.errorWithDefault("unknown")(typedAST);
+                    expect(errorMessage).to.equal(expectations['typeError']);
+                });
+            }
         })
     );
 }

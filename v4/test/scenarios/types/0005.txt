@@ -1,0 +1,6 @@
+-- given a declaration with a reference to an unknown identifier
+x = 10;
+
+y
+-- typeError
+Unknown identifier y

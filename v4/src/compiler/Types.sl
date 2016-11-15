@@ -100,7 +100,7 @@ infer state ast =
             bindingType = findBinding ast.name state;
             bindingResult = Maybe.map (\type -> Result.Ok (Tuple.Tuple state type)) bindingType
         } in
-            Maybe.withDefault (Result.Error "Unknown identifier " ++ ast.name) bindingResult
+            Maybe.withDefault (Result.Error ("Unknown identifier " ++ ast.name)) bindingResult
 
     else if ast.type == "MODULE" then
         let {
