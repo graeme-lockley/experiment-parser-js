@@ -158,6 +158,21 @@ function mk9(k1) {
 }
 
 
+function union(a) {
+    return b => {
+        const result = clone(a);
+
+        for (const key in b) {
+            if (b.hasOwnProperty(key)) {
+                result[key] = b[key];
+            }
+        }
+
+        return result;
+    }
+}
+
+
 function clone(record) {
     var temp = record.constructor();
     for (var key in record) {
@@ -184,5 +199,6 @@ module.exports = {
     mk6,
     mk7,
     mk8,
-    mk9
+    mk9,
+    union
 };

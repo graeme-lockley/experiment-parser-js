@@ -59,3 +59,7 @@ mk8 =
 
 mk9 =
     Helper.mk9;
+
+
+union a b =
+    Helper.union a b;
