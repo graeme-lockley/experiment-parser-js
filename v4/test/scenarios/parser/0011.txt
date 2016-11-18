@@ -43,30 +43,28 @@ funnyPlus a b c x = (a o b o c) x;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "COMPOSITION",
+            "left": {
               "type": "COMPOSITION",
               "left": {
-                "type": "COMPOSITION",
-                "left": {
-                  "type": "IDENTIFIER",
-                  "name": "a"
-                },
-                "right": {
-                  "type": "IDENTIFIER",
-                  "name": "b"
-                }
+                "type": "IDENTIFIER",
+                "name": "a"
               },
               "right": {
                 "type": "IDENTIFIER",
-                "name": "c"
+                "name": "b"
               }
             },
-            {
+            "right": {
               "type": "IDENTIFIER",
-              "name": "x"
+              "name": "c"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "x"
+          }
         }
       },
       "assumptions": []

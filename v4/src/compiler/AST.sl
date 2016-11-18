@@ -8,10 +8,11 @@ addition left right =
         "right" right;
 
 
-apply expressions =
-    Record.mk2
+apply operation operand =
+    Record.mk3
         "type" "APPLY"
-        "expressions" expressions;
+        "operation" operation
+        "operand" operand;
 
 
 assumption sourceName line text expression =

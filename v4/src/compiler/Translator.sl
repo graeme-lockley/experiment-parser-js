@@ -34,8 +34,7 @@ astToJavascript ast indentation =
          "(" ++ (astToJavascript ast.left indentation) ++ " + " ++ (astToJavascript ast.right indentation) ++ ")"
 
     else if ast.type == "APPLY" then
-        (astToJavascript (at 0 ast.expressions) indentation) ++
-        Array.join "" (Array.map (\x -> "(" ++ (astToJavascript x indentation) ++ ")") (Array.slice 1 ast.expressions))
+        (astToJavascript ast.operation indentation) ++ "(" ++ (astToJavascript ast.operand indentation) ++ ")"
 
     else if ast.type == "BOOLEAN_AND" then
         "(" ++ (Array.join " && " (Array.map (\e -> astToJavascript e indentation) ast.expressions)) ++ ")"

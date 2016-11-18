@@ -42,17 +42,15 @@ assumptions {
           "type": "IF",
           "ifExpr": {
             "type": "APPLY",
-            "expressions": [
-              {
-                "type": "QUALIFIED_IDENTIFIER",
-                "module": "List",
-                "identifier": "isNil"
-              },
-              {
-                "type": "IDENTIFIER",
-                "name": "xs"
-              }
-            ]
+            "operation": {
+              "type": "QUALIFIED_IDENTIFIER",
+              "module": "List",
+              "identifier": "isNil"
+            },
+            "operand": {
+              "type": "IDENTIFIER",
+              "name": "xs"
+            }
           },
           "thenExpr": {
             "type": "QUALIFIED_IDENTIFIER",
@@ -61,39 +59,44 @@ assumptions {
           },
           "elseExpr": {
             "type": "APPLY",
-            "expressions": [
-              {
-                "type": "IDENTIFIER",
-                "name": "fold"
-              },
-              {
-                "type": "IDENTIFIER",
-                "name": "op"
-              },
-              {
+            "operation": {
+              "type": "APPLY",
+              "operation": {
                 "type": "APPLY",
-                "expressions": [
-                  {
+                "operation": {
+                  "type": "IDENTIFIER",
+                  "name": "fold"
+                },
+                "operand": {
+                  "type": "IDENTIFIER",
+                  "name": "op"
+                }
+              },
+              "operand": {
+                "type": "APPLY",
+                "operation": {
+                  "type": "APPLY",
+                  "operation": {
                     "type": "IDENTIFIER",
                     "name": "op"
                   },
-                  {
+                  "operand": {
                     "type": "IDENTIFIER",
                     "name": "i"
-                  },
-                  {
-                    "type": "QUALIFIED_IDENTIFIER",
-                    "module": "List",
-                    "identifier": "head"
                   }
-                ]
-              },
-              {
-                "type": "QUALIFIED_IDENTIFIER",
-                "module": "List",
-                "identifier": "tail"
+                },
+                "operand": {
+                  "type": "QUALIFIED_IDENTIFIER",
+                  "module": "List",
+                  "identifier": "head"
+                }
               }
-            ]
+            },
+            "operand": {
+              "type": "QUALIFIED_IDENTIFIER",
+              "module": "List",
+              "identifier": "tail"
+            }
           }
         }
       },
@@ -107,25 +110,29 @@ assumptions {
             "type": "EQUAL",
             "left": {
               "type": "APPLY",
-              "expressions": [
-                {
-                  "type": "IDENTIFIER",
-                  "name": "fold"
+              "operation": {
+                "type": "APPLY",
+                "operation": {
+                  "type": "APPLY",
+                  "operation": {
+                    "type": "IDENTIFIER",
+                    "name": "fold"
+                  },
+                  "operand": {
+                    "type": "INFIX_OPERATOR",
+                    "operator": "+"
+                  }
                 },
-                {
-                  "type": "INFIX_OPERATOR",
-                  "operator": "+"
-                },
-                {
+                "operand": {
                   "type": "CONSTANT_INTEGER",
                   "value": 0
-                },
-                {
-                  "type": "QUALIFIED_IDENTIFIER",
-                  "module": "List",
-                  "identifier": "Nil"
                 }
-              ]
+              },
+              "operand": {
+                "type": "QUALIFIED_IDENTIFIER",
+                "module": "List",
+                "identifier": "Nil"
+              }
             },
             "right": {
               "type": "CONSTANT_INTEGER",
@@ -142,67 +149,74 @@ assumptions {
             "type": "EQUAL",
             "left": {
               "type": "APPLY",
-              "expressions": [
-                {
-                  "type": "IDENTIFIER",
-                  "name": "fold"
+              "operation": {
+                "type": "APPLY",
+                "operation": {
+                  "type": "APPLY",
+                  "operation": {
+                    "type": "IDENTIFIER",
+                    "name": "fold"
+                  },
+                  "operand": {
+                    "type": "INFIX_OPERATOR",
+                    "operator": "+"
+                  }
                 },
-                {
-                  "type": "INFIX_OPERATOR",
-                  "operator": "+"
-                },
-                {
+                "operand": {
                   "type": "CONSTANT_INTEGER",
                   "value": 1
-                },
-                {
+                }
+              },
+              "operand": {
+                "type": "APPLY",
+                "operation": {
                   "type": "APPLY",
-                  "expressions": [
-                    {
+                  "operation": {
+                    "type": "QUALIFIED_IDENTIFIER",
+                    "module": "List",
+                    "identifier": "Cons"
+                  },
+                  "operand": {
+                    "type": "CONSTANT_INTEGER",
+                    "value": 1
+                  }
+                },
+                "operand": {
+                  "type": "APPLY",
+                  "operation": {
+                    "type": "APPLY",
+                    "operation": {
                       "type": "QUALIFIED_IDENTIFIER",
                       "module": "List",
                       "identifier": "Cons"
                     },
-                    {
+                    "operand": {
                       "type": "CONSTANT_INTEGER",
-                      "value": 1
-                    },
-                    {
-                      "type": "APPLY",
-                      "expressions": [
-                        {
-                          "type": "QUALIFIED_IDENTIFIER",
-                          "module": "List",
-                          "identifier": "Cons"
-                        },
-                        {
-                          "type": "CONSTANT_INTEGER",
-                          "value": 2
-                        },
-                        {
-                          "type": "APPLY",
-                          "expressions": [
-                            {
-                              "type": "QUALIFIED_IDENTIFIER",
-                              "module": "List",
-                              "identifier": "Cons"
-                            },
-                            {
-                              "type": "CONSTANT_INTEGER",
-                              "value": 3
-                            },
-                            {
-                              "type": "QUALIFIED_IDENTIFIER",
-                              "module": "List",
-                              "identifier": "Nil"
-                            }
-                          ]
-                        }
-                      ]
+                      "value": 2
                     }
-                  ]
+                  },
+                  "operand": {
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "APPLY",
+                      "operation": {
+                        "type": "QUALIFIED_IDENTIFIER",
+                        "module": "List",
+                        "identifier": "Cons"
+                      },
+                      "operand": {
+                        "type": "CONSTANT_INTEGER",
+                        "value": 3
+                      }
+                    },
+                    "operand": {
+                      "type": "QUALIFIED_IDENTIFIER",
+                      "module": "List",
+                      "identifier": "Nil"
+                    }
+                  }
                 }
-              ]
+              }
             },
             "right": {
               "type": "CONSTANT_INTEGER",

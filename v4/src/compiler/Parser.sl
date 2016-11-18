@@ -209,7 +209,7 @@ parseEXPR11 lexer =
 
 
 parseEXPR12 =
-        (P.map (\e -> if (Array.length e) == 1 then at 0 e else AST.apply e)) o
+        (P.map (\e -> Array.foldl (\acc \item -> AST.apply acc item) (Maybe.withDefault () (Array.at 0 e)) (Array.slice 1 e))) o
         (P.many1 parseEXPR13);
 
 

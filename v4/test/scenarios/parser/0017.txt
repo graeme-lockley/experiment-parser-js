@@ -33,17 +33,15 @@ fold op i xs =
               "name": "isListEmpty",
               "expression": {
                 "type": "APPLY",
-                "expressions": [
-                  {
-                    "type": "QUALIFIED_IDENTIFIER",
-                    "module": "List",
-                    "identifier": "isNil"
-                  },
-                  {
-                    "type": "IDENTIFIER",
-                    "name": "xs"
-                  }
-                ]
+                "operation": {
+                  "type": "QUALIFIED_IDENTIFIER",
+                  "module": "List",
+                  "identifier": "isNil"
+                },
+                "operand": {
+                  "type": "IDENTIFIER",
+                  "name": "xs"
+                }
               },
               "assumptions": []
             },
@@ -52,17 +50,15 @@ fold op i xs =
               "name": "head",
               "expression": {
                 "type": "APPLY",
-                "expressions": [
-                  {
-                    "type": "QUALIFIED_IDENTIFIER",
-                    "module": "List",
-                    "identifier": "head"
-                  },
-                  {
-                    "type": "IDENTIFIER",
-                    "name": "xs"
-                  }
-                ]
+                "operation": {
+                  "type": "QUALIFIED_IDENTIFIER",
+                  "module": "List",
+                  "identifier": "head"
+                },
+                "operand": {
+                  "type": "IDENTIFIER",
+                  "name": "xs"
+                }
               },
               "assumptions": []
             },
@@ -71,17 +67,15 @@ fold op i xs =
               "name": "tail",
               "expression": {
                 "type": "APPLY",
-                "expressions": [
-                  {
-                    "type": "QUALIFIED_IDENTIFIER",
-                    "module": "List",
-                    "identifier": "tail"
-                  },
-                  {
-                    "type": "IDENTIFIER",
-                    "name": "xs"
-                  }
-                ]
+                "operation": {
+                  "type": "QUALIFIED_IDENTIFIER",
+                  "module": "List",
+                  "identifier": "tail"
+                },
+                "operand": {
+                  "type": "IDENTIFIER",
+                  "name": "xs"
+                }
               },
               "assumptions": []
             }
@@ -99,37 +93,42 @@ fold op i xs =
             },
             "elseExpr": {
               "type": "APPLY",
-              "expressions": [
-                {
-                  "type": "IDENTIFIER",
-                  "name": "fold"
-                },
-                {
-                  "type": "IDENTIFIER",
-                  "name": "op"
-                },
-                {
+              "operation": {
+                "type": "APPLY",
+                "operation": {
                   "type": "APPLY",
-                  "expressions": [
-                    {
+                  "operation": {
+                    "type": "IDENTIFIER",
+                    "name": "fold"
+                  },
+                  "operand": {
+                    "type": "IDENTIFIER",
+                    "name": "op"
+                  }
+                },
+                "operand": {
+                  "type": "APPLY",
+                  "operation": {
+                    "type": "APPLY",
+                    "operation": {
                       "type": "IDENTIFIER",
                       "name": "op"
                     },
-                    {
+                    "operand": {
                       "type": "IDENTIFIER",
                       "name": "i"
-                    },
-                    {
-                      "type": "IDENTIFIER",
-                      "name": "head"
                     }
-                  ]
-                },
-                {
-                  "type": "IDENTIFIER",
-                  "name": "tail"
+                  },
+                  "operand": {
+                    "type": "IDENTIFIER",
+                    "name": "head"
+                  }
                 }
-              ]
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "tail"
+              }
             }
           }
         }

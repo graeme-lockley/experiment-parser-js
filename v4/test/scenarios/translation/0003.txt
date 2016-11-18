@@ -31,50 +31,53 @@ length xs =
       "name": "myList",
       "expression": {
         "type": "APPLY",
-        "expressions": [
-          {
+        "operation": {
+          "type": "APPLY",
+          "operation": {
             "type": "QUALIFIED_IDENTIFIER",
             "module": "List",
             "identifier": "Cons"
           },
-          {
+          "operand": {
             "type": "CONSTANT_INTEGER",
             "value": 1
-          },
-          {
+          }
+        },
+        "operand": {
+          "type": "APPLY",
+          "operation": {
             "type": "APPLY",
-            "expressions": [
-              {
+            "operation": {
+              "type": "QUALIFIED_IDENTIFIER",
+              "module": "List",
+              "identifier": "Cons"
+            },
+            "operand": {
+              "type": "CONSTANT_INTEGER",
+              "value": 2
+            }
+          },
+          "operand": {
+            "type": "APPLY",
+            "operation": {
+              "type": "APPLY",
+              "operation": {
                 "type": "QUALIFIED_IDENTIFIER",
                 "module": "List",
                 "identifier": "Cons"
               },
-              {
+              "operand": {
                 "type": "CONSTANT_INTEGER",
-                "value": 2
-              },
-              {
-                "type": "APPLY",
-                "expressions": [
-                  {
-                    "type": "QUALIFIED_IDENTIFIER",
-                    "module": "List",
-                    "identifier": "Cons"
-                  },
-                  {
-                    "type": "CONSTANT_INTEGER",
-                    "value": 3
-                  },
-                  {
-                    "type": "QUALIFIED_IDENTIFIER",
-                    "module": "List",
-                    "identifier": "Nil"
-                  }
-                ]
+                "value": 3
               }
-            ]
+            },
+            "operand": {
+              "type": "QUALIFIED_IDENTIFIER",
+              "module": "List",
+              "identifier": "Nil"
+            }
           }
-        ]
+        }
       },
       "assumptions": []
     },
@@ -90,17 +93,15 @@ length xs =
           "type": "IF",
           "ifExpr": {
             "type": "APPLY",
-            "expressions": [
-              {
-                "type": "QUALIFIED_IDENTIFIER",
-                "module": "List",
-                "identifier": "isNil"
-              },
-              {
-                "type": "IDENTIFIER",
-                "name": "xs"
-              }
-            ]
+            "operation": {
+              "type": "QUALIFIED_IDENTIFIER",
+              "module": "List",
+              "identifier": "isNil"
+            },
+            "operand": {
+              "type": "IDENTIFIER",
+              "name": "xs"
+            }
           },
           "thenExpr": {
             "type": "CONSTANT_INTEGER",
@@ -114,26 +115,22 @@ length xs =
             },
             "right": {
               "type": "APPLY",
-              "expressions": [
-                {
-                  "type": "IDENTIFIER",
-                  "name": "length"
+              "operation": {
+                "type": "IDENTIFIER",
+                "name": "length"
+              },
+              "operand": {
+                "type": "APPLY",
+                "operation": {
+                  "type": "QUALIFIED_IDENTIFIER",
+                  "module": "List",
+                  "identifier": "tail"
                 },
-                {
-                  "type": "APPLY",
-                  "expressions": [
-                    {
-                      "type": "QUALIFIED_IDENTIFIER",
-                      "module": "List",
-                      "identifier": "tail"
-                    },
-                    {
-                      "type": "IDENTIFIER",
-                      "name": "xs"
-                    }
-                  ]
+                "operand": {
+                  "type": "IDENTIFIER",
+                  "name": "xs"
                 }
-              ]
+              }
             }
           }
         }

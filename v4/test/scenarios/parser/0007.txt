@@ -47,20 +47,21 @@ concat4 a b c d = (concat2 a b) ++ c ++ d;
             "type": "STRING_CONCAT",
             "left": {
               "type": "APPLY",
-              "expressions": [
-                {
+              "operation": {
+                "type": "APPLY",
+                "operation": {
                   "type": "IDENTIFIER",
                   "name": "concat2"
                 },
-                {
+                "operand": {
                   "type": "IDENTIFIER",
                   "name": "a"
-                },
-                {
-                  "type": "IDENTIFIER",
-                  "name": "b"
                 }
-              ]
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "b"
+              }
             },
             "right": {
               "type": "IDENTIFIER",

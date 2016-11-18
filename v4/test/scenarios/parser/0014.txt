@@ -25,21 +25,22 @@ maxNumber = Integer.max 10 20;
       "name": "maxNumber",
       "expression": {
         "type": "APPLY",
-        "expressions": [
-          {
+        "operation": {
+          "type": "APPLY",
+          "operation": {
             "type": "QUALIFIED_IDENTIFIER",
             "module": "Integer",
             "identifier": "max"
           },
-          {
+          "operand": {
             "type": "CONSTANT_INTEGER",
             "value": 10
-          },
-          {
-            "type": "CONSTANT_INTEGER",
-            "value": 20
           }
-        ]
+        },
+        "operand": {
+          "type": "CONSTANT_INTEGER",
+          "value": 20
+        }
       },
       "assumptions": []
     }

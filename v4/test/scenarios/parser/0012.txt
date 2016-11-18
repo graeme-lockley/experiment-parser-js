@@ -29,20 +29,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": "||"
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -58,20 +59,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": "&&"
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -87,20 +89,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": "=="
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -116,20 +119,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": "!="
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -145,20 +149,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": "<"
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -174,20 +179,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": "<="
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -203,20 +209,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": ">"
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -232,20 +239,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": ">="
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -261,20 +269,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": "++"
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -290,20 +299,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": "+"
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -319,20 +329,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": "-"
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -348,20 +359,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": "*"
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
@@ -377,20 +389,21 @@ prefixDivide a b = (/) a b;
         ],
         "expression": {
           "type": "APPLY",
-          "expressions": [
-            {
+          "operation": {
+            "type": "APPLY",
+            "operation": {
               "type": "INFIX_OPERATOR",
               "operator": "/"
             },
-            {
+            "operand": {
               "type": "IDENTIFIER",
               "name": "a"
-            },
-            {
-              "type": "IDENTIFIER",
-              "name": "b"
             }
-          ]
+          },
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "b"
+          }
         }
       },
       "assumptions": []
