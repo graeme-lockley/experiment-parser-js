@@ -185,7 +185,7 @@ infer state ast =
     else if ast.type == "IDENTIFIER" then
         let {
             bindingType = findBinding ast.name state;
-            bindingResult = Maybe.map (\type -> Result.Ok (Tuple.Tuple state type)) bindingType
+            bindingResult = Maybe.map (\type -> mkInferResult state type) bindingType
         } in
             Maybe.withDefault (Result.Error ("Unknown identifier " ++ ast.name)) bindingResult
 
