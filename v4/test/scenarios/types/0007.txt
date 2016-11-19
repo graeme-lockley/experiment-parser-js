@@ -1,0 +1,6 @@
+-- given a function and apply an argument to it
+test a = a + 1;
+
+test 10
+-- type
+{"type":"CONSTANT","name":"Integer"}

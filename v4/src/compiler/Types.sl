@@ -69,6 +69,10 @@ mergeContext state context =
     Tuple.Tuple (Tuple.first state) (Record.union (Tuple.second state) context);
 
 
+mergeState stateA stateB =
+    Tuple.Tuple (Tuple.first stateB) (Record.union (Tuple.second stateA) (Tuple.second stateB));
+
+
 findBinding name state =
     let {
         bindingValue = Record.get name (Tuple.second state)
@@ -118,6 +122,26 @@ infer state ast =
             )
         )
 
+    else if ast.type == "APPLY" then
+        let {
+            typeVariable =
+                newTypeVariable state;
+
+            typeVariableName =
+                Tuple.first typeVariable;
+
+            typeVariableState =
+                Tuple.second typeVariable
+        } in
+            Result.andThen (infer state ast.operation) (\operation ->
+                Result.andThen (infer (mergeContext state (contextFromInferResult operation)) ast.operand) (\operand ->
+                    Result.andThen (unify (resolveBinding (typeFromInferResult operation) (contextFromInferResult operand)) (functionType (typeFromInferResult operand) typeVariableName)) (\unifyResult ->
+                        mkInferResult
+                            (mergeContext (mergeState (stateFromInferResult operation) (stateFromInferResult operand)) unifyResult)
+                            (resolveBinding typeVariableName unifyResult)
+                    )
+                )
+            )
     else if ast.type == "CONSTANT_BOOLEAN" then
         mkInferResult state typeBoolean
 
