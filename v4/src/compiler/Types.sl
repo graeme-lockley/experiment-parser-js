@@ -43,12 +43,6 @@ initSubstitution =
     Record.mk0 ();
 
 
-extend typeEnvironment variable schema =
-    Record.set1
-        variable schema
-        typeEnvironment;
-
-
 initNames =
     0;
 
