@@ -137,8 +137,8 @@ infer state ast =
             typeVariableState =
                 Tuple.second typeVariable
         } in
-            Result.andThen (infer state ast.operation) (\operation ->
-                Result.andThen (infer (mergeContext state (contextFromInferResult operation)) ast.operand) (\operand ->
+            Result.andThen (infer typeVariableState ast.operation) (\operation ->
+                Result.andThen (infer (mergeContext typeVariableState (contextFromInferResult operation)) ast.operand) (\operand ->
                     Result.andThen (unify (resolveBinding (typeFromInferResult operation) (contextFromInferResult operand)) (functionType (typeFromInferResult operand) typeVariableName)) (\unifyResult ->
                         mkInferResult
                             (mergeContext (mergeState (stateFromInferResult operation) (stateFromInferResult operand)) unifyResult)
@@ -191,9 +191,9 @@ infer state ast =
 
     else if ast.type == "LAMBDA" then
         Result.andThen inferExpression (\unwrappedInferExpression ->
-            Result.Ok (Tuple.Tuple (Tuple.first unwrappedInferExpression) lambdaType)
+            mkInferResult (stateFromInferResult unwrappedInferExpression) lambdaType
                 where {
-                    lambdaType = resolveBinding (functionType lambdaParametersType (Tuple.second unwrappedInferExpression)) (Tuple.second (Tuple.first unwrappedInferExpression))
+                    lambdaType = resolveBinding (functionType lambdaParametersType (typeFromInferResult unwrappedInferExpression)) (contextFromInferResult unwrappedInferExpression)
                 }
         )
         where {
