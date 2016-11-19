@@ -1,0 +1,8 @@
+-- given declarations ensure that the typing flows across the different declarations
+testA a = testB a;
+
+testB b = (testA b) + 1;
+
+testA 10
+-- type
+{"type":"CONSTANT","name":"Integer"}

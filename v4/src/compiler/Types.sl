@@ -89,6 +89,16 @@ newTypeVariable state =
     } in
         Tuple.Tuple (variableType (nameOf newName)) (Tuple.Tuple newName (Tuple.second state));
 
+newBoundTypeVariable name state =
+    let {
+        newName =
+            nextNames (Tuple.first state);
+
+        newVariableType =
+            variableType (nameOf newName)
+    } in
+        Tuple.Tuple newVariableType (Tuple.Tuple newName (Record.set1 name newVariableType (Tuple.second state)));
+
 
 resolveBinding type context =
     if type.type == "VARIABLE" then
@@ -158,22 +168,13 @@ infer state ast =
         if (Record.get "type" (Record.get "expression" ast)) == "LAMBDA" then
             let {
                 typeVariable =
-                    newTypeVariable state;
-
-                typeVariableName =
-                    Tuple.first typeVariable;
-
-                typeVariableState =
-                    Tuple.second typeVariable;
-
-                typeVariableInState =
-                    addBinding ast.name typeVariableName typeVariableState;
+                    Maybe.withDefault () (findBinding ast.name state);
 
                 inferExpressionResult =
-                    infer typeVariableInState ast.expression
+                    infer state ast.expression
             } in
                 Result.andThen inferExpressionResult (\unwrappedTypedExpressionState ->
-                    Result.andThen (unify typeVariableName (typeFromInferResult unwrappedTypedExpressionState)) (\unifiedSchema ->
+                    Result.andThen (unify typeVariable (typeFromInferResult unwrappedTypedExpressionState)) (\unifiedSchema ->
                         mkInferResult (addBinding ast.name (resolveBinding (typeFromInferResult unwrappedTypedExpressionState) (contextFromInferResult unwrappedTypedExpressionState)) state) typeUnit
                     )
                 )
@@ -224,8 +225,11 @@ infer state ast =
 
     else if ast.type == "MODULE" then
         let {
+            initialState =
+                Array.foldl (\state \declaration -> Tuple.second (newBoundTypeVariable declaration.name state)) state ast.declarations;
+
             startResult =
-                mkInferResult state typeUnit;
+                mkInferResult initialState typeUnit;
 
             expressionFoldFunction currentResult declaration =
                 Result.andThen currentResult (\resultState -> infer (Tuple.first resultState) declaration);
