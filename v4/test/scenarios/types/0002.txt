@@ -1,4 +1,4 @@
 -- given a constant string expression
 "Hello world"
 -- type
-{"type":"CONSTANT","name":"String"}
+_$EXPR : String

@@ -5,4 +5,6 @@ testB b = (testA b) + 1;
 
 testA 10
 -- type
-{"type":"CONSTANT","name":"Integer"}
+testA : Integer -> Integer
+testB : Integer -> Integer
+_$EXPR : Integer

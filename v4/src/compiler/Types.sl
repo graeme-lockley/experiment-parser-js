@@ -2,6 +2,7 @@ import file:../core/Array as Array;
 import file:../core/Maybe as Maybe;
 import file:../core/Record as Record;
 import file:../core/Result as Result;
+import file:../core/String as String;
 import file:../core/Tuple as Tuple;
 
 import file:../core/Debug as DEBUG;
@@ -234,7 +235,18 @@ infer state ast =
             typedExpression =
                 expressionFoldFunction typedDeclarations ast.expression
         } in
-            typedExpression
+            Result.andThen typedExpression (\expression ->
+                mkInferResult (mkState names context) (Record.set1 "_$EXPR" (Tuple.second expression) (Array.foldl (\result \declaration ->
+                    Record.set1 declaration.name (resolveBinding (Record.get declaration.name context) context) result
+                ) (Record.mk0 ()) ast.declarations))
+                    where {
+                        names =
+                            namesFromInferResult expression;
+
+                        context =
+                            contextFromInferResult expression
+                    }
+            )
 
     else
         mkInferResult state typeUnit;
@@ -300,3 +312,34 @@ stateFromInferResult inferResult =
 
 contextFromInferResult inferResult =
     contextFromState (stateFromInferResult inferResult);
+
+namesFromInferResult inferResult =
+    namesFromState (stateFromInferResult inferResult);
+
+
+showType type =
+    if type.type == "CONSTANT" then
+        type.name
+
+    else if type.type == "VARIABLE" then
+        type.name
+
+    else if type.type == "FUNCTION" then
+        (if (Record.get "type" type.domain) == "FUNCTION" then
+            "(" ++ (showType type.domain) ++ ")"
+        else
+            showType type.domain) ++
+        " -> " ++
+        showType type.range
+    else
+        "-unknown-"
+assumptions {
+    DEBUG.eq (showType typeString) "String";
+    DEBUG.eq (showType (functionType typeString typeInteger)) "String -> Integer";
+    DEBUG.eq (showType (functionType (functionType (variableType "a") (variableType "b")) typeCharacter)) "(a -> b) -> Character";
+    DEBUG.eq (showType (functionType (variableType "a") (functionType (variableType "b") typeCharacter))) "a -> b -> Character"
+};
+
+
+showModuleType moduleType =
+    String.trim (Record.fold (\acc \key \value -> acc ++ key ++ " : " ++ (showType value) ++ "\n") "" moduleType);

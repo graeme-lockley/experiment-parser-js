@@ -3,4 +3,5 @@ x = 10;
 
 x
 -- type
-{"type":"CONSTANT","name":"Integer"}
+x : Integer
+_$EXPR : Integer

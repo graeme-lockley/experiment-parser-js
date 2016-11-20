@@ -87,8 +87,9 @@ function scenariosIn(directory) {
                     expect(Result.isOk(typedAST)).to.equal(true);
                 });
                 it("should have the corresponding type", () => {
-                    const tuple = Result.withDefault()(typedAST);
-                    expect(JSON.stringify(Tuple.second(tuple))).to.equal(expectations['type']);
+                    const moduleType = Tuple.second(Result.withDefault()(typedAST));
+                    const moduleTypeAsString = Types.showModuleType(moduleType);
+                    expect(moduleTypeAsString).to.equal(expectations['type']);
                 });
             }
 

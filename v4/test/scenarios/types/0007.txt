@@ -3,4 +3,5 @@ test a = a + 1;
 
 test 10
 -- type
-{"type":"CONSTANT","name":"Integer"}
+test : Integer -> Integer
+_$EXPR : Integer

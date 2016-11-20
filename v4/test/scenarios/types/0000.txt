@@ -1,4 +1,4 @@
 -- given a constant integer expression
 10
 -- type
-{"type":"CONSTANT","name":"Integer"}
+_$EXPR : Integer
