@@ -63,3 +63,6 @@ mk9 =
 
 union a b =
     Helper.union a b;
+
+fold f z r =
+    Helper.fold f z r;

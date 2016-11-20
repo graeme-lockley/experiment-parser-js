@@ -175,7 +175,7 @@ function union(a) {
 
 function clone(record) {
     var temp = record.constructor();
-    for (var key in record) {
+    for (const key in record) {
         if (record.hasOwnProperty(key)) {
             temp[key] = record[key];
         }
@@ -185,6 +185,19 @@ function clone(record) {
 }
 
 
+function fold(f) {
+    return z => r => {
+        let result = z;
+
+        for (const key in r) {
+            if (r.hasOwnProperty(key)) {
+                result = f(result)(key)(r[key]);
+            }
+        }
+
+        return result;
+    };
+}
 module.exports = {
     get,
     set1,
@@ -200,5 +213,6 @@ module.exports = {
     mk7,
     mk8,
     mk9,
-    union
+    union,
+    fold
 };
