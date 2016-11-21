@@ -191,32 +191,24 @@ infer state ast =
             Maybe.withDefault (Result.Error ("Unknown identifier " ++ ast.name)) bindingResult
 
     else if ast.type == "LAMBDA" then
-        Result.andThen inferExpression (\unwrappedInferExpression ->
-            mkInferResult (stateFromInferResult unwrappedInferExpression) lambdaType
-                where {
-                    lambdaType = resolveBinding (functionType lambdaParametersType (typeFromInferResult unwrappedInferExpression)) (contextFromInferResult unwrappedInferExpression)
-                }
-        )
-        where {
-            nameFoldFunction s item =
-                let {
-                    typeVariable = newTypeVariable (Tuple.second s);
-                    typeVariableName = Tuple.first typeVariable;
-                    typeVariableInState = addBinding item typeVariableName (Tuple.second typeVariable)
-                } in
-                    Tuple.Tuple (Array.append typeVariableName (Tuple.first s)) typeVariableInState;
+        let {
+            typeVariable =
+                newTypeVariable state;
 
-            namesState =
-                Array.foldl nameFoldFunction (Tuple.Tuple Array.empty state) ast.variables;
+            typeVariableName =
+                Tuple.first typeVariable;
 
-            names =
-                Tuple.first namesState;
+            typeVariableState =
+                Tuple.second typeVariable;
 
-            lambdaParametersType =
-                Array.foldl (\a \i -> functionType a i) (Maybe.withDefault typeUnit (Array.at 0 names)) (Array.slice 1 names);
-
-            inferExpression = infer (Tuple.second namesState) ast.expression
-        }
+            newState =
+                addBinding ast.variable typeVariableName typeVariableState
+        } in
+            Result.andThen (infer newState ast.expression) (\expression ->
+                mkInferResult
+                    (stateFromInferResult expression)
+                    (resolveBinding (functionType typeVariableName (typeFromInferResult expression)) (stateFromInferResult expression))
+            )
 
     else if ast.type == "MODULE" then
         let {

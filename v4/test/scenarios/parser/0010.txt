@@ -13,27 +13,28 @@ funnyMinus a b = -a + -b / - + b;
       "name": "funnyNot",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "BOOLEAN_NOT",
-          "operand": {
-            "type": "BOOLEAN_AND",
-            "expressions": [
-              {
-                "type": "BOOLEAN_NOT",
-                "operand": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "BOOLEAN_NOT",
+            "operand": {
+              "type": "BOOLEAN_AND",
+              "expressions": [
+                {
+                  "type": "BOOLEAN_NOT",
+                  "operand": {
+                    "type": "IDENTIFIER",
+                    "name": "a"
+                  }
+                },
+                {
                   "type": "IDENTIFIER",
-                  "name": "a"
+                  "name": "b"
                 }
-              },
-              {
-                "type": "IDENTIFIER",
-                "name": "b"
-              }
-            ]
+              ]
+            }
           }
         }
       },
@@ -44,35 +45,36 @@ funnyMinus a b = -a + -b / - + b;
       "name": "funnyPlus",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "ADDITION",
-          "left": {
-            "type": "UNARY_PLUS",
-            "operand": {
-              "type": "IDENTIFIER",
-              "name": "a"
-            }
-          },
-          "right": {
-            "type": "MULTIPLICATION",
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "ADDITION",
             "left": {
               "type": "UNARY_PLUS",
               "operand": {
                 "type": "IDENTIFIER",
-                "name": "b"
+                "name": "a"
               }
             },
             "right": {
-              "type": "UNARY_PLUS",
-              "operand": {
+              "type": "MULTIPLICATION",
+              "left": {
                 "type": "UNARY_PLUS",
                 "operand": {
                   "type": "IDENTIFIER",
                   "name": "b"
+                }
+              },
+              "right": {
+                "type": "UNARY_PLUS",
+                "operand": {
+                  "type": "UNARY_PLUS",
+                  "operand": {
+                    "type": "IDENTIFIER",
+                    "name": "b"
+                  }
                 }
               }
             }
@@ -86,35 +88,36 @@ funnyMinus a b = -a + -b / - + b;
       "name": "funnyMinus",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "ADDITION",
-          "left": {
-            "type": "UNARY_NEGATE",
-            "operand": {
-              "type": "IDENTIFIER",
-              "name": "a"
-            }
-          },
-          "right": {
-            "type": "DIVISION",
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "ADDITION",
             "left": {
               "type": "UNARY_NEGATE",
               "operand": {
                 "type": "IDENTIFIER",
-                "name": "b"
+                "name": "a"
               }
             },
             "right": {
-              "type": "UNARY_NEGATE",
-              "operand": {
-                "type": "UNARY_PLUS",
+              "type": "DIVISION",
+              "left": {
+                "type": "UNARY_NEGATE",
                 "operand": {
                   "type": "IDENTIFIER",
                   "name": "b"
+                }
+              },
+              "right": {
+                "type": "UNARY_NEGATE",
+                "operand": {
+                  "type": "UNARY_PLUS",
+                  "operand": {
+                    "type": "IDENTIFIER",
+                    "name": "b"
+                  }
                 }
               }
             }

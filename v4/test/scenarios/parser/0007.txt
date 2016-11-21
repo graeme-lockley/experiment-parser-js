@@ -12,19 +12,20 @@ concat4 a b c d = (concat2 a b) ++ c ++ d;
       "name": "concat2",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "STRING_CONCAT",
-          "left": {
-            "type": "IDENTIFIER",
-            "name": "a"
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "STRING_CONCAT",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
           }
         }
       },
@@ -35,42 +36,49 @@ concat4 a b c d = (concat2 a b) ++ c ++ d;
       "name": "concat4",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b",
-          "c",
-          "d"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "STRING_CONCAT",
-          "left": {
-            "type": "STRING_CONCAT",
-            "left": {
-              "type": "APPLY",
-              "operation": {
-                "type": "APPLY",
-                "operation": {
-                  "type": "IDENTIFIER",
-                  "name": "concat2"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "LAMBDA",
+            "variable": "c",
+            "expression": {
+              "type": "LAMBDA",
+              "variable": "d",
+              "expression": {
+                "type": "STRING_CONCAT",
+                "left": {
+                  "type": "STRING_CONCAT",
+                  "left": {
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "APPLY",
+                      "operation": {
+                        "type": "IDENTIFIER",
+                        "name": "concat2"
+                      },
+                      "operand": {
+                        "type": "IDENTIFIER",
+                        "name": "a"
+                      }
+                    },
+                    "operand": {
+                      "type": "IDENTIFIER",
+                      "name": "b"
+                    }
+                  },
+                  "right": {
+                    "type": "IDENTIFIER",
+                    "name": "c"
+                  }
                 },
-                "operand": {
+                "right": {
                   "type": "IDENTIFIER",
-                  "name": "a"
+                  "name": "d"
                 }
-              },
-              "operand": {
-                "type": "IDENTIFIER",
-                "name": "b"
               }
-            },
-            "right": {
-              "type": "IDENTIFIER",
-              "name": "c"
             }
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "d"
           }
         }
       },

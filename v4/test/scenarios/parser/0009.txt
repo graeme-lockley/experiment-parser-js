@@ -12,19 +12,20 @@ sumLots a b c d = a * b / c * d;
       "name": "add2",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "MULTIPLICATION",
-          "left": {
-            "type": "IDENTIFIER",
-            "name": "a"
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "MULTIPLICATION",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
           }
         }
       },
@@ -35,35 +36,42 @@ sumLots a b c d = a * b / c * d;
       "name": "sumLots",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b",
-          "c",
-          "d"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "MULTIPLICATION",
-          "left": {
-            "type": "DIVISION",
-            "left": {
-              "type": "MULTIPLICATION",
-              "left": {
-                "type": "IDENTIFIER",
-                "name": "a"
-              },
-              "right": {
-                "type": "IDENTIFIER",
-                "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "LAMBDA",
+            "variable": "c",
+            "expression": {
+              "type": "LAMBDA",
+              "variable": "d",
+              "expression": {
+                "type": "MULTIPLICATION",
+                "left": {
+                  "type": "DIVISION",
+                  "left": {
+                    "type": "MULTIPLICATION",
+                    "left": {
+                      "type": "IDENTIFIER",
+                      "name": "a"
+                    },
+                    "right": {
+                      "type": "IDENTIFIER",
+                      "name": "b"
+                    }
+                  },
+                  "right": {
+                    "type": "IDENTIFIER",
+                    "name": "c"
+                  }
+                },
+                "right": {
+                  "type": "IDENTIFIER",
+                  "name": "d"
+                }
               }
-            },
-            "right": {
-              "type": "IDENTIFIER",
-              "name": "c"
             }
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "d"
           }
         }
       },

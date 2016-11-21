@@ -12,19 +12,20 @@ funnyPlus a b c x = (a o b o c) x;
       "name": "funnyNot",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "COMPOSITION",
-          "left": {
-            "type": "IDENTIFIER",
-            "name": "a"
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "COMPOSITION",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
           }
         }
       },
@@ -35,35 +36,42 @@ funnyPlus a b c x = (a o b o c) x;
       "name": "funnyPlus",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b",
-          "c",
-          "x"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
-            "type": "COMPOSITION",
-            "left": {
-              "type": "COMPOSITION",
-              "left": {
-                "type": "IDENTIFIER",
-                "name": "a"
-              },
-              "right": {
-                "type": "IDENTIFIER",
-                "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "LAMBDA",
+            "variable": "c",
+            "expression": {
+              "type": "LAMBDA",
+              "variable": "x",
+              "expression": {
+                "type": "APPLY",
+                "operation": {
+                  "type": "COMPOSITION",
+                  "left": {
+                    "type": "COMPOSITION",
+                    "left": {
+                      "type": "IDENTIFIER",
+                      "name": "a"
+                    },
+                    "right": {
+                      "type": "IDENTIFIER",
+                      "name": "b"
+                    }
+                  },
+                  "right": {
+                    "type": "IDENTIFIER",
+                    "name": "c"
+                  }
+                },
+                "operand": {
+                  "type": "IDENTIFIER",
+                  "name": "x"
+                }
               }
-            },
-            "right": {
-              "type": "IDENTIFIER",
-              "name": "c"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "x"
           }
         }
       },

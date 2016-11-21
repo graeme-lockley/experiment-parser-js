@@ -151,10 +151,10 @@ infixOperator operator =
         "type" "INFIX_OPERATOR"
         "operator" operator;
 
-lambda variables expression =
+lambda variable expression =
     Record.mk3
         "type" "LAMBDA"
-        "variables" variables
+        "variable" variable
         "expression" expression;
 
 

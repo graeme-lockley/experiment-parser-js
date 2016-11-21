@@ -76,12 +76,9 @@ astToJavascript ast indentation =
 
     else if ast.type == "DECLARATION" then
         if (Record.get "type" (Record.get "expression" ast)) == "LAMBDA" then
-            (spaces indentation) ++ "function " ++ ast.name ++ "(" ++ (at 0 (Record.get "variables" (Record.get "expression" ast))) ++ ") {\n" ++
+            (spaces indentation) ++ "function " ++ ast.name ++ "(" ++ (Record.get "variable" (Record.get "expression" ast)) ++ ") {\n" ++
             (
-                if (Array.length (Record.get "variables" (Record.get "expression" ast))) == 1 then
-                    (spaces indentation) ++ "  return " ++ (astToJavascript (Record.get "expression" (Record.get "expression" ast)) (indentation + 1)) ++ ";\n"
-                else
-                    (spaces indentation) ++ "  return " ++ (astToJavascript (AST.lambda (Array.slice 1 (Record.get "variables" (Record.get "expression" ast))) (Record.get "expression" (Record.get "expression" ast))) (indentation + 1)) ++ ";\n"
+            (spaces indentation) ++ "  return " ++ (astToJavascript (Record.get "expression" (Record.get "expression" ast)) (indentation + 1)) ++ ";\n"
             ) ++ (spaces indentation) ++ "}"
         else
             (spaces indentation) ++ "const " ++ ast.name ++ " = " ++ (astToJavascript (ast.expression) 0) ++ ";"
@@ -129,8 +126,7 @@ astToJavascript ast indentation =
          infixOperator ast.operator
 
     else if ast.type == "LAMBDA" then
-        (\tmpResult -> String.substring 1 (String.length tmpResult - 1) tmpResult)
-        ("(" ++ Array.foldr (\accumulator \item -> "(" ++ item ++ " => " ++ accumulator ++ ")") (astToJavascript ast.expression indentation) ast.variables ++ ")")
+        ("(" ++ ast.variable ++ " => " ++ (astToJavascript ast.expression indentation) ++ ")")
 
     else if ast.type == "LESS_THAN" then
         "(" ++ (astToJavascript ast.left indentation) ++ " < " ++ (astToJavascript ast.right indentation) ++ ")"

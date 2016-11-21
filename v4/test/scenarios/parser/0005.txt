@@ -14,19 +14,20 @@ intNqBool a b c = a != b != c;
       "name": "intEq",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "EQUAL",
-          "left": {
-            "type": "IDENTIFIER",
-            "name": "a"
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "EQUAL",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
           }
         }
       },
@@ -37,19 +38,20 @@ intNqBool a b c = a != b != c;
       "name": "intNq",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "NOT_EQUAL",
-          "left": {
-            "type": "IDENTIFIER",
-            "name": "a"
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "NOT_EQUAL",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
           }
         }
       },
@@ -60,27 +62,31 @@ intNqBool a b c = a != b != c;
       "name": "intEqBool",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b",
-          "c"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "EQUAL",
-          "left": {
-            "type": "EQUAL",
-            "left": {
-              "type": "IDENTIFIER",
-              "name": "a"
-            },
-            "right": {
-              "type": "IDENTIFIER",
-              "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "LAMBDA",
+            "variable": "c",
+            "expression": {
+              "type": "EQUAL",
+              "left": {
+                "type": "EQUAL",
+                "left": {
+                  "type": "IDENTIFIER",
+                  "name": "a"
+                },
+                "right": {
+                  "type": "IDENTIFIER",
+                  "name": "b"
+                }
+              },
+              "right": {
+                "type": "IDENTIFIER",
+                "name": "c"
+              }
             }
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "c"
           }
         }
       },
@@ -91,27 +97,31 @@ intNqBool a b c = a != b != c;
       "name": "intNqBool",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b",
-          "c"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "NOT_EQUAL",
-          "left": {
-            "type": "NOT_EQUAL",
-            "left": {
-              "type": "IDENTIFIER",
-              "name": "a"
-            },
-            "right": {
-              "type": "IDENTIFIER",
-              "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "LAMBDA",
+            "variable": "c",
+            "expression": {
+              "type": "NOT_EQUAL",
+              "left": {
+                "type": "NOT_EQUAL",
+                "left": {
+                  "type": "IDENTIFIER",
+                  "name": "a"
+                },
+                "right": {
+                  "type": "IDENTIFIER",
+                  "name": "b"
+                }
+              },
+              "right": {
+                "type": "IDENTIFIER",
+                "name": "c"
+              }
             }
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "c"
           }
         }
       },

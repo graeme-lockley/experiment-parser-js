@@ -15,19 +15,20 @@ mixItUp a b c = a < b <= c;
       "name": "lt",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "LESS_THAN",
-          "left": {
-            "type": "IDENTIFIER",
-            "name": "a"
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "LESS_THAN",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
           }
         }
       },
@@ -38,19 +39,20 @@ mixItUp a b c = a < b <= c;
       "name": "ltEq",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "LESS_THAN_EQUAL",
-          "left": {
-            "type": "IDENTIFIER",
-            "name": "a"
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "LESS_THAN_EQUAL",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
           }
         }
       },
@@ -61,19 +63,20 @@ mixItUp a b c = a < b <= c;
       "name": "gt",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "GREATER_THAN",
-          "left": {
-            "type": "IDENTIFIER",
-            "name": "a"
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "GREATER_THAN",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
           }
         }
       },
@@ -84,19 +87,20 @@ mixItUp a b c = a < b <= c;
       "name": "gtEq",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "GREATER_THAN_EQUAL",
-          "left": {
-            "type": "IDENTIFIER",
-            "name": "a"
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "GREATER_THAN_EQUAL",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
           }
         }
       },
@@ -107,27 +111,31 @@ mixItUp a b c = a < b <= c;
       "name": "mixItUp",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b",
-          "c"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "LESS_THAN_EQUAL",
-          "left": {
-            "type": "LESS_THAN",
-            "left": {
-              "type": "IDENTIFIER",
-              "name": "a"
-            },
-            "right": {
-              "type": "IDENTIFIER",
-              "name": "b"
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "LAMBDA",
+            "variable": "c",
+            "expression": {
+              "type": "LESS_THAN_EQUAL",
+              "left": {
+                "type": "LESS_THAN",
+                "left": {
+                  "type": "IDENTIFIER",
+                  "name": "a"
+                },
+                "right": {
+                  "type": "IDENTIFIER",
+                  "name": "b"
+                }
+              },
+              "right": {
+                "type": "IDENTIFIER",
+                "name": "c"
+              }
             }
-          },
-          "right": {
-            "type": "IDENTIFIER",
-            "name": "c"
           }
         }
       },

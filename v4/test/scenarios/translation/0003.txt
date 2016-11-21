@@ -86,9 +86,7 @@ length xs =
       "name": "length",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "xs"
-        ],
+        "variable": "xs",
         "expression": {
           "type": "IF",
           "ifExpr": {

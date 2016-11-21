@@ -11,24 +11,28 @@ aaa b c d = if (b) then c else d;
       "name": "aaa",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "b",
-          "c",
-          "d"
-        ],
+        "variable": "b",
         "expression": {
-          "type": "IF",
-          "ifExpr": {
-            "type": "IDENTIFIER",
-            "name": "b"
-          },
-          "thenExpr": {
-            "type": "IDENTIFIER",
-            "name": "c"
-          },
-          "elseExpr": {
-            "type": "IDENTIFIER",
-            "name": "d"
+          "type": "LAMBDA",
+          "variable": "c",
+          "expression": {
+            "type": "LAMBDA",
+            "variable": "d",
+            "expression": {
+              "type": "IF",
+              "ifExpr": {
+                "type": "IDENTIFIER",
+                "name": "b"
+              },
+              "thenExpr": {
+                "type": "IDENTIFIER",
+                "name": "c"
+              },
+              "elseExpr": {
+                "type": "IDENTIFIER",
+                "name": "d"
+              }
+            }
           }
         }
       },

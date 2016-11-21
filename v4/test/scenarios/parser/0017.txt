@@ -20,114 +20,118 @@ fold op i xs =
       "name": "fold",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "op",
-          "i",
-          "xs"
-        ],
+        "variable": "op",
         "expression": {
-          "type": "SCOPE",
-          "declarations": [
-            {
-              "type": "DECLARATION",
-              "name": "isListEmpty",
-              "expression": {
-                "type": "APPLY",
-                "operation": {
-                  "type": "QUALIFIED_IDENTIFIER",
-                  "module": "List",
-                  "identifier": "isNil"
-                },
-                "operand": {
-                  "type": "IDENTIFIER",
-                  "name": "xs"
-                }
-              },
-              "assumptions": []
-            },
-            {
-              "type": "DECLARATION",
-              "name": "head",
-              "expression": {
-                "type": "APPLY",
-                "operation": {
-                  "type": "QUALIFIED_IDENTIFIER",
-                  "module": "List",
-                  "identifier": "head"
-                },
-                "operand": {
-                  "type": "IDENTIFIER",
-                  "name": "xs"
-                }
-              },
-              "assumptions": []
-            },
-            {
-              "type": "DECLARATION",
-              "name": "tail",
-              "expression": {
-                "type": "APPLY",
-                "operation": {
-                  "type": "QUALIFIED_IDENTIFIER",
-                  "module": "List",
-                  "identifier": "tail"
-                },
-                "operand": {
-                  "type": "IDENTIFIER",
-                  "name": "xs"
-                }
-              },
-              "assumptions": []
-            }
-          ],
+          "type": "LAMBDA",
+          "variable": "i",
           "expression": {
-            "type": "IF",
-            "ifExpr": {
-              "type": "IDENTIFIER",
-              "name": "isListEmpty"
-            },
-            "thenExpr": {
-              "type": "QUALIFIED_IDENTIFIER",
-              "module": "List",
-              "identifier": "Nil"
-            },
-            "elseExpr": {
-              "type": "APPLY",
-              "operation": {
-                "type": "APPLY",
-                "operation": {
-                  "type": "APPLY",
-                  "operation": {
-                    "type": "IDENTIFIER",
-                    "name": "fold"
+            "type": "LAMBDA",
+            "variable": "xs",
+            "expression": {
+              "type": "SCOPE",
+              "declarations": [
+                {
+                  "type": "DECLARATION",
+                  "name": "isListEmpty",
+                  "expression": {
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "QUALIFIED_IDENTIFIER",
+                      "module": "List",
+                      "identifier": "isNil"
+                    },
+                    "operand": {
+                      "type": "IDENTIFIER",
+                      "name": "xs"
+                    }
                   },
-                  "operand": {
-                    "type": "IDENTIFIER",
-                    "name": "op"
-                  }
+                  "assumptions": []
                 },
-                "operand": {
+                {
+                  "type": "DECLARATION",
+                  "name": "head",
+                  "expression": {
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "QUALIFIED_IDENTIFIER",
+                      "module": "List",
+                      "identifier": "head"
+                    },
+                    "operand": {
+                      "type": "IDENTIFIER",
+                      "name": "xs"
+                    }
+                  },
+                  "assumptions": []
+                },
+                {
+                  "type": "DECLARATION",
+                  "name": "tail",
+                  "expression": {
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "QUALIFIED_IDENTIFIER",
+                      "module": "List",
+                      "identifier": "tail"
+                    },
+                    "operand": {
+                      "type": "IDENTIFIER",
+                      "name": "xs"
+                    }
+                  },
+                  "assumptions": []
+                }
+              ],
+              "expression": {
+                "type": "IF",
+                "ifExpr": {
+                  "type": "IDENTIFIER",
+                  "name": "isListEmpty"
+                },
+                "thenExpr": {
+                  "type": "QUALIFIED_IDENTIFIER",
+                  "module": "List",
+                  "identifier": "Nil"
+                },
+                "elseExpr": {
                   "type": "APPLY",
                   "operation": {
                     "type": "APPLY",
                     "operation": {
-                      "type": "IDENTIFIER",
-                      "name": "op"
+                      "type": "APPLY",
+                      "operation": {
+                        "type": "IDENTIFIER",
+                        "name": "fold"
+                      },
+                      "operand": {
+                        "type": "IDENTIFIER",
+                        "name": "op"
+                      }
                     },
                     "operand": {
-                      "type": "IDENTIFIER",
-                      "name": "i"
+                      "type": "APPLY",
+                      "operation": {
+                        "type": "APPLY",
+                        "operation": {
+                          "type": "IDENTIFIER",
+                          "name": "op"
+                        },
+                        "operand": {
+                          "type": "IDENTIFIER",
+                          "name": "i"
+                        }
+                      },
+                      "operand": {
+                        "type": "IDENTIFIER",
+                        "name": "head"
+                      }
                     }
                   },
                   "operand": {
                     "type": "IDENTIFIER",
-                    "name": "head"
+                    "name": "tail"
                   }
                 }
-              },
-              "operand": {
-                "type": "IDENTIFIER",
-                "name": "tail"
               }
             }
           }

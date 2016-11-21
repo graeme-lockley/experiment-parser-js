@@ -23,26 +23,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixOr",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": "||"
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": "||"
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -53,26 +54,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixAnd",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": "&&"
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": "&&"
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -83,26 +85,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixEqual",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": "=="
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": "=="
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -113,26 +116,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixNotEqual",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": "!="
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": "!="
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -143,26 +147,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixLessThan",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": "<"
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": "<"
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -173,26 +178,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixLessThanEqual",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": "<="
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": "<="
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -203,26 +209,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixGreaterThan",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": ">"
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": ">"
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -233,26 +240,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixGreaterThanEqual",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": ">="
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": ">="
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -263,26 +271,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixConcat",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": "++"
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": "++"
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -293,26 +302,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixPlus",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": "+"
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": "+"
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -323,26 +333,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixMinus",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": "-"
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": "-"
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -353,26 +364,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixMultiply",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": "*"
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": "*"
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },
@@ -383,26 +395,27 @@ prefixDivide a b = (/) a b;
       "name": "prefixDivide",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "a",
-          "b"
-        ],
+        "variable": "a",
         "expression": {
-          "type": "APPLY",
-          "operation": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
             "type": "APPLY",
             "operation": {
-              "type": "INFIX_OPERATOR",
-              "operator": "/"
+              "type": "APPLY",
+              "operation": {
+                "type": "INFIX_OPERATOR",
+                "operator": "/"
+              },
+              "operand": {
+                "type": "IDENTIFIER",
+                "name": "a"
+              }
             },
             "operand": {
               "type": "IDENTIFIER",
-              "name": "a"
+              "name": "b"
             }
-          },
-          "operand": {
-            "type": "IDENTIFIER",
-            "name": "b"
           }
         }
       },

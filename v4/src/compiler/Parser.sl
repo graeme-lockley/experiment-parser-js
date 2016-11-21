@@ -78,7 +78,7 @@ parseDECLMap elements =
             if (Array.length (at 0 elements)) == 1 then
                 AST.declaration ((\assumption -> assumption.name) (at 0 (at 0 elements))) (at 2 elements) a
             else
-                AST.declaration ((\assumption -> assumption.name) (at 0 (at 0 elements))) (AST.lambda (Array.map (\n -> n.name) (Array.slice 1 (at 0 elements))) (at 2 elements)) a
+                AST.declaration ((\assumption -> assumption.name) (at 0 (at 0 elements))) (mkLambda (Array.map (\n -> n.name) (Array.slice 1 (at 0 elements))) (at 2 elements)) a
     ) (Maybe.withDefault Array.empty (at 3 elements));
 
 
@@ -259,7 +259,15 @@ parseIdentifier lexer =
 
 parseLambda lexer =
     (
-        (P.map (\items -> AST.lambda (at 0 items) (at 2 items))) o
+        (P.map (\items ->
+            mkLambda lambdaIDs lambdaExpression
+                where {
+                    lambdaIDs =
+                            at 0 items;
+
+                    lambdaExpression =
+                            at 2 items
+                })) o
         (P.and (Array.mk3
             (P.many1 (
                 (P.map (\elements -> (at 1 elements))) o
@@ -269,6 +277,13 @@ parseLambda lexer =
             (P.symbol Tokens.MINUS_GREATER)
             parseEXPR1))
     ) lexer;
+
+
+mkLambda ids expression =
+    if Array.length ids == 0 then
+        expression
+    else
+        mkLambda (Array.take ((Array.length ids) - 1) ids) (AST.lambda (at ((Array.length ids) - 1) ids) expression);
 
 
 parseParenthesisExpression lexer =

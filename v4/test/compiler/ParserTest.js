@@ -56,9 +56,8 @@ describe('Parser', function () {
         it("should parse without any errors", () => expect(Result.isOk(result)).to.equal(true));
         it("should parse a LAMBDA with variables ['a', 'b'] and expression of IDENTIFIER with value 'a'", () => {
             expect(Tuple.first(Result.withDefault()(result)).type).to.equal("LAMBDA");
-            expect(Tuple.first(Result.withDefault()(result)).variables.length).to.equal(2);
-            expect(Tuple.first(Result.withDefault()(result)).variables[0]).to.equal('a');
-            expect(Tuple.first(Result.withDefault()(result)).variables[1]).to.equal('b');
+            expect(Tuple.first(Result.withDefault()(result)).variable).to.equal('a');
+            expect(Tuple.first(Result.withDefault()(result)).expression.variable).to.equal('b');
         });
         it("should have the next token of EOF", () =>
             expect(Lexer.id(Tuple.second(Result.withDefault()(result)))).to.equal(Lexer.TokenEnum.EOF));

@@ -33,69 +33,73 @@ assumptions {
       "name": "fold",
       "expression": {
         "type": "LAMBDA",
-        "variables": [
-          "op",
-          "i",
-          "xs"
-        ],
+        "variable": "op",
         "expression": {
-          "type": "IF",
-          "ifExpr": {
-            "type": "APPLY",
-            "operation": {
-              "type": "QUALIFIED_IDENTIFIER",
-              "module": "List",
-              "identifier": "isNil"
-            },
-            "operand": {
-              "type": "IDENTIFIER",
-              "name": "xs"
-            }
-          },
-          "thenExpr": {
-            "type": "QUALIFIED_IDENTIFIER",
-            "module": "List",
-            "identifier": "Nil"
-          },
-          "elseExpr": {
-            "type": "APPLY",
-            "operation": {
-              "type": "APPLY",
-              "operation": {
+          "type": "LAMBDA",
+          "variable": "i",
+          "expression": {
+            "type": "LAMBDA",
+            "variable": "xs",
+            "expression": {
+              "type": "IF",
+              "ifExpr": {
                 "type": "APPLY",
                 "operation": {
-                  "type": "IDENTIFIER",
-                  "name": "fold"
+                  "type": "QUALIFIED_IDENTIFIER",
+                  "module": "List",
+                  "identifier": "isNil"
                 },
                 "operand": {
                   "type": "IDENTIFIER",
-                  "name": "op"
+                  "name": "xs"
                 }
               },
-              "operand": {
+              "thenExpr": {
+                "type": "QUALIFIED_IDENTIFIER",
+                "module": "List",
+                "identifier": "Nil"
+              },
+              "elseExpr": {
                 "type": "APPLY",
                 "operation": {
                   "type": "APPLY",
                   "operation": {
-                    "type": "IDENTIFIER",
-                    "name": "op"
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "IDENTIFIER",
+                      "name": "fold"
+                    },
+                    "operand": {
+                      "type": "IDENTIFIER",
+                      "name": "op"
+                    }
                   },
                   "operand": {
-                    "type": "IDENTIFIER",
-                    "name": "i"
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "APPLY",
+                      "operation": {
+                        "type": "IDENTIFIER",
+                        "name": "op"
+                      },
+                      "operand": {
+                        "type": "IDENTIFIER",
+                        "name": "i"
+                      }
+                    },
+                    "operand": {
+                      "type": "QUALIFIED_IDENTIFIER",
+                      "module": "List",
+                      "identifier": "head"
+                    }
                   }
                 },
                 "operand": {
                   "type": "QUALIFIED_IDENTIFIER",
                   "module": "List",
-                  "identifier": "head"
+                  "identifier": "tail"
                 }
               }
-            },
-            "operand": {
-              "type": "QUALIFIED_IDENTIFIER",
-              "module": "List",
-              "identifier": "tail"
             }
           }
         }
