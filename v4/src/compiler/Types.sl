@@ -236,9 +236,10 @@ infer state ast =
                 expressionFoldFunction typedDeclarations ast.expression
         } in
             Result.andThen typedExpression (\expression ->
-                mkInferResult (mkState names context) (Record.set1 "_$EXPR" (Tuple.second expression) (Array.foldl (\result \declaration ->
-                    Record.set1 declaration.name (resolveBinding (Record.get declaration.name context) context) result
-                ) (Record.mk0 ()) ast.declarations))
+                mkInferResult (mkState names context) (Record.set1 "_$EXPR" (Tuple.second expression) (
+                    Array.foldl
+                        (\result \declaration -> Record.set1 declaration.name (resolveBinding (Record.get declaration.name context) context) result)
+                        (Record.mk0 ()) ast.declarations))
                     where {
                         names =
                             namesFromInferResult expression;
