@@ -170,7 +170,7 @@ infer state ast =
             } in
                 Result.andThen inferExpressionResult (\unwrappedTypedExpressionState ->
                     Result.andThen (unify typeVariable (typeFromInferResult unwrappedTypedExpressionState)) (\unifiedSchema ->
-                        mkInferResult (addBinding ast.name (resolveBinding (typeFromInferResult unwrappedTypedExpressionState) (contextFromInferResult unwrappedTypedExpressionState)) state) typeUnit
+                        mkInferResult (addBinding ast.name (resolveBinding (typeFromInferResult unwrappedTypedExpressionState) (contextFromInferResult unwrappedTypedExpressionState)) (stateFromInferResult unwrappedTypedExpressionState)) typeUnit
                     )
                 )
         else
@@ -219,7 +219,7 @@ infer state ast =
                 mkInferResult initialState typeUnit;
 
             expressionFoldFunction currentResult declaration =
-                Result.andThen currentResult (\resultState -> infer (Tuple.first resultState) declaration);
+                Result.andThen currentResult (\resultState -> DEBUG.log "inferResult" (infer (Tuple.first resultState) declaration));
 
             typedDeclarations =
                 Array.foldl expressionFoldFunction startResult ast.declarations;
