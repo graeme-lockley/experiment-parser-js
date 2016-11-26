@@ -321,8 +321,8 @@ showType type =
 assumptions {
     DEBUG.eq (showType typeString) "String";
     DEBUG.eq (showType (functionType typeString typeInteger)) "String -> Integer";
-    DEBUG.eq (showType (functionType (functionType (variableType "a") (variableType "b")) typeCharacter)) "(a -> b) -> Character";
-    DEBUG.eq (showType (functionType (variableType "a") (functionType (variableType "b") typeCharacter))) "a -> b -> Character"
+    DEBUG.eq (showType (functionType (functionType (variableType "a") (variableType "b")) typeCharacter)) "(a1 -> a2) -> Character";
+    DEBUG.eq (showType (functionType (variableType "a") (functionType (variableType "b") typeCharacter))) "a1 -> a2 -> Character"
 };
 
 
