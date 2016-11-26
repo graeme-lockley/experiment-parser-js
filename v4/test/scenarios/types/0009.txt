@@ -1,0 +1,10 @@
+-- given an assumption ensure that it unifies with Boolean
+id a = a;
+
+id2 b = b;
+
+id 'c'
+-- type
+id : a3 -> a3
+id2 : a4 -> a4
+_$EXPR : Character

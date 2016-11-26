@@ -98,7 +98,7 @@ newBoundTypeVariable name state =
 resolveBinding type context =
     if type.type == "VARIABLE" then
         if Record.get type.name context then
-            Record.get type.name context
+            resolveBinding (Record.get type.name context) context
         else
             type
     else if type.type == "FUNCTION" then
@@ -219,7 +219,7 @@ infer state ast =
                 mkInferResult initialState typeUnit;
 
             expressionFoldFunction currentResult declaration =
-                Result.andThen currentResult (\resultState -> DEBUG.log "inferResult" (infer (Tuple.first resultState) declaration));
+                Result.andThen currentResult (\resultState -> infer (Tuple.first resultState) declaration);
 
             typedDeclarations =
                 Array.foldl expressionFoldFunction startResult ast.declarations;
@@ -230,14 +230,17 @@ infer state ast =
             Result.andThen typedExpression (\expression ->
                 mkInferResult (mkState names context) (Record.set1 "_$EXPR" (Tuple.second expression) (
                     Array.foldl
-                        (\result \declaration -> Record.set1 declaration.name (resolveBinding (Record.get declaration.name context) context) result)
+                        (\result \declaration -> Record.set1 declaration.name (resolveBinding (Record.get declaration.name context) typeDeclarationsContext) result)
                         (Record.mk0 ()) ast.declarations))
                     where {
                         names =
                             namesFromInferResult expression;
 
                         context =
-                            contextFromInferResult expression
+                            contextFromInferResult expression;
+
+                        typeDeclarationsContext =
+                            contextFromInferResult (Result.withDefault () typedDeclarations)
                     }
             )
 
@@ -308,6 +311,9 @@ contextFromInferResult inferResult =
 
 namesFromInferResult inferResult =
     namesFromState (stateFromInferResult inferResult);
+
+updateNamesInInferResult names inferResult =
+    mkInferResult (mkState names (stateFromInferResult)) (typeFromInferResult);
 
 
 showType type =
