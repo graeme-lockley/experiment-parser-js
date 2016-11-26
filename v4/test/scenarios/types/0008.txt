@@ -5,6 +5,6 @@ testB b = (testA b) + 1;
 
 testA 10
 -- type
-testA : a5 -> Integer
-testB : a5 -> Integer
+testA : a1 -> Integer
+testB : a1 -> Integer
 _$EXPR : Integer

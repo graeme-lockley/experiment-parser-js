@@ -317,27 +317,59 @@ updateNamesInInferResult names inferResult =
 
 
 showType type =
-    if type.type == "CONSTANT" then
-        type.name
-
-    else if type.type == "VARIABLE" then
-        type.name
-
-    else if type.type == "FUNCTION" then
-        (if (Record.get "type" type.domain) == "FUNCTION" then
-            "(" ++ (showType type.domain) ++ ")"
-        else
-            showType type.domain) ++
-        " -> " ++
-        showType type.range
-    else
-        "-unknown-"
+    Tuple.first (showNamedType type (Tuple.Tuple initNames (Record.mk0 ())))
 assumptions {
     DEBUG.eq (showType typeString) "String";
     DEBUG.eq (showType (functionType typeString typeInteger)) "String -> Integer";
     DEBUG.eq (showType (functionType (functionType (variableType "a") (variableType "b")) typeCharacter)) "(a -> b) -> Character";
     DEBUG.eq (showType (functionType (variableType "a") (functionType (variableType "b") typeCharacter))) "a -> b -> Character"
 };
+
+
+showNamedType type state =
+    if type.type == "CONSTANT" then
+        Tuple.Tuple type.name state
+
+    else if type.type == "VARIABLE" then
+        if Record.get type.name (Tuple.second state) then
+            Tuple.Tuple (Record.get type.name (Tuple.second state)) state
+        else
+            (Tuple.Tuple typeName newState
+                where {
+                    newName =
+                        nextNames (Tuple.first state);
+
+                    typeName =
+                        nameOf newName;
+
+                    newContext =
+                        Record.set1 type.name typeName (Tuple.second state);
+
+                    newState =
+                        Tuple.Tuple newName newContext
+
+                })
+
+    else if type.type == "FUNCTION" then
+        let {
+            showNamedTypeDomain =
+                showNamedType type.domain state;
+
+            prettyPrintDomain =
+                if (Record.get "type" type.domain) == "FUNCTION" then
+                        "(" ++ (Tuple.first showNamedTypeDomain) ++ ")"
+                    else
+                        Tuple.first showNamedTypeDomain;
+
+            showNamedTypeRange =
+                showNamedType type.range (Tuple.second showNamedTypeDomain);
+
+            prettyPrintRange =
+                Tuple.first showNamedTypeRange
+        } in
+            Tuple.Tuple (prettyPrintDomain ++ " -> " ++ prettyPrintRange) (Tuple.second showNamedTypeRange)
+    else
+        Tuple.Tuple "-unknown-" state;
 
 
 showModuleType moduleType =

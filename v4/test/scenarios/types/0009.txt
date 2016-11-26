@@ -5,6 +5,6 @@ id2 b = b;
 
 id 'c'
 -- type
-id : a3 -> a3
-id2 : a4 -> a4
+id : a1 -> a1
+id2 : a1 -> a1
 _$EXPR : Character
