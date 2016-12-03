@@ -174,7 +174,7 @@ function union(a) {
 
 
 function clone(record) {
-    var temp = record.constructor();
+    const temp = record.constructor();
     for (const key in record) {
         if (record.hasOwnProperty(key)) {
             temp[key] = record[key];
