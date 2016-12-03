@@ -26,6 +26,15 @@ size m =
         };
 
 
+map f m =
+    Helper.map f m
+assumptions {
+    DEBUG.eq (size (map ((+) 1) (singleton "a" 1))) 1;
+    DEBUG.eq (lookup "a" (map ((+) 1) (singleton "a" 1))) (Maybe.Just 2);
+    DEBUG.eq (lookup "b" (map ((+) 1) (singleton "a" 1))) Maybe.Nothing
+};
+
+
 set1 =
     Helper.set1;
 

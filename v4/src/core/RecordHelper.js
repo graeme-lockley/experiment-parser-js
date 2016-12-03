@@ -6,6 +6,21 @@ function get(name) {
 }
 
 
+function map(f) {
+    return r => {
+        const result = {};
+
+        for (const key in r) {
+            if (r.hasOwnProperty(key)) {
+                result[key] = f(r[key]);
+            }
+        }
+
+        return result;
+    };
+}
+
+
 function mk0() {
     return {};
 }
@@ -201,10 +216,12 @@ function fold(f) {
 
 
 module.exports = {
+    fold,
     get,
     set1,
     set2,
     set3,
+    map,
     mk0,
     mk1,
     mk2,
@@ -215,6 +232,5 @@ module.exports = {
     mk7,
     mk8,
     mk9,
-    union,
-    fold
+    union
 };
