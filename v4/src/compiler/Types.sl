@@ -279,7 +279,7 @@ assumptions {
     DEBUG.eq (unify typeInteger (variableType "a")) (Result.Ok (Record.mk1 "a" typeInteger));
     DEBUG.eq (unify (variableType "b") (variableType "a")) (Result.Ok (Record.mk1 "b" (variableType "a")));
     DEBUG.eq (unify (variableType "a") (functionType typeInteger typeInteger)) (Result.Ok (Record.mk1 "a" (functionType typeInteger typeInteger)));
-    DEBUG.eq (unify (functionType (variableType "a") typeInteger) (functionType typeString (variableType "b"))) (Result.Ok (Record.mk2 "a" typeString "b" typeInteger))
+    DEBUG.eq (unify (functionType (variableType "a") typeInteger) (functionType typeString (variableType "b"))) (Result.Ok (Record.mk2 "b" typeInteger "a" typeString))
 };
 
 
