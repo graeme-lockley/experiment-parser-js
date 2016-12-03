@@ -198,6 +198,8 @@ function fold(f) {
         return result;
     };
 }
+
+
 module.exports = {
     get,
     set1,
