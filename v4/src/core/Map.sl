@@ -5,7 +5,7 @@ import file:./Maybe as Maybe;
 import file:./Debug as DEBUG;
 
 
-get name d =
+lookup name d =
     let {
         tmpResult = Helper.get name d
     } in
@@ -14,8 +14,8 @@ get name d =
         else
             Maybe.Nothing
 assumptions {
-    DEBUG.eq (get "hello" (mk1 "hello" 2)) (Maybe.Just 2);
-    DEBUG.eq (get "hello" mk0) Maybe.Nothing
+    DEBUG.eq (lookup "hello" (singleton "hello" 2)) (Maybe.Just 2);
+    DEBUG.eq (lookup "hello" empty) Maybe.Nothing
 };
 
 
@@ -38,11 +38,11 @@ set3 =
     Helper.set3;
 
 
-mk0 =
-    Helper.mk0;
+empty =
+    Helper.mk0 ();
 
 
-mk1 =
+singleton =
     Helper.mk1;
 
 
