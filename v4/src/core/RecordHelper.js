@@ -160,11 +160,11 @@ function mk9(k1) {
 
 function union(a) {
     return b => {
-        const result = clone(a);
+        const result = clone(b);
 
-        for (const key in b) {
-            if (b.hasOwnProperty(key)) {
-                result[key] = b[key];
+        for (const key in a) {
+            if (a.hasOwnProperty(key)) {
+                result[key] = a[key];
             }
         }
 
