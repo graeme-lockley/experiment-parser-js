@@ -19,6 +19,20 @@ assumptions {
 };
 
 
+findWithDefault defaultResult name d =
+    let {
+        tmpResult = Helper.get name d
+    } in
+        if tmpResult then
+            tmpResult
+        else
+            defaultResult
+assumptions {
+    DEBUG.eq (findWithDefault 3 "hello" (singleton "hello" 2)) 2;
+    DEBUG.eq (findWithDefault 3 "hello" empty) 3
+};
+
+
 size m =
     keys.length
         where {
