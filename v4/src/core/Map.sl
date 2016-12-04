@@ -49,6 +49,10 @@ assumptions {
 };
 
 
+union m1 m2 =
+    Helper.union m1 m2;
+
+
 set1 =
     Helper.set1;
 
