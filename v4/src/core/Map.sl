@@ -53,15 +53,15 @@ union m1 m2 =
     Helper.union m1 m2;
 
 
-set1 =
+insert =
     Helper.set1;
 
 
-set2 =
+insert2 =
     Helper.set2;
 
 
-set3 =
+insert3 =
     Helper.set3;
 
 
