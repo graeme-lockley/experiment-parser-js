@@ -5,7 +5,7 @@ import file:./Maybe as Maybe;
 import file:./Debug as DEBUG;
 
 
-lookup name d =
+find name d =
     let {
         tmpResult = Helper.get name d
     } in
@@ -14,8 +14,8 @@ lookup name d =
         else
             Maybe.Nothing
 assumptions {
-    DEBUG.eq (lookup "hello" (singleton "hello" 2)) (Maybe.Just 2);
-    DEBUG.eq (lookup "hello" empty) Maybe.Nothing
+    DEBUG.eq (find "hello" (singleton "hello" 2)) (Maybe.Just 2);
+    DEBUG.eq (find "hello" empty) Maybe.Nothing
 };
 
 
@@ -30,8 +30,8 @@ map f m =
     Helper.map f m
 assumptions {
     DEBUG.eq (size (map ((+) 1) (singleton "a" 1))) 1;
-    DEBUG.eq (lookup "a" (map ((+) 1) (singleton "a" 1))) (Maybe.Just 2);
-    DEBUG.eq (lookup "b" (map ((+) 1) (singleton "a" 1))) Maybe.Nothing
+    DEBUG.eq (find "a" (map ((+) 1) (singleton "a" 1))) (Maybe.Just 2);
+    DEBUG.eq (find "b" (map ((+) 1) (singleton "a" 1))) Maybe.Nothing
 };
 
 
