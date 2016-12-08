@@ -2,3 +2,17 @@
 "Hello world"
 -- type
 _$EXPR : String
+-- inferType
+{
+  "_ok": {
+    "_fst": {
+      "type": "CONSTANT",
+      "name": "String"
+    },
+    "_snd": {
+      "typeEnv": {},
+      "constraints": [],
+      "names": 1
+    }
+  }
+}

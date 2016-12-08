@@ -2,3 +2,17 @@
 'c'
 -- type
 _$EXPR : Character
+-- inferType
+{
+  "_ok": {
+    "_fst": {
+      "type": "CONSTANT",
+      "name": "Character"
+    },
+    "_snd": {
+      "typeEnv": {},
+      "constraints": [],
+      "names": 1
+    }
+  }
+}
