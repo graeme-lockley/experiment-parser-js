@@ -5,3 +5,33 @@ x
 -- type
 x : Integer
 _$EXPR : Integer
+-- inferType
+{
+  "_ok": {
+    "_fst": {
+      "type": "VARIABLE",
+      "name": "a1"
+    },
+    "_snd": {
+      "typeEnv": {
+        "x": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a1"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "_fst": "a1",
+          "_snd": {
+            "type": "CONSTANT",
+            "name": "Integer"
+          }
+        }
+      ],
+      "names": 2
+    }
+  }
+}

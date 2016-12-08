@@ -2,3 +2,17 @@
 10
 -- type
 _$EXPR : Integer
+-- inferType
+{
+  "_ok": {
+    "_fst": {
+      "type": "CONSTANT",
+      "name": "Integer"
+    },
+    "_snd": {
+      "typeEnv": {},
+      "constraints": [],
+      "names": 1
+    }
+  }
+}

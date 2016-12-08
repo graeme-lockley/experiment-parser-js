@@ -3,6 +3,7 @@
 const FS = require('fs');
 const {NodeVM} = require('vm2');
 
+const Infer = require('../../src/compiler/types/Infer');
 const Parser = require('../../src/compiler/Parser');
 const Translator = require('../../src/compiler/Translator');
 const Types = require('../../src/compiler/Types');
@@ -107,6 +108,23 @@ function scenariosIn(directory) {
                     const errorMessage = Result.errorWithDefault("unknown")(typedAST);
                     expect(errorMessage).to.equal(expectations['typeError']);
                 });
+            }
+
+            if ('inferType' in expectations) {
+                if (!parseResponseIsTested) {
+                    it('should parse without any errors', () => {
+                        expect(Result.isOk(parseResponse)).to.equal(true);
+                    });
+                }
+                const inferResult = Infer.infer(Result.withDefault()(parseResponse))(Infer.initialState);
+                it("should infer type", () => {
+                    expect(Result.isOk(inferResult)).to.equal(true);
+                });
+                it("should have the expected response", () => {
+                    const moduleTypeAsString = JSON.stringify(inferResult, null, 2);
+                    expect(moduleTypeAsString).to.equal(expectations['inferType']);
+                });
+
             }
         })
     );
