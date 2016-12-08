@@ -45,7 +45,7 @@ inEnv name schema inferState =
 
 lookupEnv name inferState =
     Maybe.withDefault
-        (Result.Error ("Unknown identifier" ++ name))
+        (Result.Error ("Unknown identifier " ++ name))
         (Maybe.map (\v -> instantiate v inferState) (TypeEnv.find name inferState.typeEnv));
 
 
@@ -68,7 +68,15 @@ instantiate schema inferState =
 
 
 infer expr inferState =
-    if expr.type == "CONSTANT_BOOLEAN" then
+    if expr.type == "ADDITION" then
+        Result.andThen (infer expr.left inferState) (\t1 ->
+        Result.andThen (infer expr.right (Tuple.second t1)) (\t2 ->
+        Result.andThen (fresh (Tuple.second t2)) (\tv ->
+        Result.andThen (uni (Type.TArr (Tuple.first t1) (Type.TArr (Tuple.first t2) (Type.TVar (Tuple.first tv)))) (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger)) (Tuple.second tv)) (\u1 ->
+            mkInferResult (Type.TVar (Tuple.first tv)) u1
+        ))))
+
+    else if expr.type == "CONSTANT_BOOLEAN" then
         mkInferResult Type.typeBoolean inferState
 
     else if expr.type == "CONSTANT_CHARACTER" then
@@ -100,9 +108,9 @@ infer expr inferState =
 
     else if expr.type == "LAMBDA" then
         Result.andThen (fresh inferState) (\tv ->
-        Result.andThen (infer expr.expression (Tuple.second tv)) (\inferExpression ->
-        Result.andThen (inEnv expr.variable (Schema.Forall List.empty (Tuple.first tv)) (Tuple.second inferExpression)) (\t ->
-            mkInferResult (Type.TArr (Type.TVar (Tuple.first tv)) (Tuple.first t)) (Tuple.second t)
+        Result.andThen (inEnv expr.variable (Schema.Forall List.empty (Type.TVar (Tuple.first tv))) (Tuple.second tv)) (\t ->
+        Result.andThen (infer expr.expression t) (\inferExpression ->
+            mkInferResult (Type.TArr (Type.TVar (Tuple.first tv)) (Tuple.first inferExpression)) (Tuple.second inferExpression)
         )))
 
     else
