@@ -5,3 +5,105 @@ test 10
 -- type
 test : Integer -> Integer
 _$EXPR : Integer
+-- inferType
+{
+  "_ok": {
+    "_fst": {
+      "type": "VARIABLE",
+      "name": "a5"
+    },
+    "_snd": {
+      "typeEnv": {
+        "a": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a2"
+          }
+        },
+        "test": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a1"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "_fst": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a2"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "CONSTANT",
+                "name": "Integer"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a3"
+              }
+            }
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "CONSTANT",
+              "name": "Integer"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "CONSTANT",
+                "name": "Integer"
+              },
+              "range": {
+                "type": "CONSTANT",
+                "name": "Integer"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a1"
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a2"
+            },
+            "range": {
+              "type": "VARIABLE",
+              "name": "a3"
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a1"
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "CONSTANT",
+              "name": "Integer"
+            },
+            "range": {
+              "type": "VARIABLE",
+              "name": "a5"
+            }
+          }
+        }
+      ],
+      "names": 5
+    }
+  }
+}
