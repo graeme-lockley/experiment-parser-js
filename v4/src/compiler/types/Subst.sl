@@ -15,3 +15,6 @@ compose s1 s2 =
         (Map.map (SubstitutableType.apply s1) s2)
         s2;
 
+
+add name type subst =
+    Map.insert name type subst;
