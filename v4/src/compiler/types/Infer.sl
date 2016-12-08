@@ -76,6 +76,14 @@ infer expr inferState =
             mkInferResult (Type.TVar (Tuple.first tv)) u1
         ))))
 
+    else if expr.type == "APPLY" then
+        Result.andThen (infer expr.operation inferState) (\t1 ->
+        Result.andThen (infer expr.operand (Tuple.second t1)) (\t2 ->
+        Result.andThen (fresh (Tuple.second t2)) (\tv ->
+        Result.andThen (uni (Tuple.first t1) (Type.TArr (Tuple.first t2) (Type.TVar (Tuple.first tv))) (Tuple.second tv)) (\ur ->
+            mkInferResult (Type.TVar (Tuple.first tv)) ur
+        ))))
+
     else if expr.type == "CONSTANT_BOOLEAN" then
         mkInferResult Type.typeBoolean inferState
 
@@ -92,7 +100,7 @@ infer expr inferState =
         Result.andThen (fresh inferState) (\tv ->
         Result.andThen (infer expr.expression (Tuple.second tv)) (\inferExpression ->
         Result.andThen (inEnv expr.name (Schema.Forall List.empty (Type.TVar (Tuple.first tv))) (Tuple.second inferExpression)) (\t ->
-        Result.andThen (uni (Tuple.first tv) (Tuple.first inferExpression) t) (\t2 ->
+        Result.andThen (uni (Type.TVar (Tuple.first tv)) (Tuple.first inferExpression) t) (\t2 ->
             mkInferResult (Tuple.first inferExpression) t2
         ))))
 
@@ -103,7 +111,7 @@ infer expr inferState =
         Result.andThen (List.foldl (\currentState \declaration -> Result.andThen currentState (\state -> infer declaration (Tuple.second state))) (mkInferResult Type.typeUnit inferState) expr.declarations) (\inferDeclarations ->
         Result.andThen (fresh (Tuple.second inferDeclarations)) (\tv ->
         Result.andThen (infer expr.expression (Tuple.second tv)) (\inferExpression ->
-            Result.Ok  inferExpression
+            Result.Ok inferExpression
         )))
 
     else if expr.type == "LAMBDA" then
