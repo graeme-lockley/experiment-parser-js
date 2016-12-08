@@ -9,3 +9,7 @@ empty =
 
 extend name schema typeEnv =
     Map.insert name schema typeEnv;
+
+
+find name typeEnv =
+    Map.find name typeEnv;
