@@ -97,22 +97,27 @@ infer expr inferState =
         mkInferResult Type.typeString inferState
 
     else if expr.type == "DECLARATION" then
-        Result.andThen (fresh inferState) (\tv ->
-        Result.andThen (infer expr.expression (Tuple.second tv)) (\inferExpression ->
-        Result.andThen (inEnv expr.name (Schema.Forall List.empty (Type.TVar (Tuple.first tv))) (Tuple.second inferExpression)) (\t ->
-        Result.andThen (uni (Type.TVar (Tuple.first tv)) (Tuple.first inferExpression) t) (\t2 ->
+        Result.andThen (infer expr.expression inferState) (\inferExpression ->
+        Result.andThen (lookupEnv expr.name (Tuple.second inferExpression)) (\t ->
+        Result.andThen (uni (Tuple.first t) (Tuple.first inferExpression) (Tuple.second t)) (\t2 ->
             mkInferResult (Tuple.first inferExpression) t2
-        ))))
+        )))
 
     else if expr.type == "IDENTIFIER" then
         lookupEnv expr.name inferState
 
     else if expr.type == "MODULE" then
-        Result.andThen (List.foldl (\currentState \declaration -> Result.andThen currentState (\state -> infer declaration (Tuple.second state))) (mkInferResult Type.typeUnit inferState) expr.declarations) (\inferDeclarations ->
+        Result.andThen (List.foldl (\currentState \declaration ->
+            Result.andThen currentState (\state ->
+                Result.andThen (fresh (Tuple.second state)) (\tv ->
+                Result.andThen (inEnv declaration.name (Schema.Forall List.empty (Type.TVar (Tuple.first tv))) (Tuple.second tv)) (\t ->
+                    mkInferResult Type.typeUnit t
+                )))) (mkInferResult Type.typeUnit inferState) expr.declarations) (\initDeclarations ->
+        Result.andThen (List.foldl (\currentState \declaration -> Result.andThen currentState (\state -> infer declaration (Tuple.second state))) (mkInferResult Type.typeUnit (Tuple.second initDeclarations)) expr.declarations) (\inferDeclarations ->
         Result.andThen (fresh (Tuple.second inferDeclarations)) (\tv ->
         Result.andThen (infer expr.expression (Tuple.second tv)) (\inferExpression ->
             Result.Ok inferExpression
-        )))
+        ))))
 
     else if expr.type == "LAMBDA" then
         Result.andThen (fresh inferState) (\tv ->

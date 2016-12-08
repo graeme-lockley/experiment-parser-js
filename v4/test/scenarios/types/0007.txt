@@ -14,18 +14,18 @@ _$EXPR : Integer
     },
     "_snd": {
       "typeEnv": {
-        "a": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a2"
-          }
-        },
         "test": {
           "names": [],
           "type": {
             "type": "VARIABLE",
             "name": "a1"
+          }
+        },
+        "a": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a2"
           }
         }
       },
