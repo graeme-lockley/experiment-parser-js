@@ -96,6 +96,9 @@ infer expr inferState =
     else if expr.type == "CONSTANT_STRING" then
         mkInferResult Type.typeString inferState
 
+    else if expr.type == "CONSTANT_UNIT" then
+        mkInferResult Type.typeUnit inferState
+
     else if expr.type == "DECLARATION" then
         Result.andThen (infer expr.expression inferState) (\inferExpression ->
         Result.andThen (lookupEnv expr.name (Tuple.second inferExpression)) (\t ->
