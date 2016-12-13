@@ -73,8 +73,12 @@ empty =
     AH.empty;
 
 
-mk1 _1 =
+singleton _1 =
     prepend _1 empty;
+
+
+mk1 =
+    singleton;
 
 
 mk2 _1 _2 =
