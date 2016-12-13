@@ -1,3 +1,4 @@
+import file:./Rails as R;
 import file:./Schema as Schema;
 import file:./Subst as Subst;
 import file:./SubstitutableType as SubstitutableType;
