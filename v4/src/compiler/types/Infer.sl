@@ -85,9 +85,6 @@ inferO expr inferState =
             mkInferResult (Type.TVar (Tuple.first tv)) ur
         ))))
 
-    else if expr.type == "CONSTANT_BOOLEAN" then
-        mkInferResult Type.typeBoolean inferState
-
     else if expr.type == "CONSTANT_CHARACTER" then
         mkInferResult Type.typeCharacter inferState
 
@@ -132,7 +129,10 @@ inferO expr inferState =
 
 
 inferN expr =
-    if expr.type == "CONSTANT_INTEGER" then
+    if expr.type == "CONSTANT_BOOLEAN" then
+        R.returns Type.typeBoolean
+
+    else if expr.type == "CONSTANT_INTEGER" then
         R.returns Type.typeInteger
 
     else
