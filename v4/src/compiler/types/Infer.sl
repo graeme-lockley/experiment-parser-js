@@ -68,7 +68,7 @@ instantiate schema inferState =
         );
 
 
-infer expr inferState =
+inferO expr inferState =
     if expr.type == "ADDITION" then
         Result.andThen (infer expr.left inferState) (\t1 ->
         Result.andThen (infer expr.right (Tuple.second t1)) (\t2 ->
@@ -90,9 +90,6 @@ infer expr inferState =
 
     else if expr.type == "CONSTANT_CHARACTER" then
         mkInferResult Type.typeCharacter inferState
-
-    else if expr.type == "CONSTANT_INTEGER" then
-        mkInferResult Type.typeInteger inferState
 
     else if expr.type == "CONSTANT_STRING" then
         mkInferResult Type.typeString inferState
@@ -133,6 +130,17 @@ infer expr inferState =
     else
         Result.Error ("No inference for " ++ expr.type);
 
+
+inferN expr =
+    if expr.type == "CONSTANT_INTEGER" then
+        R.returns Type.typeInteger
+
+    else
+        (\result -> Result.andThen result (\state -> inferO expr (Tuple.second state)));
+
+
+infer expr inferState =
+    inferN expr (mkInferResult () inferState);
 
 mkInferResult type inferState =
     Result.Ok (Tuple.Tuple type inferState);
