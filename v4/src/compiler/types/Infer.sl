@@ -85,9 +85,6 @@ inferO expr inferState =
             mkInferResult (Type.TVar (Tuple.first tv)) ur
         ))))
 
-    else if expr.type == "CONSTANT_STRING" then
-        mkInferResult Type.typeString inferState
-
     else if expr.type == "CONSTANT_UNIT" then
         mkInferResult Type.typeUnit inferState
 
@@ -134,6 +131,9 @@ inferN expr =
 
     else if expr.type == "CONSTANT_INTEGER" then
         R.returns Type.typeInteger
+
+    else if expr.type == "CONSTANT_STRING" then
+        R.returns Type.typeString
 
     else
         (\result -> Result.andThen result (\state -> inferO expr (Tuple.second state)));
