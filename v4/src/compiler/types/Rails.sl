@@ -57,9 +57,9 @@ assumptions {
             returns (a * 2))) (Result.Ok (Tuple.Tuple () (Record.mk0 ()))))
         (Result.Ok (Tuple.Tuple 4 (Record.mk1 "a" 2)));
     DEBUG.eq
-        ((andThen (set "a" 1) (\a ->
+        (andThen (set "a" 1) (\a ->
          andThen (set "a" (a + 1)) (\a ->
          andThen (set "b" 10) (\b ->
-            returns (a + b))))) (Result.Ok (Tuple.Tuple () (Record.mk0 ()))))
+            returns (a + b)))) (Result.Ok (Tuple.Tuple () (Record.mk0 ()))))
         (Result.Ok (Tuple.Tuple 12 (Record.mk2 "a" 2 "b" 10)))
 };
