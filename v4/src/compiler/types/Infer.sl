@@ -100,13 +100,6 @@ inferO expr inferState =
             Result.Ok inferExpression
         ))))
 
-    else if expr.type == "LAMBDA" then
-        Result.andThen (fresh inferState) (\tv ->
-        Result.andThen (inEnv expr.variable (Schema.Forall List.empty (Type.TVar (Tuple.first tv))) (Tuple.second tv)) (\t ->
-        Result.andThen (infer expr.expression t) (\inferExpression ->
-            mkInferResult (Type.TArr (Type.TVar (Tuple.first tv)) (Tuple.first inferExpression)) (Tuple.second inferExpression)
-        )))
-
     else
         Result.Error ("No inference for " ++ expr.type);
 
@@ -134,6 +127,13 @@ inferN expr =
 
     else if expr.type == "CONSTANT_UNIT" then
         R.returns Type.typeUnit
+
+    else if expr.type == "LAMBDA" then
+        R.andThen (freshR) (\tv ->
+        R.andThen (inEnvR expr.variable (Schema.Forall List.empty tv)) (\_ ->
+        R.andThen (inferN expr.expression) (\t ->
+            R.returns (Type.TArr tv t)
+        )))
 
     else
         (\result -> Result.andThen result (\state -> inferO expr (Tuple.second state)));
