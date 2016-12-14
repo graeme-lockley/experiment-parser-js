@@ -85,9 +85,6 @@ inferO expr inferState =
             mkInferResult (Type.TVar (Tuple.first tv)) ur
         ))))
 
-    else if expr.type == "CONSTANT_UNIT" then
-        mkInferResult Type.typeUnit inferState
-
     else if expr.type == "DECLARATION" then
         Result.andThen (infer expr.expression inferState) (\inferExpression ->
         Result.andThen (lookupEnv expr.name (Tuple.second inferExpression)) (\t ->
@@ -134,6 +131,9 @@ inferN expr =
 
     else if expr.type == "CONSTANT_STRING" then
         R.returns Type.typeString
+
+    else if expr.type == "CONSTANT_UNIT" then
+        R.returns Type.typeUnit
 
     else
         (\result -> Result.andThen result (\state -> inferO expr (Tuple.second state)));
