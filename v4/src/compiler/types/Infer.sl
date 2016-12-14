@@ -69,15 +69,7 @@ instantiate schema inferState =
 
 
 inferO expr inferState =
-    if expr.type == "ADDITION" then
-        Result.andThen (infer expr.left inferState) (\t1 ->
-        Result.andThen (infer expr.right (Tuple.second t1)) (\t2 ->
-        Result.andThen (fresh (Tuple.second t2)) (\tv ->
-        Result.andThen (uni (Type.TArr (Tuple.first t1) (Type.TArr (Tuple.first t2) (Type.TVar (Tuple.first tv)))) (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger)) (Tuple.second tv)) (\u1 ->
-            mkInferResult (Type.TVar (Tuple.first tv)) u1
-        ))))
-
-    else if expr.type == "APPLY" then
+    if expr.type == "APPLY" then
         Result.andThen (infer expr.operation inferState) (\t1 ->
         Result.andThen (infer expr.operand (Tuple.second t1)) (\t2 ->
         Result.andThen (fresh (Tuple.second t2)) (\tv ->
@@ -120,7 +112,15 @@ inferO expr inferState =
 
 
 inferN expr =
-    if expr.type == "CONSTANT_BOOLEAN" then
+    if expr.type == "ADDITION" then
+        R.andThen (inferN expr.left) (\t1 ->
+        R.andThen (inferN expr.right) (\t2 ->
+        R.andThen freshR (\tv ->
+        R.andThen (uniR (Type.TArr t1 (Type.TArr t2 tv)) (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))) (\_ ->
+            R.returns tv
+        ))))
+
+    else if expr.type == "CONSTANT_BOOLEAN" then
         R.returns Type.typeBoolean
 
     else if expr.type == "CONSTANT_CHARACTER" then
@@ -137,6 +137,25 @@ inferN expr =
 
     else
         (\result -> Result.andThen result (\state -> inferO expr (Tuple.second state)));
+
+
+freshR =
+    R.andThen (R.get "names") (\names ->
+    R.andThen (R.set "names" (names + 1)) (\names ->
+        R.returns (Type.TVar ("a" ++ names))
+    ));
+
+
+inEnvR name schema =
+    R.andThen (R.get "typeEnv") (\typeEnv ->
+        R.set "typeEnv" (TypeEnv.extend name schema typeEnv)
+    );
+
+
+uniR t1 t2 =
+    R.andThen (R.get "constraints") (\constraints ->
+        R.set "constraints" (List.append (Tuple.Tuple t1 t2) constraints)
+    );
 
 
 infer expr inferState =
