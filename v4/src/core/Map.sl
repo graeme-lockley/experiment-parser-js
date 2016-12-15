@@ -1,6 +1,8 @@
 import file:./RecordHelper as Helper;
 
+import file:./Array as List;
 import file:./Maybe as Maybe;
+import file:./Tuple as Tuple;
 
 import file:./Debug as DEBUG;
 
@@ -46,6 +48,13 @@ assumptions {
     DEBUG.eq (size (map ((+) 1) (singleton "a" 1))) 1;
     DEBUG.eq (find "a" (map ((+) 1) (singleton "a" 1))) (Maybe.Just 2);
     DEBUG.eq (find "b" (map ((+) 1) (singleton "a" 1))) Maybe.Nothing
+};
+
+
+fromList list =
+    List.foldl (\acc \item -> insert (Tuple.first item) (Tuple.second item) acc) empty list
+assumptions {
+    DEBUG.eq (fromList (List.mk2 (Tuple.Tuple "hello" 1) (Tuple.Tuple "world" 2))) (mk2 "hello" 1 "world" 2)
 };
 
 
