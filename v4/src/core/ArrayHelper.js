@@ -96,7 +96,7 @@ function findMap(f) {
 function at(i) {
     return a => {
         const result = a[i];
-        return result ? Maybe.Just(result) : Maybe.Nothing;
+        return result == 0 || result ? Maybe.Just(result) : Maybe.Nothing;
     }
 }
 

@@ -14,8 +14,13 @@ Nothing =
 
 
 isJust maybe =
-    Record.get "value" maybe
+    let {
+        value =
+            Record.get "value" maybe
+    } in
+        value == 0 || value
 assumptions {
+    isJust (Just 0);
     isJust (Just 1);
     Boolean.not o isJust Nothing
 };
@@ -35,6 +40,7 @@ withDefault defaultValue maybe =
         defaultValue
 assumptions {
     withDefault 0 (Just 1) == 1;
+    withDefault 1 (Just 0) == 0;
     withDefault 0 Nothing == 0
 };
 
