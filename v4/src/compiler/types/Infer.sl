@@ -6,6 +6,7 @@ import file:./Type as Type;
 import file:./TypeEnv as TypeEnv;
 
 import file:../../core/Array as List;
+import file:../../core/Map as Map;
 import file:../../core/Maybe as Maybe;
 import file:../../core/Record as Record;
 import file:../../core/Result as Result;
@@ -51,21 +52,18 @@ lookupEnv name inferState =
 
 
 instantiate schema inferState =
-    let {
-        substInferState =
-            List.foldl (\state \name ->
-                Result.andThen (fresh (Tuple.second state)) (\nameInferState ->
-                Tuple.Tuple
-                    (Subst.add name (Type.TVar (Tuple.first nameInferState)) (Tuple.first state))
-                    (Tuple.second nameInferState)
-                )
-            ) (Result.Ok (Tuple.Tuple Subst.nullSubst inferState)) (Schema.names schema)
-    } in
-        Result.andThen substInferState (\s ->
-            mkInferResult
-                (SubstitutableType.apply (Tuple.first s) (Schema.type schema))
-                (Tuple.second s)
-        );
+    instantiateR schema (mkInferResult () inferState);
+
+
+instantiateR schema =
+    R.andThen (R.returns (Schema.names schema)) (\_ ->
+    R.andThen (R.map (\_ -> fresh)) (\asp ->
+        R.returns (SubstitutableType.apply s (Schema.type schema))
+            where {
+                s =
+                    Map.fromList (List.zip (Schema.names schema) asp)
+            }
+    ));
 
 
 inferO expr inferState =
