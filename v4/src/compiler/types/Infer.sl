@@ -69,15 +69,7 @@ instantiate schema inferState =
 
 
 inferO expr inferState =
-    if expr.type == "APPLY" then
-        Result.andThen (infer expr.operation inferState) (\t1 ->
-        Result.andThen (infer expr.operand (Tuple.second t1)) (\t2 ->
-        Result.andThen (fresh (Tuple.second t2)) (\tv ->
-        Result.andThen (uni (Tuple.first t1) (Type.TArr (Tuple.first t2) (Type.TVar (Tuple.first tv))) (Tuple.second tv)) (\ur ->
-            mkInferResult (Type.TVar (Tuple.first tv)) ur
-        ))))
-
-    else if expr.type == "DECLARATION" then
+    if expr.type == "DECLARATION" then
         Result.andThen (infer expr.expression inferState) (\inferExpression ->
         Result.andThen (lookupEnv expr.name (Tuple.second inferExpression)) (\t ->
         Result.andThen (uni (Tuple.first t) (Tuple.first inferExpression) (Tuple.second t)) (\t2 ->
@@ -105,7 +97,15 @@ inferO expr inferState =
 
 
 inferN expr =
-    if expr.type == "ADDITION" then
+    if expr.type == "APPLY" then
+        R.andThen (inferN expr.operation) (\t1 ->
+        R.andThen (inferN expr.operand) (\t2 ->
+        R.andThen freshR (\tv ->
+        R.andThen (uniR t1 (Type.TArr t2 tv)) (\_ ->
+            R.returns tv
+        ))))
+
+    else if expr.type == "ADDITION" then
         R.andThen (inferN expr.left) (\t1 ->
         R.andThen (inferN expr.right) (\t2 ->
         R.andThen freshR (\tv ->
