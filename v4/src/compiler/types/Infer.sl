@@ -59,7 +59,7 @@ lookupEnvR name =
 
 instantiate schema =
     R.andThen (R.returns (Schema.names schema)) (\_ ->
-    R.andThen (R.map (\_ -> fresh)) (\asp ->
+    R.andThen (R.map (\_ -> freshR)) (\asp ->
         R.returns (SubstitutableType.apply s (Schema.type schema))
             where {
                 s =
