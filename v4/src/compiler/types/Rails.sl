@@ -1,3 +1,4 @@
+import file:../../core/Array as List;
 import file:../../core/Record as Record;
 import file:../../core/Result as Result;
 import file:../../core/Tuple as Tuple;
@@ -63,3 +64,38 @@ assumptions {
             returns (a + b)))) (Result.Ok (Tuple.Tuple () (Record.mk0 ()))))
         (Result.Ok (Tuple.Tuple 12 (Record.mk2 "a" 2 "b" 10)))
 };
+
+
+
+map f =
+    andThen value (\list \state ->
+        List.foldl
+            (\acc \item ->
+                (andThen value (\accList ->
+                 andThen (replaceValue item) (\_ ->
+                 andThen f (\fResult ->
+                    returns (List.append fResult accList))))) acc)
+            (replaceValue List.empty state)
+            list
+    )
+assumptions {
+    DEBUG.eq (map (andThen value (\n -> returns (n + 1))) (mkOkState (List.mk3 1 2 3) 0)) (mkOkState (List.mk3 2 3 4) 0)
+};
+
+
+replaceValue v =
+    andThen value (\_ -> returns v)
+assumptions {
+    DEBUG.eq (replaceValue 123 (mkOkState 312 1)) (mkOkState 123 1)
+};
+
+
+value state =
+    state
+assumptions {
+    DEBUG.eq (value (mkOkState 123 1)) (mkOkState 123 1)
+};
+
+
+mkOkState value body =
+    Result.Ok (Tuple.Tuple value body);
