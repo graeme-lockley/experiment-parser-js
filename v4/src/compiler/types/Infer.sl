@@ -69,17 +69,7 @@ instantiate schema =
 
 
 inferO expr inferState =
-    if expr.type == "DECLARATION" then
-        Result.andThen (infer expr.expression inferState) (\inferExpression ->
-        Result.andThen (lookupEnv expr.name (Tuple.second inferExpression)) (\t ->
-        Result.andThen (uni (Tuple.first t) (Tuple.first inferExpression) (Tuple.second t)) (\t2 ->
-            mkInferResult (Tuple.first inferExpression) t2
-        )))
-
-    else if expr.type == "IDENTIFIER" then
-        lookupEnv expr.name inferState
-
-    else if expr.type == "MODULE" then
+    if expr.type == "MODULE" then
         Result.andThen (List.foldl (\currentState \declaration ->
             Result.andThen currentState (\state ->
                 Result.andThen (fresh (Tuple.second state)) (\tv ->
@@ -127,6 +117,16 @@ inferN expr =
 
     else if expr.type == "CONSTANT_UNIT" then
         R.returns Type.typeUnit
+
+    else if expr.type == "DECLARATION" then
+        R.andThen (inferN expr.expression) (\inferExpression ->
+        R.andThen (lookupEnvR expr.name) (\t ->
+        R.andThen (uniR t inferExpression) (\_ ->
+            R.returns inferExpression
+        )))
+
+    else if expr.type == "IDENTIFIER" then
+        lookupEnvR expr.name
 
     else if expr.type == "LAMBDA" then
         R.andThen (freshR) (\tv ->
