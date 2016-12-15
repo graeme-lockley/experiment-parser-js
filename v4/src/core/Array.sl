@@ -1,5 +1,6 @@
 import file:./ArrayHelper as AH;
 import file:./Maybe as Maybe;
+import file:./Tuple as Tuple;
 
 import file:./Debug as DEBUG;
 
@@ -128,4 +129,19 @@ mk12 _1 _2 _3 _4 _5 _6 _7 _8 _9 _10 _11 _12 =
 mk13 _1 _2 _3 _4 _5 _6 _7 _8 _9 _10 _11 _12 _13 =
     prepend _1 (mk12 _2 _3 _4 _5 _6 _7 _8 _9 _10 _11 _12 _13);
 
+
+zip l1 l2 =
+    if (isEmpty l1) || (isEmpty l2) then
+        empty
+    else
+        prepend (Tuple.Tuple (Maybe.withDefault () (at 0 l1)) (Maybe.withDefault () (at 0 l2))) (zip (slice 1 l1) (slice 1 l2))
+assumptions {
+    DEBUG.eq (zip (mk2 1 2) (mk2 3 4)) (mk2 (Tuple.Tuple 1 3) (Tuple.Tuple 2 4));
+    DEBUG.eq (zip (mk2 1 2) (mk3 3 4 5)) (mk2 (Tuple.Tuple 1 3) (Tuple.Tuple 2 4));
+    DEBUG.eq (zip (mk3 0 1 2) (mk2 3 4)) (mk2 (Tuple.Tuple 0 3) (Tuple.Tuple 1 4))
+};
+
+
+isEmpty l =
+    (length l) == 0;
 
