@@ -46,16 +46,18 @@ inEnv name schema inferState =
 
 
 lookupEnv name inferState =
-    Maybe.withDefault
-        (Result.Error ("Unknown identifier " ++ name))
-        (Maybe.map (\v -> instantiate v inferState) (TypeEnv.find name inferState.typeEnv));
+    lookupEnvR name (mkInferResult () inferState);
 
 
-instantiate schema inferState =
-    instantiateR schema (mkInferResult () inferState);
+lookupEnvR name =
+    R.andThen (R.get "typeEnv") (\typeEnv \state ->
+        Maybe.withDefault
+            (Result.Error ("Unknown identifier " ++ name))
+            (Maybe.map (\v -> instantiate v state) (TypeEnv.find name typeEnv))
+    );
 
 
-instantiateR schema =
+instantiate schema =
     R.andThen (R.returns (Schema.names schema)) (\_ ->
     R.andThen (R.map (\_ -> fresh)) (\asp ->
         R.returns (SubstitutableType.apply s (Schema.type schema))
