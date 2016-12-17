@@ -26,17 +26,6 @@ initialState =
     mkState TypeEnv.empty List.empty 0;
 
 
-fresh inferState =
-    Result.Ok (Tuple.Tuple name (Record.set1 "names" nextNameState inferState))
-        where {
-            nextNameState =
-                inferState.names + 1;
-
-            name =
-                "a" ++ nextNameState
-        };
-
-
 lookupEnvR name =
     R.andThen (R.get "typeEnv") (\typeEnv \state ->
         Maybe.withDefault
