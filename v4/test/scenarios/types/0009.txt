@@ -1,10 +1,318 @@
--- given an assumption ensure that it unifies with Boolean
-id a = a;
+-- given a boolean operators ensure that they unify with boolean.
+opAnd a b = a && b;
 
-id2 b = b;
+opOr c d = c || d;
 
-id 'c'
--- type
-id : a1 -> a1
-id2 : a1 -> a1
-_$EXPR : Character
+opNot x = !x;
+-- ast
+{
+  "type": "MODULE",
+  "sourceName": "stream",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "DECLARATION",
+      "name": "opAnd",
+      "expression": {
+        "type": "LAMBDA",
+        "variable": "a",
+        "expression": {
+          "type": "LAMBDA",
+          "variable": "b",
+          "expression": {
+            "type": "BOOLEAN_AND",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "a"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "b"
+            }
+          }
+        }
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "opOr",
+      "expression": {
+        "type": "LAMBDA",
+        "variable": "c",
+        "expression": {
+          "type": "LAMBDA",
+          "variable": "d",
+          "expression": {
+            "type": "BOOLEAN_OR",
+            "left": {
+              "type": "IDENTIFIER",
+              "name": "c"
+            },
+            "right": {
+              "type": "IDENTIFIER",
+              "name": "d"
+            }
+          }
+        }
+      },
+      "assumptions": []
+    },
+    {
+      "type": "DECLARATION",
+      "name": "opNot",
+      "expression": {
+        "type": "LAMBDA",
+        "variable": "x",
+        "expression": {
+          "type": "BOOLEAN_NOT",
+          "operand": {
+            "type": "IDENTIFIER",
+            "name": "x"
+          }
+        }
+      },
+      "assumptions": []
+    }
+  ],
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
+}
+-- inferType
+{
+  "_ok": {
+    "_fst": {
+      "type": "CONSTANT",
+      "name": "Unit"
+    },
+    "_snd": {
+      "typeEnv": {
+        "opAnd": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a1"
+          }
+        },
+        "opOr": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a2"
+          }
+        },
+        "opNot": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a3"
+          }
+        },
+        "a": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a4"
+          }
+        },
+        "b": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a5"
+          }
+        },
+        "c": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a7"
+          }
+        },
+        "d": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a8"
+          }
+        },
+        "x": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a10"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "_fst": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a4"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a5"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a6"
+              }
+            }
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "CONSTANT",
+              "name": "Boolean"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "CONSTANT",
+                "name": "Boolean"
+              },
+              "range": {
+                "type": "CONSTANT",
+                "name": "Boolean"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a1"
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a4"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a5"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a6"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a7"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a8"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a9"
+              }
+            }
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "CONSTANT",
+              "name": "Boolean"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "CONSTANT",
+                "name": "Boolean"
+              },
+              "range": {
+                "type": "CONSTANT",
+                "name": "Boolean"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a2"
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a7"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a8"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a9"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a10"
+            },
+            "range": {
+              "type": "VARIABLE",
+              "name": "a11"
+            }
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "CONSTANT",
+              "name": "Boolean"
+            },
+            "range": {
+              "type": "CONSTANT",
+              "name": "Boolean"
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a3"
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a10"
+            },
+            "range": {
+              "type": "VARIABLE",
+              "name": "a11"
+            }
+          }
+        }
+      ],
+      "names": 12
+    }
+  }
+}

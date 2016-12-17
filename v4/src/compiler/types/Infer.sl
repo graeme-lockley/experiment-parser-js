@@ -62,6 +62,29 @@ inferN expr =
             R.returns tv
         ))))
 
+    else if expr.type == "BOOLEAN_AND" then
+        R.andThen (inferN expr.left) (\t1 ->
+        R.andThen (inferN expr.right) (\t2 ->
+        R.andThen fresh (\tv ->
+        R.andThen (uni (Type.TArr t1 (Type.TArr t2 tv)) (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))) (\_ ->
+            R.returns tv
+        ))))
+
+    else if expr.type == "BOOLEAN_NOT" then
+        R.andThen (inferN expr.operand) (\t1 ->
+        R.andThen fresh (\tv ->
+        R.andThen (uni (Type.TArr t1 tv) (Type.TArr Type.typeBoolean Type.typeBoolean)) (\_ ->
+            R.returns tv
+        )))
+
+    else if expr.type == "BOOLEAN_OR" then
+        R.andThen (inferN expr.left) (\t1 ->
+        R.andThen (inferN expr.right) (\t2 ->
+        R.andThen fresh (\tv ->
+        R.andThen (uni (Type.TArr t1 (Type.TArr t2 tv)) (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))) (\_ ->
+            R.returns tv
+        ))))
+
     else if expr.type == "CONSTANT_BOOLEAN" then
         R.returns Type.typeBoolean
 
@@ -108,7 +131,10 @@ inferN expr =
         ))))
 
     else
-        Result.Error ("No inference for " ++ expr.type);
+    {
+        DEBUG.log "No inference for " expr.type;
+        Result.Error ("No inference for " ++ expr.type)
+    };
 
 
 fresh =
