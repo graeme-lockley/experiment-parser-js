@@ -36,7 +36,7 @@ lookupEnv name =
 
 instantiate schema =
     R.andThen (R.returns (Schema.names schema)) (\_ ->
-    R.andThen (R.map (\_ -> freshR)) (\asp ->
+    R.andThen (R.map (\_ -> fresh)) (\asp ->
         R.returns (SubstitutableType.apply s (Schema.type schema))
             where {
                 s =
@@ -49,7 +49,7 @@ inferN expr =
     if expr.type == "APPLY" then
         R.andThen (inferN expr.operation) (\t1 ->
         R.andThen (inferN expr.operand) (\t2 ->
-        R.andThen freshR (\tv ->
+        R.andThen fresh (\tv ->
         R.andThen (uniR t1 (Type.TArr t2 tv)) (\_ ->
             R.returns tv
         ))))
@@ -57,7 +57,7 @@ inferN expr =
     else if expr.type == "ADDITION" then
         R.andThen (inferN expr.left) (\t1 ->
         R.andThen (inferN expr.right) (\t2 ->
-        R.andThen freshR (\tv ->
+        R.andThen fresh (\tv ->
         R.andThen (uniR (Type.TArr t1 (Type.TArr t2 tv)) (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))) (\_ ->
             R.returns tv
         ))))
@@ -88,7 +88,7 @@ inferN expr =
         lookupEnv expr.name
 
     else if expr.type == "LAMBDA" then
-        R.andThen (freshR) (\tv ->
+        R.andThen (fresh) (\tv ->
         R.andThen (inEnvR expr.variable (Schema.Forall List.empty tv)) (\_ ->
         R.andThen (inferN expr.expression) (\t ->
             R.returns (Type.TArr tv t)
@@ -97,12 +97,12 @@ inferN expr =
     else if expr.type == "MODULE" then
         R.andThen (
             R.foldl (\declaration ->
-                R.andThen freshR (\tv ->
+                R.andThen fresh (\tv ->
                 R.andThen (inEnvR declaration.name (Schema.Forall List.empty tv)) (\_ ->
                     R.returns Type.typeUnit
                 ))) expr.declarations) (\_ ->
         R.andThen (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
-        R.andThen freshR (\tv ->
+        R.andThen fresh (\tv ->
         R.andThen (inferN expr.expression) (\te ->
             R.returns te
         ))))
@@ -111,13 +111,13 @@ inferN expr =
         Result.Error ("No inference for " ++ expr.type);
 
 
-freshR =
+fresh =
     R.andThen (R.get "names") (\names ->
     R.andThen (R.set "names" (names + 1)) (\names ->
         R.returns (Type.TVar ("a" ++ names))
     ))
 assumptions {
-    DEBUG.eq (freshR (mkInferResult () initialState)) (mkInferResult (Type.TVar "a1") (mkState TypeEnv.empty List.empty 1))
+    DEBUG.eq (fresh (mkInferResult () initialState)) (mkInferResult (Type.TVar "a1") (mkState TypeEnv.empty List.empty 1))
 };
 
 
