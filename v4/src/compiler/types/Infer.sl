@@ -68,24 +68,6 @@ instantiate schema =
     ));
 
 
-inferO expr inferState =
-    if expr.type == "MODULE" then
-        Result.andThen (List.foldl (\currentState \declaration ->
-            Result.andThen currentState (\state ->
-                Result.andThen (fresh (Tuple.second state)) (\tv ->
-                Result.andThen (inEnv declaration.name (Schema.Forall List.empty (Type.TVar (Tuple.first tv))) (Tuple.second tv)) (\t ->
-                    mkInferResult Type.typeUnit t
-                )))) (mkInferResult Type.typeUnit inferState) expr.declarations) (\initDeclarations ->
-        Result.andThen (List.foldl (\currentState \declaration -> Result.andThen currentState (\state -> infer declaration (Tuple.second state))) (mkInferResult Type.typeUnit (Tuple.second initDeclarations)) expr.declarations) (\inferDeclarations ->
-        Result.andThen (fresh (Tuple.second inferDeclarations)) (\tv ->
-        Result.andThen (infer expr.expression (Tuple.second tv)) (\inferExpression ->
-            Result.Ok inferExpression
-        ))))
-
-    else
-        Result.Error ("No inference for " ++ expr.type);
-
-
 inferN expr =
     if expr.type == "APPLY" then
         R.andThen (inferN expr.operation) (\t1 ->
@@ -135,15 +117,31 @@ inferN expr =
             R.returns (Type.TArr tv t)
         )))
 
+    else if expr.type == "MODULE" then
+        R.andThen (
+            R.foldl (\declaration ->
+                R.andThen freshR (\tv ->
+                R.andThen (inEnvR declaration.name (Schema.Forall List.empty tv)) (\_ ->
+                    R.returns Type.typeUnit
+                ))) expr.declarations) (\_ ->
+        R.andThen (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
+        R.andThen freshR (\tv ->
+        R.andThen (inferN expr.expression) (\te ->
+            R.returns te
+        ))))
+
     else
-        (\result -> Result.andThen result (\state -> inferO expr (Tuple.second state)));
+        Result.Error ("No inference for " ++ expr.type);
 
 
 freshR =
     R.andThen (R.get "names") (\names ->
     R.andThen (R.set "names" (names + 1)) (\names ->
         R.returns (Type.TVar ("a" ++ names))
-    ));
+    ))
+assumptions {
+    DEBUG.eq (freshR (mkInferResult () initialState)) (mkInferResult (Type.TVar "a1") (mkState TypeEnv.empty List.empty 1))
+};
 
 
 inEnvR name schema =
