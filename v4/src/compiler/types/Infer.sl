@@ -89,7 +89,7 @@ inferN expr =
 
     else if expr.type == "LAMBDA" then
         R.andThen (fresh) (\tv ->
-        R.andThen (inEnvR expr.variable (Schema.Forall List.empty tv)) (\_ ->
+        R.andThen (inEnv expr.variable (Schema.Forall List.empty tv)) (\_ ->
         R.andThen (inferN expr.expression) (\t ->
             R.returns (Type.TArr tv t)
         )))
@@ -98,7 +98,7 @@ inferN expr =
         R.andThen (
             R.foldl (\declaration ->
                 R.andThen fresh (\tv ->
-                R.andThen (inEnvR declaration.name (Schema.Forall List.empty tv)) (\_ ->
+                R.andThen (inEnv declaration.name (Schema.Forall List.empty tv)) (\_ ->
                     R.returns Type.typeUnit
                 ))) expr.declarations) (\_ ->
         R.andThen (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
@@ -121,7 +121,7 @@ assumptions {
 };
 
 
-inEnvR name schema =
+inEnv name schema =
     R.andThen (R.get "typeEnv") (\typeEnv ->
         R.set "typeEnv" (TypeEnv.extend name schema typeEnv)
     );
