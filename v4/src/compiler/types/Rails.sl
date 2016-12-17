@@ -1,4 +1,5 @@
 import file:../../core/Array as List;
+import file:../../core/Maybe as Maybe;
 import file:../../core/Record as Record;
 import file:../../core/Result as Result;
 import file:../../core/Tuple as Tuple;
@@ -78,6 +79,25 @@ map f =
     )
 assumptions {
     DEBUG.eq (map (andThen value (\n -> returns (n + 1))) (mkOkState (List.mk3 1 2 3) 0)) (mkOkState (List.mk3 2 3 4) 0)
+};
+
+
+foldl f accumulator list =
+    if List.isEmpty list then
+        accumulator
+    else
+        foldl f (f (head list) accumulator) (tail list)
+            where {
+                head x =
+                    Maybe.withDefault () (List.at 0 x);
+
+                tail x =
+                    List.slice 1 x
+            }
+assumptions {
+    DEBUG.eq
+        (foldl (\v -> andThen value (\acc -> returns (acc + v))) (mkOkState 0 99) (List.mk3 1 2 3))
+        (mkOkState 6 99)
 };
 
 
