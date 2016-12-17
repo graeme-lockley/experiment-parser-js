@@ -26,7 +26,7 @@ initialState =
     mkState TypeEnv.empty List.empty 0;
 
 
-lookupEnvR name =
+lookupEnv name =
     R.andThen (R.get "typeEnv") (\typeEnv \state ->
         Maybe.withDefault
             (Result.Error ("Unknown identifier " ++ name))
@@ -79,13 +79,13 @@ inferN expr =
 
     else if expr.type == "DECLARATION" then
         R.andThen (inferN expr.expression) (\inferExpression ->
-        R.andThen (lookupEnvR expr.name) (\t ->
+        R.andThen (lookupEnv expr.name) (\t ->
         R.andThen (uniR t inferExpression) (\_ ->
             R.returns inferExpression
         )))
 
     else if expr.type == "IDENTIFIER" then
-        lookupEnvR expr.name
+        lookupEnv expr.name
 
     else if expr.type == "LAMBDA" then
         R.andThen (freshR) (\tv ->
