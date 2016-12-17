@@ -88,7 +88,7 @@ inferN expr =
         lookupEnv expr.name
 
     else if expr.type == "LAMBDA" then
-        R.andThen (fresh) (\tv ->
+        R.andThen fresh (\tv ->
         R.andThen (inEnv expr.variable (Schema.Forall List.empty tv)) (\_ ->
         R.andThen (inferN expr.expression) (\t ->
             R.returns (Type.TArr tv t)
@@ -135,6 +135,7 @@ uni t1 t2 =
 
 infer expr inferState =
     inferN expr (mkInferResult () inferState);
+
 
 mkInferResult type inferState =
     Result.Ok (Tuple.Tuple type inferState);
