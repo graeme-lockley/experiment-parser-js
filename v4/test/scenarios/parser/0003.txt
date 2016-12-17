@@ -22,46 +22,43 @@ aaa b c d = if b || c || d then c || d else b || d;
               "type": "IF",
               "ifExpr": {
                 "type": "BOOLEAN_OR",
-                "expressions": [
-                  {
+                "left": {
+                  "type": "BOOLEAN_OR",
+                  "left": {
                     "type": "IDENTIFIER",
                     "name": "b"
                   },
-                  {
+                  "right": {
                     "type": "IDENTIFIER",
                     "name": "c"
-                  },
-                  {
-                    "type": "IDENTIFIER",
-                    "name": "d"
                   }
-                ]
+                },
+                "right": {
+                  "type": "IDENTIFIER",
+                  "name": "d"
+                }
               },
               "thenExpr": {
                 "type": "BOOLEAN_OR",
-                "expressions": [
-                  {
-                    "type": "IDENTIFIER",
-                    "name": "c"
-                  },
-                  {
-                    "type": "IDENTIFIER",
-                    "name": "d"
-                  }
-                ]
+                "left": {
+                  "type": "IDENTIFIER",
+                  "name": "c"
+                },
+                "right": {
+                  "type": "IDENTIFIER",
+                  "name": "d"
+                }
               },
               "elseExpr": {
                 "type": "BOOLEAN_OR",
-                "expressions": [
-                  {
-                    "type": "IDENTIFIER",
-                    "name": "b"
-                  },
-                  {
-                    "type": "IDENTIFIER",
-                    "name": "d"
-                  }
-                ]
+                "left": {
+                  "type": "IDENTIFIER",
+                  "name": "b"
+                },
+                "right": {
+                  "type": "IDENTIFIER",
+                  "name": "d"
+                }
               }
             }
           }

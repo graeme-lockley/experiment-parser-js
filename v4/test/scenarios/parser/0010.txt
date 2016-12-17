@@ -21,19 +21,17 @@ funnyMinus a b = -a + -b / - + b;
             "type": "BOOLEAN_NOT",
             "operand": {
               "type": "BOOLEAN_AND",
-              "expressions": [
-                {
-                  "type": "BOOLEAN_NOT",
-                  "operand": {
-                    "type": "IDENTIFIER",
-                    "name": "a"
-                  }
-                },
-                {
+              "left": {
+                "type": "BOOLEAN_NOT",
+                "operand": {
                   "type": "IDENTIFIER",
-                  "name": "b"
+                  "name": "a"
                 }
-              ]
+              },
+              "right": {
+                "type": "IDENTIFIER",
+                "name": "b"
+              }
             }
           }
         }

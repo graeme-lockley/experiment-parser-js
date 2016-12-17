@@ -31,19 +31,19 @@ encodeString =
 
 astToJavascript ast indentation =
     if ast.type == "ADDITION" then
-         "(" ++ (astToJavascript ast.left indentation) ++ " + " ++ (astToJavascript ast.right indentation) ++ ")"
+        "(" ++ (astToJavascript ast.left indentation) ++ " + " ++ (astToJavascript ast.right indentation) ++ ")"
 
     else if ast.type == "APPLY" then
         (astToJavascript ast.operation indentation) ++ "(" ++ (astToJavascript ast.operand indentation) ++ ")"
 
     else if ast.type == "BOOLEAN_AND" then
-        "(" ++ (Array.join " && " (Array.map (\e -> astToJavascript e indentation) ast.expressions)) ++ ")"
+        "(" ++ (astToJavascript ast.left indentation) ++ " && " ++ (astToJavascript ast.right indentation) ++ ")"
 
     else if ast.type == "BOOLEAN_NOT" then
         "(!" ++ (astToJavascript ast.operand indentation) ++ ")"
 
     else if ast.type == "BOOLEAN_OR" then
-        "(" ++ (Array.join " || " (Array.map (\e -> astToJavascript e indentation) ast.expressions)) ++ ")"
+        "(" ++ (astToJavascript ast.left indentation) ++ " || " ++ (astToJavascript ast.right indentation) ++ ")"
 
     else if ast.type == "COMPOSITION" then
         (\variableName ->

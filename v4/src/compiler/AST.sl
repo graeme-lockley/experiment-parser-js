@@ -24,10 +24,11 @@ assumption sourceName line text expression =
         "expression" expression;
 
 
-booleanAnd expressions =
-    Record.mk2
+booleanAnd left right =
+    Record.mk3
         "type" "BOOLEAN_AND"
-        "expressions" expressions;
+        "left" left
+        "right" right;
 
 
 booleanNot operand =
@@ -36,10 +37,11 @@ booleanNot operand =
         "operand" operand;
 
 
-booleanOr expressions =
-    Record.mk2
+booleanOr left right =
+    Record.mk3
         "type" "BOOLEAN_OR"
-        "expressions" expressions;
+        "left" left
+        "right" right;
 
 
 composition left right =

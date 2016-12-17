@@ -22,60 +22,50 @@ aaa b c d = if b && c || d then b || c && d else b || d;
               "type": "IF",
               "ifExpr": {
                 "type": "BOOLEAN_OR",
-                "expressions": [
-                  {
-                    "type": "BOOLEAN_AND",
-                    "expressions": [
-                      {
-                        "type": "IDENTIFIER",
-                        "name": "b"
-                      },
-                      {
-                        "type": "IDENTIFIER",
-                        "name": "c"
-                      }
-                    ]
-                  },
-                  {
+                "left": {
+                  "type": "BOOLEAN_AND",
+                  "left": {
                     "type": "IDENTIFIER",
-                    "name": "d"
+                    "name": "b"
+                  },
+                  "right": {
+                    "type": "IDENTIFIER",
+                    "name": "c"
                   }
-                ]
+                },
+                "right": {
+                  "type": "IDENTIFIER",
+                  "name": "d"
+                }
               },
               "thenExpr": {
                 "type": "BOOLEAN_OR",
-                "expressions": [
-                  {
+                "left": {
+                  "type": "IDENTIFIER",
+                  "name": "b"
+                },
+                "right": {
+                  "type": "BOOLEAN_AND",
+                  "left": {
                     "type": "IDENTIFIER",
-                    "name": "b"
+                    "name": "c"
                   },
-                  {
-                    "type": "BOOLEAN_AND",
-                    "expressions": [
-                      {
-                        "type": "IDENTIFIER",
-                        "name": "c"
-                      },
-                      {
-                        "type": "IDENTIFIER",
-                        "name": "d"
-                      }
-                    ]
-                  }
-                ]
-              },
-              "elseExpr": {
-                "type": "BOOLEAN_OR",
-                "expressions": [
-                  {
-                    "type": "IDENTIFIER",
-                    "name": "b"
-                  },
-                  {
+                  "right": {
                     "type": "IDENTIFIER",
                     "name": "d"
                   }
-                ]
+                }
+              },
+              "elseExpr": {
+                "type": "BOOLEAN_OR",
+                "left": {
+                  "type": "IDENTIFIER",
+                  "name": "b"
+                },
+                "right": {
+                  "type": "IDENTIFIER",
+                  "name": "d"
+                }
               }
             }
           }

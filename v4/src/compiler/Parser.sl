@@ -135,18 +135,15 @@ parseEXPR2 =
             ))));
 
 
-parseEXPR3 =
-    (P.map (\e -> if (Array.length e) == 1 then (at 0 e) else (AST.booleanOr e))) o
-    (P.sepBy1 parseEXPR4 (P.symbol Tokens.BAR_BAR));
+parseEXPR3 lexer =
+    P.chainl1 parseEXPR4 ((P.map (\_ -> AST.booleanOr)) o (P.symbol Tokens.BAR_BAR)) lexer;
 
 
-parseEXPR4 =
-    (P.map (\e -> if (Array.length e) == 1 then (at 0 e) else (AST.booleanAnd e))) o
-    (P.sepBy1 parseEXPR5 (P.symbol Tokens.AMPERSAND_AMPERSAND));
+parseEXPR4 lexer =
+    P.chainl1 parseEXPR5 ((P.map (\_ -> AST.booleanAnd)) o (P.symbol Tokens.AMPERSAND_AMPERSAND)) lexer;
 
-
-parseEXPR5 =
-    P.chainl1 parseEXPR6 parseEqualOp;
+parseEXPR5 lexer =
+    P.chainl1 parseEXPR6 parseEqualOp lexer;
 
 
 parseEqualOp lexer =
