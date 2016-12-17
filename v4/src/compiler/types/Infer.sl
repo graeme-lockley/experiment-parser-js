@@ -50,7 +50,7 @@ inferN expr =
         R.andThen (inferN expr.operation) (\t1 ->
         R.andThen (inferN expr.operand) (\t2 ->
         R.andThen fresh (\tv ->
-        R.andThen (uniR t1 (Type.TArr t2 tv)) (\_ ->
+        R.andThen (uni t1 (Type.TArr t2 tv)) (\_ ->
             R.returns tv
         ))))
 
@@ -58,7 +58,7 @@ inferN expr =
         R.andThen (inferN expr.left) (\t1 ->
         R.andThen (inferN expr.right) (\t2 ->
         R.andThen fresh (\tv ->
-        R.andThen (uniR (Type.TArr t1 (Type.TArr t2 tv)) (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))) (\_ ->
+        R.andThen (uni (Type.TArr t1 (Type.TArr t2 tv)) (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))) (\_ ->
             R.returns tv
         ))))
 
@@ -80,7 +80,7 @@ inferN expr =
     else if expr.type == "DECLARATION" then
         R.andThen (inferN expr.expression) (\inferExpression ->
         R.andThen (lookupEnv expr.name) (\t ->
-        R.andThen (uniR t inferExpression) (\_ ->
+        R.andThen (uni t inferExpression) (\_ ->
             R.returns inferExpression
         )))
 
@@ -127,7 +127,7 @@ inEnv name schema =
     );
 
 
-uniR t1 t2 =
+uni t1 t2 =
     R.andThen (R.get "constraints") (\constraints ->
         R.set "constraints" (List.append (Tuple.Tuple t1 t2) constraints)
     );
