@@ -37,18 +37,6 @@ fresh inferState =
         };
 
 
-uni t1 t2 inferState =
-    Result.Ok (Record.set1 "constraints" (List.append (Tuple.Tuple t1 t2) inferState.constraints) inferState);
-
-
-inEnv name schema inferState =
-    Result.Ok (Record.set1 "typeEnv" (TypeEnv.extend name schema inferState.typeEnv) inferState);
-
-
-lookupEnv name inferState =
-    lookupEnvR name (mkInferResult () inferState);
-
-
 lookupEnvR name =
     R.andThen (R.get "typeEnv") (\typeEnv \state ->
         Maybe.withDefault
