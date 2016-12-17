@@ -12,7 +12,7 @@ get name state =
         let {
             value = Record.get name (Tuple.second stateValue)
         } in
-            if value then
+            if value == 0 || value then
                 mkOkState value (Tuple.second stateValue)
             else
                 Result.Error ("Unknown record field " ++ name))
@@ -82,11 +82,11 @@ assumptions {
 };
 
 
-foldl f accumulator list =
+foldl f list accumulator =
     if List.isEmpty list then
         accumulator
     else
-        foldl f (f (head list) accumulator) (tail list)
+        foldl f (tail list) (f (head list) accumulator)
             where {
                 head x =
                     Maybe.withDefault () (List.at 0 x);
@@ -96,7 +96,7 @@ foldl f accumulator list =
             }
 assumptions {
     DEBUG.eq
-        (foldl (\v -> andThen value (\acc -> returns (acc + v))) (mkOkState 0 99) (List.mk3 1 2 3))
+        (foldl (\v -> andThen value (\acc -> returns (acc + v))) (List.mk3 1 2 3) (mkOkState 0 99))
         (mkOkState 6 99)
 };
 
