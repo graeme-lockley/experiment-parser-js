@@ -110,8 +110,9 @@ inferN expr =
         R.andThen fresh (\tv ->
         R.andThen (inEnv expr.variable (Schema.Forall List.empty tv)) (\_ ->
         R.andThen (inferN expr.expression) (\t ->
+        R.andThen (outEnv expr.variable) (\_ ->
             R.returns (Type.TArr tv t)
-        )))
+        ))))
 
     else if expr.type == "MODULE" then
         R.andThen (
@@ -155,6 +156,12 @@ assumptions {
 inEnv name schema =
     R.andThen (R.get "typeEnv") (\typeEnv ->
         R.set "typeEnv" (TypeEnv.extend name schema typeEnv)
+    );
+
+
+outEnv name =
+    R.andThen (R.get "typeEnv") (\typeEnv ->
+        R.set "typeEnv" (TypeEnv.remove name typeEnv)
     );
 
 

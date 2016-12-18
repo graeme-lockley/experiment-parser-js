@@ -66,6 +66,10 @@ insert =
     Helper.set1;
 
 
+remove =
+    Helper.remove;
+
+
 insert2 =
     Helper.set2;
 

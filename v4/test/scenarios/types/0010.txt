@@ -15,27 +15,6 @@ newFun f g c = (f o g) c;
             "type": "VARIABLE",
             "name": "a1"
           }
-        },
-        "f": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a2"
-          }
-        },
-        "g": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a3"
-          }
-        },
-        "c": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a4"
-          }
         }
       },
       "constraints": [

@@ -6,6 +6,16 @@ function get(name) {
 }
 
 
+function remove(name) {
+    return record => {
+        const result = clone(record);
+
+        delete result[name];
+
+        return result;
+    };
+}
+
 function map(f) {
     return r => {
         const result = {};
@@ -218,6 +228,7 @@ function fold(f) {
 module.exports = {
     fold,
     get,
+    remove,
     set1,
     set2,
     set3,

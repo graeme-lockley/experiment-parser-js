@@ -11,5 +11,9 @@ extend name schema typeEnv =
     Map.insert name schema typeEnv;
 
 
+remove name typeEnv =
+    Map.remove name typeEnv;
+
+
 find name typeEnv =
     Map.find name typeEnv;

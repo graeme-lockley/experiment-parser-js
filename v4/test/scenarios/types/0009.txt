@@ -33,41 +33,6 @@ opNot x = !x;
             "type": "VARIABLE",
             "name": "a3"
           }
-        },
-        "a": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a4"
-          }
-        },
-        "b": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a5"
-          }
-        },
-        "c": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a7"
-          }
-        },
-        "d": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a8"
-          }
-        },
-        "x": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a10"
-          }
         }
       },
       "constraints": [

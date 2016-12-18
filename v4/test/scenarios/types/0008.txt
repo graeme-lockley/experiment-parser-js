@@ -30,20 +30,6 @@ _$EXPR : Integer
             "type": "VARIABLE",
             "name": "a2"
           }
-        },
-        "a": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a3"
-          }
-        },
-        "b": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a5"
-          }
         }
       },
       "constraints": [
