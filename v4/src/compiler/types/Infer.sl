@@ -85,6 +85,17 @@ inferN expr =
             R.returns tv
         ))))
 
+    else if expr.type == "COMPOSITION" then
+        R.andThen (inferN expr.left) (\t1 ->
+        R.andThen (inferN expr.right) (\t2 ->
+        R.andThen fresh (\tv1 ->
+        R.andThen fresh (\tv2 ->
+        R.andThen fresh (\tv3 ->
+        R.andThen (uni t1 (Type.TArr tv1 tv2)) (\_ ->
+        R.andThen (uni t2 (Type.TArr tv3 tv1)) (\_ ->
+            R.returns (Type.TArr tv3 tv2)
+        )))))))
+
     else if expr.type == "CONSTANT_BOOLEAN" then
         R.returns Type.typeBoolean
 
