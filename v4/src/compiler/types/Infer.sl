@@ -55,20 +55,10 @@ inferN expr =
         ))))
 
     else if expr.type == "ADDITION" then
-        R.andThen (inferN expr.left) (\t1 ->
-        R.andThen (inferN expr.right) (\t2 ->
-        R.andThen fresh (\tv ->
-        R.andThen (uni (Type.TArr t1 (Type.TArr t2 tv)) (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))) (\_ ->
-            R.returns tv
-        ))))
+        inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
 
     else if expr.type == "BOOLEAN_AND" then
-        R.andThen (inferN expr.left) (\t1 ->
-        R.andThen (inferN expr.right) (\t2 ->
-        R.andThen fresh (\tv ->
-        R.andThen (uni (Type.TArr t1 (Type.TArr t2 tv)) (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))) (\_ ->
-            R.returns tv
-        ))))
+        inferBinaryOperation expr (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))
 
     else if expr.type == "BOOLEAN_NOT" then
         R.andThen (inferN expr.operand) (\t1 ->
@@ -78,12 +68,7 @@ inferN expr =
         )))
 
     else if expr.type == "BOOLEAN_OR" then
-        R.andThen (inferN expr.left) (\t1 ->
-        R.andThen (inferN expr.right) (\t2 ->
-        R.andThen fresh (\tv ->
-        R.andThen (uni (Type.TArr t1 (Type.TArr t2 tv)) (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))) (\_ ->
-            R.returns tv
-        ))))
+        inferBinaryOperation expr (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))
 
     else if expr.type == "COMPOSITION" then
         R.andThen (inferN expr.left) (\t1 ->
@@ -146,6 +131,15 @@ inferN expr =
         DEBUG.log "No inference for " expr.type;
         Result.Error ("No inference for " ++ expr.type)
     };
+
+
+inferBinaryOperation expr type =
+    R.andThen (inferN expr.left) (\t1 ->
+    R.andThen (inferN expr.right) (\t2 ->
+    R.andThen fresh (\tv ->
+    R.andThen (uni (Type.TArr t1 (Type.TArr t2 tv)) type) (\_ ->
+        R.returns tv
+    ))));
 
 
 fresh =
