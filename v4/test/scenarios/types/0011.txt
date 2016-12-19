@@ -1,0 +1,350 @@
+-- given arithmetic operators ensure that they unify with integer
+opPlus a b = a + b;
+
+opMinus a b = a - b;
+
+opMultiplication a b = a * b;
+
+opDivision a b = a / b;
+
+opNegate x = -x;
+-- inferType
+{
+  "_ok": {
+    "_fst": {
+      "type": "CONSTANT",
+      "name": "Unit"
+    },
+    "_snd": {
+      "typeEnv": {
+        "opPlus": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a1"
+          }
+        },
+        "opMinus": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a2"
+          }
+        },
+        "opMultiplication": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a3"
+          }
+        },
+        "opDivision": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a4"
+          }
+        },
+        "opNegate": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a5"
+          }
+        }
+      },
+      "constraints": [
+        {
+          "_fst": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a6"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a7"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a8"
+              }
+            }
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "CONSTANT",
+              "name": "Integer"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "CONSTANT",
+                "name": "Integer"
+              },
+              "range": {
+                "type": "CONSTANT",
+                "name": "Integer"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a1"
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a6"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a7"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a8"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a9"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a10"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a11"
+              }
+            }
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "CONSTANT",
+              "name": "Integer"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "CONSTANT",
+                "name": "Integer"
+              },
+              "range": {
+                "type": "CONSTANT",
+                "name": "Integer"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a2"
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a9"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a10"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a11"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a12"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a13"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a14"
+              }
+            }
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "CONSTANT",
+              "name": "Integer"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "CONSTANT",
+                "name": "Integer"
+              },
+              "range": {
+                "type": "CONSTANT",
+                "name": "Integer"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a3"
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a12"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a13"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a14"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a15"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a16"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a17"
+              }
+            }
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "CONSTANT",
+              "name": "Integer"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "CONSTANT",
+                "name": "Integer"
+              },
+              "range": {
+                "type": "CONSTANT",
+                "name": "Integer"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a4"
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a15"
+            },
+            "range": {
+              "type": "FUNCTION",
+              "domain": {
+                "type": "VARIABLE",
+                "name": "a16"
+              },
+              "range": {
+                "type": "VARIABLE",
+                "name": "a17"
+              }
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a18"
+            },
+            "range": {
+              "type": "VARIABLE",
+              "name": "a19"
+            }
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "CONSTANT",
+              "name": "Integer"
+            },
+            "range": {
+              "type": "CONSTANT",
+              "name": "Integer"
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a5"
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a18"
+            },
+            "range": {
+              "type": "VARIABLE",
+              "name": "a19"
+            }
+          }
+        }
+      ],
+      "names": 20
+    }
+  }
+}

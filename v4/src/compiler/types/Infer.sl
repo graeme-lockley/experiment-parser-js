@@ -103,6 +103,9 @@ inferN expr =
             R.returns inferExpression
         )))
 
+    else if expr.type == "DIVISION" then
+        inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
+
     else if expr.type == "IDENTIFIER" then
         lookupEnv expr.name
 
@@ -126,6 +129,19 @@ inferN expr =
         R.andThen (inferN expr.expression) (\te ->
             R.returns te
         ))))
+
+    else if expr.type == "MULTIPLICATION" then
+        inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
+
+    else if expr.type == "SUBTRACTION" then
+        inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
+
+    else if expr.type == "UNARY_NEGATE" then
+        R.andThen (inferN expr.operand) (\t1 ->
+        R.andThen fresh (\tv ->
+        R.andThen (uni (Type.TArr t1 tv) (Type.TArr Type.typeInteger Type.typeInteger)) (\_ ->
+            R.returns tv
+        )))
 
     else
     {
