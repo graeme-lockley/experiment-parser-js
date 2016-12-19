@@ -106,6 +106,15 @@ inferN expr =
     else if expr.type == "DIVISION" then
         inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
 
+    else if expr.type == "EQUAL" then
+        inferRelationalOperator expr
+
+    else if expr.type == "GREATER_THAN" then
+        inferRelationalOperator expr
+
+    else if expr.type == "GREATER_THAN_EQUAL" then
+        inferRelationalOperator expr
+
     else if expr.type == "IDENTIFIER" then
         lookupEnv expr.name
 
@@ -116,6 +125,12 @@ inferN expr =
         R.andThen (outEnv expr.variable) (\_ ->
             R.returns (Type.TArr tv t)
         ))))
+
+    else if expr.type == "LESS_THAN" then
+        inferRelationalOperator expr
+
+    else if expr.type == "LESS_THAN_EQUAL" then
+        inferRelationalOperator expr
 
     else if expr.type == "MODULE" then
         R.andThen (
@@ -132,6 +147,9 @@ inferN expr =
 
     else if expr.type == "MULTIPLICATION" then
         inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
+
+    else if expr.type == "NOT_EQUAL" then
+        inferRelationalOperator expr
 
     else if expr.type == "SUBTRACTION" then
         inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
@@ -157,6 +175,14 @@ inferBinaryOperation expr type =
     R.andThen (uni (Type.TArr t1 (Type.TArr t2 tv)) type) (\_ ->
         R.returns tv
     ))));
+
+
+inferRelationalOperator expr =
+    R.andThen (inferN expr.left) (\t1 ->
+    R.andThen (inferN expr.right) (\t2 ->
+    R.andThen (uni t1 t2) (\_ ->
+        R.returns Type.typeBoolean
+    )));
 
 
 fresh =
