@@ -115,8 +115,22 @@ inferN expr =
     else if expr.type == "GREATER_THAN_EQUAL" then
         inferRelationalOperator expr
 
+    else if expr.type == "EXPRESSIONS" then
+        R.foldl (\expression -> inferN expression) expr.expressions
+
     else if expr.type == "IDENTIFIER" then
         lookupEnv expr.name
+
+    else if expr.type == "IF" then
+        R.andThen fresh (\tv ->
+        R.andThen (inferN expr.ifExpr) (\e1 ->
+        R.andThen (inferN expr.thenExpr) (\e2 ->
+        R.andThen (inferN expr.elseExpr) (\e3 ->
+        R.andThen (uni e1 Type.typeBoolean) (\_ ->
+        R.andThen (uni e2 e3) (\_ ->
+        R.andThen (uni e3 tv) (\_ ->
+            R.returns tv
+        )))))))
 
     else if expr.type == "LAMBDA" then
         R.andThen fresh (\tv ->
