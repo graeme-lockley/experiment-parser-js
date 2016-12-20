@@ -163,6 +163,19 @@ inferN expr =
     else if expr.type == "NOT_EQUAL" then
         inferRelationalOperator expr
 
+    else if expr.type == "SCOPE" then
+        R.andThen (
+            R.foldl (\declaration ->
+                R.andThen fresh (\tv ->
+                R.andThen (inEnv declaration.name (Schema.Forall List.empty tv)) (\_ ->
+                    R.returns Type.typeUnit
+                ))) expr.declarations) (\_ ->
+        R.andThen (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
+        R.andThen fresh (\tv ->
+        R.andThen (inferN expr.expression) (\te ->
+            R.returns te
+        ))))
+
     else if expr.type == "STRING_CONCAT" then
         inferBinaryOperation expr (Type.TArr Type.typeString (Type.TArr Type.typeString Type.typeString))
 
