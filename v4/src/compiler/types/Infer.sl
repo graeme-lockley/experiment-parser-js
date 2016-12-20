@@ -195,10 +195,7 @@ inferN expr =
         ))
 
     else
-    {
-        DEBUG.log "No inference for " expr.type;
-        Result.Error ("No inference for " ++ expr.type)
-    };
+        \_ -> Result.Error ("No inference for " ++ expr.type);
 
 
 inferBinaryOperation expr type =
