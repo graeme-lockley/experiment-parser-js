@@ -41,16 +41,6 @@ fun1 a b c = if a then b else c;
         {
           "_fst": {
             "type": "VARIABLE",
-            "name": "a4"
-          },
-          "_snd": {
-            "type": "VARIABLE",
-            "name": "a5"
-          }
-        },
-        {
-          "_fst": {
-            "type": "VARIABLE",
             "name": "a1"
           },
           "_snd": {
@@ -73,14 +63,14 @@ fun1 a b c = if a then b else c;
                 },
                 "range": {
                   "type": "VARIABLE",
-                  "name": "a5"
+                  "name": "a4"
                 }
               }
             }
           }
         }
       ],
-      "names": 6
+      "names": 5
     }
   }
 }
