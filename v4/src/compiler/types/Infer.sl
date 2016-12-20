@@ -166,12 +166,17 @@ inferN expr =
     else if expr.type == "SUBTRACTION" then
         inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
 
+    else if expr.type == "UNARY_PLUS" then
+        R.andThen (inferN expr.operand) (\t1 ->
+        R.andThen (uni t1 Type.typeInteger) (\_ ->
+            R.returns Type.typeInteger
+        ))
+
     else if expr.type == "UNARY_NEGATE" then
         R.andThen (inferN expr.operand) (\t1 ->
-        R.andThen fresh (\tv ->
-        R.andThen (uni (Type.TArr t1 tv) (Type.TArr Type.typeInteger Type.typeInteger)) (\_ ->
-            R.returns tv
-        )))
+        R.andThen (uni t1 Type.typeInteger) (\_ ->
+            R.returns Type.typeInteger
+        ))
 
     else
     {

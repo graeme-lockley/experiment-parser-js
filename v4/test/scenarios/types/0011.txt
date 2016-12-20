@@ -7,7 +7,9 @@ opMultiplication a b = a * b;
 
 opDivision a b = a / b;
 
-opNegate x = -x;
+opUnaryPlus x = +x;
+
+opUnaryMinus x = -x;
 -- inferType
 {
   "_ok": {
@@ -45,11 +47,18 @@ opNegate x = -x;
             "name": "a4"
           }
         },
-        "opNegate": {
+        "opUnaryPlus": {
           "names": [],
           "type": {
             "type": "VARIABLE",
             "name": "a5"
+          }
+        },
+        "opUnaryMinus": {
+          "names": [],
+          "type": {
+            "type": "VARIABLE",
+            "name": "a6"
           }
         }
       },
@@ -59,17 +68,17 @@ opNegate x = -x;
             "type": "FUNCTION",
             "domain": {
               "type": "VARIABLE",
-              "name": "a6"
+              "name": "a7"
             },
             "range": {
               "type": "FUNCTION",
               "domain": {
                 "type": "VARIABLE",
-                "name": "a7"
+                "name": "a8"
               },
               "range": {
                 "type": "VARIABLE",
-                "name": "a8"
+                "name": "a9"
               }
             }
           },
@@ -101,17 +110,17 @@ opNegate x = -x;
             "type": "FUNCTION",
             "domain": {
               "type": "VARIABLE",
-              "name": "a6"
+              "name": "a7"
             },
             "range": {
               "type": "FUNCTION",
               "domain": {
                 "type": "VARIABLE",
-                "name": "a7"
+                "name": "a8"
               },
               "range": {
                 "type": "VARIABLE",
-                "name": "a8"
+                "name": "a9"
               }
             }
           }
@@ -121,17 +130,17 @@ opNegate x = -x;
             "type": "FUNCTION",
             "domain": {
               "type": "VARIABLE",
-              "name": "a9"
+              "name": "a10"
             },
             "range": {
               "type": "FUNCTION",
               "domain": {
                 "type": "VARIABLE",
-                "name": "a10"
+                "name": "a11"
               },
               "range": {
                 "type": "VARIABLE",
-                "name": "a11"
+                "name": "a12"
               }
             }
           },
@@ -163,17 +172,17 @@ opNegate x = -x;
             "type": "FUNCTION",
             "domain": {
               "type": "VARIABLE",
-              "name": "a9"
+              "name": "a10"
             },
             "range": {
               "type": "FUNCTION",
               "domain": {
                 "type": "VARIABLE",
-                "name": "a10"
+                "name": "a11"
               },
               "range": {
                 "type": "VARIABLE",
-                "name": "a11"
+                "name": "a12"
               }
             }
           }
@@ -183,17 +192,17 @@ opNegate x = -x;
             "type": "FUNCTION",
             "domain": {
               "type": "VARIABLE",
-              "name": "a12"
+              "name": "a13"
             },
             "range": {
               "type": "FUNCTION",
               "domain": {
                 "type": "VARIABLE",
-                "name": "a13"
+                "name": "a14"
               },
               "range": {
                 "type": "VARIABLE",
-                "name": "a14"
+                "name": "a15"
               }
             }
           },
@@ -225,17 +234,17 @@ opNegate x = -x;
             "type": "FUNCTION",
             "domain": {
               "type": "VARIABLE",
-              "name": "a12"
+              "name": "a13"
             },
             "range": {
               "type": "FUNCTION",
               "domain": {
                 "type": "VARIABLE",
-                "name": "a13"
+                "name": "a14"
               },
               "range": {
                 "type": "VARIABLE",
-                "name": "a14"
+                "name": "a15"
               }
             }
           }
@@ -245,17 +254,17 @@ opNegate x = -x;
             "type": "FUNCTION",
             "domain": {
               "type": "VARIABLE",
-              "name": "a15"
+              "name": "a16"
             },
             "range": {
               "type": "FUNCTION",
               "domain": {
                 "type": "VARIABLE",
-                "name": "a16"
+                "name": "a17"
               },
               "range": {
                 "type": "VARIABLE",
-                "name": "a17"
+                "name": "a18"
               }
             }
           },
@@ -287,43 +296,29 @@ opNegate x = -x;
             "type": "FUNCTION",
             "domain": {
               "type": "VARIABLE",
-              "name": "a15"
+              "name": "a16"
             },
             "range": {
               "type": "FUNCTION",
               "domain": {
                 "type": "VARIABLE",
-                "name": "a16"
+                "name": "a17"
               },
               "range": {
                 "type": "VARIABLE",
-                "name": "a17"
+                "name": "a18"
               }
             }
           }
         },
         {
           "_fst": {
-            "type": "FUNCTION",
-            "domain": {
-              "type": "VARIABLE",
-              "name": "a18"
-            },
-            "range": {
-              "type": "VARIABLE",
-              "name": "a19"
-            }
+            "type": "VARIABLE",
+            "name": "a19"
           },
           "_snd": {
-            "type": "FUNCTION",
-            "domain": {
-              "type": "CONSTANT",
-              "name": "Integer"
-            },
-            "range": {
-              "type": "CONSTANT",
-              "name": "Integer"
-            }
+            "type": "CONSTANT",
+            "name": "Integer"
           }
         },
         {
@@ -335,16 +330,43 @@ opNegate x = -x;
             "type": "FUNCTION",
             "domain": {
               "type": "VARIABLE",
-              "name": "a18"
+              "name": "a19"
             },
             "range": {
+              "type": "CONSTANT",
+              "name": "Integer"
+            }
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a20"
+          },
+          "_snd": {
+            "type": "CONSTANT",
+            "name": "Integer"
+          }
+        },
+        {
+          "_fst": {
+            "type": "VARIABLE",
+            "name": "a6"
+          },
+          "_snd": {
+            "type": "FUNCTION",
+            "domain": {
               "type": "VARIABLE",
-              "name": "a19"
+              "name": "a20"
+            },
+            "range": {
+              "type": "CONSTANT",
+              "name": "Integer"
             }
           }
         }
       ],
-      "names": 20
+      "names": 21
     }
   }
 }
