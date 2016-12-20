@@ -163,6 +163,9 @@ inferN expr =
     else if expr.type == "NOT_EQUAL" then
         inferRelationalOperator expr
 
+    else if expr.type == "STRING_CONCAT" then
+        inferBinaryOperation expr (Type.TArr Type.typeString (Type.TArr Type.typeString Type.typeString))
+
     else if expr.type == "SUBTRACTION" then
         inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
 
