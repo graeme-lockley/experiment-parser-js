@@ -39,27 +39,27 @@ assumptions {
 };
 
 
-andThen f1 f2 state =
+bind f1 f2 state =
     let {
         v1 = f1 state
     } in
         Result.andThen v1 (\v1Result -> f2 (Tuple.first v1Result) v1)
 assumptions {
     DEBUG.eq
-        ((andThen (get "bob") (\bobValue -> returns (bobValue + 1))) (mkOkState () (Record.mk1 "bob" 123)))
+        ((bind (get "bob") (\bobValue -> returns (bobValue + 1))) (mkOkState () (Record.mk1 "bob" 123)))
         (mkOkState 124 (Record.mk1 "bob" 123));
     DEBUG.eq
-        (andThen (set "a" 1) (\a -> get "a") (mkOkState () (Record.mk0 ())))
+        (bind (set "a" 1) (\a -> get "a") (mkOkState () (Record.mk0 ())))
         (mkOkState 1 (Record.mk1 "a" 1));
     DEBUG.eq
-        (andThen (set "a" 1) (\a ->
-         andThen (set "a" (a + 1)) (\a ->
+        (bind (set "a" 1) (\a ->
+         bind (set "a" (a + 1)) (\a ->
             returns (a * 2))) (mkOkState () (Record.mk0 ())))
         (mkOkState 4 (Record.mk1 "a" 2));
     DEBUG.eq
-        (andThen (set "a" 1) (\a ->
-         andThen (set "a" (a + 1)) (\a ->
-         andThen (set "b" 10) (\b ->
+        (bind (set "a" 1) (\a ->
+         bind (set "a" (a + 1)) (\a ->
+         bind (set "b" 10) (\b ->
             returns (a + b)))) (mkOkState () (Record.mk0 ())))
         (mkOkState 12 (Record.mk2 "a" 2 "b" 10))
 };
@@ -67,18 +67,18 @@ assumptions {
 
 
 map f =
-    andThen value (\list \state ->
+    bind value (\list \state ->
         List.foldl
             (\acc \item ->
-                (andThen value (\accList ->
-                 andThen (returns item) (\_ ->
-                 andThen f (\fResult ->
+                (bind value (\accList ->
+                 bind (returns item) (\_ ->
+                 bind f (\fResult ->
                     returns (List.append fResult accList))))) acc)
             (returns List.empty state)
             list
     )
 assumptions {
-    DEBUG.eq (map (andThen value (\n -> returns (n + 1))) (mkOkState (List.mk3 1 2 3) 0)) (mkOkState (List.mk3 2 3 4) 0)
+    DEBUG.eq (map (bind value (\n -> returns (n + 1))) (mkOkState (List.mk3 1 2 3) 0)) (mkOkState (List.mk3 2 3 4) 0)
 };
 
 
@@ -96,7 +96,7 @@ foldl f list accumulator =
             }
 assumptions {
     DEBUG.eq
-        (foldl (\v -> andThen value (\acc -> returns (acc + v))) (List.mk3 1 2 3) (mkOkState 0 99))
+        (foldl (\v -> bind value (\acc -> returns (acc + v))) (List.mk3 1 2 3) (mkOkState 0 99))
         (mkOkState 6 99)
 };
 

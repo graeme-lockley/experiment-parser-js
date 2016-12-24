@@ -27,7 +27,7 @@ initialState =
 
 
 lookupEnv name =
-    R.andThen (R.get "typeEnv") (\typeEnv \state ->
+    R.bind (R.get "typeEnv") (\typeEnv \state ->
         Maybe.withDefault
             (Result.Error ("Unknown identifier " ++ name))
             (Maybe.map (\v -> instantiate v state) (TypeEnv.find name typeEnv))
@@ -35,8 +35,8 @@ lookupEnv name =
 
 
 instantiate schema =
-    R.andThen (R.returns (Schema.names schema)) (\_ ->
-    R.andThen (R.map (\_ -> fresh)) (\asp ->
+    R.bind (R.returns (Schema.names schema)) (\_ ->
+    R.bind (R.map (\_ -> fresh)) (\asp ->
         R.returns (SubstitutableType.apply s (Schema.type schema))
             where {
                 s =
@@ -47,10 +47,10 @@ instantiate schema =
 
 inferN expr =
     if expr.type == "APPLY" then
-        R.andThen (inferN expr.operation) (\t1 ->
-        R.andThen (inferN expr.operand) (\t2 ->
-        R.andThen fresh (\tv ->
-        R.andThen (uni t1 (Type.TArr t2 tv)) (\_ ->
+        R.bind (inferN expr.operation) (\t1 ->
+        R.bind (inferN expr.operand) (\t2 ->
+        R.bind fresh (\tv ->
+        R.bind (uni t1 (Type.TArr t2 tv)) (\_ ->
             R.returns tv
         ))))
 
@@ -61,9 +61,9 @@ inferN expr =
         inferBinaryOperator expr (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))
 
     else if expr.type == "BOOLEAN_NOT" then
-        R.andThen (inferN expr.operand) (\t1 ->
-        R.andThen fresh (\tv ->
-        R.andThen (uni (Type.TArr t1 tv) (Type.TArr Type.typeBoolean Type.typeBoolean)) (\_ ->
+        R.bind (inferN expr.operand) (\t1 ->
+        R.bind fresh (\tv ->
+        R.bind (uni (Type.TArr t1 tv) (Type.TArr Type.typeBoolean Type.typeBoolean)) (\_ ->
             R.returns tv
         )))
 
@@ -71,13 +71,13 @@ inferN expr =
         inferBinaryOperator expr (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))
 
     else if expr.type == "COMPOSITION" then
-        R.andThen (inferN expr.left) (\t1 ->
-        R.andThen (inferN expr.right) (\t2 ->
-        R.andThen fresh (\tv1 ->
-        R.andThen fresh (\tv2 ->
-        R.andThen fresh (\tv3 ->
-        R.andThen (uni t1 (Type.TArr tv1 tv2)) (\_ ->
-        R.andThen (uni t2 (Type.TArr tv3 tv1)) (\_ ->
+        R.bind (inferN expr.left) (\t1 ->
+        R.bind (inferN expr.right) (\t2 ->
+        R.bind fresh (\tv1 ->
+        R.bind fresh (\tv2 ->
+        R.bind fresh (\tv3 ->
+        R.bind (uni t1 (Type.TArr tv1 tv2)) (\_ ->
+        R.bind (uni t2 (Type.TArr tv3 tv1)) (\_ ->
             R.returns (Type.TArr tv3 tv2)
         )))))))
 
@@ -97,9 +97,9 @@ inferN expr =
         R.returns Type.typeUnit
 
     else if expr.type == "DECLARATION" then
-        R.andThen (inferN expr.expression) (\inferExpression ->
-        R.andThen (lookupEnv expr.name) (\t ->
-        R.andThen (uni t inferExpression) (\_ ->
+        R.bind (inferN expr.expression) (\inferExpression ->
+        R.bind (lookupEnv expr.name) (\t ->
+        R.bind (uni t inferExpression) (\_ ->
             R.returns inferExpression
         )))
 
@@ -122,19 +122,19 @@ inferN expr =
         lookupEnv expr.name
 
     else if expr.type == "IF" then
-        R.andThen (inferN expr.ifExpr) (\e1 ->
-        R.andThen (inferN expr.thenExpr) (\e2 ->
-        R.andThen (inferN expr.elseExpr) (\e3 ->
-        R.andThen (uni e1 Type.typeBoolean) (\_ ->
-        R.andThen (uni e2 e3) (\_ ->
+        R.bind (inferN expr.ifExpr) (\e1 ->
+        R.bind (inferN expr.thenExpr) (\e2 ->
+        R.bind (inferN expr.elseExpr) (\e3 ->
+        R.bind (uni e1 Type.typeBoolean) (\_ ->
+        R.bind (uni e2 e3) (\_ ->
             R.returns e3
         )))))
 
     else if expr.type == "LAMBDA" then
-        R.andThen fresh (\tv ->
-        R.andThen (inEnv expr.variable (Schema.Forall List.empty tv)) (\_ ->
-        R.andThen (inferN expr.expression) (\t ->
-        R.andThen (outEnv expr.variable) (\_ ->
+        R.bind fresh (\tv ->
+        R.bind (inEnv expr.variable (Schema.Forall List.empty tv)) (\_ ->
+        R.bind (inferN expr.expression) (\t ->
+        R.bind (outEnv expr.variable) (\_ ->
             R.returns (Type.TArr tv t)
         ))))
 
@@ -145,15 +145,15 @@ inferN expr =
         inferRelationalOperator expr
 
     else if expr.type == "MODULE" then
-        R.andThen (
+        R.bind (
             R.foldl (\declaration ->
-                R.andThen fresh (\tv ->
-                R.andThen (inEnv declaration.name (Schema.Forall List.empty tv)) (\_ ->
+                R.bind fresh (\tv ->
+                R.bind (inEnv declaration.name (Schema.Forall List.empty tv)) (\_ ->
                     R.returns Type.typeUnit
                 ))) expr.declarations) (\_ ->
-        R.andThen (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
-        R.andThen fresh (\tv ->
-        R.andThen (inferN expr.expression) (\te ->
+        R.bind (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
+        R.bind fresh (\tv ->
+        R.bind (inferN expr.expression) (\te ->
             R.returns te
         ))))
 
@@ -164,15 +164,15 @@ inferN expr =
         inferRelationalOperator expr
 
     else if expr.type == "SCOPE" then
-        R.andThen (
+        R.bind (
             R.foldl (\declaration ->
-                R.andThen fresh (\tv ->
-                R.andThen (inEnv declaration.name (Schema.Forall List.empty tv)) (\_ ->
+                R.bind fresh (\tv ->
+                R.bind (inEnv declaration.name (Schema.Forall List.empty tv)) (\_ ->
                     R.returns Type.typeUnit
                 ))) expr.declarations) (\_ ->
-        R.andThen (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
-        R.andThen fresh (\tv ->
-        R.andThen (inferN expr.expression) (\te ->
+        R.bind (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
+        R.bind fresh (\tv ->
+        R.bind (inferN expr.expression) (\te ->
             R.returns te
         ))))
 
@@ -183,14 +183,14 @@ inferN expr =
         inferBinaryOperator expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
 
     else if expr.type == "UNARY_PLUS" then
-        R.andThen (inferN expr.operand) (\t1 ->
-        R.andThen (uni t1 Type.typeInteger) (\_ ->
+        R.bind (inferN expr.operand) (\t1 ->
+        R.bind (uni t1 Type.typeInteger) (\_ ->
             R.returns Type.typeInteger
         ))
 
     else if expr.type == "UNARY_NEGATE" then
-        R.andThen (inferN expr.operand) (\t1 ->
-        R.andThen (uni t1 Type.typeInteger) (\_ ->
+        R.bind (inferN expr.operand) (\t1 ->
+        R.bind (uni t1 Type.typeInteger) (\_ ->
             R.returns Type.typeInteger
         ))
 
@@ -199,25 +199,25 @@ inferN expr =
 
 
 inferBinaryOperator expr type =
-    R.andThen (inferN expr.left) (\t1 ->
-    R.andThen (inferN expr.right) (\t2 ->
-    R.andThen fresh (\tv ->
-    R.andThen (uni (Type.TArr t1 (Type.TArr t2 tv)) type) (\_ ->
+    R.bind (inferN expr.left) (\t1 ->
+    R.bind (inferN expr.right) (\t2 ->
+    R.bind fresh (\tv ->
+    R.bind (uni (Type.TArr t1 (Type.TArr t2 tv)) type) (\_ ->
         R.returns tv
     ))));
 
 
 inferRelationalOperator expr =
-    R.andThen (inferN expr.left) (\t1 ->
-    R.andThen (inferN expr.right) (\t2 ->
-    R.andThen (uni t1 t2) (\_ ->
+    R.bind (inferN expr.left) (\t1 ->
+    R.bind (inferN expr.right) (\t2 ->
+    R.bind (uni t1 t2) (\_ ->
         R.returns Type.typeBoolean
     )));
 
 
 fresh =
-    R.andThen (R.get "names") (\names ->
-    R.andThen (R.set "names" (names + 1)) (\names ->
+    R.bind (R.get "names") (\names ->
+    R.bind (R.set "names" (names + 1)) (\names ->
         R.returns (Type.TVar ("a" ++ names))
     ))
 assumptions {
@@ -226,19 +226,19 @@ assumptions {
 
 
 inEnv name schema =
-    R.andThen (R.get "typeEnv") (\typeEnv ->
+    R.bind (R.get "typeEnv") (\typeEnv ->
         R.set "typeEnv" (TypeEnv.extend name schema typeEnv)
     );
 
 
 outEnv name =
-    R.andThen (R.get "typeEnv") (\typeEnv ->
+    R.bind (R.get "typeEnv") (\typeEnv ->
         R.set "typeEnv" (TypeEnv.remove name typeEnv)
     );
 
 
 uni t1 t2 =
-    R.andThen (R.get "constraints") (\constraints ->
+    R.bind (R.get "constraints") (\constraints ->
         R.set "constraints" (List.append (Tuple.Tuple t1 t2) constraints)
     );
 
