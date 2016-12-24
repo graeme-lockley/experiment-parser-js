@@ -55,10 +55,10 @@ inferN expr =
         ))))
 
     else if expr.type == "ADDITION" then
-        inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
+        inferBinaryOperator expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
 
     else if expr.type == "BOOLEAN_AND" then
-        inferBinaryOperation expr (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))
+        inferBinaryOperator expr (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))
 
     else if expr.type == "BOOLEAN_NOT" then
         R.andThen (inferN expr.operand) (\t1 ->
@@ -68,7 +68,7 @@ inferN expr =
         )))
 
     else if expr.type == "BOOLEAN_OR" then
-        inferBinaryOperation expr (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))
+        inferBinaryOperator expr (Type.TArr Type.typeBoolean (Type.TArr Type.typeBoolean Type.typeBoolean))
 
     else if expr.type == "COMPOSITION" then
         R.andThen (inferN expr.left) (\t1 ->
@@ -104,7 +104,7 @@ inferN expr =
         )))
 
     else if expr.type == "DIVISION" then
-        inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
+        inferBinaryOperator expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
 
     else if expr.type == "EQUAL" then
         inferRelationalOperator expr
@@ -158,7 +158,7 @@ inferN expr =
         ))))
 
     else if expr.type == "MULTIPLICATION" then
-        inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
+        inferBinaryOperator expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
 
     else if expr.type == "NOT_EQUAL" then
         inferRelationalOperator expr
@@ -177,10 +177,10 @@ inferN expr =
         ))))
 
     else if expr.type == "STRING_CONCAT" then
-        inferBinaryOperation expr (Type.TArr Type.typeString (Type.TArr Type.typeString Type.typeString))
+        inferBinaryOperator expr (Type.TArr Type.typeString (Type.TArr Type.typeString Type.typeString))
 
     else if expr.type == "SUBTRACTION" then
-        inferBinaryOperation expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
+        inferBinaryOperator expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
 
     else if expr.type == "UNARY_PLUS" then
         R.andThen (inferN expr.operand) (\t1 ->
@@ -198,7 +198,7 @@ inferN expr =
         \_ -> Result.Error ("No inference for " ++ expr.type);
 
 
-inferBinaryOperation expr type =
+inferBinaryOperator expr type =
     R.andThen (inferN expr.left) (\t1 ->
     R.andThen (inferN expr.right) (\t2 ->
     R.andThen fresh (\tv ->
