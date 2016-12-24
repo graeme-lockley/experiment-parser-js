@@ -326,14 +326,19 @@ parseConstantUnit lexer =
 
 
 
-parseString input sourceName =
-    (\input ->
-        (\parser ->
-            (\parseResult ->
-                Result.map (\value -> Tuple.first value) parseResult
-            ) (parser input)
-        ) ((P.map (\elements -> at 0 elements)) o (P.and (Array.mk2 parseMODULE (P.symbol Tokens.EOF))))
-    ) (Lexer.fromString input sourceName);
+parseString source sourceName =
+    let {
+        input =
+            Lexer.fromString source sourceName;
+
+        parser =
+            (P.map (at 0)) o
+            (P.and (Array.mk2 parseMODULE (P.symbol Tokens.EOF)));
+
+        parseResult =
+            parser input
+    } in
+        Result.map Tuple.first parseResult;
 
 
 parseExpressionString input =
