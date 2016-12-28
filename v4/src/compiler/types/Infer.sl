@@ -164,6 +164,7 @@ inferN expr =
         inferRelationalOperator expr
 
     else if expr.type == "SCOPE" then
+        R.bind openScope (\scope ->
         R.bind (
             R.foldl (\declaration ->
                 R.bind fresh (\tv ->
@@ -173,8 +174,9 @@ inferN expr =
         R.bind (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
         R.bind fresh (\tv ->
         R.bind (inferN expr.expression) (\te ->
+        R.bind (closeScope scope) (\_ ->
             R.returns te
-        ))))
+        ))))))
 
     else if expr.type == "STRING_CONCAT" then
         inferBinaryOperator expr (Type.TArr Type.typeString (Type.TArr Type.typeString Type.typeString))
@@ -241,6 +243,14 @@ uni t1 t2 =
     R.bind (R.get "constraints") (\constraints ->
         R.set "constraints" (List.append (Tuple.Tuple t1 t2) constraints)
     );
+
+
+openScope =
+    R.get "typeEnv";
+
+
+closeScope scope =
+    R.set "typeEnv" scope;
 
 
 infer expr inferState =
