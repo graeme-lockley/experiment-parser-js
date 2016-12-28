@@ -37,6 +37,11 @@ function toList(s) {
 }
 
 
+function fromList(l) {
+    return new Set(l);
+}
+
+
 function union(s1) {
     return s2 => new Set([...s1, ...s2]);
 }
@@ -45,6 +50,7 @@ function union(s1) {
 module.exports = {
     difference,
     empty,
+    fromList,
     insert,
     isEmpty,
     intersection,
