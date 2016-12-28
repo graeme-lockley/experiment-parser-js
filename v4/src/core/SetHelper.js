@@ -1,8 +1,25 @@
 const empty = new Set();
 
+
+function difference(s1) {
+    return s2 => new Set([...s1].filter(x => !s2.has(x)));
+}
+
+
+function insert(e) {
+    return s => new Set(s).add(e);
+}
+
+
+function intersection(s1) {
+    return s2 => new Set ([...s1].filter(x => s2.has(x)));
+}
+
+
 function isEmpty(s) {
     return s.size == 0;
 }
+
 
 function singleton(e) {
     const result = new Set();
@@ -10,19 +27,28 @@ function singleton(e) {
     return result;
 }
 
-function union(s1) {
-    return s2 => {
-        const result = new Set(s1);
-        for (const elem of s2) {
-            result.add(elem);
-        }
-        return result;
+
+function toList(s) {
+    const result = [];
+    for (const e in s) {
+        result.push(e);
     }
+    return result;
 }
 
+
+function union(s1) {
+    return s2 => new Set([...s1, ...s2]);
+}
+
+
 module.exports = {
+    difference,
     empty,
+    insert,
     isEmpty,
+    intersection,
     singleton,
+    toList,
     union
 };
