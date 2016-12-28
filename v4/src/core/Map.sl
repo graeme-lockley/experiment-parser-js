@@ -62,6 +62,10 @@ assumptions {
 };
 
 
+toList map =
+    List.map (\key -> Tuple.Tuple key (findWithDefault () key map)) (Helper.keys map);
+
+
 union m1 m2 =
     Helper.union m1 m2;
 
