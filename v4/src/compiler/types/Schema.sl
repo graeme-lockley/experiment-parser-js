@@ -26,17 +26,6 @@ assumptions {
 };
 
 
-show schema =
-    if List.length (names schema) == 0 then
-        Type.show (type schema)
-    else
-        "forall" ++ (List.foldl (\accumulator \item -> accumulator ++ " " ++ item) "" (names schema)) ++ " . " ++ (Type.show (type schema))
-assumptions {
-    (show (Forall (List.empty) (Type.TArr Type.typeInteger Type.typeString))) == "Integer -> String";
-    (show (Forall (List.mk2 "a" "b") (Type.TArr (Type.TVar "a") (Type.TVar "b")))) == "forall a b . a -> b"
-};
-
-
 resolve schema subst =
     let {
         mkTriple type count mapOfNames =
@@ -54,7 +43,7 @@ resolve schema subst =
                         resolvep (Record.set1 "type" (Subst.apply type.name subst) t)
                     else
                         if Map.contains type.name t.mapOfNames then
-                            Record.set1 "type" (Map.findWithDefault () type.name t.mapOfNames)
+                            Record.set1 "type" (Map.findWithDefault () type.name t.mapOfNames) t
                         else
                             mkTriple newType (t.count + 1) (Map.insert type.name newType t.mapOfNames)
                                 where {
@@ -81,7 +70,7 @@ resolve schema subst =
             if count == 1 then
                 List.empty
             else
-                List.prepend ("a" ++ lessCount) (freeVariables lessCount)
+                List.append ("a" ++ lessCount) (freeVariables lessCount)
                     where {
                         lessCount =
                             count - 1
@@ -105,4 +94,8 @@ show schema =
                     ""
                 else
                     "forall " ++ (List.join " " schema.names) ++ " . "
-        };
+        }
+assumptions {
+    (show (Forall (List.empty) (Type.TArr Type.typeInteger Type.typeString))) == "Integer -> String";
+    (show (Forall (List.mk2 "a" "b") (Type.TArr (Type.TVar "a") (Type.TVar "b")))) == "forall a b . a -> b"
+};
