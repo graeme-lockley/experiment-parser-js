@@ -1,4 +1,5 @@
 import file:../../core/Record as Record;
+import file:../../core/Set as Set;
 
 import file:../../core/Debug as DEBUG;
 
@@ -86,3 +87,13 @@ assumptions {
     show (TArr (TArr (TVar "a") (TVar "b")) (TVar "c")) == "(a -> b) -> c";
     show (TArr (TVar "a") (TArr (TVar "b") (TVar "c"))) == "a -> b -> c"
 };
+
+
+
+ftv type =
+    if isTCon type then
+        Set.empty
+    else if isTVar type then
+        Set.singleton type.name
+    else
+        Set.union (ftv type.domain) (ftv type.range);
