@@ -7,7 +7,6 @@ const Infer = require('../../src/compiler/types/Infer');
 const Solver = require('../../src/compiler/types/Solver');
 const Parser = require('../../src/compiler/Parser');
 const Translator = require('../../src/compiler/Translator');
-const Types = require('../../src/compiler/Types');
 const NTypes = require('../../src/compiler/NTypes');
 
 const Maybe = require('../../src/core/Maybe');
@@ -101,12 +100,12 @@ function scenariosIn(directory) {
                         expect(Result.isOk(parseResponse)).to.equal(true);
                     });
                 }
-                const typedAST = Types.typeCheckAST(Result.withDefault()(parseResponse));
+                const moduleTypeResult = NTypes.inferModuleType(Result.withDefault()(parseResponse));
                 it("should fail when attempting to type check", () => {
-                    expect(Result.isOk(typedAST)).to.equal(false);
+                    expect(Result.isOk(moduleTypeResult)).to.equal(false);
                 });
                 it("should have the expected error message", () => {
-                    const errorMessage = Result.errorWithDefault("unknown")(typedAST);
+                    const errorMessage = Result.errorWithDefault("unknown")(moduleTypeResult);
                     expect(errorMessage).to.equal(expectations['typeError']);
                 });
             }
