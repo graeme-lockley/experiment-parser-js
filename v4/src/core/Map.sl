@@ -2,6 +2,7 @@ import file:./RecordHelper as Helper;
 
 import file:./Array as List;
 import file:./Maybe as Maybe;
+import file:./Set as Set;
 import file:./Tuple as Tuple;
 
 import file:./Debug as DEBUG;
@@ -64,6 +65,13 @@ assumptions {
 
 toList map =
     List.map (\key -> Tuple.Tuple key (findWithDefault () key map)) (Helper.keys map);
+
+
+keys s =
+    Set.fromList (Helper.keys s)
+assumptions {
+    DEBUG.eq (keys (mk4 "a" 1 "b" 2 "c" 3 "d" 4)) (Set.insert "a" (Set.insert "b" (Set.insert "c" (Set.insert "d" Set.empty))))
+};
 
 
 union m1 m2 =
