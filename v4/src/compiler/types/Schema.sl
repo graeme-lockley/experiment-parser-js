@@ -95,3 +95,14 @@ assumptions {
     DEBUG.eq (resolve (Forall List.empty (Type.TVar "a9")) (Subst.add "a9" (Type.TVar "a11") Subst.nullSubst)) (Forall (List.singleton "a1") (Type.TVar "a1"));
     DEBUG.eq (resolve (Forall List.empty (Type.TArr (Type.TVar "a9") Type.typeInteger)) (Subst.add "a9" (Type.TVar "a11") Subst.nullSubst)) (Forall (List.singleton "a1") (Type.TArr (Type.TVar "a1") Type.typeInteger))
 };
+
+
+show schema =
+    quantifierPrefix ++ (Type.show schema.type)
+        where {
+            quantifierPrefix =
+                if List.isEmpty schema.names then
+                    ""
+                else
+                    "forall " ++ (List.join " " schema.names) ++ " . "
+        };
