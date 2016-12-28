@@ -1,12 +1,4 @@
 -- given a constant character expression
 'c'
 -- type
-{
-  "_$EXPR": {
-    "names": [],
-    "type": {
-      "type": "CONSTANT",
-      "name": "Character"
-    }
-  }
-}
+_$EXPR :: Character

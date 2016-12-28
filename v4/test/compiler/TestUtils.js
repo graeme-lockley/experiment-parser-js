@@ -91,8 +91,7 @@ function scenariosIn(directory) {
                 });
                 it("should have the corresponding type", () => {
                     const moduleType = Result.withDefault()(moduleTypeResult);
-                    const moduleTypeAsString = JSON.stringify(moduleType, null, 2);
-                    expect(moduleTypeAsString).to.equal(expectations['type']);
+                    expect(NTypes.show(moduleType)).to.equal(expectations['type']);
                 });
             }
 

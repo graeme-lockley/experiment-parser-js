@@ -3,33 +3,5 @@ test a = a + 1;
 
 test
 -- type
-{
-  "test": {
-    "names": [],
-    "type": {
-      "type": "FUNCTION",
-      "domain": {
-        "type": "CONSTANT",
-        "name": "Integer"
-      },
-      "range": {
-        "type": "CONSTANT",
-        "name": "Integer"
-      }
-    }
-  },
-  "_$EXPR": {
-    "names": [],
-    "type": {
-      "type": "FUNCTION",
-      "domain": {
-        "type": "CONSTANT",
-        "name": "Integer"
-      },
-      "range": {
-        "type": "CONSTANT",
-        "name": "Integer"
-      }
-    }
-  }
-}
+test :: Integer -> Integer
+_$EXPR :: Integer -> Integer

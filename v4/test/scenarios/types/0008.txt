@@ -5,40 +5,6 @@ testB b = (testA b) + 1;
 
 testA 10
 -- type
-{
-  "testA": {
-    "names": [],
-    "type": {
-      "type": "FUNCTION",
-      "domain": {
-        "type": "CONSTANT",
-        "name": "Integer"
-      },
-      "range": {
-        "type": "CONSTANT",
-        "name": "Integer"
-      }
-    }
-  },
-  "testB": {
-    "names": [],
-    "type": {
-      "type": "FUNCTION",
-      "domain": {
-        "type": "CONSTANT",
-        "name": "Integer"
-      },
-      "range": {
-        "type": "CONSTANT",
-        "name": "Integer"
-      }
-    }
-  },
-  "_$EXPR": {
-    "names": [],
-    "type": {
-      "type": "CONSTANT",
-      "name": "Integer"
-    }
-  }
-}
+testA :: Integer -> Integer
+testB :: Integer -> Integer
+_$EXPR :: Integer

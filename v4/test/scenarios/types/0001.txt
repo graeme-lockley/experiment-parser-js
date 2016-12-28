@@ -1,12 +1,4 @@
 -- given a constant boolean expression
 true
 -- type
-{
-  "_$EXPR": {
-    "names": [],
-    "type": {
-      "type": "CONSTANT",
-      "name": "Boolean"
-    }
-  }
-}
+_$EXPR :: Boolean
