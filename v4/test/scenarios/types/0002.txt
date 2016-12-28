@@ -1,18 +1,12 @@
 -- given a constant string expression
 "Hello world"
 -- type
-_$EXPR : String
--- inferType
 {
-  "_ok": {
-    "_fst": {
+  "_$EXPR": {
+    "names": [],
+    "type": {
       "type": "CONSTANT",
       "name": "String"
-    },
-    "_snd": {
-      "typeEnv": {},
-      "constraints": [],
-      "names": 1
     }
   }
 }

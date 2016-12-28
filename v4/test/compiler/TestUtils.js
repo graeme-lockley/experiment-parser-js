@@ -4,9 +4,11 @@ const FS = require('fs');
 const {NodeVM} = require('vm2');
 
 const Infer = require('../../src/compiler/types/Infer');
+const Solver = require('../../src/compiler/types/Solver');
 const Parser = require('../../src/compiler/Parser');
 const Translator = require('../../src/compiler/Translator');
 const Types = require('../../src/compiler/Types');
+const NTypes = require('../../src/compiler/NTypes');
 
 const Maybe = require('../../src/core/Maybe');
 const Result = require('../../src/core/Result');
@@ -83,13 +85,13 @@ function scenariosIn(directory) {
                         expect(Result.isOk(parseResponse)).to.equal(true);
                     });
                 }
-                const typedAST = Types.typeCheckAST(Result.withDefault()(parseResponse));
+                const moduleTypeResult = NTypes.inferModuleType(Result.withDefault()(parseResponse));
                 it("should be type checked", () => {
-                    expect(Result.isOk(typedAST)).to.equal(true);
+                    expect(Result.isOk(moduleTypeResult)).to.equal(true);
                 });
                 it("should have the corresponding type", () => {
-                    const moduleType = Tuple.second(Result.withDefault()(typedAST));
-                    const moduleTypeAsString = Types.showModuleType(moduleType);
+                    const moduleType = Result.withDefault()(moduleTypeResult);
+                    const moduleTypeAsString = JSON.stringify(moduleType, null, 2);
                     expect(moduleTypeAsString).to.equal(expectations['type']);
                 });
             }
@@ -124,7 +126,19 @@ function scenariosIn(directory) {
                     const moduleTypeAsString = JSON.stringify(inferResult, null, 2);
                     expect(moduleTypeAsString).to.equal(expectations['inferType']);
                 });
+            }
 
+            if ('unify' in expectations) {
+                if (!parseResponseIsTested) {
+                    it('should parse without any errors', () => {
+                        expect(Result.isOk(parseResponse)).to.equal(true);
+                    });
+                }
+                const inferResult = Infer.infer(Result.withDefault()(parseResponse))(Infer.initialState);
+
+                it ('should unify', () => {
+                    expect(JSON.stringify(Solver.unify(inferResult._ok._snd.constraints), null, 2)).to.equal(expectations['unify']);
+                });
             }
         })
     );

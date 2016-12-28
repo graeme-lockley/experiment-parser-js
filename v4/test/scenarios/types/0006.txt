@@ -3,83 +3,33 @@ test a = a + 1;
 
 test
 -- type
-test : Integer -> Integer
-_$EXPR : Integer -> Integer
--- inferType
 {
-  "_ok": {
-    "_fst": {
-      "type": "VARIABLE",
-      "name": "a1"
-    },
-    "_snd": {
-      "typeEnv": {
-        "test": {
-          "names": [],
-          "type": {
-            "type": "VARIABLE",
-            "name": "a1"
-          }
-        }
+  "test": {
+    "names": [],
+    "type": {
+      "type": "FUNCTION",
+      "domain": {
+        "type": "CONSTANT",
+        "name": "Integer"
       },
-      "constraints": [
-        {
-          "_fst": {
-            "type": "FUNCTION",
-            "domain": {
-              "type": "VARIABLE",
-              "name": "a2"
-            },
-            "range": {
-              "type": "FUNCTION",
-              "domain": {
-                "type": "CONSTANT",
-                "name": "Integer"
-              },
-              "range": {
-                "type": "VARIABLE",
-                "name": "a3"
-              }
-            }
-          },
-          "_snd": {
-            "type": "FUNCTION",
-            "domain": {
-              "type": "CONSTANT",
-              "name": "Integer"
-            },
-            "range": {
-              "type": "FUNCTION",
-              "domain": {
-                "type": "CONSTANT",
-                "name": "Integer"
-              },
-              "range": {
-                "type": "CONSTANT",
-                "name": "Integer"
-              }
-            }
-          }
-        },
-        {
-          "_fst": {
-            "type": "VARIABLE",
-            "name": "a1"
-          },
-          "_snd": {
-            "type": "FUNCTION",
-            "domain": {
-              "type": "VARIABLE",
-              "name": "a2"
-            },
-            "range": {
-              "type": "VARIABLE",
-              "name": "a3"
-            }
-          }
-        }
-      ],
-      "names": 4
+      "range": {
+        "type": "CONSTANT",
+        "name": "Integer"
+      }
+    }
+  },
+  "_$EXPR": {
+    "names": [],
+    "type": {
+      "type": "FUNCTION",
+      "domain": {
+        "type": "CONSTANT",
+        "name": "Integer"
+      },
+      "range": {
+        "type": "CONSTANT",
+        "name": "Integer"
+      }
     }
   }
 }

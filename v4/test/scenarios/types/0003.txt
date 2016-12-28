@@ -1,18 +1,12 @@
 -- given a constant character expression
 'c'
 -- type
-_$EXPR : Character
--- inferType
 {
-  "_ok": {
-    "_fst": {
+  "_$EXPR": {
+    "names": [],
+    "type": {
       "type": "CONSTANT",
       "name": "Character"
-    },
-    "_snd": {
-      "typeEnv": {},
-      "constraints": [],
-      "names": 1
     }
   }
 }

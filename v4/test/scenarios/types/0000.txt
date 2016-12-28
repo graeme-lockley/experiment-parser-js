@@ -1,18 +1,12 @@
 -- given a constant integer expression
 10
 -- type
-_$EXPR : Integer
--- inferType
 {
-  "_ok": {
-    "_fst": {
+  "_$EXPR": {
+    "names": [],
+    "type": {
       "type": "CONSTANT",
       "name": "Integer"
-    },
-    "_snd": {
-      "typeEnv": {},
-      "constraints": [],
-      "names": 1
     }
   }
 }
