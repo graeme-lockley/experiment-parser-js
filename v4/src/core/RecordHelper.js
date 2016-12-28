@@ -31,6 +31,19 @@ function map(f) {
 }
 
 
+function keys(r) {
+    const result = [];
+
+    for (const key in r) {
+        if (r.hasOwnProperty(key)) {
+            result.push(key);
+        }
+    }
+
+    return result;
+}
+
+
 function mk0() {
     return {};
 }
@@ -228,6 +241,7 @@ function fold(f) {
 module.exports = {
     fold,
     get,
+    keys,
     remove,
     set1,
     set2,
