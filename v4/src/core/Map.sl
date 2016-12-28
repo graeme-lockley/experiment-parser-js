@@ -35,6 +35,10 @@ assumptions {
 };
 
 
+contains name d =
+    Helper.get name d;
+
+
 size m =
     keys.length
         where {
