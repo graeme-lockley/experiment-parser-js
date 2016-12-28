@@ -40,3 +40,4 @@ resolveExpr type unifyResult =
 
 
 show schemas =
+    List.join "\n" (List.map (\declaration -> (Tuple.first declaration) ++ " :: " ++ (Schema.show (Tuple.second declaration))) (Map.toList schemas));
