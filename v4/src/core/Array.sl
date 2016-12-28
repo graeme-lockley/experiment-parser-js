@@ -5,6 +5,10 @@ import file:./Tuple as Tuple;
 import file:./Debug as DEBUG;
 
 
+concat a b =
+    a.concat b;
+
+
 append =
     AH.append;
 
