@@ -17,3 +17,8 @@ remove name typeEnv =
 
 find name typeEnv =
     Map.find name typeEnv;
+
+
+
+ftv typeEnv =
+    Map.keys typeEnv;
