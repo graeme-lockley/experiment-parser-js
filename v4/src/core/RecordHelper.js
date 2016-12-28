@@ -6,6 +6,11 @@ function get(name) {
 }
 
 
+function has(name) {
+    return d => name in d;
+}
+
+
 function remove(name) {
     return record => {
         const result = clone(record);
@@ -241,6 +246,7 @@ function fold(f) {
 module.exports = {
     fold,
     get,
+    has,
     keys,
     remove,
     set1,

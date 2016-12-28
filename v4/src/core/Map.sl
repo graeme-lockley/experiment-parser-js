@@ -36,7 +36,7 @@ assumptions {
 
 
 contains name d =
-    Helper.get name d;
+    Helper.has name d;
 
 
 size m =
