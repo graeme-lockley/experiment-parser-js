@@ -40,6 +40,10 @@ toList s =
     Helper.toList s;
 
 
+fromList l =
+    Helper.fromList l;
+
+
 union s1 s2 =
     Helper.union s1 s2
 assumptions {
