@@ -7,7 +7,7 @@ const Infer = require('../../src/compiler/types/Infer');
 const Solver = require('../../src/compiler/types/Solver');
 const Parser = require('../../src/compiler/Parser');
 const Translator = require('../../src/compiler/Translator');
-const NTypes = require('../../src/compiler/NTypes');
+const Types = require('../../src/compiler/Types');
 
 const Maybe = require('../../src/core/Maybe');
 const Result = require('../../src/core/Result');
@@ -84,13 +84,13 @@ function scenariosIn(directory) {
                         expect(Result.isOk(parseResponse)).to.equal(true);
                     });
                 }
-                const moduleTypeResult = NTypes.inferModuleType(Result.withDefault()(parseResponse));
+                const moduleTypeResult = Types.inferModuleType(Result.withDefault()(parseResponse));
                 it("should be type checked", () => {
                     expect(Result.isOk(moduleTypeResult)).to.equal(true);
                 });
                 it("should have the corresponding type", () => {
                     const moduleType = Result.withDefault()(moduleTypeResult);
-                    expect(NTypes.show(moduleType)).to.equal(expectations['type']);
+                    expect(Types.show(moduleType)).to.equal(expectations['type']);
                 });
             }
 
@@ -100,7 +100,7 @@ function scenariosIn(directory) {
                         expect(Result.isOk(parseResponse)).to.equal(true);
                     });
                 }
-                const moduleTypeResult = NTypes.inferModuleType(Result.withDefault()(parseResponse));
+                const moduleTypeResult = Types.inferModuleType(Result.withDefault()(parseResponse));
                 it("should fail when attempting to type check", () => {
                     expect(Result.isOk(moduleTypeResult)).to.equal(false);
                 });
