@@ -18,3 +18,7 @@ isEmpty s =
 
 union s1 s2 =
     Helper.union s1 s2;
+
+
+has e s =
+    s.has e;
