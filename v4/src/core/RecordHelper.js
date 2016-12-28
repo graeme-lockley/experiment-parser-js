@@ -37,15 +37,7 @@ function map(f) {
 
 
 function keys(r) {
-    const result = [];
-
-    for (const key in r) {
-        if (r.hasOwnProperty(key)) {
-            result.push(key);
-        }
-    }
-
-    return result;
+    return Object.keys(r);
 }
 
 
