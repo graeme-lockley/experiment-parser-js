@@ -12,6 +12,8 @@ const Types = require('../../src/compiler/Types');
 const Maybe = require('../../src/core/Maybe');
 const Result = require('../../src/core/Result');
 const Tuple = require('../../src/core/Tuple');
+const ObjectHelper = require('../../src/core/ObjectHelper');
+
 
 const expect = require("chai").expect;
 
@@ -50,7 +52,7 @@ function scenariosIn(directory) {
                     });
                 }
                 it('produces the expected AST', () =>
-                    expect(JSON.stringify(Result.withDefault()(parseResponse), null, 2)).to.equal(expectations['ast']));
+                    expect(ObjectHelper.show(Result.withDefault()(parseResponse))).to.equal(expectations['ast']));
             }
 
             if ('run' in expectations) {
@@ -85,6 +87,7 @@ function scenariosIn(directory) {
                     });
                 }
                 const moduleTypeResult = Types.inferModuleType(Result.withDefault()(parseResponse));
+                console.log(ObjectHelper.show(moduleTypeResult));
                 it("should be type checked", () => {
                     expect(Result.isOk(moduleTypeResult)).to.equal(true);
                 });
@@ -121,7 +124,7 @@ function scenariosIn(directory) {
                     expect(Result.isOk(inferResult)).to.equal(true);
                 });
                 it("should have the expected response", () => {
-                    const moduleTypeAsString = JSON.stringify(inferResult, null, 2);
+                    const moduleTypeAsString = ObjectHelper.show(inferResult);
                     expect(moduleTypeAsString).to.equal(expectations['inferType']);
                 });
             }
@@ -135,7 +138,7 @@ function scenariosIn(directory) {
                 const inferResult = Infer.infer(Result.withDefault()(parseResponse))(Infer.initialState);
 
                 it ('should unify', () => {
-                    expect(JSON.stringify(Solver.unify(inferResult._ok._snd.constraints), null, 2)).to.equal(expectations['unify']);
+                    expect(ObjectHelper.show(Solver.unify(inferResult._ok._snd.constraints))).to.equal(expectations['unify']);
                 });
             }
         })
