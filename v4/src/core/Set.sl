@@ -1,3 +1,4 @@
+import file:./Array as List;
 import file:./SetHelper as Helper;
 
 import file:./Debug as DEBUG;
@@ -37,7 +38,10 @@ singleton e =
 
 
 toList s =
-    Helper.toList s;
+    Helper.toList s
+assumptions {
+    DEBUG.eq (toList setA) (List.mk3 1 2 3)
+};
 
 
 fromList l =

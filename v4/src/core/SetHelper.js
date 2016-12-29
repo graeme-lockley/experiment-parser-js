@@ -29,11 +29,7 @@ function singleton(e) {
 
 
 function toList(s) {
-    const result = [];
-    for (const e in s) {
-        result.push(e);
-    }
-    return result;
+    return Array.from(s).sort();
 }
 
 
