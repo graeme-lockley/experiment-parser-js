@@ -1,6 +1,11 @@
+"use strict";
+
+const ObjectHelper = require("./ObjectHelper");
+
+
 function log(label) {
     return value => {
-        console.log(label + ": " + (JSON.stringify(value, null, 2)));
+        console.log(label + ": " + ObjectHelper.show(value));
         return value;
     };
 }
