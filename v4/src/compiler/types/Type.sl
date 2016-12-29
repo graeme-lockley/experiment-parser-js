@@ -96,4 +96,8 @@ ftv type =
     else if isTVar type then
         Set.singleton type.name
     else
-        Set.union (ftv type.domain) (ftv type.range);
+        Set.union (ftv type.domain) (ftv type.range)
+assumptions {
+    DEBUG.eq (ftv typeString) Set.empty;
+    DEBUG.eq (ftv (TVar "a")) (Set.singleton "a")
+};
