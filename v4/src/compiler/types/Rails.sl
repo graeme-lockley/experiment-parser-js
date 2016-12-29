@@ -39,6 +39,9 @@ assumptions {
 };
 
 
+log message f2 state =
+    Result.andThen (DEBUG.log message state) (\_ -> f2 state);
+
 bind f1 f2 state =
     let {
         v1 = f1 state
