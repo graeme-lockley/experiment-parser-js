@@ -44,6 +44,7 @@ function show(o, indent = 0, inMap = false) {
             let result = nspaces(indent, inMap) + "{";
             let isFirst = true;
             let oArray = Array.from(o);
+            oArray.sort();
             for (const v in oArray) {
                 if (isFirst) {
                     isFirst = false;
