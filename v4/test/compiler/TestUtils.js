@@ -87,13 +87,12 @@ function scenariosIn(directory) {
                     });
                 }
                 const moduleTypeResult = Types.inferModuleType(Result.withDefault()(parseResponse));
-                console.log(ObjectHelper.show(moduleTypeResult));
                 it("should be type checked", () => {
                     expect(Result.isOk(moduleTypeResult)).to.equal(true);
                 });
                 it("should have the corresponding type", () => {
-                    const moduleType = Result.withDefault()(moduleTypeResult);
-                    expect(Types.show(moduleType)).to.equal(expectations['type']);
+                    const moduleType = Result.flatMap(ok => Types.show(ok))(error => error)(moduleTypeResult);
+                    expect(moduleType).to.equal(expectations['type']);
                 });
             }
 
