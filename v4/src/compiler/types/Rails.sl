@@ -68,7 +68,6 @@ assumptions {
 };
 
 
-
 map f =
     bind value (\list \state ->
         List.foldl
