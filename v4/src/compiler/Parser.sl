@@ -41,9 +41,14 @@ parseIMPORT =
 
 
 markLocation parser lexer =
-    (\startToken \result ->
-        Result.map (\t -> Tuple.Tuple (Array.mk3 startToken (Tuple.second t) (Tuple.first t)) (Tuple.second t)) result
-    ) lexer (parser lexer);
+    Result.map (\t -> Tuple.Tuple (Array.mk3 startToken (Tuple.second t) (Tuple.first t)) (Tuple.second t)) result
+        where {
+            startToken =
+                lexer;
+
+            result =
+                parser lexer
+        };
 
 
 parseDECL lexer =
@@ -74,12 +79,14 @@ parseDECLAssumptionMap lexer es =
 
 
 parseDECLMap elements =
-    (\a ->
-            if (Array.length (at 0 elements)) == 1 then
-                AST.declaration ((\assumption -> assumption.name) (at 0 (at 0 elements))) (at 2 elements) a
-            else
-                AST.declaration ((\assumption -> assumption.name) (at 0 (at 0 elements))) (mkLambda (Array.map (\n -> n.name) (Array.slice 1 (at 0 elements))) (at 2 elements)) a
-    ) (Maybe.withDefault Array.empty (at 3 elements));
+    let {
+        a =
+            Maybe.withDefault Array.empty (at 3 elements)
+    } in
+        if (Array.length (at 0 elements)) == 1 then
+            AST.declaration ((\assumption -> assumption.name) (at 0 (at 0 elements))) (at 2 elements) a
+        else
+            AST.declaration ((\assumption -> assumption.name) (at 0 (at 0 elements))) (mkLambda (Array.map (\n -> n.name) (Array.slice 1 (at 0 elements))) (at 2 elements)) a;
 
 
 parseEXPR1 lexer =
