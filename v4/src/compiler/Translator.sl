@@ -8,13 +8,14 @@ import file:../core/String as String;
 
 
 infixOperator operator =
-    (\jsOperator -> "(_$a => (_$b => (_$a " ++ jsOperator ++ " _$b)))")
-    (
-        if operator == "++" then
-            "+"
-        else
-            operator
-    );
+    "(_$a => (_$b => (_$a " ++ jsOperator ++ " _$b)))"
+        where {
+            jsOperator =
+                if operator == "++" then
+                    "+"
+                else
+                    operator
+        };
 
 
 searchNewlinePattern =
@@ -46,9 +47,11 @@ astToJavascript ast indentation =
         "(" ++ (astToJavascript ast.left indentation) ++ " || " ++ (astToJavascript ast.right indentation) ++ ")"
 
     else if ast.type == "COMPOSITION" then
-        (\variableName ->
-            "(" ++ variableName ++ " => " ++ (astToJavascript ast.left indentation) ++ "(" ++ (astToJavascript ast.right indentation) ++ "(" ++ variableName ++ ")))"
-        ) ("_$" ++ indentation)
+        "(" ++ variableName ++ " => " ++ (astToJavascript ast.left indentation) ++ "(" ++ (astToJavascript ast.right indentation) ++ "(" ++ variableName ++ ")))"
+            where {
+                variableName =
+                    "_$" ++ indentation
+            }
 
     else if ast.type == "CONSTANT_BOOLEAN" then
         if ast.value then
@@ -112,15 +115,17 @@ astToJavascript ast indentation =
         (spaces (indentation + 1)) ++ ": " ++ (astToJavascript ast.elseExpr (indentation + 1)) ++ ")"
 
     else if ast.type == "IMPORT" then
-        (\fileName ->
-            "const " ++ (Record.get "name" (Record.get "id" ast)) ++ " = require('" ++
-            (
-                if (String.startsWith "./" fileName) || (String.startsWith "/" fileName) then
-                    fileName
-                else
-                    "./" ++ fileName
-            ) ++ "');"
-        ) (String.substring 5 (String.length (Record.get "value" (Record.get "url" ast))) (Record.get "value" (Record.get "url" ast)))
+        "const " ++ (Record.get "name" (Record.get "id" ast)) ++ " = require('" ++
+        (
+            if (String.startsWith "./" fileName) || (String.startsWith "/" fileName) then
+                fileName
+            else
+                "./" ++ fileName
+        ) ++ "');"
+            where {
+                fileName =
+                    String.substring 5 (String.length (Record.get "value" (Record.get "url" ast))) (Record.get "value" (Record.get "url" ast))
+            }
 
     else if ast.type == "INFIX_OPERATOR" then
          infixOperator ast.operator
@@ -138,56 +143,60 @@ astToJavascript ast indentation =
         "(" ++ (astToJavascript ast.left indentation) ++ " * " ++ (astToJavascript ast.right indentation) ++ ")"
 
     else if ast.type == "MODULE" then
-        (\imports \suffix ->
-            (if (String.length imports) == 0 then
-                ""
-            else
-                imports ++ "\n" ++ "\n") ++
-            Array.join ("\n" ++ "\n") (Array.map  (\d -> astToJavascript d indentation) (Record.get "declarations" ast)) ++
-            "\n" ++ "\nconst _$EXPR = " ++ (astToJavascript (Record.get "expression" ast) indentation) ++ ";" ++
-            "\n" ++ "\n" ++ "const _$ASSUMPTIONS = [].concat(\n" ++
-            Array.join ",\n" (
-                Array.map (\i ->
-                        "  " ++
-                        (Record.get "name" (Record.get "id" i)) ++
-                        "._$ASSUMPTIONS || []")
-                    (Record.get "imports" ast)) ++
-            ");\n" ++ "\n" ++
-            "_$ASSUMPTIONS.push({\n" ++
-            "  source: '" ++
-            (simplifyPath (encodeString (Record.get "sourceName" ast))) ++
-            "',\n" ++
-            "  declarations: [\n" ++
-            Array.join ",\n" (
-                Array.map
-                    (\d ->
-                        "    {\n" ++
-                        "      name: \'" ++
-                        d.name ++
-                        "\',\n" ++
-                        "      predicates: [\n" ++
-                        Array.join ",\n" (
-                            Array.map
-                                (\a ->
-                                    "        {\n" ++
-                                    "          line: " ++ a.line ++ ",\n" ++
-                                    "          source: \'" ++ simplifyPath (encodeString a.sourceName) ++ "\',\n" ++
-                                    "          text: \'" ++ encodeString a.text ++ "\',\n" ++
-                                    "          predicate: () => " ++ astToJavascript a.expression 6 ++ "\n" ++
-                                    "        }")
-                                (Record.get "assumptions" d)) ++
-                        "\n" ++
-                        "      ]\n" ++
-                        "    }"
-                    )
-                    (Array.filter (\d -> (Array.length (Record.get "assumptions" d)) > 0) (Record.get "declarations" ast))
-            ) ++
-            "\n" ++
-            "  ]\n" ++
-            "});\n" ++ "\n" ++
-            suffix
-        ) (moduleImports (Record.get "imports" ast) indentation)
-          (moduleSuffix (Record.get "declarations" ast) (Record.get "optionalExpression" ast))
+        (if (String.length imports) == 0 then
+            ""
+        else
+            imports ++ "\n" ++ "\n") ++
+        Array.join ("\n" ++ "\n") (Array.map  (\d -> astToJavascript d indentation) (Record.get "declarations" ast)) ++
+        "\n" ++ "\nconst _$EXPR = " ++ (astToJavascript (Record.get "expression" ast) indentation) ++ ";" ++
+        "\n" ++ "\n" ++ "const _$ASSUMPTIONS = [].concat(\n" ++
+        Array.join ",\n" (
+            Array.map (\i ->
+                    "  " ++
+                    (Record.get "name" (Record.get "id" i)) ++
+                    "._$ASSUMPTIONS || []")
+                (Record.get "imports" ast)) ++
+        ");\n" ++ "\n" ++
+        "_$ASSUMPTIONS.push({\n" ++
+        "  source: '" ++
+        (simplifyPath (encodeString (Record.get "sourceName" ast))) ++
+        "',\n" ++
+        "  declarations: [\n" ++
+        Array.join ",\n" (
+            Array.map
+                (\d ->
+                    "    {\n" ++
+                    "      name: \'" ++
+                    d.name ++
+                    "\',\n" ++
+                    "      predicates: [\n" ++
+                    Array.join ",\n" (
+                        Array.map
+                            (\a ->
+                                "        {\n" ++
+                                "          line: " ++ a.line ++ ",\n" ++
+                                "          source: \'" ++ simplifyPath (encodeString a.sourceName) ++ "\',\n" ++
+                                "          text: \'" ++ encodeString a.text ++ "\',\n" ++
+                                "          predicate: () => " ++ astToJavascript a.expression 6 ++ "\n" ++
+                                "        }")
+                            (Record.get "assumptions" d)) ++
+                    "\n" ++
+                    "      ]\n" ++
+                    "    }"
+                )
+                (Array.filter (\d -> (Array.length (Record.get "assumptions" d)) > 0) (Record.get "declarations" ast))
+        ) ++
+        "\n" ++
+        "  ]\n" ++
+        "});\n" ++ "\n" ++
+        suffix
+            where {
+                imports =
+                    moduleImports (Record.get "imports" ast) indentation;
+
+                suffix =
+                    moduleSuffix (Record.get "declarations" ast) (Record.get "optionalExpression" ast)
+            }
 
     else if ast.type == "QUALIFIED_IDENTIFIER" then
         ast.module ++ "." ++ ast.identifier
@@ -224,7 +233,8 @@ moduleSuffix declarations optionalExpression =
             "\n" ++ "module.exports = {\n" ++ (spaces 1) ++ "_$EXPR,\n" ++ (spaces 1) ++ "_$ASSUMPTIONS\n};";
 
 
-blanks = "  ";
+blanks =
+    "  ";
 
 
 spaces count =
@@ -232,12 +242,14 @@ spaces count =
 
 
 simplifyPath path =
-    (\candidateResult ->
+    let {
+        candidateResult =
+            String.replace "/./" "/" path
+    } in
         if (candidateResult == path) then
             path
         else
-            simplifyPath candidateResult
-    ) (String.replace "/./" "/" path);
+            simplifyPath candidateResult;
 
 
 at i a =
