@@ -31,12 +31,12 @@ inferModuleType ast =
     );
 
 
-includeExpr schema schemaResults =
-    Map.insert "_$EXPR" schema schemaResults;
+includeExpr =
+    Map.insert "_$EXPR";
 
 
-resolveExpr type unifyResult =
-    Schema.resolve (Schema.Forall List.empty type) unifyResult;
+resolveExpr type =
+    Schema.resolve (Schema.Forall List.empty type);
 
 
 show schemas =
