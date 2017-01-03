@@ -69,12 +69,14 @@ many parser lexer =
 
 
 many1 parser lexer =
-    (\result ->
+    let {
+        result =
+            parser lexer
+    } in
         if Result.isOk result then
-            map (\r -> Array.prepend (extractResult result) r) (many parser (extractLexer result))
+            map (Array.prepend (extractResult result)) (many parser (extractLexer result))
         else
-            result
-    ) (parser lexer);
+            result;
 
 
 empty value lexer =
@@ -82,50 +84,65 @@ empty value lexer =
 
 
 sepBy1 parser separator lexer =
-    (\accumulatedResult \tailParser ->
+    let {
+        accumulatedResult =
+            parser lexer;
+
+        tailParser =
+            (map (\item -> Maybe.withDefault () (Array.at 1 item))) o (and (Array.mk2 separator parser))
+    } in
         if Result.isOk accumulatedResult then
-            sepBy1p (map (\item -> Array.mk1 item) accumulatedResult) tailParser
+            sepBy1p (map Array.mk1 accumulatedResult) tailParser
         else
             accumulatedResult
-    ) (parser lexer) ((map (\item -> Maybe.withDefault () (Array.at 1 item))) o (and (Array.mk2 separator parser)))
 assumptions {
     DEBUG.eq (sepBy1 (symbol tokens.IDENTIFIER) (symbol tokens.BANG) testLexer) (empty (Array.mk3 "hello" "the" "world") (nextLexer 5 testLexer))
 };
 
 
 sepBy1p accumulatedResult parser =
-    (\newResult ->
+    let {
+        newResult =
+             parser (extractLexer accumulatedResult)
+
+    } in
         if Result.isOk newResult then
             sepBy1p (andOpResultMerge accumulatedResult newResult) parser
         else
-            accumulatedResult
-    ) (parser (extractLexer accumulatedResult));
+            accumulatedResult;
 
 
 chainl1 parser separator lexer =
-    (\accumulatedResult \tailParser ->
+    let {
+        accumulatedResult =
+            parser lexer;
+
+        tailParser =
+            and (Array.mk2 separator parser)
+    } in
         if Result.isOk accumulatedResult then
             chainl1p accumulatedResult tailParser
         else
-            accumulatedResult
-    ) (parser lexer) (and (Array.mk2 separator parser));
-
+            accumulatedResult;
 
 
 chainl1p accumulatedResult parser =
-    (\newResult ->
+    let {
+        newResult =
+            parser (extractLexer accumulatedResult)
+    } in
         if Result.isOk newResult then
             chainl1p (map (\item -> ((at 0 item) (extractResult accumulatedResult) (at 1 item))) newResult) parser
         else
-            accumulatedResult
-    ) (parser (extractLexer accumulatedResult));
+            accumulatedResult;
 
 
-at i a = Maybe.withDefault () (Array.at i a);
+at i a =
+    Maybe.withDefault () (Array.at i a);
 
 
 map f result =
-    Result.map (\t -> Tuple.mapFirst f t) result
+    Result.map (Tuple.mapFirst f) result
 assumptions {
     DEBUG.eq (map ((+) 1) (Result.Ok (Tuple.Tuple 1 "Hello"))) (Result.Ok (Tuple.Tuple 2 "Hello"))
 };
