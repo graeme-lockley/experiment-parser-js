@@ -21,7 +21,7 @@ parseMODULE lexer =
         (P.and (Array.mk3
             (P.many parseIMPORT)
             (P.many (
-                (P.map (\es -> at 0 es)) o
+                (P.map (at 0)) o
                 (P.and (Array.mk2
                     parseDECL
                     (P.symbol Tokens.SEMICOLON))))
@@ -136,7 +136,7 @@ parseEXPR2 =
             (P.and (Array.mk3
                 (P.symbol Tokens.LEFT_CURLY)
                 (
-                    (P.map (\e -> AST.expressions e)) o
+                    (P.map AST.expressions) o
                     (P.sepBy1 parseEXPR2 (P.symbol Tokens.SEMICOLON)))
                 (P.symbol Tokens.RIGHT_CURLY)
             ))));
@@ -274,7 +274,7 @@ parseLambda lexer =
                 })) o
         (P.and (Array.mk3
             (P.many1 (
-                (P.map (\elements -> (at 1 elements))) o
+                (P.map (at 1)) o
                 (P.and (Array.mk2
                     (P.symbol Tokens.LAMBDA)
                     (P.symbol Tokens.IDENTIFIER)))))
@@ -292,7 +292,7 @@ mkLambda ids expression =
 
 parseParenthesisExpression lexer =
     (
-        (P.map (\elements -> (at 1 elements))) o
+        (P.map (at 1)) o
         (P.and (Array.mk3
             (P.symbol Tokens.LEFT_PAREN)
             parseEXPR1
@@ -351,9 +351,9 @@ parseString source sourceName =
 parseExpressionString input =
     (
         (\parseResult ->
-            Result.map (\_ -> Tuple.first _) parseResult
+            Result.map Tuple.first parseResult
         ) o (
-            (P.map (\e -> (at 0 e))) o
+            (P.map (at 0)) o
             (P.and (Array.mk2 parseEXPR1 (P.symbol Tokens.EOF)))
         ) o (
             Lexer.fromString input
