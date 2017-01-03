@@ -1,5 +1,6 @@
 import file:./Rails as R;
 import file:./Schema as Schema;
+import file:./Solver as Solver;
 import file:./Subst as Subst;
 import file:./SubstitutableType as SubstitutableType;
 import file:./Type as Type;
@@ -10,6 +11,7 @@ import file:../../core/Map as Map;
 import file:../../core/Maybe as Maybe;
 import file:../../core/Record as Record;
 import file:../../core/Result as Result;
+import file:../../core/Set as Set;
 import file:../../core/Tuple as Tuple;
 
 import file:../../core/Debug as DEBUG;
@@ -36,12 +38,43 @@ lookupEnv name =
 
 instantiate schema =
     R.bind (R.returns (Schema.names schema)) (\_ ->
-    R.bind (R.map (\_ -> fresh)) (\asp ->
+    R.bind (R.map (R.bind R.value (\_ -> fresh))) (\asp ->
         R.returns (SubstitutableType.apply s (Schema.type schema))
             where {
                 s =
                     Map.fromList (List.zip (Schema.names schema) asp)
             }
+    ))
+assumptions {
+    DEBUG.eq (instantiate (Schema.Forall List.empty (Type.TVar "x")) (mkInferResult 0 (mkState TypeEnv.empty List.empty 10))) (mkInferResult (Type.TVar "x") (mkState TypeEnv.empty List.empty 10));
+    DEBUG.eq (instantiate (Schema.Forall (List.mk1 "a1") (Type.TVar "a1")) (mkInferResult 0 (mkState TypeEnv.empty List.empty 10))) (mkInferResult (Type.TVar "a11") (mkState TypeEnv.empty List.empty 11))
+};
+
+
+generalize typeEnv type =
+    Schema.Forall names type
+        where {
+            names =
+                Set.toList (Set.difference (Type.ftv type) (TypeEnv.ftv typeEnv))
+        }
+    assumptions {
+        DEBUG.eq (generalize TypeEnv.empty (Type.TVar "x")) (Schema.Forall (List.mk1 "x") (Type.TVar "x"))
+    };
+
+
+resolveExpression expr =
+    R.bind (inferN expr) (\inferResult ->
+    R.bind (R.get "constraints") (\constraints \state ->
+        Result.andThen (Solver.unify constraints) (\unifyResult ->
+            R.returns resolvedSchemaWithExpr state
+                where {
+                    resolveExpr type unifyResult =
+                        Schema.resolve (Schema.Forall List.empty type) unifyResult;
+
+                    resolvedSchemaWithExpr =
+                        resolveExpr inferResult unifyResult
+                }
+        )
     ));
 
 
@@ -97,10 +130,10 @@ inferN expr =
         R.returns Type.typeUnit
 
     else if expr.type == "DECLARATION" then
-        R.bind (inferN expr.expression) (\inferExpression ->
-        R.bind (lookupEnv expr.name) (\t ->
-        R.bind (uni t inferExpression) (\_ ->
-            R.returns inferExpression
+        R.bind (R.get "typeEnv") (\typeEnv ->
+        R.bind (resolveExpression expr.expression) (\expressionSchema ->
+        R.bind (inEnv expr.name expressionSchema) (\_ ->
+            R.returns expressionSchema
         )))
 
     else if expr.type == "DIVISION" then
@@ -145,17 +178,11 @@ inferN expr =
         inferRelationalOperator expr
 
     else if expr.type == "MODULE" then
-        R.bind (
-            R.foldl (\declaration ->
-                R.bind fresh (\tv ->
-                R.bind (inEnv declaration.name (Schema.Forall List.empty tv)) (\_ ->
-                    R.returns Type.typeUnit
-                ))) expr.declarations) (\_ ->
         R.bind (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
         R.bind fresh (\tv ->
         R.bind (inferN expr.expression) (\te ->
             R.returns te
-        ))))
+        )))
 
     else if expr.type == "MULTIPLICATION" then
         inferBinaryOperator expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
@@ -165,18 +192,12 @@ inferN expr =
 
     else if expr.type == "SCOPE" then
         R.bind openScope (\scope ->
-        R.bind (
-            R.foldl (\declaration ->
-                R.bind fresh (\tv ->
-                R.bind (inEnv declaration.name (Schema.Forall List.empty tv)) (\_ ->
-                    R.returns Type.typeUnit
-                ))) expr.declarations) (\_ ->
         R.bind (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
         R.bind fresh (\tv ->
         R.bind (inferN expr.expression) (\te ->
         R.bind (closeScope scope) (\_ ->
             R.returns te
-        ))))))
+        )))))
 
     else if expr.type == "STRING_CONCAT" then
         inferBinaryOperator expr (Type.TArr Type.typeString (Type.TArr Type.typeString Type.typeString))

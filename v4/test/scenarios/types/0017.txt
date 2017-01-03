@@ -1,0 +1,8 @@
+-- given a method with two parameters of the same type it can be instantiated within the same expression with two different types
+eqq a b =
+    a == b;
+
+(eqq 1 2) && (eqq "hello" "world")
+-- type
+eqq :: forall a1 . a1 -> a1 -> Boolean
+_$EXPR :: Boolean

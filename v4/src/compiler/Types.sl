@@ -19,7 +19,7 @@ inferModuleType ast =
                         Tuple.second inferResult;
 
                     resolvedSchemas =
-                        Map.map (\schema -> Schema.resolve schema unifyResult) record.typeEnv;
+                        record.typeEnv;
 
                     resolvedExpr =
                         resolveExpr (Tuple.first inferResult) unifyResult;
