@@ -4,7 +4,3 @@ testA a = testB a;
 testB b = (testA b) + 1;
 
 testA 10
--- type
-testA :: Integer -> Integer
-testB :: Integer -> Integer
-_$EXPR :: Integer
