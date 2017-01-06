@@ -225,6 +225,13 @@ subtraction left right =
         "right" right;
 
 
+typeSignature name value =
+    Record.mk3
+        "type" "TYPE_SIGNATURE"
+        "name" name
+        "value" value;
+
+
 unaryPlus operand =
     Record.mk2
         "type" "UNARY_PLUS"
