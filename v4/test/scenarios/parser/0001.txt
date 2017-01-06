@@ -1,4 +1,5 @@
 -- given an if-then-else
+aaa : Boolean -> a -> a -> a;
 aaa b c d = if (b) then c else d;
 -- ast
 {
@@ -6,6 +7,36 @@ aaa b c d = if (b) then c else d;
   "sourceName": "stream",
   "imports": [],
   "declarations": [
+    {
+      "type": "TYPE_SIGNATURE",
+      "name": "aaa",
+      "value": {
+        "type": "FUNCTION",
+        "domain": {
+          "type": "CONSTANT",
+          "name": "Boolean",
+          "parameters": []
+        },
+        "range": {
+          "type": "FUNCTION",
+          "domain": {
+            "type": "VARIABLE",
+            "name": "a"
+          },
+          "range": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "a"
+            },
+            "range": {
+              "type": "VARIABLE",
+              "name": "a"
+            }
+          }
+        }
+      }
+    },
     {
       "type": "DECLARATION",
       "name": "aaa",

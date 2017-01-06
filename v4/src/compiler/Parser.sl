@@ -1,6 +1,7 @@
 import file:./AST as AST;
 import file:./Lexer as Lexer;
 import file:./ParserCombinators as P;
+import file:./TypeAST as TypeAST;
 
 import file:../core/Array as Array;
 import file:../core/Character as Character;
@@ -51,10 +52,10 @@ markLocation parser lexer =
         };
 
 
-parseDECL lexer = parseVALUE_DECLARATION lexer;
+parseDECLn lexer = parseVALUE_DECLARATION lexer;
 
 
-parseDECLn lexer =
+parseDECL lexer =
     (P.or (Array.mk2
         parseVALUE_DECLARATION
         parseTYPE_SIGNATURE)) lexer;
@@ -99,32 +100,36 @@ parseVALUE_DECLARATIONMap elements =
 
 
 parseTYPE_SIGNATURE lexer =
-    P.and (Array.mk5
-        (P.symbol Tokens.IDENTIFIER)
-        (P.many (
-            P.and (Array.mk2
-                (P.symbol Tokens.COLON)
-                (P.symbol Tokens.IDENTIFIER)
-            )))
-        (P.symbol Tokens.COLON)
-        parseTYPE
-        (P.symbol Tokens.SEMICOLON)) lexer;
+    (
+        (P.map (\e -> AST.typeSignature (at 0 e) (at 2 e))) o
+        (P.and (Array.mk3
+            (P.symbol Tokens.IDENTIFIER)
+            (P.symbol Tokens.COLON)
+            parseTYPE))
+    )  lexer;
 
 
 parseTYPE lexer =
-    P.sepBy1 parseTYPE1 (P.symbol Tokens.MINUS_GREATER) lexer;
+    (
+        (P.map (\e -> Array.foldr (\item \acc -> TypeAST.functionArrow acc item) (at ((Array.length e) - 1) e) (Array.take ((Array.length e) - 1) e))) o
+        (P.sepBy1 parseTYPE1 (P.symbol Tokens.MINUS_GREATER))
+    ) lexer;
 
 
 parseTYPE1 lexer =
     P.or (Array.mk3
-        P.and (Array.mk3
-            (P.symbol Tokens.LEFT_PAREN)
-            parseTYPE
-            (P.symbol Tokens.RIGHT_PAREN))
-        P.and (Array.mk2
-            (P.symbol Tokens.UPPER_IDENTIFIER)
-            (P.many (P.symbol Tokens.IDENTIFIER)))
-        (P.symbol Tokens.IDENTIFIER)
+        (
+            (P.map (at 1)) o
+            (P.and (Array.mk3
+                (P.symbol Tokens.LEFT_PAREN)
+                parseTYPE
+                (P.symbol Tokens.RIGHT_PAREN))))
+        (   (P.map (\e -> TypeAST.constant (at 0 e) (at 1 e))) o
+            (P.and (Array.mk2
+                (P.symbol Tokens.UPPER_IDENTIFIER)
+                (P.many (P.symbol Tokens.IDENTIFIER)))))
+        (   (P.map TypeAST.variable) o
+            (P.symbol Tokens.IDENTIFIER))
     ) lexer;
 
 
