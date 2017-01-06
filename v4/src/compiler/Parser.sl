@@ -52,14 +52,11 @@ markLocation parser lexer =
         };
 
 
-parseDECLn lexer = parseVALUE_DECLARATION lexer;
-
-
-parseDECL lexer =
-    (P.or (Array.mk3
+parseDECL =
+    P.or (Array.mk3
         parseVALUE_DECLARATION
         parseTYPE_SIGNATURE
-        parseTYPE_ALIAS)) lexer;
+        parseTYPE_ALIAS);
 
 
 parseVALUE_DECLARATION lexer =
@@ -110,14 +107,12 @@ parseTYPE_SIGNATURE lexer =
     )  lexer;
 
 
-parseTYPE lexer =
-    (
-        (P.map (\e -> Array.foldr (\item \acc -> TypeAST.functionArrow acc item) (at ((Array.length e) - 1) e) (Array.take ((Array.length e) - 1) e))) o
-        (P.sepBy1 parseTYPE1 (P.symbol Tokens.MINUS_GREATER))
-    ) lexer;
+parseTYPE =
+    (P.map (\e -> Array.foldr (\item \acc -> TypeAST.functionArrow acc item) (at ((Array.length e) - 1) e) (Array.take ((Array.length e) - 1) e))) o
+    (P.sepBy1 parseTYPE1 (P.symbol Tokens.MINUS_GREATER));
 
 
-parseTYPE1 lexer =
+parseTYPE1 =
     P.or (Array.mk3
         (
             (P.map (at 1)) o
@@ -130,8 +125,7 @@ parseTYPE1 lexer =
                 (P.symbol Tokens.UPPER_IDENTIFIER)
                 (P.many (P.symbol Tokens.IDENTIFIER)))))
         (   (P.map TypeAST.variable) o
-            (P.symbol Tokens.IDENTIFIER))
-    ) lexer;
+            (P.symbol Tokens.IDENTIFIER)));
 
 
 parseTYPE_ALIAS lexer =
