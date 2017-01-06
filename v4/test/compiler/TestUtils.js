@@ -24,7 +24,7 @@ function scenariosIn(directory) {
             let parseResponseIsTested = false;
 
             if ('js' in expectations) {
-                    parseResponseIsTested = true;
+                parseResponseIsTested = true;
                 it('should parse without any errors', () => {
                     expect(Result.isOk(parseResponse)).to.equal(true);
                 });
@@ -86,8 +86,9 @@ function scenariosIn(directory) {
                         expect(Result.isOk(parseResponse)).to.equal(true);
                     });
                 }
-                const moduleTypeResult = Types.inferModuleType(Result.withDefault()(parseResponse));
+                let moduleTypeResult;
                 it("should be type checked", () => {
+                    moduleTypeResult = Types.inferModuleType(Result.withDefault()(parseResponse));
                     expect(Result.isOk(moduleTypeResult)).to.equal(true);
                 });
                 it("should have the corresponding type", () => {
@@ -102,8 +103,9 @@ function scenariosIn(directory) {
                         expect(Result.isOk(parseResponse)).to.equal(true);
                     });
                 }
-                const moduleTypeResult = Types.inferModuleType(Result.withDefault()(parseResponse));
+                let moduleTypeResult;
                 it("should fail when attempting to type check", () => {
+                    moduleTypeResult = Types.inferModuleType(Result.withDefault()(parseResponse));
                     expect(Result.isOk(moduleTypeResult)).to.equal(false);
                 });
                 it("should have the expected error message", () => {
@@ -118,8 +120,9 @@ function scenariosIn(directory) {
                         expect(Result.isOk(parseResponse)).to.equal(true);
                     });
                 }
-                const inferResult = Infer.infer(Result.withDefault()(parseResponse))(Infer.initialState);
+                let inferResult;
                 it("should infer type", () => {
+                    inferResult = Infer.infer(Result.withDefault()(parseResponse))(Infer.initialState);
                     expect(Result.isOk(inferResult)).to.equal(true);
                 });
                 it("should have the expected response", () => {
@@ -134,9 +137,9 @@ function scenariosIn(directory) {
                         expect(Result.isOk(parseResponse)).to.equal(true);
                     });
                 }
-                const inferResult = Infer.infer(Result.withDefault()(parseResponse))(Infer.initialState);
 
                 it ('should unify', () => {
+                    const inferResult = Infer.infer(Result.withDefault()(parseResponse))(Infer.initialState);
                     expect(ObjectHelper.show(Solver.unify(inferResult._ok._snd.constraints))).to.equal(expectations['unify']);
                 });
             }
