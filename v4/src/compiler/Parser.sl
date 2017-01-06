@@ -56,9 +56,10 @@ parseDECLn lexer = parseVALUE_DECLARATION lexer;
 
 
 parseDECL lexer =
-    (P.or (Array.mk2
+    (P.or (Array.mk3
         parseVALUE_DECLARATION
-        parseTYPE_SIGNATURE)) lexer;
+        parseTYPE_SIGNATURE
+        parseTYPE_ALIAS)) lexer;
 
 
 parseVALUE_DECLARATION lexer =
@@ -130,6 +131,19 @@ parseTYPE1 lexer =
                 (P.many (P.symbol Tokens.IDENTIFIER)))))
         (   (P.map TypeAST.variable) o
             (P.symbol Tokens.IDENTIFIER))
+    ) lexer;
+
+
+parseTYPE_ALIAS lexer =
+    (
+        (P.map (\e -> AST.typeAlias (at 2 e) (at 3 e) (at 5 e))) o
+        (P.and (Array.mk6
+            (P.symbol Tokens.TYPE)
+            (P.symbol Tokens.ALIAS)
+            (P.symbol Tokens.UPPER_IDENTIFIER)
+            (P.many (P.symbol Tokens.IDENTIFIER))
+            (P.symbol Tokens.EQUAL)
+            parseTYPE))
     ) lexer;
 
 

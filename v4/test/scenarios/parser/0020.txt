@@ -19,27 +19,43 @@ foldl op z xs =
   "imports": [],
   "declarations": [
     {
+      "type": "TYPE_ALIAS",
+      "name": "FoldFunction",
+      "parameters": [
+        "a",
+        "b"
+      ],
+      "value": {
+        "type": "FUNCTION",
+        "domain": {
+          "type": "VARIABLE",
+          "name": "a"
+        },
+        "range": {
+          "type": "FUNCTION",
+          "domain": {
+            "type": "VARIABLE",
+            "name": "b"
+          },
+          "range": {
+            "type": "VARIABLE",
+            "name": "b"
+          }
+        }
+      }
+    },
+    {
       "type": "TYPE_SIGNATURE",
       "name": "foldl",
       "value": {
         "type": "FUNCTION",
         "domain": {
-          "type": "FUNCTION",
-          "domain": {
-            "type": "VARIABLE",
-            "name": "a"
-          },
-          "range": {
-            "type": "FUNCTION",
-            "domain": {
-              "type": "VARIABLE",
-              "name": "b"
-            },
-            "range": {
-              "type": "VARIABLE",
-              "name": "b"
-            }
-          }
+          "type": "CONSTANT",
+          "name": "FoldFunction",
+          "parameters": [
+            "a",
+            "b"
+          ]
         },
         "range": {
           "type": "FUNCTION",
