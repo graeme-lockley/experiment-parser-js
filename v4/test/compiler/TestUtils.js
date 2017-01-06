@@ -22,7 +22,7 @@ function scenariosIn(directory) {
         describe(name, () => {
             let parseResponse;
 
-            it ('should compile', () => {
+            it ('should parse', () => {
                 parseResponse = Parser.parseString(input)("stream");
             });
 
