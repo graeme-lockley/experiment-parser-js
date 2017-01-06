@@ -70,7 +70,7 @@ parseVALUE_DECLARATION lexer =
             (P.symbol Tokens.EQUAL)
             parseEXPR1
             (P.option (
-                (P.map (parseDECLAssumptionMap lexer)) o
+                (P.map (parseVALUE_DECLARATIONAssumptionMap lexer)) o
                 (P.and (Array.mk4
                     (P.symbol Tokens.ASSUMPTIONS)
                     (P.symbol Tokens.LEFT_CURLY)
@@ -79,7 +79,7 @@ parseVALUE_DECLARATION lexer =
     ) lexer;
 
 
-parseDECLAssumptionMap lexer es =
+parseVALUE_DECLARATIONAssumptionMap lexer es =
     Array.map (\a ->
         AST.assumption
             (Lexer.sourceName lexer)
