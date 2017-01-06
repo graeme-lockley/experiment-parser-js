@@ -1,0 +1,194 @@
+-- given a type alias and a declaration
+type alias FoldFunction a b = a -> b -> b;
+
+foldl : FoldFunction a b -> b -> List a -> b;
+foldl op z xs =
+    if isListEmpty then
+        z
+    else
+        foldl op (op head z) tail
+    where {
+        isListEmpty = List.isNil xs;
+        head = List.head xs;
+        tail = List.tail xs
+    };
+-- ast
+{
+  "type": "MODULE",
+  "sourceName": "stream",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "TYPE_SIGNATURE",
+      "name": "foldl",
+      "value": {
+        "type": "FUNCTION",
+        "domain": {
+          "type": "FUNCTION",
+          "domain": {
+            "type": "VARIABLE",
+            "name": "a"
+          },
+          "range": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "VARIABLE",
+              "name": "b"
+            },
+            "range": {
+              "type": "VARIABLE",
+              "name": "b"
+            }
+          }
+        },
+        "range": {
+          "type": "FUNCTION",
+          "domain": {
+            "type": "VARIABLE",
+            "name": "b"
+          },
+          "range": {
+            "type": "FUNCTION",
+            "domain": {
+              "type": "CONSTANT",
+              "name": "List",
+              "parameters": [
+                "a"
+              ]
+            },
+            "range": {
+              "type": "VARIABLE",
+              "name": "b"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "foldl",
+      "expression": {
+        "type": "LAMBDA",
+        "variable": "op",
+        "expression": {
+          "type": "LAMBDA",
+          "variable": "z",
+          "expression": {
+            "type": "LAMBDA",
+            "variable": "xs",
+            "expression": {
+              "type": "SCOPE",
+              "declarations": [
+                {
+                  "type": "DECLARATION",
+                  "name": "isListEmpty",
+                  "expression": {
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "QUALIFIED_IDENTIFIER",
+                      "module": "List",
+                      "identifier": "isNil"
+                    },
+                    "operand": {
+                      "type": "IDENTIFIER",
+                      "name": "xs"
+                    }
+                  },
+                  "assumptions": []
+                },
+                {
+                  "type": "DECLARATION",
+                  "name": "head",
+                  "expression": {
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "QUALIFIED_IDENTIFIER",
+                      "module": "List",
+                      "identifier": "head"
+                    },
+                    "operand": {
+                      "type": "IDENTIFIER",
+                      "name": "xs"
+                    }
+                  },
+                  "assumptions": []
+                },
+                {
+                  "type": "DECLARATION",
+                  "name": "tail",
+                  "expression": {
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "QUALIFIED_IDENTIFIER",
+                      "module": "List",
+                      "identifier": "tail"
+                    },
+                    "operand": {
+                      "type": "IDENTIFIER",
+                      "name": "xs"
+                    }
+                  },
+                  "assumptions": []
+                }
+              ],
+              "expression": {
+                "type": "IF",
+                "ifExpr": {
+                  "type": "IDENTIFIER",
+                  "name": "isListEmpty"
+                },
+                "thenExpr": {
+                  "type": "IDENTIFIER",
+                  "name": "z"
+                },
+                "elseExpr": {
+                  "type": "APPLY",
+                  "operation": {
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "APPLY",
+                      "operation": {
+                        "type": "IDENTIFIER",
+                        "name": "foldl"
+                      },
+                      "operand": {
+                        "type": "IDENTIFIER",
+                        "name": "op"
+                      }
+                    },
+                    "operand": {
+                      "type": "APPLY",
+                      "operation": {
+                        "type": "APPLY",
+                        "operation": {
+                          "type": "IDENTIFIER",
+                          "name": "op"
+                        },
+                        "operand": {
+                          "type": "IDENTIFIER",
+                          "name": "head"
+                        }
+                      },
+                      "operand": {
+                        "type": "IDENTIFIER",
+                        "name": "z"
+                      }
+                    }
+                  },
+                  "operand": {
+                    "type": "IDENTIFIER",
+                    "name": "tail"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "assumptions": []
+    }
+  ],
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
+}

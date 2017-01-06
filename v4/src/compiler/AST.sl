@@ -225,6 +225,14 @@ subtraction left right =
         "right" right;
 
 
+typeAlias name parameters value =
+    Record.mk4
+        "type" "TYPE_ALIAS"
+        "name" name
+        "parameters" parameters
+        "value" value;
+
+
 typeSignature name value =
     Record.mk3
         "type" "TYPE_SIGNATURE"
