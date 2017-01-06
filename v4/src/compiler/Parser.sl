@@ -52,8 +52,12 @@ markLocation parser lexer =
 
 
 parseDECL lexer =
+    parseVALUE_DECLARATION lexer;
+
+
+parseVALUE_DECLARATION lexer =
     (
-        (P.map parseDECLMap) o
+        (P.map parseVALUE_DECLARATIONMap) o
         (P.and (Array.mk4
             (P.many1 parseIdentifier)
             (P.symbol Tokens.EQUAL)
@@ -78,7 +82,7 @@ parseDECLAssumptionMap lexer es =
     ) (at 2 es);
 
 
-parseDECLMap elements =
+parseVALUE_DECLARATIONMap elements =
     let {
         a =
             Maybe.withDefault Array.empty (at 3 elements)
@@ -350,8 +354,7 @@ parseString source sourceName =
 
 parseExpressionString input =
     (
-        (\parseResult ->
-            Result.map Tuple.first parseResult
+        (\parseResult -> Result.map Tuple.first parseResult
         ) o (
             (P.map (at 0)) o
             (P.and (Array.mk2 parseEXPR1 (P.symbol Tokens.EOF)))
