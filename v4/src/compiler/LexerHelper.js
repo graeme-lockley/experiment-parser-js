@@ -42,22 +42,25 @@ const TokenEnum = {
     SLASH: 30,
     STAR: 31,
 
-    AS: 32,
-    ASSUMPTIONS: 33,
-    ELSE: 34,
-    FALSE: 35,
-    IF: 36,
-    IN: 37,
-    IMPORT: 38,
-    LET: 39,
-    O: 40,
-    THEN: 41,
-    TRUE: 42,
-    WHERE: 43
+    ALIAS: 32,
+    AS: 33,
+    ASSUMPTIONS: 34,
+    ELSE: 35,
+    FALSE: 36,
+    IF: 37,
+    IN: 38,
+    IMPORT: 39,
+    LET: 40,
+    O: 41,
+    THEN: 42,
+    TRUE: 43,
+    TYPE: 44,
+    WHERE: 45
 };
 
 
 const reservedIdentifiers = {
+    'alias': TokenEnum.ALIAS,
     'as': TokenEnum.AS,
     'assumptions': TokenEnum.ASSUMPTIONS,
     'else': TokenEnum.ELSE,
@@ -69,6 +72,7 @@ const reservedIdentifiers = {
     'o': TokenEnum.O,
     'then': TokenEnum.THEN,
     'true': TokenEnum.TRUE,
+    'type': TokenEnum.TYPE,
     'where': TokenEnum.WHERE
 };
 
