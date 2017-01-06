@@ -6,7 +6,7 @@ fold op i xs =
         tail = List.tail xs
     } in
         if isListEmpty then
-            List.Nil
+            List.nil
         else
             fold op (op i head) tail;
 -- ast
@@ -91,7 +91,7 @@ fold op i xs =
                 "thenExpr": {
                   "type": "QUALIFIED_IDENTIFIER",
                   "module": "List",
-                  "identifier": "Nil"
+                  "identifier": "nil"
                 },
                 "elseExpr": {
                   "type": "APPLY",

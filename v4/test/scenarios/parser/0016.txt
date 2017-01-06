@@ -3,12 +3,12 @@ import file:./lib/List as List;
 
 fold op i xs =
     if List.isNil xs then
-        List.Nil
+        List.nil
     else
         fold op (op i List.head) List.tail
 assumptions {
-    fold (+) 0 List.Nil == 0;
-    fold (+) 1 (List.Cons 1 (List.Cons 2 (List.Cons 3 List.Nil))) == 6
+    fold (+) 0 List.nil == 0;
+    fold (+) 1 (List.cons 1 (List.cons 2 (List.cons 3 List.nil))) == 6
 };
 -- ast
 {
@@ -57,7 +57,7 @@ assumptions {
               "thenExpr": {
                 "type": "QUALIFIED_IDENTIFIER",
                 "module": "List",
-                "identifier": "Nil"
+                "identifier": "nil"
               },
               "elseExpr": {
                 "type": "APPLY",
@@ -109,7 +109,7 @@ assumptions {
           "type": "ASSUMPTION",
           "sourceName": "stream",
           "line": 9,
-          "text": "fold (+) 0 List.Nil == 0",
+          "text": "fold (+) 0 List.nil == 0",
           "expression": {
             "type": "EQUAL",
             "left": {
@@ -135,7 +135,7 @@ assumptions {
               "operand": {
                 "type": "QUALIFIED_IDENTIFIER",
                 "module": "List",
-                "identifier": "Nil"
+                "identifier": "nil"
               }
             },
             "right": {
@@ -148,7 +148,7 @@ assumptions {
           "type": "ASSUMPTION",
           "sourceName": "stream",
           "line": 10,
-          "text": "fold (+) 1 (List.Cons 1 (List.Cons 2 (List.Cons 3 List.Nil))) == 6",
+          "text": "fold (+) 1 (List.cons 1 (List.cons 2 (List.cons 3 List.nil))) == 6",
           "expression": {
             "type": "EQUAL",
             "left": {
@@ -178,7 +178,7 @@ assumptions {
                   "operation": {
                     "type": "QUALIFIED_IDENTIFIER",
                     "module": "List",
-                    "identifier": "Cons"
+                    "identifier": "cons"
                   },
                   "operand": {
                     "type": "CONSTANT_INTEGER",
@@ -192,7 +192,7 @@ assumptions {
                     "operation": {
                       "type": "QUALIFIED_IDENTIFIER",
                       "module": "List",
-                      "identifier": "Cons"
+                      "identifier": "cons"
                     },
                     "operand": {
                       "type": "CONSTANT_INTEGER",
@@ -206,7 +206,7 @@ assumptions {
                       "operation": {
                         "type": "QUALIFIED_IDENTIFIER",
                         "module": "List",
-                        "identifier": "Cons"
+                        "identifier": "cons"
                       },
                       "operand": {
                         "type": "CONSTANT_INTEGER",
@@ -216,7 +216,7 @@ assumptions {
                     "operand": {
                       "type": "QUALIFIED_IDENTIFIER",
                       "module": "List",
-                      "identifier": "Nil"
+                      "identifier": "nil"
                     }
                   }
                 }

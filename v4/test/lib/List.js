@@ -1,4 +1,4 @@
-function Cons(car) {
+function cons(car) {
     return cons => {
         return {
             car: car,
@@ -7,10 +7,10 @@ function Cons(car) {
     }
 }
 
-const Nil = null;
+const empty = null;
 
 
-function isNil(x) {
+function isEmpty(x) {
     return x == null;
 }
 
@@ -26,5 +26,5 @@ function tail(xs) {
 
 
 module.exports = {
-    Cons, head, isNil, Nil, tail
+    cons, head, isEmpty, empty, tail
 };

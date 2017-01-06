@@ -2,20 +2,20 @@
 import file:./lib/List as List;
 
 fold op i xs =
-    if List.isNil xs then
-        List.Nil
+    if List.isEmpty xs then
+        List.empty
     else
         fold op (op i List.head) List.tail
 assumptions {
-    fold (+) 0 List.Nil == 0;
-    fold (+) 1 (List.Cons 1 (List.Cons 2 (List.Cons 3 List.Nil))) == 6
+    fold (+) 0 List.empty == 0;
+    fold (+) 1 (List.cons 1 (List.cons 2 (List.cons 3 List.empty))) == 6
 };
 -- js
 const List = require('./lib/List');
 
 function fold(op) {
-  return (i => (xs => (List.isNil(xs)
-    ? List.Nil
+  return (i => (xs => (List.isEmpty(xs)
+    ? List.empty
     : fold(op)(op(i)(List.head))(List.tail))));
 }
 
@@ -33,14 +33,14 @@ _$ASSUMPTIONS.push({
         {
           line: 9,
           source: 'stream',
-          text: 'fold (+) 0 List.Nil == 0',
-          predicate: () => (fold((_$a => (_$b => (_$a + _$b))))(0)(List.Nil) == 0)
+          text: 'fold (+) 0 List.empty == 0',
+          predicate: () => (fold((_$a => (_$b => (_$a + _$b))))(0)(List.empty) == 0)
         },
         {
           line: 10,
           source: 'stream',
-          text: 'fold (+) 1 (List.Cons 1 (List.Cons 2 (List.Cons 3 List.Nil))) == 6',
-          predicate: () => (fold((_$a => (_$b => (_$a + _$b))))(1)(List.Cons(1)(List.Cons(2)(List.Cons(3)(List.Nil)))) == 6)
+          text: 'fold (+) 1 (List.cons 1 (List.cons 2 (List.cons 3 List.empty))) == 6',
+          predicate: () => (fold((_$a => (_$b => (_$a + _$b))))(1)(List.cons(1)(List.cons(2)(List.cons(3)(List.empty)))) == 6)
         }
       ]
     }

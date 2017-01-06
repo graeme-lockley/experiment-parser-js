@@ -36,7 +36,7 @@ parseIMPORT =
         (P.symbol Tokens.IMPORT)
         (P.symbol Tokens.CONSTANT_URL)
         (P.symbol Tokens.AS)
-        (P.symbol Tokens.IDENTIFIER)
+        (P.symbol Tokens.UPPER_IDENTIFIER)
         (P.symbol Tokens.SEMICOLON)));
 
 
@@ -51,8 +51,13 @@ markLocation parser lexer =
         };
 
 
-parseDECL lexer =
-    parseVALUE_DECLARATION lexer;
+parseDECL lexer = parseVALUE_DECLARATION lexer;
+
+
+parseDECLn lexer =
+    (P.or (Array.mk2
+        parseVALUE_DECLARATION
+        parseTYPE_SIGNATURE)) lexer;
 
 
 parseVALUE_DECLARATION lexer =
@@ -91,6 +96,36 @@ parseVALUE_DECLARATIONMap elements =
             AST.declaration ((\assumption -> assumption.name) (at 0 (at 0 elements))) (at 2 elements) a
         else
             AST.declaration ((\assumption -> assumption.name) (at 0 (at 0 elements))) (mkLambda (Array.map (\n -> n.name) (Array.slice 1 (at 0 elements))) (at 2 elements)) a;
+
+
+parseTYPE_SIGNATURE lexer =
+    P.and (Array.mk5
+        (P.symbol Tokens.IDENTIFIER)
+        (P.many (
+            P.and (Array.mk2
+                (P.symbol Tokens.COLON)
+                (P.symbol Tokens.IDENTIFIER)
+            )))
+        (P.symbol Tokens.COLON)
+        parseTYPE
+        (P.symbol Tokens.SEMICOLON)) lexer;
+
+
+parseTYPE lexer =
+    P.sepBy1 parseTYPE1 (P.symbol Tokens.MINUS_GREATER) lexer;
+
+
+parseTYPE1 lexer =
+    P.or (Array.mk3
+        P.and (Array.mk3
+            (P.symbol Tokens.LEFT_PAREN)
+            parseTYPE
+            (P.symbol Tokens.RIGHT_PAREN))
+        P.and (Array.mk2
+            (P.symbol Tokens.UPPER_IDENTIFIER)
+            (P.many (P.symbol Tokens.IDENTIFIER)))
+        (P.symbol Tokens.IDENTIFIER)
+    ) lexer;
 
 
 parseEXPR1 lexer =
@@ -253,7 +288,7 @@ parseConstantString lexer =
     ) lexer;
 
 
-parseIdentifier lexer =
+parseOldIdentifier lexer =
     (
         (P.map (\e -> if Maybe.isJust (at 1 e) then AST.qualifiedIdentifier (at 0 e) (at 1 (Maybe.withDefault () (at 1 e))) else AST.identifier (at 0 e))) o
         (P.and (Array.mk2
@@ -262,6 +297,17 @@ parseIdentifier lexer =
                 (P.and (Array.mk2
                     (P.symbol Tokens.PERIOD)
                     (P.symbol Tokens.IDENTIFIER))))))
+    ) lexer;
+
+
+parseIdentifier lexer =
+    (P.or (Array.mk2
+        ((P.map AST.identifier) o (P.symbol Tokens.IDENTIFIER))
+        ((P.map (\e -> AST.qualifiedIdentifier (at 0 e) (at 2 e))) o
+         (P.and (Array.mk3
+            (P.symbol Tokens.UPPER_IDENTIFIER)
+            (P.symbol Tokens.PERIOD)
+            (P.symbol Tokens.IDENTIFIER)))))
     ) lexer;
 
 

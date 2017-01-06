@@ -1,7 +1,7 @@
 -- given a definition with a number of where expressions
 fold op i xs =
     if isListEmpty then
-        List.Nil
+        List.nil
     else
         fold op (op i head) tail
     where {
@@ -91,7 +91,7 @@ fold op i xs =
                 "thenExpr": {
                   "type": "QUALIFIED_IDENTIFIER",
                   "module": "List",
-                  "identifier": "Nil"
+                  "identifier": "nil"
                 },
                 "elseExpr": {
                   "type": "APPLY",
