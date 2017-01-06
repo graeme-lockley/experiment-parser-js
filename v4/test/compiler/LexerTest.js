@@ -5,8 +5,8 @@ const Lexer = require('../../src/compiler/Lexer');
 const expect = require('chai').expect;
 
 describe('Lexer', () => {
-    describe('with input "Hello 123"', () => {
-        const context = Lexer.fromString('Hello 123')("stream");
+    describe('with input "hello 123"', () => {
+        const context = Lexer.fromString('hello 123')("stream");
 
         describe('after initialisation', () => {
             it('should match to an IDENTIFIER', () => expect(Lexer.id(context)).to.equal(Lexer.TokenEnum.IDENTIFIER));
@@ -14,7 +14,7 @@ describe('Lexer', () => {
                 expect(Lexer.x(context)).to.equal(1);
                 expect(Lexer.y(context)).to.equal(1);
             });
-            it('should have the text "Hello"', () => expect(Lexer.text(context)).to.equal('Hello'));
+            it('should have the text "Hello"', () => expect(Lexer.text(context)).to.equal('hello'));
         });
 
         describe('next token', () => {
