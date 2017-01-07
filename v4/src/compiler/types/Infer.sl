@@ -1,3 +1,4 @@
+import file:./Names as Names;
 import file:./Rails as R;
 import file:./Schema as Schema;
 import file:./Solver as Solver;
@@ -25,7 +26,7 @@ mkState typeEnv constraints names =
 
 
 initialState =
-    mkState TypeEnv.empty List.empty 0;
+    mkState TypeEnv.empty List.empty Names.initial;
 
 
 lookupEnv name =
@@ -240,8 +241,18 @@ inferRelationalOperator expr =
 
 fresh =
     R.bind (R.get "names") (\names ->
-    R.bind (R.set "names" (names + 1)) (\names ->
-        R.returns (Type.TVar ("a" ++ names))
+        let {
+            nextNames =
+                Names.fresh names;
+
+            variableName =
+                Tuple.first nextNames;
+
+            newNamesState =
+                Tuple.second nextNames
+        } in
+            R.bind (R.set "names" newNamesState) (\names ->
+                R.returns (Type.TVar variableName)
     ))
 assumptions {
     DEBUG.eq (fresh (mkInferResult () initialState)) (mkInferResult (Type.TVar "a1") (mkState TypeEnv.empty List.empty 1))
