@@ -1,0 +1,5 @@
+-- given a function with an incompatible type signature
+fun : String -> String -> Boolean;
+fun a b = a + b;
+-- typeError
+Unification failed String and Integer

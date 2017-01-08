@@ -3,6 +3,7 @@ import file:./types/Names as Names;
 import file:./types/Schema as Schema;
 import file:./types/Solver as Solver;
 import file:./types/Type as Type;
+import file:./types/TypeEnv as TypeEnv;
 
 import file:./TypeAST as TypeAST;
 
@@ -17,24 +18,44 @@ import file:../core/Tuple as Tuple;
 
 
 inferModuleType ast =
-    Result.andThen (Infer.infer ast Infer.initialState) (\inferResult ->
-        Result.andThen (Solver.unify (Record.get "constraints" (Tuple.second inferResult))) (\unifyResult ->
-            Result.Ok resolvedSchemasWithExpr
+    let {
+        typeSignatureASTs =
+            List.filter (\declarationAST -> declarationAST.type == "TYPE_SIGNATURE") ast.declarations;
+
+        addTS state signatureAST =
+            Record.set2 "typeEnv" typeEnv "names" names state
                 where {
-                    record =
-                        Tuple.second inferResult;
+                    fromASTResult =
+                        fromAST signatureAST.value state.names;
 
-                    resolvedSchemas =
-                        record.typeEnv;
+                    names =
+                        Tuple.second fromASTResult;
 
-                    resolvedExpr =
-                        resolveExpr (Tuple.first inferResult) unifyResult;
+                    typeEnv =
+                        TypeEnv.extend signatureAST.name (Tuple.first fromASTResult) state.typeEnv
+                };
 
-                    resolvedSchemasWithExpr =
-                        includeExpr resolvedExpr resolvedSchemas
-                }
-        )
-    );
+        initialState =
+            List.foldl (\state \signatureAST -> addTS state signatureAST) Infer.initialState typeSignatureASTs
+    } in
+        Result.andThen (Infer.infer ast initialState) (\inferResult ->
+            Result.andThen (Solver.unify (Record.get "constraints" (Tuple.second inferResult))) (\unifyResult ->
+                Result.Ok resolvedSchemasWithExpr
+                    where {
+                        record =
+                            Tuple.second inferResult;
+
+                        resolvedSchemas =
+                            record.typeEnv;
+
+                        resolvedExpr =
+                            resolveExpr (Tuple.first inferResult) unifyResult;
+
+                        resolvedSchemasWithExpr =
+                            includeExpr resolvedExpr resolvedSchemas
+                    }
+            )
+        );
 
 
 includeExpr =
@@ -76,8 +97,7 @@ fromAST ast names =
                         Tuple.second rangeResult
                 } in
                     Tuple.Tuple
-                        (Type.TArr domainType rangeType)
-                        rangeState
+                        (Type.TArr domainType rangeType) rangeState
 
             else
                 let {

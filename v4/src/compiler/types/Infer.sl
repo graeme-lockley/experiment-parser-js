@@ -65,6 +65,11 @@ generalize typeEnv type =
 
 resolveExpression expr =
     R.bind (inferN expr) (\inferResult ->
+        resolveInferredExpression inferResult
+    );
+
+
+resolveInferredExpression inferredExpression =
     R.bind (R.get "constraints") (\constraints \state ->
         Result.andThen (Solver.unify constraints) (\unifyResult ->
             R.returns resolvedSchemaWithExpr state
@@ -73,11 +78,10 @@ resolveExpression expr =
                         Schema.resolve (Schema.Forall List.empty type) unifyResult;
 
                     resolvedSchemaWithExpr =
-                        resolveExpr inferResult unifyResult
+                        resolveExpr inferredExpression unifyResult
                 }
         )
-    ));
-
+    );
 
 inferN expr =
     if expr.type == "APPLY" then
@@ -132,10 +136,18 @@ inferN expr =
 
     else if expr.type == "DECLARATION" then
         R.bind (R.get "typeEnv") (\typeEnv ->
-        R.bind (resolveExpression expr.expression) (\expressionSchema ->
-        R.bind (inEnv expr.name expressionSchema) (\_ ->
-            R.returns expressionSchema
-        )))
+        if Maybe.isJust (TypeEnv.find expr.name typeEnv) then
+            R.bind (lookupEnv expr.name) (\valueSignature ->
+            R.bind (inferN expr.expression) (\inferResult ->
+            R.bind (uni valueSignature inferResult) (\_ ->
+                resolveInferredExpression inferResult
+            )))
+        else
+            R.bind (resolveExpression expr.expression) (\expressionSchema ->
+            R.bind (inEnv expr.name expressionSchema) (\_ ->
+                R.returns expressionSchema
+            ))
+        )
 
     else if expr.type == "DIVISION" then
         inferBinaryOperator expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
@@ -179,7 +191,7 @@ inferN expr =
         inferRelationalOperator expr
 
     else if expr.type == "MODULE" then
-        R.bind (R.foldl (\declaration -> inferN declaration) expr.declarations) (\_ ->
+        R.bind (R.foldl (\declaration -> inferN declaration) (List.filter (\declaration -> declaration.type == "DECLARATION") expr.declarations)) (\_ ->
         R.bind fresh (\tv ->
         R.bind (inferN expr.expression) (\te ->
             R.returns te
