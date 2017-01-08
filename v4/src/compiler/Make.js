@@ -33,9 +33,9 @@ class Repository {
                 .assign('_', s => writeFile(s.jsFileName, s.js), s => 'Writing ' + s.jsFileName);
 
             const ast = seq.return(s => s.ast);
-            ast.okay(module => module.imports.forEach(i => {
+            Result.map(module => module.imports.forEach(i => {
                 seq.assign('_', s => this.compile(composeScriptNameFromURL(scriptName, i.url.value)));
-            }));
+            }))(ast);
 
             return seq.return(s => s.jsFileName);
         } else if (scriptName.endsWith('.js')) {
