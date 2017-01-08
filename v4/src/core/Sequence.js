@@ -16,7 +16,7 @@ class Sequence {
                 }
                 const eResult = e(Result.withDefault()(this._state));
 
-                if (Result.is(eResult)) {
+                if (eResult != undefined && Result.is(eResult)) {
                     if (Result.isOk(eResult)) {
                         Result.withDefault()(this._state)[n] = Result.withDefault()(eResult);
                     } else {
