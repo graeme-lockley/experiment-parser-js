@@ -22,7 +22,7 @@ inferModuleType ast =
         typeSignatureASTs =
             List.filter (\declarationAST -> declarationAST.type == "TYPE_SIGNATURE") ast.declarations;
 
-        addTS state signatureAST =
+        includeTypeSignature state signatureAST =
             Record.set2 "typeEnv" typeEnv "names" names state
                 where {
                     fromASTResult =
@@ -36,7 +36,7 @@ inferModuleType ast =
                 };
 
         initialState =
-            List.foldl (\state \signatureAST -> addTS state signatureAST) Infer.initialState typeSignatureASTs
+            List.foldl (\state \signatureAST -> includeTypeSignature state signatureAST) Infer.initialState typeSignatureASTs
     } in
         Result.andThen (Infer.infer ast initialState) (\inferResult ->
             Result.andThen (Solver.unify (Record.get "constraints" (Tuple.second inferResult))) (\unifyResult ->
