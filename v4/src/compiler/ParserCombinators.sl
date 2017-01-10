@@ -1,4 +1,5 @@
 import file:../core/Array as Array;
+import file:../core/ObjectHelper as ObjectHelper;
 import file:../core/Result as Result;
 import file:../core/Tuple as Tuple;
 import file:../core/Maybe as Maybe;
@@ -16,10 +17,10 @@ symbol tokenID lexer =
     if (Lexer.id lexer) == tokenID then
         empty (Lexer.text lexer) (Lexer.next lexer)
     else
-        Result.Error ("Expected the symbol " ++ tokenID)
+        Result.Error (Tuple.Tuple ("Expected the symbol " ++ tokenID) lexer)
 assumptions {
     DEBUG.eq (symbol tokens.IDENTIFIER testLexer) (empty "hello" (nextLexer 1 testLexer));
-    DEBUG.eq (symbol tokens.CONSTANT_INTEGER testLexer) (Result.Error ("Expected the symbol " ++ tokens.CONSTANT_INTEGER))
+    DEBUG.eq (Tuple.first (Result.errorWithDefault () (symbol tokens.CONSTANT_INTEGER testLexer))) ("Expected the symbol " ++ tokens.CONSTANT_INTEGER)
 };
 
 
@@ -36,8 +37,16 @@ and parsers lexer =
 assumptions {
     DEBUG.eq (and (Array.mk1 (symbol tokens.IDENTIFIER)) testLexer) (empty (Array.mk1 "hello") (nextLexer 1 testLexer));
     DEBUG.eq (and (Array.mk2 (symbol tokens.IDENTIFIER) (symbol tokens.BANG)) testLexer) (empty (Array.mk2 "hello" "!") (nextLexer 2 testLexer));
-    DEBUG.eq (and (Array.mk2 (symbol tokens.IDENTIFIER) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.IDENTIFIER));
-    DEBUG.eq (and (Array.mk2 (symbol tokens.BANG) (symbol tokens.IDENTIFIER)) testLexer) (Result.Error ("Expected the symbol " ++ tokens.BANG))
+    DEBUG.eq (Tuple.first (Result.errorWithDefault () result)) ("Expected the symbol " ++ tokens.IDENTIFIER)
+        where {
+            result =
+                and (Array.mk2 (symbol tokens.IDENTIFIER) (symbol tokens.IDENTIFIER)) testLexer
+        };
+    DEBUG.eq (Tuple.first (Result.errorWithDefault () result)) ("Expected the symbol " ++ tokens.BANG)
+        where {
+            result =
+                and (Array.mk2 (symbol tokens.BANG) (symbol tokens.IDENTIFIER)) testLexer
+        }
 };
 
 
