@@ -147,7 +147,7 @@ astToJavascript ast indentation =
             ""
         else
             imports ++ "\n" ++ "\n") ++
-        Array.join ("\n" ++ "\n") (Array.map  (\d -> astToJavascript d indentation) (Record.get "declarations" ast)) ++
+        Array.join ("\n" ++ "\n") (Array.map  (\d -> astToJavascript d indentation) (Array.filter (\declaration -> declaration.type == "DECLARATION") ast.declarations)) ++
         "\n" ++ "\nconst _$EXPR = " ++ (astToJavascript (Record.get "expression" ast) indentation) ++ ";" ++
         "\n" ++ "\n" ++ "const _$ASSUMPTIONS = [].concat(\n" ++
         Array.join ",\n" (
@@ -184,7 +184,7 @@ astToJavascript ast indentation =
                     "      ]\n" ++
                     "    }"
                 )
-                (Array.filter (\d -> (Array.length (Record.get "assumptions" d)) > 0) (Record.get "declarations" ast))
+                (Array.filter (\d -> (Array.length (Record.get "assumptions" d)) > 0) (Array.filter (\declaration -> declaration.type == "DECLARATION") ast.declarations))
         ) ++
         "\n" ++
         "  ]\n" ++
