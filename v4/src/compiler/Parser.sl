@@ -302,13 +302,30 @@ parseConstantString lexer =
 
 
 parseIdentifier lexer =
-    (P.or (Array.mk2
-        ((P.map AST.identifier) o (P.symbol Tokens.IDENTIFIER))
-        ((P.map (\e -> AST.qualifiedIdentifier (at 0 e) (at 2 e))) o
-         (P.and (Array.mk3
-            (P.symbol Tokens.UPPER_IDENTIFIER)
-            (P.symbol Tokens.PERIOD)
-            (P.symbol Tokens.IDENTIFIER)))))
+    (
+        (
+            P.map (\e ->
+                if Maybe.isJust (at 1 e) then
+                    AST.qualifiedIdentifier (at 0 e) (at 1 (Maybe.withDefault () (at 1 e)))
+                else
+                    AST.identifier (at 0 e))
+        ) o
+        (
+            P.and (Array.mk2
+                (P.or (Array.mk2
+                    (P.symbol Tokens.IDENTIFIER)
+                    (P.symbol Tokens.UPPER_IDENTIFIER)
+                ))
+                (P.option (P.and (Array.mk2
+                    (P.symbol Tokens.PERIOD)
+                    (
+                        (P.or (Array.mk2
+                            (P.symbol Tokens.IDENTIFIER)
+                            (P.symbol Tokens.UPPER_IDENTIFIER)
+                        ))
+                    )
+                ))))
+        )
     ) lexer;
 
 
