@@ -70,8 +70,8 @@ const result = Sequence.seq()
             const file = require(s.fileName);
 
             if (executeTests(file._$ASSUMPTIONS)) {
-                return ('_$EXPR' in file) ? JSON.stringify(file['_$EXPR'])
-                    : ('main' in file) ? file['main'](s.cmdLine.args)
+                return ('main' in file) ? file['main'](s.cmdLine.args)
+                    : ('_$EXPR' in file) ? JSON.stringify(file['_$EXPR'])
                     : file;
             } else {
                 return Result.Error('Assumptions failed');
