@@ -41,7 +41,7 @@ class Sequence {
         if (Result.isOk(this._state)) {
             const result = e(Result.withDefault()(this._state));
 
-            if (Result.is(result)) {
+            if (result != undefined && Result.is(result)) {
                 return result;
             } else {
                 return Result.Ok(result);
