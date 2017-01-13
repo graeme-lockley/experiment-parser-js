@@ -8,6 +8,14 @@ addition left right =
         "right" right;
 
 
+adtDeclaration name parameters constructors =
+        Record.mk4
+        "type" "ADT_DECLARATION"
+        "name" name
+        "parameters" parameters
+        "constructors" constructors;
+
+
 apply operation operand =
     Record.mk3
         "type" "APPLY"

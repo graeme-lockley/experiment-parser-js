@@ -1,2 +1,42 @@
 -- given an ADT
 type List a = Cons a (List a) | Nil;
+-- ast
+{
+  "type": "MODULE",
+  "sourceName": "stream",
+  "imports": [],
+  "declarations": [
+    {
+      "type": "ADT_DECLARATION",
+      "name": "List",
+      "parameters": [
+        "a"
+      ],
+      "constructors": [
+        {
+          "_fst": "Cons",
+          "_snd": [
+            {
+              "type": "VARIABLE",
+              "name": "a"
+            },
+            {
+              "type": "CONSTANT",
+              "name": "List",
+              "parameters": [
+                "a"
+              ]
+            }
+          ]
+        },
+        {
+          "_fst": "Nil",
+          "_snd": []
+        }
+      ]
+    }
+  ],
+  "expression": {
+    "type": "CONSTANT_UNIT"
+  }
+}

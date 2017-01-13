@@ -146,17 +146,15 @@ parseTYPE_ALIAS lexer =
 
 parseTYPE_ADT lexer =
     (
-        (P.and (Array.mk6
+        (P.map (\e -> AST.adtDeclaration (at 1 e) (at 2 e) (at 4 e))) o
+        (P.and (Array.mk5
             (P.symbol Tokens.TYPE)
             (P.symbol Tokens.UPPER_IDENTIFIER)
             (P.many (P.symbol Tokens.IDENTIFIER))
             (P.symbol Tokens.EQUAL)
-            parseTYPE_ADT_CONSTRUCTOR
-            (P.many
-                (P.and (Array.mk2
-                    (P.symbol Tokens.BAR)
-                    parseTYPE_ADT_CONSTRUCTOR
-                ))
+            (P.sepBy1
+                parseTYPE_ADT_CONSTRUCTOR
+                (P.symbol Tokens.BAR)
             )
         ))
     ) lexer;
@@ -164,10 +162,11 @@ parseTYPE_ADT lexer =
 
 parseTYPE_ADT_CONSTRUCTOR lexer =
     (
-        P.and (Array.mk2
+        (P.map (\e -> Tuple.Tuple (at 0 e) (at 1 e))) o
+        (P.and (Array.mk2
             (P.symbol Tokens.UPPER_IDENTIFIER)
             (P.many parseTYPE)
-        )
+        ))
     ) lexer;
 
 
