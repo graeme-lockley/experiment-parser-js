@@ -11,8 +11,8 @@ const TestUtils = require('./TestUtils');
 const expect = require("chai").expect;
 
 describe('Parser', function () {
-    describe('given the input "123" to parseEXPR13', () => {
-        const result = Parser.parseEXPR13(Lexer.fromString("123")("stream"));
+    describe('given the input "123" to parseEXPR14', () => {
+        const result = Parser.parseEXPR14(Lexer.fromString("123")("stream"));
 
         it("should parse without any errors", () =>
             expect(Result.isOk(result)).to.equal(true));
@@ -24,8 +24,8 @@ describe('Parser', function () {
             expect(Lexer.id(Tuple.second(Result.withDefault()(result)))).to.equal(Lexer.TokenEnum.EOF));
     });
 
-    describe('given the input "abc 123" to parseEXPR13', () => {
-        const result = Parser.parseEXPR13(Lexer.fromString("abc 123")("stream"));
+    describe('given the input "abc 123" to parseEXPR14', () => {
+        const result = Parser.parseEXPR14(Lexer.fromString("abc 123")("stream"));
 
         it("should parse without any errors", () =>
             expect(Result.isOk(result)).to.equal(true));
@@ -37,8 +37,8 @@ describe('Parser', function () {
             expect(Lexer.id(Tuple.second(Result.withDefault()(result)))).to.equal(Lexer.TokenEnum.CONSTANT_INTEGER));
     });
 
-    describe('given the input "( 123)" to parseEXPR13', () => {
-        const result = Parser.parseEXPR13(Lexer.fromString('( 123)')("stream"));
+    describe('given the input "( 123)" to parseEXPR14', () => {
+        const result = Parser.parseEXPR14(Lexer.fromString('( 123)')("stream"));
 
         it("should parse without any errors", ()=>
             expect(Result.isOk(result)).to.equal(true));
@@ -50,8 +50,8 @@ describe('Parser', function () {
             expect(Lexer.id(Tuple.second(Result.withDefault()(result)))).to.equal(Lexer.TokenEnum.EOF));
     });
 
-    describe('given the input "\\a \\b -> (a)" to parseEXPR13', () => {
-        const result = Parser.parseEXPR13(Lexer.fromString('\\a \\b -> (a)')("stream"));
+    describe('given the input "\\a \\b -> (a)" to parseEXPR14', () => {
+        const result = Parser.parseEXPR14(Lexer.fromString('\\a \\b -> (a)')("stream"));
 
         it("should parse without any errors", () => expect(Result.isOk(result)).to.equal(true));
         it("should parse a LAMBDA with variables ['a', 'b'] and expression of IDENTIFIER with value 'a'", () => {

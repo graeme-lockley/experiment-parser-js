@@ -1,6 +1,7 @@
 import file:./AST as AST;
 import file:./Lexer as Lexer;
 import file:./ParserCombinators as P;
+import file:./PatternAST as PatternAST;
 import file:./TypeAST as TypeAST;
 
 import file:../core/Array as Array;
@@ -224,14 +225,65 @@ parseEXPR2 =
 
 
 parseEXPR3 lexer =
-    P.chainl1 parseEXPR4 ((P.map (\_ -> AST.booleanOr)) o (P.symbol Tokens.BAR_BAR)) lexer;
+    P.or (Array.mk2
+        (
+            (P.map (\e -> AST.caseExpression (at 1 e) (at 4 e))) o
+            (P.and (Array.mk6
+                (P.symbol Tokens.CASE)
+                parseEXPR1
+                (P.symbol Tokens.OF)
+                (P.symbol Tokens.LEFT_CURLY)
+                (P.sepBy1 parseCASE_ITEM (P.symbol Tokens.SEMICOLON))
+                (P.symbol Tokens.RIGHT_CURLY)
+            ))
+        )
+        parseEXPR4
+    ) lexer;
+
+
+parseCASE_ITEM lexer =
+    (
+        (P.map (\e -> Tuple.Tuple (at 0 e) (at 2 e))) o
+        (P.and (Array.mk3
+            parsePATTERN
+            (P.symbol Tokens.MINUS_GREATER)
+            parseEXPR1
+        ))
+    ) lexer;
+
+
+parsePATTERN lexer =
+    P.or (Array.mk4
+        ((P.map (\_ -> PatternAST.any)) o (P.symbol Tokens.STAR))
+        ((P.map PatternAST.variable) o (P.symbol Tokens.IDENTIFIER))
+        (
+            (P.map (\e -> PatternAST.adtConstructor (at 0 e) (at 1 e))) o
+            (P.and (Array.mk2
+                (P.symbol Tokens.UPPER_IDENTIFIER)
+                (P.many parsePATTERN)
+            ))
+        )
+        (
+            (P.map (at 1)) o
+            (P.and (Array.mk3
+                (P.symbol Tokens.LEFT_PAREN)
+                parsePATTERN
+                (P.symbol Tokens.RIGHT_PAREN)
+            ))
+        )
+    ) lexer;
 
 
 parseEXPR4 lexer =
-    P.chainl1 parseEXPR5 ((P.map (\_ -> AST.booleanAnd)) o (P.symbol Tokens.AMPERSAND_AMPERSAND)) lexer;
+    P.chainl1 parseEXPR5 ((P.map (\_ -> AST.booleanOr)) o (P.symbol Tokens.BAR_BAR)) lexer;
+
 
 parseEXPR5 lexer =
-    P.chainl1 parseEXPR6 parseEqualOp lexer;
+    P.chainl1 parseEXPR6 ((P.map (\_ -> AST.booleanAnd)) o (P.symbol Tokens.AMPERSAND_AMPERSAND)) lexer;
+
+
+parseEXPR6 lexer =
+    P.chainl1 parseEXPR7 parseEqualOp lexer;
 
 
 parseEqualOp lexer =
@@ -240,8 +292,8 @@ parseEqualOp lexer =
         ((P.map (\_ -> AST.notEqual)) o (P.symbol Tokens.BANG_EQUAL))) lexer;
 
 
-parseEXPR6 lexer =
-    P.chainl1 parseEXPR7 parseComparisonOp lexer;
+parseEXPR7 lexer =
+    P.chainl1 parseEXPR8 parseComparisonOp lexer;
 
 
 parseComparisonOp lexer =
@@ -252,12 +304,12 @@ parseComparisonOp lexer =
         ((P.map (\_ -> AST.greaterThanEqual)) o (P.symbol Tokens.GREATER_EQUAL))) lexer;
 
 
-parseEXPR7 lexer =
-    P.chainl1 parseEXPR8 ((P.map (\_ -> AST.stringConcat)) o (P.symbol Tokens.PLUS_PLUS)) lexer;
+parseEXPR8 lexer =
+    P.chainl1 parseEXPR9 ((P.map (\_ -> AST.stringConcat)) o (P.symbol Tokens.PLUS_PLUS)) lexer;
 
 
-parseEXPR8 =
-    P.chainl1 parseEXPR9 parseAdditiveOp;
+parseEXPR9 =
+    P.chainl1 parseEXPR10 parseAdditiveOp;
 
 
 parseAdditiveOp lexer =
@@ -266,8 +318,8 @@ parseAdditiveOp lexer =
         ((P.map (\_ -> AST.subtraction)) o (P.symbol Tokens.MINUS))) lexer;
 
 
-parseEXPR9 lexer =
-    P.chainl1 parseEXPR10 parseMultiplicativeOp lexer;
+parseEXPR10 lexer =
+    P.chainl1 parseEXPR11 parseMultiplicativeOp lexer;
 
 
 parseMultiplicativeOp =
@@ -276,10 +328,10 @@ parseMultiplicativeOp =
         ((P.map (\_ -> AST.division)) o (P.symbol Tokens.SLASH)));
 
 
-parseEXPR10 =
+parseEXPR11 =
     P.or (Array.mk2
-        ((P.map (\e -> (at 0 e) (at 1 e))) o (P.and (Array.mk2 parseUnaryOp parseEXPR10)))
-        parseEXPR11);
+        ((P.map (\e -> (at 0 e) (at 1 e))) o (P.and (Array.mk2 parseUnaryOp parseEXPR11)))
+        parseEXPR12);
 
 
 parseUnaryOp =
@@ -289,16 +341,16 @@ parseUnaryOp =
         ((P.map (\_ -> AST.unaryNegate)) o (P.symbol Tokens.MINUS)));
 
 
-parseEXPR11 lexer =
-    P.chainl1 parseEXPR12 ((P.map (\_ -> AST.composition)) o (P.symbol Tokens.O)) lexer;
-
-
-parseEXPR12 =
-        (P.map (\e -> Array.foldl (\acc \item -> AST.apply acc item) (Maybe.withDefault () (Array.at 0 e)) (Array.slice 1 e))) o
-        (P.many1 parseEXPR13);
+parseEXPR12 lexer =
+    P.chainl1 parseEXPR13 ((P.map (\_ -> AST.composition)) o (P.symbol Tokens.O)) lexer;
 
 
 parseEXPR13 =
+        (P.map (\e -> Array.foldl (\acc \item -> AST.apply acc item) (Maybe.withDefault () (Array.at 0 e)) (Array.slice 1 e))) o
+        (P.many1 parseEXPR14);
+
+
+parseEXPR14 =
     P.or (Array.mk10
         parseConstantInteger
         parseConstantCharacter

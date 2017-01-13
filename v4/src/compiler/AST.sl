@@ -52,6 +52,13 @@ booleanOr left right =
         "right" right;
 
 
+caseExpression expression patterns =
+    Record.mk3
+        "type" "CASE"
+        "expression" expression
+        "patterns" patterns;
+
+
 composition left right =
     Record.mk3
         "type" "COMPOSITION"

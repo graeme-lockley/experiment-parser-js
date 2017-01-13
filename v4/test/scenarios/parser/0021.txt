@@ -1,5 +1,18 @@
--- given an ADT
-type List a = Cons a (List a) | Nil;
+-- given an ADT with functions over the ADT
+type List a = Cons a (List a)
+            | Nil;
+
+map : (a -> b) -> (List a) -> (List b);
+map f l = case l of {
+    Cons x xs -> Cons (f x) (map f xs);
+    Nil -> Nil
+};
+
+length : List a -> Integer;
+length l = case l of {
+    Cons * xs -> 1 + (length xs);
+    Nil -> 0
+};
 -- ast
 {
   "type": "MODULE",
@@ -34,6 +47,210 @@ type List a = Cons a (List a) | Nil;
           "_snd": []
         }
       ]
+    },
+    {
+      "type": "TYPE_SIGNATURE",
+      "name": "map",
+      "value": {
+        "type": "FUNCTION",
+        "domain": {
+          "type": "FUNCTION",
+          "domain": {
+            "type": "VARIABLE",
+            "name": "a"
+          },
+          "range": {
+            "type": "VARIABLE",
+            "name": "b"
+          }
+        },
+        "range": {
+          "type": "FUNCTION",
+          "domain": {
+            "type": "CONSTANT",
+            "name": "List",
+            "parameters": [
+              "a"
+            ]
+          },
+          "range": {
+            "type": "CONSTANT",
+            "name": "List",
+            "parameters": [
+              "b"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "map",
+      "expression": {
+        "type": "LAMBDA",
+        "variable": "f",
+        "expression": {
+          "type": "LAMBDA",
+          "variable": "l",
+          "expression": {
+            "type": "CASE",
+            "expression": {
+              "type": "IDENTIFIER",
+              "name": "l"
+            },
+            "patterns": [
+              {
+                "_fst": {
+                  "type": "CONSTRUCTOR",
+                  "name": "Cons",
+                  "patterns": [
+                    {
+                      "type": "VARIABLE",
+                      "name": "x"
+                    },
+                    {
+                      "type": "VARIABLE",
+                      "name": "xs"
+                    }
+                  ]
+                },
+                "_snd": {
+                  "type": "APPLY",
+                  "operation": {
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "IDENTIFIER",
+                      "name": "Cons"
+                    },
+                    "operand": {
+                      "type": "APPLY",
+                      "operation": {
+                        "type": "IDENTIFIER",
+                        "name": "f"
+                      },
+                      "operand": {
+                        "type": "IDENTIFIER",
+                        "name": "x"
+                      }
+                    }
+                  },
+                  "operand": {
+                    "type": "APPLY",
+                    "operation": {
+                      "type": "APPLY",
+                      "operation": {
+                        "type": "IDENTIFIER",
+                        "name": "map"
+                      },
+                      "operand": {
+                        "type": "IDENTIFIER",
+                        "name": "f"
+                      }
+                    },
+                    "operand": {
+                      "type": "IDENTIFIER",
+                      "name": "xs"
+                    }
+                  }
+                }
+              },
+              {
+                "_fst": {
+                  "type": "CONSTRUCTOR",
+                  "name": "Nil",
+                  "patterns": []
+                },
+                "_snd": {
+                  "type": "IDENTIFIER",
+                  "name": "Nil"
+                }
+              }
+            ]
+          }
+        }
+      },
+      "assumptions": []
+    },
+    {
+      "type": "TYPE_SIGNATURE",
+      "name": "length",
+      "value": {
+        "type": "FUNCTION",
+        "domain": {
+          "type": "CONSTANT",
+          "name": "List",
+          "parameters": [
+            "a"
+          ]
+        },
+        "range": {
+          "type": "CONSTANT",
+          "name": "Integer",
+          "parameters": []
+        }
+      }
+    },
+    {
+      "type": "DECLARATION",
+      "name": "length",
+      "expression": {
+        "type": "LAMBDA",
+        "variable": "l",
+        "expression": {
+          "type": "CASE",
+          "expression": {
+            "type": "IDENTIFIER",
+            "name": "l"
+          },
+          "patterns": [
+            {
+              "_fst": {
+                "type": "CONSTRUCTOR",
+                "name": "Cons",
+                "patterns": [
+                  {
+                    "type": "ANY"
+                  },
+                  {
+                    "type": "VARIABLE",
+                    "name": "xs"
+                  }
+                ]
+              },
+              "_snd": {
+                "type": "ADDITION",
+                "left": {
+                  "type": "CONSTANT_INTEGER",
+                  "value": 1
+                },
+                "right": {
+                  "type": "APPLY",
+                  "operation": {
+                    "type": "IDENTIFIER",
+                    "name": "length"
+                  },
+                  "operand": {
+                    "type": "IDENTIFIER",
+                    "name": "xs"
+                  }
+                }
+              }
+            },
+            {
+              "_fst": {
+                "type": "CONSTRUCTOR",
+                "name": "Nil",
+                "patterns": []
+              },
+              "_snd": {
+                "type": "CONSTANT_INTEGER",
+                "value": 0
+              }
+            }
+          ]
+        }
+      },
+      "assumptions": []
     }
   ],
   "expression": {
