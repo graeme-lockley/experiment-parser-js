@@ -127,7 +127,7 @@ parseTYPE1 =
         (   (P.map (\e -> TypeAST.constant (at 0 e) (at 1 e))) o
             (P.and (Array.mk2
                 (P.symbol Tokens.UPPER_IDENTIFIER)
-                (P.many (P.symbol Tokens.IDENTIFIER)))))
+                (P.many parseTYPE1))))
         (   (P.map TypeAST.variable) o
             (P.symbol Tokens.IDENTIFIER)));
 

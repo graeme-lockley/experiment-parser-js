@@ -51,7 +51,10 @@ foldl op z xs =
               "type": "CONSTANT",
               "name": "List",
               "parameters": [
-                "a"
+                {
+                  "type": "VARIABLE",
+                  "name": "a"
+                }
               ]
             },
             "range": {

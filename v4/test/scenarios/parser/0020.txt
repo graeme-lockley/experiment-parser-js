@@ -53,8 +53,14 @@ foldl op z xs =
           "type": "CONSTANT",
           "name": "FoldFunction",
           "parameters": [
-            "a",
-            "b"
+            {
+              "type": "VARIABLE",
+              "name": "a"
+            },
+            {
+              "type": "VARIABLE",
+              "name": "b"
+            }
           ]
         },
         "range": {
@@ -69,7 +75,10 @@ foldl op z xs =
               "type": "CONSTANT",
               "name": "List",
               "parameters": [
-                "a"
+                {
+                  "type": "VARIABLE",
+                  "name": "a"
+                }
               ]
             },
             "range": {

@@ -37,7 +37,10 @@ length l = case l of {
               "type": "CONSTANT",
               "name": "List",
               "parameters": [
-                "a"
+                {
+                  "type": "VARIABLE",
+                  "name": "a"
+                }
               ]
             }
           ]
@@ -70,14 +73,20 @@ length l = case l of {
             "type": "CONSTANT",
             "name": "List",
             "parameters": [
-              "a"
+              {
+                "type": "VARIABLE",
+                "name": "a"
+              }
             ]
           },
           "range": {
             "type": "CONSTANT",
             "name": "List",
             "parameters": [
-              "b"
+              {
+                "type": "VARIABLE",
+                "name": "b"
+              }
             ]
           }
         }
@@ -180,7 +189,10 @@ length l = case l of {
           "type": "CONSTANT",
           "name": "List",
           "parameters": [
-            "a"
+            {
+              "type": "VARIABLE",
+              "name": "a"
+            }
           ]
         },
         "range": {
