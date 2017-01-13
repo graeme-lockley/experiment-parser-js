@@ -53,10 +53,11 @@ markLocation parser lexer =
 
 
 parseDECL =
-    P.or (Array.mk3
+    P.or (Array.mk4
         parseVALUE_DECLARATION
         parseTYPE_SIGNATURE
-        parseTYPE_ALIAS);
+        parseTYPE_ALIAS
+        parseTYPE_ADT);
 
 
 parseVALUE_DECLARATION lexer =
@@ -107,9 +108,11 @@ parseTYPE_SIGNATURE lexer =
     )  lexer;
 
 
-parseTYPE =
-    (P.map (\e -> Array.foldr (\item \acc -> TypeAST.functionArrow acc item) (at ((Array.length e) - 1) e) (Array.take ((Array.length e) - 1) e))) o
-    (P.sepBy1 parseTYPE1 (P.symbol Tokens.MINUS_GREATER));
+parseTYPE lexer =
+    (
+        (P.map (\e -> Array.foldr (\item \acc -> TypeAST.functionArrow acc item) (at ((Array.length e) - 1) e) (Array.take ((Array.length e) - 1) e))) o
+        (P.sepBy1 parseTYPE1 (P.symbol Tokens.MINUS_GREATER))
+    ) lexer;
 
 
 parseTYPE1 =
@@ -138,6 +141,33 @@ parseTYPE_ALIAS lexer =
             (P.many (P.symbol Tokens.IDENTIFIER))
             (P.symbol Tokens.EQUAL)
             parseTYPE))
+    ) lexer;
+
+
+parseTYPE_ADT lexer =
+    (
+        (P.and (Array.mk6
+            (P.symbol Tokens.TYPE)
+            (P.symbol Tokens.UPPER_IDENTIFIER)
+            (P.many (P.symbol Tokens.IDENTIFIER))
+            (P.symbol Tokens.EQUAL)
+            parseTYPE_ADT_CONSTRUCTOR
+            (P.many
+                (P.and (Array.mk2
+                    (P.symbol Tokens.BAR)
+                    parseTYPE_ADT_CONSTRUCTOR
+                ))
+            )
+        ))
+    ) lexer;
+
+
+parseTYPE_ADT_CONSTRUCTOR lexer =
+    (
+        P.and (Array.mk2
+            (P.symbol Tokens.UPPER_IDENTIFIER)
+            (P.many parseTYPE)
+        )
     ) lexer;
 
 
