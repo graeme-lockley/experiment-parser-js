@@ -5,10 +5,11 @@ import file:../../core/Set as Set;
 import file:../../core/Debug as DEBUG;
 
 
-TCon name =
-    Record.mk2
+TCon name variables =
+    Record.mk3
         "type" "CONSTANT"
-        "name" name;
+        "name" name
+        "variables" variables;
 
 
 TVar name =
@@ -24,32 +25,25 @@ TArr domain range =
         "range" range;
 
 
-TADT name variables =
-    Record.mk3
-        "type" "ADT"
-        "name" name
-        "variables" variables;
+typeBoolean = TCon "Boolean" List.empty;
 
 
-typeBoolean = TCon "Boolean";
+typeCharacter = TCon "Character" List.empty;
 
 
-typeCharacter = TCon "Character";
+typeInteger = TCon "Integer" List.empty;
 
 
-typeInteger = TCon "Integer";
+typeString = TCon "String" List.empty;
 
 
-typeString = TCon "String";
-
-
-typeUnit = TCon "Unit";
+typeUnit = TCon "Unit" List.empty;
 
 
 isTCon type =
     type.type == "CONSTANT"
 assumptions {
-    isTCon (TCon "a");
+    isTCon (TCon "a" List.empty);
     !isTCon (TVar "a");
     !isTCon (TArr typeBoolean typeBoolean)
 };
@@ -58,7 +52,7 @@ assumptions {
 isTVar type =
     type.type == "VARIABLE"
 assumptions {
-    !isTVar (TCon "a");
+    !isTVar (TCon "a" List.empty);
     isTVar (TVar "a");
     !isTVar (TArr typeBoolean typeBoolean)
 };
@@ -67,28 +61,18 @@ assumptions {
 isTArr type =
     type.type == "FUNCTION"
 assumptions {
-    !isTArr (TCon "a");
+    !isTArr (TCon "a" List.empty);
     !isTArr (TVar "a");
     isTArr (TArr typeBoolean typeBoolean)
 };
 
 
-isTADT type =
-    type.type == "ADT"
-assumptions {
-    !isTADT (TCon "a");
-    !isTADT (TVar "a");
-    !isTADT (TArr typeBoolean typeBoolean);
-    isTADT (TADT "List" (List.singleton "a"))
-};
-
-
 show type =
     if isTCon type then
-        type.name
+        type.name ++ (List.foldl (\acc \item -> acc ++ " " ++ item) "" type.variables)
     else if isTVar type then
         type.name
-    else if isTArr type then
+    else
         let {
             showDomain = show type.domain;
             showRange = show type.range
@@ -98,31 +82,27 @@ show type =
             else
                 showDomain ++ " -> " ++ showRange
         )
-    else
-        type.name ++ (List.foldl (\acc \item -> acc ++ " " ++ item) "" type.variables)
 assumptions {
     show typeString == "String";
     show (TVar "a") == "a";
     DEBUG.eq (show (TArr (TVar "a") (TVar "b"))) "a -> b";
     show (TArr (TArr (TVar "a") (TVar "b")) (TVar "c")) == "(a -> b) -> c";
     show (TArr (TVar "a") (TArr (TVar "b") (TVar "c"))) == "a -> b -> c";
-    show (TADT "Type" List.empty) == "Type";
-    show (TADT "List" (List.singleton "a")) == "List a"
+    show (TCon "Type" List.empty) == "Type";
+    show (TCon "List" (List.singleton "a")) == "List a"
 };
 
 
 
 ftv type =
     if isTCon type then
-        Set.empty
+        Set.fromList type.variables
     else if isTVar type then
         Set.singleton type.name
-    else if isTArr type then
-        Set.union (ftv type.domain) (ftv type.range)
     else
-        Set.fromList type.variables
+        Set.union (ftv type.domain) (ftv type.range)
 assumptions {
     DEBUG.eq (ftv typeString) Set.empty;
     DEBUG.eq (ftv (TVar "a")) (Set.singleton "a");
-    DEBUG.eq (ftv (TADT "Map" (List.mk2 "a" "a"))) (Set.singleton "a")
+    DEBUG.eq (ftv (TCon "Map" (List.mk2 "a" "a"))) (Set.singleton "a")
 };
