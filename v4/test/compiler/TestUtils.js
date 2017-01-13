@@ -43,9 +43,9 @@ function scenariosIn(directory) {
 
             if ('error' in expectations) {
                 it('should fail ', () =>
-                    expect(parseResponse.isError()).to.be.true);
+                    expect(!Result.isOk(parseResponse)).to.equal(true));
 
-                it('with the expected error message ' + output, () =>
+                it('with the expected error message ' + expectations['error'], () =>
                     expect(Result.errorWithDefault()(parseResponse)).to.equal(expectations['error']));
             }
 
