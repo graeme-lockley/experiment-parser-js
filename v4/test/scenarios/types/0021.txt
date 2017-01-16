@@ -1,0 +1,7 @@
+-- given an ADT with functions over the ADT
+type List a = Cons a (List a)
+            | Nil;
+
+Cons 10 Nil == Cons "Hello World" Nil
+-- typeError
+Unification failed Integer and String
