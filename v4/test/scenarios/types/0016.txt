@@ -13,6 +13,6 @@ funA a b =
     } in
         (fun2 a) ++ fun3;
 -- type
-fun1 :: String -> String -> String
-funA :: String -> String -> String
-_$EXPR :: Unit
+fun1 : String -> String -> String
+funA : String -> String -> String
+_$EXPR : Unit

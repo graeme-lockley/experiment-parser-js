@@ -3,5 +3,5 @@ test a = a + 1;
 
 test
 -- type
-test :: Integer -> Integer
-_$EXPR :: Integer -> Integer
+test : Integer -> Integer
+_$EXPR : Integer -> Integer

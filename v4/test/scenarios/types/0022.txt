@@ -9,7 +9,7 @@ range min max =
     else
         Cons min (range (min + 1) max);
 -- type
-range :: Integer -> Integer -> List Integer
-Cons :: forall a1 . a1 -> List a1 -> List a1
-Nil :: forall a1 . List a1
-_$EXPR :: Unit
+range : Integer -> Integer -> List Integer
+Cons : a1 -> List a1 -> List a1
+Nil : List a1
+_$EXPR : Unit

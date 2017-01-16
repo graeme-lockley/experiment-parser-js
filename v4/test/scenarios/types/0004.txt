@@ -3,5 +3,5 @@ x = 10;
 
 x
 -- type
-x :: Integer
-_$EXPR :: Integer
+x : Integer
+_$EXPR : Integer

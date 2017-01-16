@@ -11,10 +11,10 @@ opUnaryPlus x = +x;
 
 opUnaryMinus x = -x;
 -- type
-opPlus :: Integer -> Integer -> Integer
-opMinus :: Integer -> Integer -> Integer
-opMultiplication :: Integer -> Integer -> Integer
-opDivision :: Integer -> Integer -> Integer
-opUnaryPlus :: Integer -> Integer
-opUnaryMinus :: Integer -> Integer
-_$EXPR :: Unit
+opPlus : Integer -> Integer -> Integer
+opMinus : Integer -> Integer -> Integer
+opMultiplication : Integer -> Integer -> Integer
+opDivision : Integer -> Integer -> Integer
+opUnaryPlus : Integer -> Integer
+opUnaryMinus : Integer -> Integer
+_$EXPR : Unit

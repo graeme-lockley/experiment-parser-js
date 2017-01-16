@@ -1,4 +1,4 @@
 -- given a constant string expression
 "Hello world"
 -- type
-_$EXPR :: String
+_$EXPR : String

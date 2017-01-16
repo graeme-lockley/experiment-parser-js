@@ -1,5 +1,5 @@
 -- given if-then-else ensure it is correctly inferred
 fun1 a b c = if a then b else c;
 -- type
-fun1 :: forall a1 . Boolean -> a1 -> a1 -> a1
-_$EXPR :: Unit
+fun1 : Boolean -> a1 -> a1 -> a1
+_$EXPR : Unit

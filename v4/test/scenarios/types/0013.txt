@@ -7,8 +7,8 @@ fun3 a b = { a; b; a < b };
 
 fun4 a b = { a * b ; b };
 -- type
-fun1 :: forall a1 . a1 -> Integer -> Integer
-fun2 :: Integer -> Integer -> Integer
-fun3 :: forall a1 . a1 -> a1 -> Boolean
-fun4 :: Integer -> Integer -> Integer
-_$EXPR :: Unit
+fun1 : a1 -> Integer -> Integer
+fun2 : Integer -> Integer -> Integer
+fun3 : a1 -> a1 -> Boolean
+fun4 : Integer -> Integer -> Integer
+_$EXPR : Unit

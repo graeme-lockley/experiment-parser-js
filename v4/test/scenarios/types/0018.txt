@@ -4,7 +4,7 @@ id a = a;
 funA = (id 1) + 1;
 funB = (id "hello") ++ "world";
 -- type
-id :: forall a1 . a1 -> a1
-funA :: Integer
-funB :: String
-_$EXPR :: Unit
+id : a1 -> a1
+funA : Integer
+funB : String
+_$EXPR : Unit

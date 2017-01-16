@@ -5,7 +5,7 @@ opOr c d = c || d;
 
 opNot x = !x;
 -- type
-opAnd :: Boolean -> Boolean -> Boolean
-opOr :: Boolean -> Boolean -> Boolean
-opNot :: Boolean -> Boolean
-_$EXPR :: Unit
+opAnd : Boolean -> Boolean -> Boolean
+opOr : Boolean -> Boolean -> Boolean
+opNot : Boolean -> Boolean
+_$EXPR : Unit

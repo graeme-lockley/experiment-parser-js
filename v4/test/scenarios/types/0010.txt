@@ -1,5 +1,5 @@
 -- given a composition of multiple functions ensure correct inference
 newFun f g c = (f o g) c;
 -- type
-newFun :: forall a1 a2 a3 . (a1 -> a2) -> (a3 -> a1) -> a3 -> a2
-_$EXPR :: Unit
+newFun : (a1 -> a2) -> (a3 -> a1) -> a3 -> a2
+_$EXPR : Unit

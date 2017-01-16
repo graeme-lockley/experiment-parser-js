@@ -1,5 +1,5 @@
 -- given a string concat ensure it is correctly inferred
 fun1 a b = a ++ b;
 -- type
-fun1 :: String -> String -> String
-_$EXPR :: Unit
+fun1 : String -> String -> String
+_$EXPR : Unit

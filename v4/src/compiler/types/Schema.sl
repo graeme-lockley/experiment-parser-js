@@ -87,15 +87,8 @@ assumptions {
 
 
 show schema =
-    quantifierPrefix ++ (Type.show schema.type)
-        where {
-            quantifierPrefix =
-                if List.isEmpty schema.names then
-                    ""
-                else
-                    "forall " ++ (List.join " " schema.names) ++ " . "
-        }
+    (Type.show schema.type)
 assumptions {
     (show (Forall (List.empty) (Type.TArr Type.typeInteger Type.typeString))) == "Integer -> String";
-    (show (Forall (List.mk2 "a" "b") (Type.TArr (Type.TVar "a") (Type.TVar "b")))) == "forall a b . a -> b"
+    (show (Forall (List.mk2 "a" "b") (Type.TArr (Type.TVar "a") (Type.TVar "b")))) == "a -> b"
 };

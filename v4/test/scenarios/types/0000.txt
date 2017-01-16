@@ -1,4 +1,4 @@
 -- given a constant integer expression
 10
 -- type
-_$EXPR :: Integer
+_$EXPR : Integer

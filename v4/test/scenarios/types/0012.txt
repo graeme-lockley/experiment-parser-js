@@ -11,10 +11,10 @@ opGreaterEqual a b = a >= b;
 
 opGreater a b = a > b;
 -- type
-opEqual :: forall a1 . a1 -> a1 -> Boolean
-opNotEqual :: forall a1 . a1 -> a1 -> Boolean
-opLessEqual :: forall a1 . a1 -> a1 -> Boolean
-opLess :: forall a1 . a1 -> a1 -> Boolean
-opGreaterEqual :: forall a1 . a1 -> a1 -> Boolean
-opGreater :: forall a1 . a1 -> a1 -> Boolean
-_$EXPR :: Unit
+opEqual : a1 -> a1 -> Boolean
+opNotEqual : a1 -> a1 -> Boolean
+opLessEqual : a1 -> a1 -> Boolean
+opLess : a1 -> a1 -> Boolean
+opGreaterEqual : a1 -> a1 -> Boolean
+opGreater : a1 -> a1 -> Boolean
+_$EXPR : Unit

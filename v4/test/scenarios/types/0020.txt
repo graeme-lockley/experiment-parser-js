@@ -4,6 +4,6 @@ type List a = Cons a (List a)
 
 Cons 10 Nil
 -- type
-Cons :: forall a1 . a1 -> List a1 -> List a1
-Nil :: forall a1 . List a1
-_$EXPR :: List Integer
+Cons : a1 -> List a1 -> List a1
+Nil : List a1
+_$EXPR : List Integer
