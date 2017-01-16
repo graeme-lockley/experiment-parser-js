@@ -14,6 +14,8 @@ import file:../../core/Tuple as Tuple;
 unifies t1 t2 s =
     if Object.eq t1 t2 then
         returns emptyUnifier s
+    else if Type.isTCon t1 && Type.isTCon t2 && t1.name == t2.name && (List.length t1.variables) == (List.length t2.variables) then
+        unifyMany t1.variables t2.variables s
     else if Type.isTVar t1 then
         bindType t1.name t2 s
     else if Type.isTVar t2 then
@@ -31,7 +33,13 @@ assumptions {
     DEBUG.eq (unifies Type.typeBoolean (Type.TVar "a") (Result.Ok emptyUnifier)) (Result.Ok (Tuple.Tuple (Map.singleton "a" Type.typeBoolean) List.empty));
     DEBUG.eq
         (unifies (Type.TArr (Type.TVar "a2") (Type.TArr Type.typeInteger (Type.TVar "a3"))) (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger)) (Result.Ok emptyUnifier))
-        (Result.Ok (Tuple.Tuple (Map.mk2 "a2" Type.typeInteger "a3" Type.typeInteger) List.empty))
+        (Result.Ok (Tuple.Tuple (Map.mk2 "a2" Type.typeInteger "a3" Type.typeInteger) List.empty));
+    DEBUG.eq
+        (unifies (Type.TArr (Type.TVar "a2") (Type.TArr (Type.TCon "List" (List.singleton (Type.TVar "a2"))) (Type.TCon "List" (List.singleton (Type.TVar "a2"))))) (Type.TArr Type.typeInteger (Type.TVar "a3")) (Result.Ok emptyUnifier))
+        (Result.Ok (Tuple.Tuple (Map.mk2 "a2" Type.typeInteger "a3" (Type.TArr (Type.TCon "List" (List.singleton Type.typeInteger)) (Type.TCon "List" (List.singleton Type.typeInteger)))) List.empty));
+    DEBUG.eq
+        (unifies (Type.TCon "List" (List.singleton (Type.TVar "a2"))) (Type.TCon "List" (List.singleton Type.typeInteger)) (Result.Ok emptyUnifier))
+        (Result.Ok (Tuple.Tuple (Map.singleton "a2" Type.typeInteger) List.empty))
 };
 
 

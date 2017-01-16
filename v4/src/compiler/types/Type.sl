@@ -69,7 +69,7 @@ assumptions {
 
 show type =
     if isTCon type then
-        type.name ++ (List.foldl (\acc \item -> acc ++ " " ++ item) "" type.variables)
+        type.name ++ (List.foldl (\acc \item -> acc ++ " " ++ (show item)) "" type.variables)
     else if isTVar type then
         type.name
     else
@@ -89,14 +89,14 @@ assumptions {
     show (TArr (TArr (TVar "a") (TVar "b")) (TVar "c")) == "(a -> b) -> c";
     show (TArr (TVar "a") (TArr (TVar "b") (TVar "c"))) == "a -> b -> c";
     show (TCon "Type" List.empty) == "Type";
-    show (TCon "List" (List.singleton "a")) == "List a"
+    show (TCon "List" (List.singleton (TVar "a"))) == "List a"
 };
 
 
 
 ftv type =
     if isTCon type then
-        Set.fromList type.variables
+        List.foldl (\acc \item -> Set.union acc (ftv item)) Set.empty type.variables
     else if isTVar type then
         Set.singleton type.name
     else
@@ -104,5 +104,5 @@ ftv type =
 assumptions {
     DEBUG.eq (ftv typeString) Set.empty;
     DEBUG.eq (ftv (TVar "a")) (Set.singleton "a");
-    DEBUG.eq (ftv (TCon "Map" (List.mk2 "a" "a"))) (Set.singleton "a")
+    DEBUG.eq (ftv (TCon "Map" (List.mk2 (TVar "a") (TVar "a")))) (Set.singleton "a")
 };

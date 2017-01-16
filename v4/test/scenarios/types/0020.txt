@@ -1,0 +1,9 @@
+-- given an ADT with functions over the ADT
+type List a = Cons a (List a)
+            | Nil;
+
+Cons 10 Nil
+-- type
+Cons :: forall a1 . a1 -> List a1 -> List a1
+Nil :: forall a1 . List a1
+_$EXPR :: List Integer

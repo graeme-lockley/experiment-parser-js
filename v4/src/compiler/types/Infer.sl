@@ -48,7 +48,23 @@ instantiate schema =
     ))
 assumptions {
     DEBUG.eq (instantiate (Schema.Forall List.empty (Type.TVar "x")) (mkInferResult 0 (mkState TypeEnv.empty List.empty 10))) (mkInferResult (Type.TVar "x") (mkState TypeEnv.empty List.empty 10));
-    DEBUG.eq (instantiate (Schema.Forall (List.mk1 "a1") (Type.TVar "a1")) (mkInferResult 0 (mkState TypeEnv.empty List.empty 10))) (mkInferResult (Type.TVar "a11") (mkState TypeEnv.empty List.empty 11))
+    DEBUG.eq (instantiate (Schema.Forall (List.mk1 "a1") (Type.TVar "a1")) (mkInferResult 0 (mkState TypeEnv.empty List.empty 10))) (mkInferResult (Type.TVar "a11") (mkState TypeEnv.empty List.empty 11));
+    DEBUG.eq
+        (instantiate
+            (Schema.Forall (List.mk1 "a1")
+                (Type.TArr
+                    (Type.TVar "a1")
+                    (Type.TArr
+                        (Type.TCon "List" (List.singleton (Type.TVar "a1")))
+                        (Type.TCon "List" (List.singleton (Type.TVar "a1")))))
+            ) (mkInferResult 0 (mkState TypeEnv.empty List.empty 10)))
+        (mkInferResult
+            (Type.TArr
+                (Type.TVar "a11")
+                (Type.TArr
+                    (Type.TCon "List" (List.singleton (Type.TVar "a11")))
+                    (Type.TCon "List" (List.singleton (Type.TVar "a11")))))
+        (mkState TypeEnv.empty List.empty 11))
 };
 
 
@@ -59,7 +75,8 @@ generalize typeEnv type =
                 Set.toList (Set.difference (Type.ftv type) (TypeEnv.ftv typeEnv))
         }
     assumptions {
-        DEBUG.eq (generalize TypeEnv.empty (Type.TVar "x")) (Schema.Forall (List.mk1 "x") (Type.TVar "x"))
+        DEBUG.eq (generalize TypeEnv.empty (Type.TVar "x")) (Schema.Forall (List.mk1 "x") (Type.TVar "x"));
+        DEBUG.eq (generalize TypeEnv.empty (Type.TCon "List" (List.singleton (Type.TVar "x")))) (Schema.Forall (List.mk1 "x") (Type.TCon "List" (List.singleton (Type.TVar "x"))))
     };
 
 
@@ -194,8 +211,9 @@ inferN expr =
         R.bind (R.foldl (\declaration -> inferN declaration) (List.filter (\declaration -> declaration.type == "DECLARATION") expr.declarations)) (\_ ->
         R.bind fresh (\tv ->
         R.bind (inferN expr.expression) (\te ->
+        R.log "inferenceResult" (
             R.returns te
-        )))
+        ))))
 
     else if expr.type == "MULTIPLICATION" then
         inferBinaryOperator expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
