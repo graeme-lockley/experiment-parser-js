@@ -211,9 +211,8 @@ inferN expr =
         R.bind (R.foldl (\declaration -> inferN declaration) (List.filter (\declaration -> declaration.type == "DECLARATION") expr.declarations)) (\_ ->
         R.bind fresh (\tv ->
         R.bind (inferN expr.expression) (\te ->
-        R.log "inferenceResult" (
             R.returns te
-        ))))
+        )))
 
     else if expr.type == "MULTIPLICATION" then
         inferBinaryOperator expr (Type.TArr Type.typeInteger (Type.TArr Type.typeInteger Type.typeInteger))
