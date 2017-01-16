@@ -1,0 +1,15 @@
+-- given a function parameter type ensure that it correctly unifies
+type List a = Cons a (List a)
+            | Nil;
+
+range : Integer -> Integer -> List(Integer);
+range min max =
+    if min > max then
+        Nil
+    else
+        Cons min (range (min + 1) max);
+-- type
+range :: Integer -> Integer -> List Integer
+Cons :: forall a1 . a1 -> List a1 -> List a1
+Nil :: forall a1 . List a1
+_$EXPR :: Unit
