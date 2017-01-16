@@ -1,5 +1,5 @@
 -- given a list, calculate the list's length
-import file:./lib/List as List;
+import file:./lib/ListHelper as List;
 
 myList = List.cons 1 (List.cons 2 (List.cons 3 List.empty));
 
@@ -17,7 +17,7 @@ length xs =
       "type": "IMPORT",
       "url": {
         "type": "CONSTANT_URL",
-        "value": "file:./lib/List"
+        "value": "file:./lib/ListHelper"
       },
       "id": {
         "type": "IDENTIFIER",
@@ -141,7 +141,7 @@ length xs =
   }
 }
 -- js
-const List = require('./lib/List');
+const List = require('./lib/ListHelper');
 
 const myList = List.cons(1)(List.cons(2)(List.cons(3)(List.empty)));
 
