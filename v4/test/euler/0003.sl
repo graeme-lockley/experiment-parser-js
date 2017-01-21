@@ -39,17 +39,11 @@ primeFactors n =
 
 solution n =
     let {
-        max a b =
-            if a > b then
-                a
-            else
-                b;
-
         maxInList lst =
             if List.isEmpty lst then
                 0
             else
-                max (List.head lst) (maxInList (List.tail lst))
+                Math.max (List.head lst) (maxInList (List.tail lst))
     } in
         maxInList (primeFactors n)
 assumptions {
