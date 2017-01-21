@@ -1,8 +1,8 @@
 function cons(car) {
-    return cons => {
+    return cdr => {
         return {
             car: car,
-            cons: cons
+            cdr: cdr
         };
     }
 }
@@ -21,7 +21,7 @@ function head(x) {
 
 
 function tail(xs) {
-    return xs.cons;
+    return xs.cdr;
 }
 
 
