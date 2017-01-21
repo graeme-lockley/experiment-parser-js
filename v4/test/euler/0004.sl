@@ -24,25 +24,27 @@ assumptions {
 findLPP n m =
     let {
         findLPPIterOnRow i j =
-            (if isPalindrome (Integer.toS (i * j)) then
-                Math.max (i * j) rest
+            if isPalindrome (Integer.toS (i * j)) then
+                i * j
+            else if j >= 0 then
+                findLPPIterOnRow i (j - 1)
             else
-                rest)
-                where {
-                    rest =
-                        if j < m then
-                            findLPPIterOnRow i (j + 1)
-                        else
-                            0
-                };
+                0;
 
         findLPPIter i =
-            if i < n then
-                Math.max (findLPPIterOnRow i 0) (findLPPIter (i + 1))
+            if i >= 0 then
+                Math.max (findLPPIterOnRow i m) (findLPPIter (i - 1))
             else
                 0
     } in
-        findLPPIter 0
+        findLPPIter n
 assumptions {
     findLPP 99 99 == 9009
+};
+
+
+solution n =
+    findLPP n n
+assumptions {
+    solution 999 == 906609
 };
