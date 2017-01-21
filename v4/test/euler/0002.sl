@@ -14,10 +14,14 @@ mapRangeCondition v f predicate =
 
 
 fib n =
-    if n <= 1 then
-        n
-    else
-        (fib (n-1)) + (fib (n-2));
+    fibIter n 1 0
+        where {
+            fibIter n a b =
+                if n <= 1 then
+                    a
+                else
+                    fibIter (n - 1) (a + b) a
+        };
 
 
 isEven n =
