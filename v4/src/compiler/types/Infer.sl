@@ -100,6 +100,18 @@ resolveInferredExpression inferredExpression =
         )
     );
 
+
+instanceOf signature =
+    R.bind (R.get "constraints") (\constraints \state ->
+        Result.andThen (Solver.unify constraints) (\unifyResult ->
+            if Schema.noSubstitution signature unifyResult then
+                R.returns true state
+            else
+                R.error ("The signature " ++ (Type.show signature) ++ " is not sufficiently general") state
+        )
+    );
+
+
 inferN expr =
     if expr.type == "APPLY" then
         R.bind (inferN expr.operation) (\t1 ->
@@ -157,8 +169,9 @@ inferN expr =
             R.bind (lookupEnv expr.name) (\valueSignature ->
             R.bind (inferN expr.expression) (\inferResult ->
             R.bind (uni valueSignature inferResult) (\_ ->
+            R.bind (instanceOf valueSignature) (\_ ->
                 resolveInferredExpression inferResult
-            )))
+            ))))
         else
             R.bind (resolveExpression expr.expression) (\expressionSchema ->
             R.bind (inEnv expr.name expressionSchema) (\_ ->
