@@ -26,6 +26,26 @@ assumptions {
 };
 
 
+noSubstitution schema subst =
+    let {
+        resolvep type =
+            if Type.isTCon type then
+                true
+            else if Type.isTVar type then
+                !(Subst.has type.name subst)
+            else
+                (resolvep type.domain) && (resolvep type.range)
+    } in
+        resolvep schema
+assumptions {
+    DEBUG.eq (noSubstitution Type.typeString Subst.nullSubst) true;
+    DEBUG.eq (noSubstitution (Type.TVar "a9") Subst.nullSubst) true;
+    DEBUG.eq (noSubstitution (Type.TVar "a9") (Subst.add "a9" Type.typeString Subst.nullSubst)) false;
+    DEBUG.eq (noSubstitution (Type.TVar "a9") (Subst.add "a9" (Type.TVar "a11") Subst.nullSubst)) false;
+    DEBUG.eq (noSubstitution (Type.TArr (Type.TVar "a9") Type.typeInteger) (Subst.add "a9" (Type.TVar "a11") Subst.nullSubst)) false
+};
+
+
 resolve schema subst =
     let {
         mkTriple type count mapOfNames =
