@@ -39,6 +39,11 @@ assumptions {
 };
 
 
+error message state =
+    Result.andThen state (\stateValue ->
+        Result.Error message);
+
+
 log message f2 state =
     Result.andThen (DEBUG.log message state) (\_ -> f2 state);
 
