@@ -7,7 +7,7 @@ isPalindrome s =
     if String.length s < 2 then
         true
     else
-        ((String.charAt 0 s) == (String.charAt (lengthOfS - 1) s)) && (isPalindrome (String.slice 1 (lengthOfS - 1) s))
+        String.charAt 0 s == String.charAt (lengthOfS - 1) s && isPalindrome (String.slice 1 (lengthOfS - 1) s)
             where {
                 lengthOfS =
                     String.length s
@@ -37,14 +37,13 @@ findLPP n m =
             else
                 0
     } in
-        findLPPIter n
-assumptions {
-    findLPP 99 99 == 9009
-};
+        findLPPIter n;
 
 
 solution n =
     findLPP n n
 assumptions {
+    solution 99 == 9009;
     solution 999 == 906609
 };
+
