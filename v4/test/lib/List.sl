@@ -35,6 +35,10 @@ map f list =
         cons (f (head list)) (map f (tail list));
 
 
+foldl =
+    Helper.foldl;
+
+
 sum list =
     if isEmpty list then
         0
@@ -51,10 +55,11 @@ filter predicate list =
         filter predicate (tail list);
 
 
-range min max =
-    if min > max then
-        empty
-    else
-        cons min (range (min + 1) max);
+find =
+    Helper.find;
+
+
+range =
+    Helper.range;
 
 
